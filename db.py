@@ -66,7 +66,9 @@ class Database:
         
         #commit the changes we have made to the database
         self.conn.commit()        
-    
+
+
+
 
     """
         Returns a tuple of lists of tuples of  all the rows in each of the tables.
@@ -121,3 +123,10 @@ class Database:
         return [row for row in self.fetch()[0] if query.lower() in str(row).lower()]
 
 
+    def add_screen(self,capacity):
+        return
+
+    def remove_screen(self, id):
+        return   
+    def __del__(self):
+        self.conn.close()
