@@ -64,6 +64,11 @@ class Database:
         """
         self.cur.execute("CREATE TABLE IF NOT EXISTS screenings (id INTEGER PRIMARY KEY, date DATE NOT NULL, time TIME NOT NULL, screenid INTEGER REFERENCES screens(id) NOT NULL, movieid INTEGER REFERENCES movies(id) NOT NULL)")
         
+        self.cur.execute("CREATE TABLE IF NOT EXISTS bookings (id INTEGER PRIMARY KEY, screeningid INTEGER references screenings(id) NOT NULL, customerid INTEGER references customers(id), seats text NOT NULL)")
+
+        self.cur.execute("CREATE TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY, Forename text NOT NULL, Surname text NOT NULL, email text NOT NULL, phonenumber text NOT NULL, Password text NOT NULL, DoB date NOT NULL)")
+
+
         #commit the changes we have made to the database
         self.conn.commit()        
 
@@ -87,7 +92,13 @@ class Database:
         self.cur.execute("SELECT * FROM screenings")
         screenings = self.cur.fetchall()
 
-        return movies, screens, screenings
+        self.cur.execute("SELECT * FROM customers")
+        customers = self.cur.fetchall()
+
+        self.cur.execute("SELECT * FROM bookings")
+        bookings = self.cur.fetchall()
+
+        return movies, screens, screenings, customers, bookings
     
     """
         Inserts a new entry into the movies table
@@ -123,10 +134,68 @@ class Database:
         return [row for row in self.fetch()[0] if query.lower() in str(row).lower()]
 
 
+    """
+        Inserts a new entry into the screens table
+    """
+
     def add_screen(self,capacity):
-        return
+        
+        #Executre an SQL query to insert a new record into the movies database.
+        #WE use '?' to prevent against SQL injection attacks.
+        self.cur.execute("INSERT INTO screens VALUES (NULL, ?)", (capacity,))
+
+        #Commit the changes to the database.
+        self.conn.commit()
 
     def remove_screen(self, id):
-        return   
+        
+        self.cur.execute("DELETE FROM screens WHERE id=?",(id,))
+
+        self.conn.commit()
+
+    def add_screening(self, date, time, screenid, movieid):
+
+        self.cur.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?)",(date,time,screenid,movieid))
+
+        self.conn.commit()
+
+    def remove_screening(self, id):
+
+        self.cur.execute("DELETE FROM screenings WHERE id=?",(id,))
+
+        self.conn.commit()
+
+    
+    def add_booking(self, screeningid, customerid, seats):
+        
+        self.cur.execute("INSERT INTO bookings VALUES (NULL, ?,?,?)", (screeningid, customerid, seats))
+
+        self.conn.commit()
+    
+    def remove_booking(self, id):
+        
+        self.cur.execute("DELETE FROM bookings WHERE id=?",(id,))
+
+        self.conn.commit()
+    
+    def add_customer(self, forename, surname, email, phonenumber, password, dob):
+        
+        self.cur.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?)",(forename, surname, email, phonenumber, password, dob))
+
+        self.conn.commit()
+    
+    def remove_customer(self, id):
+        
+        self.cur.execute("DELETE FROM customers WHERE id=?",(id,))
+
+        self.conn.commit()
+    
+    def search(self, query, table):
+        dictionary = {'movies':0,'screens':1, 'screenings': 2,  'customers': 3, 'bookings': 4}
+        return [row for row in self.fetch()[dictionary[table.lower()]] if query.lower() in str(row).lower()]
+
+
+
+
     def __del__(self):
         self.conn.close()
