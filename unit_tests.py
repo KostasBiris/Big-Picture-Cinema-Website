@@ -30,6 +30,15 @@ class TestDataBase(unittest.TestCase):
         cursor = conn.execute('SELECT * FROM movies')
         self.assertEqual(cursor.fetchall(), [(1,'On the Waterfront', 'A movie about an ex-prizefighter, on the waterfront.', '16', 'Elia Kazan', 'Marlon Brando')])
 
+    def testUpdateMovie(self):
+        testDataBase = Database('test.db')
+        testDataBase.update_movie(1, ('On the Waterfront', 'A movie about an ex-prizefighter.', '16', 'Elia Kazan', 'Marlon Brando'))
+        conn = sqlite3.connect('test.db')
+        cursor = conn.execute('SELECT * FROM movies')
+        self.assertEqual(cursor.fetchall(), [(1,'On the Waterfront', 'A movie about an ex-prizefighter.', '16', 'Elia Kazan', 'Marlon Brando')])
+
+
+
     def testFetchNonEmpty(self):
         testDataBase = Database('test.db')
         rows = testDataBase.fetch()
@@ -124,7 +133,7 @@ def suite():
     suite.addTest(TestDataBase('testDatabaseCreation'))
     suite.addTest(TestDataBase('testFetchEmpty'))
     suite.addTest(TestDataBase('testInsertMovie'))
-
+    suite.addTest(TestDataBase('testUpdateMovie'))
     suite.addTest(TestDataBase('testInsertScreen'))
     suite.addTest(TestDataBase('testInsertScreening'))
     suite.addTest(TestDataBase('testInsertCustomer'))
@@ -135,10 +144,6 @@ def suite():
     suite.addTest(TestDataBase('testRemoveScreening'))
     suite.addTest(TestDataBase('testRemoveMovie'))
     suite.addTest(TestDataBase('testRemoveScreen'))
-
-
-
-
 
     return suite
 

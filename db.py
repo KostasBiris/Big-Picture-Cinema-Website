@@ -104,14 +104,18 @@ class Database:
         Inserts a new entry into the movies table
     """
 
-    def add_movie(self, name, blurb, certificate, director, leadactors):
+    def add_movie(self, name,blurb,certificate,director,leadactors):
         #Execute an SQL query to insert a new record into the movies database.
         #We use '?' to prevent against SQL injection attacks.
-        self.cur.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?)", (name, blurb,certificate, director, leadactors))
+        self.cur.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?)", (name,blurb,certificate,director,leadactors))
         
         #Commit the changes we have made to the database.
         self.conn.commit()
-    
+
+    def update_movie(self, id, data):
+        self.cur.execute("UPDATE movies SET name=?, blurb=?, certificate=?, director=?, leadactors=? WHERE id=?",(*data, id))
+
+        self.conn.commit()
 
     """
         Removes a movie from the movies table
