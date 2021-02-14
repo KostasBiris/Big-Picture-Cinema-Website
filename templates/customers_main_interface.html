@@ -12,8 +12,10 @@
     <button class="tab_background" style="position:absolute;top:125px;left:850px;width:150px;height:40px;">INFO</button>
 </div>
 <div class="search_bar">
-    <input type="text" placeholder="Search here.." style="position:absolute;top:125px;left:1020px;width:300px;height:40px;">
-<!--<button type="submit" class="search_icon" style="position:absolute;top:125px;left:1100px;width:50px;height:40px;"> </button>-->
+    <form action="{{ url_for('mainpage') }}" method="post" >
+        <input name = "query" id="query" type="text" placeholder="Search here.." style="position:absolute;top:125px;left:1020px;width:300px;height:40px;">
+        <button type="submit" class="search_icon" style="position:absolute;top:125px;left:1100px;width:50px;height:40px;"> </button>
+    </form>
 </div> 
 <div>
     <input type="image" src="{{url_for('static',filename='usericon.png')}}"style="position:absolute;top:125px;left:1340px;width:40px;height:40px;" />

@@ -25,6 +25,8 @@ import os #for path stuff
         'testRemoveScreening'
         'testRemoveMovie'
         'testRemoveScreen'
+
+        
 """
 class TestDataBase(unittest.TestCase):
 
@@ -70,7 +72,7 @@ class TestDataBase(unittest.TestCase):
         rows = testDataBase.fetch()
 
         #Asserts that the sum of the lengths of the rows fetched is 0 (False)
-        self.assertFalse(len(rows[0]) + len(rows[1]) + len(rows[2]) + len(rows[3]) + len(rows[4] + len(rows[5])))
+        self.assertFalse(len(rows[0]) + len(rows[1]) + len(rows[2]) + len(rows[3]) + len(rows[4]))
 
     #Test that a movie is correctly inserted.
     def testInsertMovie(self):
@@ -314,6 +316,81 @@ class TestDataBase(unittest.TestCase):
         #Assert that our original entry is NOT in the 'bookings' table.
         self.assertTrue((1,1,1, 'A12,A11,A10') not in testDataBase.fetch()[4])
         
+class TestMainPage(unittest.TestCase):
+
+
+    def testSearchQuery(self):
+        pass
+
+    def testClickWhatsNew(self):
+        pass
+
+    def testClickTickets(self):
+        pass
+
+    def testClickScreens(self):
+        pass
+
+    def testClickInfo(self):
+        pass
+
+    def testClickAccount(self):
+        pass
+
+    def testClickLogin(self):
+        pass
+
+    def testClickSignup(self):
+        pass
+
+
+class TestLoginPage(unittest.TestCase):
+    
+    def testCorrectLogin(self):
+        pass
+
+    def testIncorrectLogin(self):
+        pass
+
+    def testNonExistingUser(self):
+        pass
+
+    def testLockAccount(self):
+        pass
+
+    def testEmptyFields(self):
+        pass
+
+class TestRegisterPage(unittest.TestCase):
+
+    def testEmptyFields(self):
+        pass
+
+    def testAlphaFirstname(self):
+        pass
+
+    def testAlphaSurname(self):
+        pass
+
+    def testNumericPhone(self):
+        pass
+
+    def testPhoneLength(self):
+        pass
+
+    def testValidEmail(self):
+        pass
+
+    def testPasswordLength(self):
+        pass
+    def testValidDoB(self):
+        pass
+
+    def testRegisterValid(self):
+        pass
+
+    def testRegisterInvalid(self):
+        pass
 
 
 
@@ -348,6 +425,29 @@ def suite():
     suite.addTest(TestDataBase('testRemoveScreening'))
     suite.addTest(TestDataBase('testRemoveMovie'))
     suite.addTest(TestDataBase('testRemoveScreen'))
+    suite.addTest(TestMainPage('testSearchQuery'))
+    suite.addTest(TestMainPage('testClickWhatsNew'))
+    suite.addTest(TestMainPage('testClickTickets'))    
+    suite.addTest(TestMainPage('testClickScreens'))    
+    suite.addTest(TestMainPage('testClickInfo'))    
+    suite.addTest(TestMainPage('testClickAccount'))    
+    suite.addTest(TestMainPage('testClickLogin'))    
+    suite.addTest(TestMainPage('testClickSignup'))
+    suite.addTest(TestLoginPage('testCorrectLogin'))    
+    suite.addTest(TestLoginPage('testIncorrectLogin'))  
+    suite.addTest(TestLoginPage('testNonExistingUser'))  
+    suite.addTest(TestLoginPage('testLockAccount'))  
+    suite.addTest(TestLoginPage('testEmptyFields'))  
+    suite.addTest(TestRegisterPage('testEmptyFields'))
+    suite.addTest(TestRegisterPage('testAlphaFirstname'))
+    suite.addTest(TestRegisterPage('testAlphaSurname'))
+    suite.addTest(TestRegisterPage('testNumericPhone'))
+    suite.addTest(TestRegisterPage('testPhoneLength'))
+    suite.addTest(TestRegisterPage('testValidEmail'))
+    suite.addTest(TestRegisterPage('testValidDoB'))
+    suite.addTest(TestRegisterPage('testRegisterValid'))
+    suite.addTest(TestRegisterPage('testRegisterInvalid'))
+
     return suite
 
 if __name__ == '__main__':
