@@ -1,0 +1,37 @@
+.tab_background {
+  border: 3px solid #4e5b60;
+  background-color: #f9bc50;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size:medium;
+  margin:auto;
+  cursor: pointer;
+}
+
+.text{
+  font-family: Verdana, sans-serif;
+  font-weight: bold;
+}
+
+.search_bar input[type=text]{
+  float:right;
+  border: 3px solid #f9bc50;
+  font-size: 17px;
+}
+
+.search_icon button:hover {
+  background:#4e5b60;
+}
+
+.text_button{
+  border: none;
+  background-color: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.text_button:hover {
+  background:#f9bc50;
+}
