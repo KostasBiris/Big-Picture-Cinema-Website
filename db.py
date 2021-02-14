@@ -157,6 +157,12 @@ class Database:
 
         self.conn.commit()
 
+    def update_screen(self, id, data):
+
+        self.cur.execute("UPDATE screens SET capacity=? WHERE id=?",(*data, id))
+
+        self.conn.commit()
+
     def add_screening(self, date, time, screenid, movieid):
 
         self.cur.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?)",(date,time,screenid,movieid))
@@ -169,6 +175,11 @@ class Database:
 
         self.conn.commit()
 
+    def update_screening(self, id, data):
+
+        self.cur.execute("UPDATE screenings SET date=?, time=?, screenid=?, movieid=? WHERE id=?",(*data, id))
+
+        self.conn.commit()
     
     def add_booking(self, screeningid, customerid, seats):
         
@@ -181,6 +192,13 @@ class Database:
         self.cur.execute("DELETE FROM bookings WHERE id=?",(id,))
 
         self.conn.commit()
+
+    def update_booking(self, id, data):
+
+        self.cur.execute("UPDATE bookings SET screeningid=?, customerid=?, seats=? WHERE id=?",(*data, id))
+
+        self.conn.commit()
+    
     
     def add_customer(self, forename, surname, email, phonenumber, password, dob):
         
@@ -191,6 +209,12 @@ class Database:
     def remove_customer(self, id):
         
         self.cur.execute("DELETE FROM customers WHERE id=?",(id,))
+
+        self.conn.commit()
+
+    def update_customer(self, id, data):
+
+        self.cur.execute("UPDATE customers SET forename=?, surname=?, email=?, phonenumber=?, password=?, dob=? WHERE id=?",(*data, id))
 
         self.conn.commit()
     

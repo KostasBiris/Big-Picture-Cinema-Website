@@ -73,6 +73,14 @@ class TestDataBase(unittest.TestCase):
         conn = sqlite3.connect('test.db')        
         cursor = conn.execute('SELECT * FROM screens')
         self.assertEqual(cursor.fetchall(), [(1, 50)])
+
+    def testUpdateScreen(self):
+        testDataBase = Database('test.db')
+        testDataBase.update_screen(1, (60,))
+        conn = sqlite3.connect('test.db')
+        cursor = conn.execute("SELECT * FROM screens")
+        self.assertEqual(cursor.fetchall(), [(1,60)])
+
     
     def testRemoveScreen(self):
         testDataBase = Database('test.db')
@@ -87,6 +95,14 @@ class TestDataBase(unittest.TestCase):
         conn = sqlite3.connect('test.db')
         cursor = conn.execute('SELECT * FROM screenings')
         self.assertEqual(cursor.fetchall(), [(1, '01-03-2020', '18:00', 1, 1)])
+
+    def testUpdateScreening(self):
+        testDataBase = Database('test.db')
+        testDataBase.update_screening(1, ('02-03-2020', '19:00', 1, 1))
+        conn = sqlite3.connect('test.db')
+        cursor = conn.execute('SELECT * FROM screenings')
+        self.assertEqual(cursor.fetchall(), [(1, '02-03-2020', '19:00', 1, 1)])
+
 
     def testRemoveScreening(self):
         testDataBase = Database('test.db')
@@ -103,6 +119,13 @@ class TestDataBase(unittest.TestCase):
         cursor = conn.execute('SELECT * FROM customers')
         self.assertEqual(cursor.fetchall(), [(1, 'Jared', 'Swift', 'ed18jws@leeds.ac.uk', '07495508368', 'o kostas einai andras', '13-07-2001')])
 
+
+    def testUpdateCustomer(self):
+        testDataBase = Database('test.db')
+        testDataBase.update_customer(1, ('Kostas', 'Biris', 'sc19kb@leeds.ac.uk', '07495508228', 'i kostas einai yuneika', '13-07-1900'))
+        conn = sqlite3.connect('test.db')
+        cursor = conn.execute('SELECT * FROM customers')
+        self.assertEqual(cursor.fetchall(), [(1,'Kostas', 'Biris', 'sc19kb@leeds.ac.uk', '07495508228', 'i kostas einai yuneika', '13-07-1900')])
     def testRemoveCustomer(self):
         testDataBase = Database('test.db')
         prev_len = len(testDataBase.fetch()[3])
@@ -117,6 +140,12 @@ class TestDataBase(unittest.TestCase):
         cursor = conn.execute('SELECT * FROM bookings')
         self.assertEqual(cursor.fetchall(), [(1,1,1,'A12,A11,A10')])
 
+    def testUpdateBooking(self):
+        testDataBase = Database('test.db')
+        testDataBase.update_booking(1, (1,1, 'B12,B11,B10'))
+        conn = sqlite3.connect('test.db')
+        cursor = conn.execute('SELECT * FROM bookings')
+        self.assertEqual(cursor.fetchall(), [(1,1,1,'B12,B11,B10')])
 
     def testRemoveBooking(self):
         testDataBase = Database('test.db')
@@ -135,9 +164,13 @@ def suite():
     suite.addTest(TestDataBase('testInsertMovie'))
     suite.addTest(TestDataBase('testUpdateMovie'))
     suite.addTest(TestDataBase('testInsertScreen'))
+    suite.addTest(TestDataBase('testUpdateScreen'))
     suite.addTest(TestDataBase('testInsertScreening'))
+    suite.addTest(TestDataBase('testUpdateScreening'))  
     suite.addTest(TestDataBase('testInsertCustomer'))
+    suite.addTest(TestDataBase('testUpdateCustomer'))    
     suite.addTest(TestDataBase('testInsertBooking'))
+    suite.addTest(TestDataBase('testUpdateBooking')) 
     suite.addTest(TestDataBase('testFetchNonEmpty'))
     suite.addTest(TestDataBase('testRemoveBooking'))
     suite.addTest(TestDataBase('testRemoveCustomer'))
