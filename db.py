@@ -4,14 +4,7 @@ import sqlite3 as sql
 
 """
     TODO:
-        functions to be added before we can start adding bookings etc:
-            add_screen
-            remove_screen
-            search_screens
-            add_screening
-            remove_screening
-            search_screenings
-        
+        comments and documentation.
         Data structure for seatings
         More efficient/accurate methods of searching (not high priority)
 """
@@ -66,7 +59,7 @@ class Database:
         
         self.cur.execute("CREATE TABLE IF NOT EXISTS bookings (id INTEGER PRIMARY KEY, screeningid INTEGER references screenings(id) NOT NULL, customerid INTEGER references customers(id), seats text NOT NULL)")
 
-        self.cur.execute("CREATE TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY, Forename text NOT NULL, Surname text NOT NULL, email text NOT NULL, phonenumber text NOT NULL, Password text NOT NULL, DoB date NOT NULL)")
+        self.cur.execute("CREATE TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY, forename text NOT NULL, surname text NOT NULL, email text NOT NULL, phonenumber text NOT NULL, password text NOT NULL, dob date NOT NULL)")
 
 
         #commit the changes we have made to the database
@@ -223,7 +216,7 @@ class Database:
         return [row for row in self.fetch()[dictionary[table.lower()]] if query.lower() in str(row).lower()]
 
 
-
-
     def __del__(self):
         self.conn.close()
+
+print(Database.locals())
