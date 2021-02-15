@@ -2,7 +2,7 @@ import unittest #testing framework
 from db import Database #our database class (MODULAR PROGRAMMING ;))
 import sqlite3
 import os #for path stuff
-
+import selenium
 
 """
     UnitTest TestCase class for testing on the Database.
@@ -26,7 +26,7 @@ import os #for path stuff
         'testRemoveMovie'
         'testRemoveScreen'
 
-        
+
 """
 class TestDataBase(unittest.TestCase):
 
@@ -453,7 +453,7 @@ def suite():
 if __name__ == '__main__':
     #Create a TextTestRunner 
     #failfast=False ensures that our testing suite does not terminate upon a singular test failing.    
-    testRunner = unittest.TextTestRunner(failfast=False)
+    testRunner = unittest.TextTestRunner(failfast=False, verbosity=2)
     #Run our test suite!
     testRunner.run(suite())
 
