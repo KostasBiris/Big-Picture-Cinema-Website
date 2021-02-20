@@ -35,3 +35,13 @@
 .text_button:hover {
   background:#f9bc50;
 }
+
+.big-box{
+  background-color: #4e5b60;
+  opacity: 0.3;
+  vertical-align:middle;
+}
+
+.register{
+  background:rgba(249, 187, 80, 0.438);
+ 
