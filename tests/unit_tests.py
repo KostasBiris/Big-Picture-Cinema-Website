@@ -3,6 +3,9 @@ from app.db import Database #our database class (MODULAR PROGRAMMING ;))
 import sqlite3
 import os #for path stuff
 import selenium
+import urllib.request #for testing server
+
+
 
 """
     UnitTest TestCase class for testing on the Database.
@@ -315,7 +318,11 @@ class TestDataBase(unittest.TestCase):
 
         #Assert that our original entry is NOT in the 'bookings' table.
         self.assertTrue((1,1,1, 'A12,A11,A10') not in testDataBase.fetch()[4])
-        
+
+
+
+
+
 class TestMainPage(unittest.TestCase):
 
 
@@ -425,6 +432,7 @@ def suite():
     suite.addTest(TestDataBase('testRemoveScreening'))
     suite.addTest(TestDataBase('testRemoveMovie'))
     suite.addTest(TestDataBase('testRemoveScreen'))
+
     suite.addTest(TestMainPage('testSearchQuery'))
     suite.addTest(TestMainPage('testClickWhatsNew'))
     suite.addTest(TestMainPage('testClickTickets'))    
@@ -433,11 +441,13 @@ def suite():
     suite.addTest(TestMainPage('testClickAccount'))    
     suite.addTest(TestMainPage('testClickLogin'))    
     suite.addTest(TestMainPage('testClickSignup'))
+
     suite.addTest(TestLoginPage('testCorrectLogin'))    
     suite.addTest(TestLoginPage('testIncorrectLogin'))  
     suite.addTest(TestLoginPage('testNonExistingUser'))  
     suite.addTest(TestLoginPage('testLockAccount'))  
     suite.addTest(TestLoginPage('testEmptyFields'))  
+
     suite.addTest(TestRegisterPage('testEmptyFields'))
     suite.addTest(TestRegisterPage('testAlphaFirstname'))
     suite.addTest(TestRegisterPage('testAlphaSurname'))
