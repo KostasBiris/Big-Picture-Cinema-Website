@@ -1,5 +1,5 @@
 import unittest #testing framework
-from db import Database #our database class (MODULAR PROGRAMMING ;))
+from app.db import Database #our database class (MODULAR PROGRAMMING ;))
 import sqlite3
 import os #for path stuff
 import selenium
