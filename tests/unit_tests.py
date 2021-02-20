@@ -458,5 +458,8 @@ if __name__ == '__main__':
     testRunner.run(suite())
 
     #Cleanup the environment by removing the 'test.db' file created by the tests.
-    if os.path.isfile(os.path.dirname(os.path.abspath(__file__))+'/test.db'):
-        os.remove(os.path.dirname(os.path.abspath(__file__))+'/test.db')
+    
+    _dir = os.path.abspath(os.path.join(__file__, os.pardir))
+    _dir = os.path.abspath(os.path.join(_dir, os.pardir))
+    if os.path.isfile(_dir+'/test.db'):
+        os.remove(_dir+'/test.db')
