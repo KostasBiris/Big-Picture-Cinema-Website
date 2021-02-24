@@ -1,19 +1,21 @@
 <html lang="en">
 <head>
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='main.css')}}"/>
-    
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 </head>
 <body style="background-color: rgb(255, 255, 255);">
 <img src="{{url_for('static',filename='finlogo.png')}}" style="top:1px;width:300px;height:190px;" >
 <img src="{{url_for('static',filename='headerbanner.png')}}" style="position:absolute;top:10px;left:340px;width:980px;height:105px;" >
 <img src="{{url_for('static',filename='follow.png')}}" style="position: absolute; top: 10px; left: 1380px; width:100px;height:105px;" >
 <div class="text">
+    <!--Tabs for customer-->
     <button class="tab_background" style="position:absolute;top:125px;left:340px;width:150px;height:40px;">WHAT'S NEW </button>
     <button class="tab_background" style="position:absolute;top:125px;left:510px;width:150px;height:40px;">TICKETS</button>
     <button class="tab_background" style="position:absolute;top:125px;left:680px;width:150px;height:40px;">SCREENS</button>
     <button class="tab_background" style="position:absolute;top:125px;left:850px;width:150px;height:40px;">INFO</button>
 </div>
     <form action="{{ url_for('mainpage') }}" method="post" >
+        <!--Search bar...-->
         <input class="search_bar" name = "query" id="query" type="text" placeholder="Search here.." style="position:absolute;top:125px;left:1020px"/>
         <!--fix sizing in search bar-->
         <input class="search_icon" type="image" src = "{{url_for('static',filename='search.png')}}" style="position:absolute;top:125px;left:1270px;width:50px;height:40px;"/>
@@ -38,7 +40,112 @@
             location.href = "{{ url_for('register') }}";
         };
     </script>
+    <input type="image" src="{{url_for('static',filename='usericon.png')}}"style="position:absolute;top:125px;left:1340px;width:40px;height:40px;" />
+    <!--Login and signup button-->
+    <button class="text_button"style="position:absolute;top:125px;left:1390px;width:60px;height:40px;">LOG IN</button>
+    <button class="text_button"style="position:absolute;top:125px;left:1460px;width:60px;height:40px;">SIGN UP</button>
+
 </div>
+<div class="container">
+    <div class="button" onclick="shiftLeft()">
+        <img src= "{{url_for('static',filename='left.png')}}" alt=""></div>
+        <div class="cards-wrapper">
+            <ul class="cards__container">
+               <!-- needs to dynamically allocate the movie posters based on random generation-->
+            <li class="box">box 1</li>
+            <li class="box">box 2</li>
+            <li class="box">box 3</li>
+            <li class="box">box 4</li>
+            <li class="box">box 5</li>
+            <li class="box box--hide">box 6</li>
+            <li class="box box--hide">box 7</li>
+        </ul>
+        <div class="card__text-content"><!--needs to dynamically allocate the movie discription and titles based on random generation-->
+            <h3 class="card__title">On the Waterfront </h3>
+             <div class="card__summary">An ex-prize fighter turned longshoreman struggles to stand up to his corrupt union bosses. </div>
+            </div>
+        </div>
+        <div class="button" onclick="shiftRight()"><img src="{{url_for('static',filename='right.png')}}" alt=""></div>
+    </div>
+
+    <!--JAVASCRIPT - source: -->
+    <script>
+    function shiftLeft() {
+        const boxes = document.querySelectorAll(".box");
+        const tmpNode = boxes[0];
+        boxes[0].className = "box move-out-from-left";
+        setTimeout(function() {
+            if (boxes.length > 5) {
+                 tmpNode.classList.add("box--hide");
+                 boxes[5].className = "box move-to-position5-from-left";
+                }
+                boxes[1].className = "box move-to-position1-from-left";
+                boxes[2].className = "box move-to-position2-from-left";
+                boxes[3].className = "box move-to-position3-from-left";
+                boxes[4].className = "box move-to-position4-from-left";
+                boxes[0].remove();
+                document.querySelector(".cards__container").appendChild(tmpNode);
+            }, 500);
+}
+function shiftRight() {
+    const boxes = document.querySelectorAll(".box");
+    boxes[4].className = "box move-out-from-right";
+    setTimeout(function() {
+        const noOfCards = boxes.length;
+        if (noOfCards > 4) {
+            boxes[4].className = "box box--hide";
+        }
+        const tmpNode = boxes[noOfCards - 1];
+        tmpNode.classList.remove("box--hide");
+        boxes[noOfCards - 1].remove();
+        let parentObj = document.querySelector(".cards__container");
+        parentObj.insertBefore(tmpNode, parentObj.firstChild);
+        tmpNode.className = "box move-to-position1-from-right";
+        boxes[0].className = "box move-to-position2-from-right";
+        boxes[1].className = "box move-to-position3-from-right";
+        boxes[2].className = "box move-to-position4-from-right";
+        boxes[3].className = "box move-to-position5-from-right";
+    }, 500);
+}
+</script>
+<!-- 
+<section class="items">
+<div class="carouselOfImages">
+  <div class="carouselImage" style="background-size:cover;">
+    <img data-tab="bright" src="http://www.thebrandage.com/assets/image/uploads/haberler/Bright_TUR.jpg"/>
+  </div>
+  <div class="carouselImage" style="background-size:cover;">
+    <img data-tab="avatar" src="https://i.pinimg.com/736x/a4/23/f8/a423f86593029b7d2a6d9f1e1fd1e406---movies-movies-to-watch-online.jpg"/>
+  </div>
+ <div class="carouselImage" style="background-size:cover;">
+    <img data-tab="nuh" src="http://a69.g.akamai.net/n/69/10688/v1/img5.allocine.fr/acmedia/medias/nmedia/19/02/17/31/20658158.jpg"/>
+  </div>
+   <div class="carouselImage" style="background-size:cover;">
+    <img data-tab="lord" src="https://cdn.empireonline.com/jpg/70/0/0/1280/960/aspectfit/0/0/0/0/0/0/c/features/59e8d795405a5c6805947751/47%20Lord%20of%20War.jpg"/>
+  </div>
+  <div class="carouselImage" style="background-size:cover;">
+    <img data-tab="thor" src="https://mikeantjones.files.wordpress.com/2012/04/thor-film-poster.jpg"/>
+  </div>
+   <div class="carouselImage" style="background-size:cover;">
+    <img data-tab="john" src="https://images-na.ssl-images-amazon.com/images/I/91H06HPhX%2BL._SY717_.jpg"/>
+  </div>
+  <div class="carouselImage" style="background-size:cover;">
+    <img data-tab="bond" src="http://www.the007dossier.com/007Dossier/james-bond-007-movie-posters/skyfall/skyfall-bond-poster.jpg"/>
+  </div>
+   <div class="carouselImage" style="background-size:cover;">
+    <img data-tab="deadpool2" src="https://icdn3.digitaltrends.com/image/deadpool-2-thanksgiving-poster-1294x2048.jpg"/>
+  </div>
+   <div class="carouselImage" style="background-size:cover;">
+    <img data-tab="inception" src="http://netdna.webdesignerdepot.com/uploads/2011/02/inception.jpg"/>
+  </div>
+   <div class="carouselImage" style="background-size:cover;">
+    <img data-tab="fight" src="https://i.pinimg.com/736x/fd/5e/66/fd5e662dce1a3a8cd192a5952fa64f02--classic-poster-classic-movies-posters.jpg"/>
+  </div>
+   <div class="carouselImage" style="background-size:cover;">
+    <img data-tab="dunkirk" src="http://www.gmhslasso.org/wp-content/uploads/2018/01/Stegenga_BestMoviesof2017_Photo2.jpg"/>
+  </div>
+</div>
+</section>-->
 </body>
 </html>
 
