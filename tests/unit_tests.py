@@ -4,8 +4,7 @@ import sqlite3
 import os #for path stuff
 import selenium
 import urllib.request #for testing server
-
-
+from werkzeug.security import generate_password_hash, check_password_hash
 
 """
     UnitTest TestCase class for testing on the Database.
@@ -59,7 +58,7 @@ class TestDataBase(unittest.TestCase):
         self.assertEqual(['id','date','time','screenid','movieid'], [cursor.description[0][0],cursor.description[1][0],cursor.description[2][0],cursor.description[3][0],cursor.description[4][0]])
 
         cursor = conn.execute('SELECT * FROM customers')
-        self.assertEqual(['id', 'forename', 'surname', 'email', 'phonenumber', 'password', 'dob'], [cursor.description[0][0],cursor.description[1][0],cursor.description[2][0],cursor.description[3][0],cursor.description[4][0],
+        self.assertEqual(['id', 'forename', 'surname', 'email', 'phonenumber', 'hash', 'dob'], [cursor.description[0][0],cursor.description[1][0],cursor.description[2][0],cursor.description[3][0],cursor.description[4][0],
         cursor.description[5][0],cursor.description[6][0]])
 
         cursor = conn.execute("SELECT * FROM bookings")
@@ -238,10 +237,13 @@ class TestDataBase(unittest.TestCase):
 
         #Manually connect to the database.
         conn = sqlite3.connect('test.db')
-        cursor = conn.execute('SELECT * FROM customers')
-
+        cursor = conn.execute('SELECT * FROM customers')    
+        fetch = cursor.fetchall()
+        hash = fetch[0][5]
+        fetch = [tuple(list(f)[:5] + list(f)[6:]) for f in fetch]
         #Asserts that the rows of the 'customers' table only contains our test entry, and that it does indeed contain this entry correctly.
-        self.assertEqual(cursor.fetchall(), [(1, 'Jared', 'Swift', 'ed18jws@leeds.ac.uk', '07495508368', 'o kostas einai andras', '13-07-2001')])
+        self.assertEqual(fetch, [(1, 'Jared', 'Swift', 'ed18jws@leeds.ac.uk', '07495508368', '13-07-2001')])
+        self.assertTrue(check_password_hash(hash, 'o kostas einai andras'))
 
 
     def testUpdateCustomer(self):
@@ -249,15 +251,18 @@ class TestDataBase(unittest.TestCase):
 
         #Update test customer
         testDataBase.update_customer(1, ('Kostas', 'Biris', 'sc19kb@leeds.ac.uk', '07495508228', 'i kostas einai yuneika', '13-07-1900'))
-
-        #Connect manually to the database.
         conn = sqlite3.connect('test.db')
-
         cursor = conn.execute('SELECT * FROM customers')
+        fetch = cursor.fetchall()
+        hash = fetch[0][5]
+        #Connect manually to the database.
 
+        
+        fetch = [tuple(list(f)[:5] + list(f)[6:]) for f in fetch]
         #Asserts that the rows of the 'customers' table only contains our test entry, and that it has been correctly updated.
-        self.assertEqual(cursor.fetchall(), [(1,'Kostas', 'Biris', 'sc19kb@leeds.ac.uk', '07495508228', 'i kostas einai yuneika', '13-07-1900')])
-
+        self.assertEqual(fetch, [(1,'Kostas', 'Biris', 'sc19kb@leeds.ac.uk', '07495508228', '13-07-1900')])
+        fetch = cursor.fetchall()
+        self.assertTrue(check_password_hash(hash, 'i kostas einai yuneika'))
     #Test that a customer is correctly removed.
     def testRemoveCustomer(self):
         testDataBase = Database('test.db')

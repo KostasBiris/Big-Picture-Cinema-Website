@@ -1,7 +1,7 @@
 
 
 import sqlite3 as sql
-
+from werkzeug.security import generate_password_hash, check_password_hash
 """
     TODO:
         comments and documentation.
@@ -59,7 +59,7 @@ class Database:
         
         self.cur.execute("CREATE TABLE IF NOT EXISTS bookings (id INTEGER PRIMARY KEY, screeningid INTEGER references screenings(id) NOT NULL, customerid INTEGER references customers(id), seats text NOT NULL)")
 
-        self.cur.execute("CREATE TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY, forename text NOT NULL, surname text NOT NULL, email text NOT NULL, phonenumber text NOT NULL, password text NOT NULL, dob date NOT NULL)")
+        self.cur.execute("CREATE TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY, forename text NOT NULL, surname text NOT NULL, email text NOT NULL, phonenumber text NOT NULL, hash text NOT NULL, dob date NOT NULL)")
 
 
         #commit the changes we have made to the database
@@ -195,8 +195,8 @@ class Database:
     
     def add_customer(self, forename, surname, email, phonenumber, password, dob):
         
-        self.cur.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?)",(forename, surname, email, phonenumber, password, dob))
-
+        _hash = generate_password_hash(password)
+        self.cur.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?)",(forename, surname, email, phonenumber, _hash, dob))
         self.conn.commit()
     
     def remove_customer(self, id):
@@ -206,11 +206,24 @@ class Database:
         self.conn.commit()
 
     def update_customer(self, id, data):
-
-        self.cur.execute("UPDATE customers SET forename=?, surname=?, email=?, phonenumber=?, password=?, dob=? WHERE id=?",(*data, id))
-
+        data = list(data)
+        data[4] = generate_password_hash(data[4])
+        data = tuple(data)
+        self.cur.execute("UPDATE customers SET forename=?, surname=?, email=?, phonenumber=?, hash=?, dob=? WHERE id=?",(*data, id))
         self.conn.commit()
     
+    def fetch_customer(self, id):
+
+        self.cur.execute("SELECT * from customers WHERE id =?", (id,))
+        return self.cur.fetchone()
+
+    def validate_customer(self, email, password):
+        self.cur.execute("SELECT * from customers WHERE email =?", (email,))
+        u = self.cur.fetchone()
+        if not u : return False
+        return check_password_hash(u[5], password)
+
+
     def search(self, query, table):
         dictionary = {'movies':0,'screens':1, 'screenings': 2,  'customers': 3, 'bookings': 4}
         return [row for row in self.fetch()[dictionary[table.lower()]] if query.lower() in str(row).lower()]
