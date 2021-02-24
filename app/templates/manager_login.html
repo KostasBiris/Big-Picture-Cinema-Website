@@ -1,0 +1,18 @@
+<html lang="en">
+    <head>
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='main.css')}}"/>
+    </head>
+    <body class="register">
+        <img src="{{url_for('static',filename='finlogo.png')}}"  style=" display: block; margin-left: auto; margin-right: auto; width: 300px; height: 190px;">
+        <form action="/" method="post">
+    			<input class="register_details" type="text" name="email" id="email" placeholder="E-mail address" style="color:black;" required/>
+    			<br>
+    			<input class="register_details" type="password" name="password" id="password" placeholder="Password" style="color:black;" required/>
+    			<br>
+                <input class="register_details" type="text" name="identification" id="id" placeholder="Manager ID" style="color:black;" required/>
+    			<br>
+    			<input  class="login_button"type="submit" value="LOG IN" style=" color:white; position: relative; " />
+  			</form>
+             <!-- <div  class="big-box" style= "position:fixed; width: 600px; top:250px; height:350px;" ></div>-->
+</body>
+</html>
