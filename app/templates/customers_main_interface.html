@@ -50,23 +50,32 @@
     <div class="button" onclick="shiftLeft()">
         <img src= "{{url_for('static',filename='left.png')}}" alt=""></div>
         <div class="cards-wrapper">
-            <ul class="cards__container">
-               <!-- needs to dynamically allocate the movie posters based on random generation-->
-            <li class="box">box 1</li>
-            <li class="box">box 2</li>
-            <li class="box">box 3</li>
-            <li class="box">box 4</li>
-            <li class="box">box 5</li>
-            <li class="box box--hide">box 6</li>
-            <li class="box box--hide">box 7</li>
-        </ul>
-        <div class="card__text-content"><!--needs to dynamically allocate the movie discription and titles based on random generation-->
-            <h3 class="card__title">On the Waterfront </h3>
-             <div class="card__summary">An ex-prize fighter turned longshoreman struggles to stand up to his corrupt union bosses. </div>
-            </div>
-        </div>
-        <div class="button" onclick="shiftRight()"><img src="{{url_for('static',filename='right.png')}}" alt=""></div>
-    </div>
+             <div class="cards__container">
+                 <div class="carouselOfImages">
+                     <div class="carouselImage" style="background-size:cover;">
+                        <img  class="box" src="http://www.thebrandage.com/assets/image/uploads/haberler/Bright_TUR.jpg"/>
+                    </div>
+                    <div class="carouselOfImages">
+                         <div class="carouselImage" style="background-size:cover;"> 
+                            <img  class="box" src="http://www.thebrandage.com/assets/image/uploads/haberler/Bright_TUR.jpg"/>
+                        </div>
+                        <div class="carouselOfImages">
+                             <div class="carouselImage" style="background-size:cover;"> 
+                                <img class="box" src="http://www.thebrandage.com/assets/image/uploads/haberler/Bright_TUR.jpg"/>
+                            </div>
+                            <div class="carouselOfImages">
+                                 <div class="carouselImage" style="background-size:cover;"> 
+                                    <img class="box"  src="http://www.thebrandage.com/assets/image/uploads/haberler/Bright_TUR.jpg"/>
+                                 </div>
+                                <div class="carouselOfImages"> 
+                                     <div class="carouselImage" style="background-size:cover;"> 
+                                        <img class="box" src="http://www.thebrandage.com/assets/image/uploads/haberler/Bright_TUR.jpg"/>
+                                    </div>
+        <!--needs to dynamically allocate the movie discription and titles based on random generation-->
+        <div class="button" onclick="shiftRight()">
+            <img src="{{url_for('static',filename='right.png')}}" alt=""></div>
+</div>
+</div>
 
     <!--JAVASCRIPT - source: -->
     <script>
@@ -108,44 +117,6 @@ function shiftRight() {
     }, 500);
 }
 </script>
-<!-- 
-<section class="items">
-<div class="carouselOfImages">
-  <div class="carouselImage" style="background-size:cover;">
-    <img data-tab="bright" src="http://www.thebrandage.com/assets/image/uploads/haberler/Bright_TUR.jpg"/>
-  </div>
-  <div class="carouselImage" style="background-size:cover;">
-    <img data-tab="avatar" src="https://i.pinimg.com/736x/a4/23/f8/a423f86593029b7d2a6d9f1e1fd1e406---movies-movies-to-watch-online.jpg"/>
-  </div>
- <div class="carouselImage" style="background-size:cover;">
-    <img data-tab="nuh" src="http://a69.g.akamai.net/n/69/10688/v1/img5.allocine.fr/acmedia/medias/nmedia/19/02/17/31/20658158.jpg"/>
-  </div>
-   <div class="carouselImage" style="background-size:cover;">
-    <img data-tab="lord" src="https://cdn.empireonline.com/jpg/70/0/0/1280/960/aspectfit/0/0/0/0/0/0/c/features/59e8d795405a5c6805947751/47%20Lord%20of%20War.jpg"/>
-  </div>
-  <div class="carouselImage" style="background-size:cover;">
-    <img data-tab="thor" src="https://mikeantjones.files.wordpress.com/2012/04/thor-film-poster.jpg"/>
-  </div>
-   <div class="carouselImage" style="background-size:cover;">
-    <img data-tab="john" src="https://images-na.ssl-images-amazon.com/images/I/91H06HPhX%2BL._SY717_.jpg"/>
-  </div>
-  <div class="carouselImage" style="background-size:cover;">
-    <img data-tab="bond" src="http://www.the007dossier.com/007Dossier/james-bond-007-movie-posters/skyfall/skyfall-bond-poster.jpg"/>
-  </div>
-   <div class="carouselImage" style="background-size:cover;">
-    <img data-tab="deadpool2" src="https://icdn3.digitaltrends.com/image/deadpool-2-thanksgiving-poster-1294x2048.jpg"/>
-  </div>
-   <div class="carouselImage" style="background-size:cover;">
-    <img data-tab="inception" src="http://netdna.webdesignerdepot.com/uploads/2011/02/inception.jpg"/>
-  </div>
-   <div class="carouselImage" style="background-size:cover;">
-    <img data-tab="fight" src="https://i.pinimg.com/736x/fd/5e/66/fd5e662dce1a3a8cd192a5952fa64f02--classic-poster-classic-movies-posters.jpg"/>
-  </div>
-   <div class="carouselImage" style="background-size:cover;">
-    <img data-tab="dunkirk" src="http://www.gmhslasso.org/wp-content/uploads/2018/01/Stegenga_BestMoviesof2017_Photo2.jpg"/>
-  </div>
-</div>
-</section>-->
 </body>
 </html>
 

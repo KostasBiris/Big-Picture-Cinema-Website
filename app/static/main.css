@@ -137,14 +137,14 @@
 
 .box {
     /*margin: -1.5rem; */
-    width: 12rem;
-    height: 20rem;
+    width: 15rem;
+    height: 23rem;
     box-shadow: 0px 0px 2rem 0px #888888;
-    background-color: white;
     display: flex;
+    background-color: white;
     justify-content: center;
     align-items: center;
-    position: relative;
+    position:relative;
     /*transition: 1s all; */
 }
 
@@ -173,6 +173,7 @@
 .box:nth-child(5) {
   left: -15%;
 }
+
 
 .card__text-content {
     text-align: center;
@@ -353,7 +354,7 @@
         transform: scale(0.75) translateX(0);
     }
 }
-/*
+
 .carouselOfImages
 {
   max-width:960px;
@@ -367,17 +368,6 @@
   margin-bottom:100px;
   border-radius: 5px;
   counter-increment: carousel-cell;
-  transition: transform 0.5s;
-  transform: scale(1);
+  /*transition: transform 0.5s;
+  transform: scale(1);*/
 }
-.carouselImage img {
-  height:235px;
-}
-.carouselImage.is-selected {
-  z-index:10;
-  transform: scale(1.5);
-}
-.carouselImage.nextToSelected {
-  transform: scale(1.25);
-  z-index:5;
-}*/
