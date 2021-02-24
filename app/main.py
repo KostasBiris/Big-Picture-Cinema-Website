@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect
 from db import Database
-
 import socket
 
 app = Flask(__name__)
@@ -87,6 +86,6 @@ def account():
 
 
 if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0', port='5000', threaded=True)
+    app.run(debug=False, host='localhost', port='4000', threaded=True)
 
 
