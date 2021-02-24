@@ -1,6 +1,7 @@
 <html lang="en">
 <head>
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='main.css')}}"/>
+    
 </head>
 <body style="background-color: rgb(255, 255, 255);">
 <img src="{{url_for('static',filename='finlogo.png')}}" style="top:1px;width:300px;height:190px;" >
@@ -19,9 +20,24 @@
 
     </form>
 <div>
-    <input type="image" src="{{url_for('static',filename='usericon.png')}}"style="position:absolute;top:125px;left:1340px;width:40px;height:40px;" />
-    <button class="text_button"style="position:absolute;top:125px;left:1390px;width:60px;height:40px;">LOG IN</button>
-    <button class="text_button"style="position:absolute;top:125px;left:1460px;width:60px;height:40px;">SIGN UP</button>
+    <input id = "account" type="image" src="{{url_for('static',filename='usericon.png')}}"style="position:absolute;top:125px;left:1340px;width:40px;height:40px;" />
+    <script type="text/javascript">
+        document.getElementById("account").onclick = function () {
+            location.href = "{{ url_for('account') }}";
+        };
+    </script>
+    <button type = "submit" id = "login" class="text_button"style="position:absolute;top:125px;left:1390px;width:60px;height:40px;">LOG IN</button>
+    <script type="text/javascript">
+        document.getElementById("login").onclick = function () {
+            location.href = "{{ url_for('login') }}";
+        };
+    </script>
+    <button id = "register" type ="submit" class="text_button"  style="position:absolute;top:125px;left:1460px;width:60px;height:40px;">SIGN UP</button>
+    <script type="text/javascript">
+        document.getElementById("register").onclick = function () {
+            location.href = "{{ url_for('register') }}";
+        };
+    </script>
 </div>
 </body>
 </html>

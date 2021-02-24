@@ -1,11 +1,10 @@
+import sys
+sys.path.append("/home/konstantinos/Desktop/SEP/sep-group-project/app")
 import unittest #testing framework
-from app.db import Database #our database class (MODULAR PROGRAMMING ;))
+from db import Database #our database class (MODULAR PROGRAMMING ;))
 import sqlite3
 import os #for path stuff
 import selenium
-import urllib.request #for testing server
-
-
 
 """
     UnitTest TestCase class for testing on the Database.
@@ -33,7 +32,7 @@ import urllib.request #for testing server
 """
 class TestDataBase(unittest.TestCase):
 
-    # Test that the database is successfully created on the instantiation of the Database class.
+    # Test1 that the database is successfully created on the instantiation of the Database class.
     def testDatabaseCreation(self):
         #Instantiate Database
         testDataBase = Database('test.db')
@@ -66,7 +65,7 @@ class TestDataBase(unittest.TestCase):
         self.assertEqual(['id','screeningid','customerid','seats'],[cursor.description[0][0],cursor.description[1][0],cursor.description[2][0],cursor.description[3][0]] )
 
 
-    #Test that the correct output is produced when 'fetching' an empty database.
+    #Test2 that the correct output is produced when 'fetching' an empty database.
     def testFetchEmpty(self):
 
         testDataBase = Database('test.db')
@@ -77,12 +76,12 @@ class TestDataBase(unittest.TestCase):
         #Asserts that the sum of the lengths of the rows fetched is 0 (False)
         self.assertFalse(len(rows[0]) + len(rows[1]) + len(rows[2]) + len(rows[3]) + len(rows[4]))
 
-    #Test that a movie is correctly inserted.
+    #Test3 that a movie is correctly inserted.
     def testInsertMovie(self):
         testDataBase = Database('test.db')
 
         #Add an entry for testing.
-        testDataBase.add_movie('On the Waterfront', 'A movie about an ex-prizefighter, on the waterfront.', '16', 'Elia Kazan', 'Marlon Brando')
+        testDataBase.add_movie('Test3nameInsertMovie', 'Test3blurbInsertMovie', '15', 'Test3directorInsertMovie', 'Test3actorInsertMovie')
 
         #Manually connect to the database.
         
@@ -90,24 +89,24 @@ class TestDataBase(unittest.TestCase):
         cursor = conn.execute('SELECT * FROM movies')
 
         #Asserts that the rows of the 'movies' table only contains our test entry, and that it does indeed contain this entry correctly.
-        self.assertEqual(cursor.fetchall(), [(1,'On the Waterfront', 'A movie about an ex-prizefighter, on the waterfront.', '16', 'Elia Kazan', 'Marlon Brando')])
+        self.assertEqual(cursor.fetchall(), [(10,'Test3nameInsertMovie', 'Test3blurbInsertMovie', '15', 'Test3directorInsertMovie', 'Test3actorInsertMovie')])
 
-    #Test that a movie is correctly updarted.
+    #Test4 that a movie is correctly updarted.
     def testUpdateMovie(self):
         testDataBase = Database('test.db')
 
         #Update our test movie.
-        testDataBase.update_movie(1, ('On the Waterfront', 'A movie about an ex-prizefighter.', '16', 'Elia Kazan', 'Marlon Brando'))
+        testDataBase.update_movie(1, ('Test4nameUpdateMovie', 'Test4blurbUpdateMovie', '15', 'Test4directorUpdateMovie', 'Test4actorUpdateMovie'))
         
         #Manually connect to the database.
         conn = sqlite3.connect('test.db')
         cursor = conn.execute('SELECT * FROM movies')
 
         #Asserts that the rows of the 'movies' table only contains our test entry, and that it has been correctly updated.
-        self.assertEqual(cursor.fetchall(), [(1,'On the Waterfront', 'A movie about an ex-prizefighter.', '16', 'Elia Kazan', 'Marlon Brando')])
+        self.assertEqual(cursor.fetchall(), [(1,'Test4nameUpdateMovie', 'Test4blurbUpdateMovie', '15', 'Test4directorUpdateMovie', 'Test4actorUpdateMovie')])
 
 
-    #Test that the correct output is produced when 'fetching' a database with entries
+    #Test5 that the correct output is produced when 'fetching' a database with entries
     def testFetchNonEmpty(self):
         testDataBase = Database('test.db')
         #Fetch rows
@@ -136,85 +135,85 @@ class TestDataBase(unittest.TestCase):
         bookings = cur.fetchall()
         self.assertEqual(rows, (movies,screens,screenings,customers,bookings))
 
-    #Test that a movie is correctly removed from the database.
+    #Test6 that a movie is correctly removed from the database.
     def testRemoveMovie(self):
         testDataBase = Database('test.db')
 
         #Store the previous number of rows in the 'movies' table.
         prev_len = len(testDataBase.fetch()[0])
         #Remove the movie
-        testDataBase.remove_movie(1)
+        testDataBase.remove_movie(2)
         #Assert that the number of rows has decremented.
         self.assertEqual(prev_len-1, len(testDataBase.fetch()[0]))
         #Assert that our original entry is NOT in the 'movies' table.
-        self.assertTrue((1,'On the Waterfront', 'A movie about an ex-prizefighter, on the waterfront.', '16', 'Elia Kazan', 'Marlon Brando') not in testDataBase.fetch()[0])
+        self.assertTrue((2,'Test6nameRemoveMovie', 'Test6blurbRemoveMovie', '15', 'Test6directorRemoveMovie', 'Test6actorRemoveMovie') not in testDataBase.fetch()[0])
 
-    #Test that a screen is correctly inserted.
+    #Test7 that a screen is correctly inserted.
     def testInsertScreen(self):
         testDataBase = Database('test.db')
         
         #Add a screen
-        testDataBase.add_screen(50)
+        testDataBase.add_screen(9)
 
         #Manually connect to the database
         conn = sqlite3.connect('test.db')        
         cursor = conn.execute('SELECT * FROM screens')
 
         #Asserts that the rows of the 'screens' table only contains our test entry, and that it does indeed contain this entry correctly.
-        self.assertEqual(cursor.fetchall(), [(1, 50)])
+        self.assertEqual(cursor.fetchall(), [(9, 7)])
 
-    #Test that a screen is correctly updated.
+    #Test8 that a screen is correctly updated.
     def testUpdateScreen(self):
         testDataBase = Database('test.db')
         #Update the screen (NOTE: the ',' is used to allow a singleton tuple to be passed to the function.)
-        testDataBase.update_screen(1, (60,))
+        testDataBase.update_screen(10, (88,))
 
         #Manually connect to the database.
         conn = sqlite3.connect('test.db')
         cursor = conn.execute("SELECT * FROM screens")
 
         #Asserts that the rows of the 'screens' table only contains our test entry, and that it has been correctly updated.
-        self.assertEqual(cursor.fetchall(), [(1,60)])
+        self.assertEqual(cursor.fetchall(), [(1,88)])
 
-    #Test that a screen is correctly removed from the database.
+    #Test9 that a screen is correctly removed from the database.
     def testRemoveScreen(self):
         testDataBase = Database('test.db')
         #Store the previous number of rows in the 'screens' table.
         prev_len = len(testDataBase.fetch()[1])
         #Remove the screen
-        testDataBase.remove_screen(1)
+        testDataBase.remove_screen(2)
         #Assert that the number of rows has decremented.
         self.assertEqual(prev_len-1, len(testDataBase.fetch()[1]))
         #Assert that our original entry is NOT in the 'screens' table
-        self.assertTrue((1,50) not in testDataBase.fetch()[1])
+        self.assertTrue((2,9) not in testDataBase.fetch()[1])
 
-    #Test that a screening is correctly inserted.
+    #Test10 that a screening is correctly inserted.
     def testInsertScreening(self):
         testDataBase = Database('test.db')
         
         #Insert test screening
-        testDataBase.add_screening('01-03-2020','18:00', 1, 1)
+        testDataBase.add_screening('10-12-2021','10:00', 3, 4)
         
         #Manually connect to the database.
         conn = sqlite3.connect('test.db')
         cursor = conn.execute('SELECT * FROM screenings')
 
         #Asserts that the rows of the 'screenings' table only contains our test entry, and that it does indeed contain this entry correctly.
-        self.assertEqual(cursor.fetchall(), [(1, '01-03-2020', '18:00', 1, 1)])
+        self.assertEqual(cursor.fetchall(), [(6, '10-10-2021', '10:00', 3, 4)])
 
-    #Test that a screening is correctly updated.
+    #Test11 that a screening is correctly updated.
     def testUpdateScreening(self):
         testDataBase = Database('test.db')
         
         #Update our test screening.
-        testDataBase.update_screening(1, ('02-03-2020', '19:00', 1, 1))
+        testDataBase.update_screening(1, ('11-12-2021', '11:11', 4, 6))
         conn = sqlite3.connect('test.db')
         cursor = conn.execute('SELECT * FROM screenings')
 
         #Asserts that the rows of the 'screenings' table only contains our test entry, and that it has been correctly updated.
-        self.assertEqual(cursor.fetchall(), [(1, '02-03-2020', '19:00', 1, 1)])
+        self.assertEqual(cursor.fetchall(), [(6, '11-12-2021', '11:11', 4, 6)])
 
-    #Test that a screening is correctly removed.
+    #Test12 that a screening is correctly removed.
     def testRemoveScreening(self):
         testDataBase = Database('test.db')
         #Store the previous number of rows in the 'screenings' table.
@@ -227,28 +226,28 @@ class TestDataBase(unittest.TestCase):
         self.assertEqual(prev_len-1, len(testDataBase.fetch()[2]))
 
         #Assert that our original entry is NOT in the 'screenings' table
-        self.assertTrue((1,'01-03-2020', '18:00', 1, 1) not in testDataBase.fetch()[2])
+        self.assertTrue((1,'12-12-2021', '12:12', 5, 5) not in testDataBase.fetch()[2])
         
-    #Test that a customer is inserted correctly.
+    #Test13 that a customer is inserted correctly.
     def testInsertCustomer(self):
         testDataBase = Database('test.db')
 
         #Insert test customer
-        testDataBase.add_customer('Jared', 'Swift', 'ed18jws@leeds.ac.uk', '07495508368', 'o kostas einai andras', '13-07-2001')
+        testDataBase.add_customer('Test13forenameInsertCustomer', 'Test13surnameInsertCustomer', 'Test31@InsertCustomer.com', '01313131313', 'Test13passwordInsertCustomer', '13-01-2000')
 
         #Manually connect to the database.
         conn = sqlite3.connect('test.db')
         cursor = conn.execute('SELECT * FROM customers')
 
         #Asserts that the rows of the 'customers' table only contains our test entry, and that it does indeed contain this entry correctly.
-        self.assertEqual(cursor.fetchall(), [(1, 'Jared', 'Swift', 'ed18jws@leeds.ac.uk', '07495508368', 'o kostas einai andras', '13-07-2001')])
+        self.assertEqual(cursor.fetchall(), [(6, 'Test13forenameInsertCustomer', 'Test13surnameInsertCustomer', 'Test13@InsertCustomer.com', '01313131313', 'Test13passwordInsertCustomer', '13-01-2000')])
 
-
+    #Test14 that a customer is correctly updated.
     def testUpdateCustomer(self):
         testDataBase = Database('test.db')
 
         #Update test customer
-        testDataBase.update_customer(1, ('Kostas', 'Biris', 'sc19kb@leeds.ac.uk', '07495508228', 'i kostas einai yuneika', '13-07-1900'))
+        testDataBase.update_customer(7, ('Test14forenameUpdateCustomer', 'Test14surnameUpdateCustomer', 'Test14@UpdateCustomer.com', '01414141414', 'Test14passwordUpdateCustomer', '14-01-2000'))
 
         #Connect manually to the database.
         conn = sqlite3.connect('test.db')
@@ -256,9 +255,9 @@ class TestDataBase(unittest.TestCase):
         cursor = conn.execute('SELECT * FROM customers')
 
         #Asserts that the rows of the 'customers' table only contains our test entry, and that it has been correctly updated.
-        self.assertEqual(cursor.fetchall(), [(1,'Kostas', 'Biris', 'sc19kb@leeds.ac.uk', '07495508228', 'i kostas einai yuneika', '13-07-1900')])
+        self.assertEqual(cursor.fetchall(), [(7, 'Test14forenameUpdateCustomer', 'Test14surnameUpdateCustomer', 'Test14@UpdateCustomer.com', '01414141414', 'Test14passwordUpdateCustomer', '14-01-2000')])
 
-    #Test that a customer is correctly removed.
+    #Test15 that a customer is correctly removed.
     def testRemoveCustomer(self):
         testDataBase = Database('test.db')
 
@@ -272,14 +271,14 @@ class TestDataBase(unittest.TestCase):
         self.assertEqual(prev_len-1, len(testDataBase.fetch()[3]))
 
         #Assert that our original entry is NOT in the 'customers' table
-        self.assertTrue((1, 'Jared', 'Swift', 'ed18jws@leeds.ac.uk', '07495508368', 'o kostas einai andras', '13-07-2001') not in testDataBase.fetch()[3])
+        self.assertTrue((1, 7, 'Test15forenameUpdateCustomer', 'Test15surnameUpdateCustomer', 'Test15@UpdateCustomer.com', '01515151515', 'Test15passwordUpdateCustomer', '15-01-2000') not in testDataBase.fetch()[3])
 
-    #Test that a booking is correctly inserted.
+    #Test16 that a booking is correctly inserted.
     def testInsertBooking(self):
         testDataBase = Database('test.db')
 
         #Insert a test booking.
-        testDataBase.add_booking(1,1, 'A12,A11,A10')
+        testDataBase.add_booking(1,1, 'A16,B16,C16')
         
         #Manually connect to the database.
         conn = sqlite3.connect('test.db')
@@ -287,23 +286,23 @@ class TestDataBase(unittest.TestCase):
         cursor = conn.execute('SELECT * FROM bookings')
 
         #Asserts that the rows of the 'bookings' table only contains our test entry, and that it does indeed contain this entry correctly.
-        self.assertEqual(cursor.fetchall(), [(1,1,1,'A12,A11,A10')])
+        self.assertEqual(cursor.fetchall(), [(1,1,1,'A16,B16,C16')])
 
-    #Test that a booking is correctly updated.
+    #Test17 that a booking is correctly updated.
     def testUpdateBooking(self):
         testDataBase = Database('test.db')
 
         #Update test booking
-        testDataBase.update_booking(1, (1,1, 'B12,B11,B10'))
+        testDataBase.update_booking(17, (4,4, 'A17,B17,C17'))
 
         #Manually connect to the database.
         conn = sqlite3.connect('test.db')
         cursor = conn.execute('SELECT * FROM bookings')
 
         #Asserts that the rows of the 'bookings' table only contains our test entry, and that it has been correctly updated.
-        self.assertEqual(cursor.fetchall(), [(1,1,1,'B12,B11,B10')])
+        self.assertEqual(cursor.fetchall(), [(17,4,4,'A17,B17,C17')])
 
-    #Test that a booking is correctly removed.
+    #Test18 that a booking is correctly removed.
     def testRemoveBooking(self):
         testDataBase = Database('test.db')
         
@@ -311,18 +310,14 @@ class TestDataBase(unittest.TestCase):
         prev_len = len(testDataBase.fetch()[4])
 
         #Remove booking
-        testDataBase.remove_booking(1)
+        testDataBase.remove_booking(18)
 
         #Assert that the length has decremented.
         self.assertEqual(prev_len-1, len(testDataBase.fetch()[4]))
 
         #Assert that our original entry is NOT in the 'bookings' table.
-        self.assertTrue((1,1,1, 'A12,A11,A10') not in testDataBase.fetch()[4])
-
-
-
-
-
+        self.assertTrue((18,5,5, 'A18,B18,C18') not in testDataBase.fetch()[4])
+        
 class TestMainPage(unittest.TestCase):
 
 
@@ -432,7 +427,6 @@ def suite():
     suite.addTest(TestDataBase('testRemoveScreening'))
     suite.addTest(TestDataBase('testRemoveMovie'))
     suite.addTest(TestDataBase('testRemoveScreen'))
-
     suite.addTest(TestMainPage('testSearchQuery'))
     suite.addTest(TestMainPage('testClickWhatsNew'))
     suite.addTest(TestMainPage('testClickTickets'))    
@@ -441,13 +435,11 @@ def suite():
     suite.addTest(TestMainPage('testClickAccount'))    
     suite.addTest(TestMainPage('testClickLogin'))    
     suite.addTest(TestMainPage('testClickSignup'))
-
     suite.addTest(TestLoginPage('testCorrectLogin'))    
     suite.addTest(TestLoginPage('testIncorrectLogin'))  
     suite.addTest(TestLoginPage('testNonExistingUser'))  
     suite.addTest(TestLoginPage('testLockAccount'))  
     suite.addTest(TestLoginPage('testEmptyFields'))  
-
     suite.addTest(TestRegisterPage('testEmptyFields'))
     suite.addTest(TestRegisterPage('testAlphaFirstname'))
     suite.addTest(TestRegisterPage('testAlphaSurname'))
@@ -468,8 +460,5 @@ if __name__ == '__main__':
     testRunner.run(suite())
 
     #Cleanup the environment by removing the 'test.db' file created by the tests.
-    
-    _dir = os.path.abspath(os.path.join(__file__, os.pardir))
-    _dir = os.path.abspath(os.path.join(_dir, os.pardir))
-    if os.path.isfile(_dir+'/test.db'):
-        os.remove(_dir+'/test.db')
+   # if os.path.isfile(os.path.dirname(os.path.abspath(__file__))+'/test.db'):
+    #    os.remove(os.path.dirname(os.path.abspath(__file__))+'/test.db')
