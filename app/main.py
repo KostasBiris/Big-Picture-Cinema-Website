@@ -1,14 +1,8 @@
 from flask import Flask, render_template, request, redirect
-
-#from db import Database
-
+from db import Database
 import socket
 
 app = Flask(__name__)
-
-
-
-
 
 @app.route('/')
 def mainpage():
@@ -21,6 +15,16 @@ def managepage():
 @app.route('/primelogin')
 def managerlogin():
     return render_template('manager_login.html')
+
+@app.route('/primelogin', methods =['POST'])
+def _managerlogin():
+    db = Database('cinema.db')
+    email = request.form['email']
+    pwd = request.form['password']
+    _id = request.form['identification']
+    print(email, pwd, _id)
+    del db
+    return render_template('business_main_interface.html')
 
 @app.route('/register')
 def customer_register():
@@ -67,12 +71,11 @@ def login():
 @app.route('/login', methods = ['POST'])
 def _login():
     db = Database('cinema.db')
-    
     email = request.form['email']
     pwd = request.form['password']
     print(email, pwd)
     del db
-    return render_template('customer_login.html')
+    return render_template('customer_main_interface.html')
  
 
 @app.route('/account')
