@@ -1,18 +1,38 @@
 from flask import Flask, render_template, request, redirect
-
 from db import Database
-
 import socket
 
 app = Flask(__name__)
 
-
-
-
-
 @app.route('/')
 def mainpage():
     return render_template('customers_main_interface.html')
+
+@app.route('/manage')
+def managepage():
+    return render_template('business_main_interface.html')
+
+@app.route('/primelogin')
+def managerlogin():
+    return render_template('manager_login.html')
+
+@app.route('/primelogin', methods =['POST'])
+def _managerlogin():
+    db = Database('cinema.db')
+    email = request.form['email']
+    pwd = request.form['password']
+    _id = request.form['identification']
+    print(email, pwd, _id)
+    del db
+    return render_template('business_main_interface.html')
+
+@app.route('/register')
+def customer_register():
+    return render_template('customer_register.html')
+
+@app.route('/login')
+def customer_login():
+    return render_template('customer_login.html')
 
 @app.route('/', methods=['POST'])
 def _mainpage():
@@ -51,12 +71,11 @@ def login():
 @app.route('/login', methods = ['POST'])
 def _login():
     db = Database('cinema.db')
-    
     email = request.form['email']
     pwd = request.form['password']
     print(email, pwd)
     del db
-    return render_template('customer_login.html')
+    return render_template('customer_main_interface.html')
  
 
 @app.route('/account')
@@ -67,6 +86,6 @@ def account():
 
 
 if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0', port='5000', threaded=True)
+    app.run(debug=False, host='localhost', port='4000', threaded=True)
 
 
