@@ -60,7 +60,8 @@ class Database:
         self.cur.execute("CREATE TABLE IF NOT EXISTS bookings (id INTEGER PRIMARY KEY, screeningid INTEGER references screenings(id) NOT NULL, customerid INTEGER references customers(id), seats text NOT NULL)")
 
         self.cur.execute("CREATE TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY, forename text NOT NULL, surname text NOT NULL, email text NOT NULL, phonenumber text NOT NULL, password text NOT NULL, dob date NOT NULL)")
-
+        
+        self.cur.execute("CREATE TABLE IF NOT EXISTS employees (id INTEGER PRIMARY KEY, forename text NOT NULL, surname text NOT NULL, email text NOT NULL, phonenumber text NOT NULL, password text NOT NULL, isManager BIT NOT NULL)")
 
         #commit the changes we have made to the database
         self.conn.commit()        
@@ -134,7 +135,7 @@ class Database:
     """
         Inserts a new entry into the screens table
     """
-
+#=-=-=-=-=-=-=-=-=SCREENS-=-=-=-=-=-=-=-=-=-=
     def add_screen(self,capacity):
         
         #Executre an SQL query to insert a new record into the movies database.
@@ -155,7 +156,9 @@ class Database:
         self.cur.execute("UPDATE screens SET capacity=? WHERE id=?",(*data, id))
 
         self.conn.commit()
+#=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
+#=-=-=-=-=-=-=-=-=SCREENINGS-=-=-=-=-=-=-=-=-=
     def add_screening(self, date, time, screenid, movieid):
 
         self.cur.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?)",(date,time,screenid,movieid))
@@ -173,7 +176,9 @@ class Database:
         self.cur.execute("UPDATE screenings SET date=?, time=?, screenid=?, movieid=? WHERE id=?",(*data, id))
 
         self.conn.commit()
-    
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=
+
+#=-=-=-=-=-=-=-=-=-=BOOKINGS-=-=-=-=-=-=-=-=-=-=
     def add_booking(self, screeningid, customerid, seats):
         
         self.cur.execute("INSERT INTO bookings VALUES (NULL, ?,?,?)", (screeningid, customerid, seats))
@@ -191,8 +196,9 @@ class Database:
         self.cur.execute("UPDATE bookings SET screeningid=?, customerid=?, seats=? WHERE id=?",(*data, id))
 
         self.conn.commit()
+#=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=
     
-    
+#=-=-=-=-=-=-=-=-=-=CUSTOMERS-=-=-=-=-=-=-=-=-=-=    
     def add_customer(self, forename, surname, email, phonenumber, password, dob):
         
         self.cur.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?)",(forename, surname, email, phonenumber, password, dob))
@@ -210,9 +216,30 @@ class Database:
         self.cur.execute("UPDATE customers SET forename=?, surname=?, email=?, phonenumber=?, password=?, dob=? WHERE id=?",(*data, id))
 
         self.conn.commit()
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+#=-=-=-=-=-=-=-=-=-=EMPLOYEES-=-=-=-=-=-=-=-=-=-=-=-=   
+    def add_employee(self, forename, surname, email, phonenumber, password, isManager):
+        
+        self.cur.execute("INSERT INTO employees VALUES (NULL, ?,?,?,?,?,?)",(forename, surname, email, phonenumber, password, isManager))
+
+        self.conn.commit()
     
+    def remove_employee(self, id):
+        
+        self.cur.execute("DELETE FROM employees WHERE id=?",(id,))
+
+        self.conn.commit()
+
+    def update_employee(self, id, data):
+
+        self.cur.execute("UPDATE employees SET forename=?, surname=?, email=?, phonenumber=?, password=?, isManager=? WHERE id=?",(*data, id))
+
+        self.conn.commit()
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
     def search(self, query, table):
-        dictionary = {'movies':0,'screens':1, 'screenings': 2,  'customers': 3, 'bookings': 4}
+        dictionary = {'movies':0,'screens':1, 'screenings': 2,  'customers': 3, 'bookings': 4, 'employees': 5}
         return [row for row in self.fetch()[dictionary[table.lower()]] if query.lower() in str(row).lower()]
 
 
