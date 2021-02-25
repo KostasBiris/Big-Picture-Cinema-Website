@@ -49,9 +49,9 @@ class Database:
         self.cur.execute("CREATE TABLE IF NOT EXISTS screens (id INTEGER PRIMARY KEY, capacity INTEGER NOT NULL, seatmap BLOB NOT NULL)")
         
         #Screenings table is created (if it does not exist) with the following fields: id (PK), date, time, screenid (FK), movieid (FK), seatmap
-        self.cur.execute("CREATE TABLE IF NOT EXISTS screenings (id INTEGER PRIMARY KEY, date DATE NOT NULL, time TIME NOT NULL, screenid INTEGER REFERENCES screens(id) NOT NULL, movieid INTEGER REFERENCES movies(id) NOT NULL, seatmap BLOB NOT NULL)")
+        self.cur.execute("CREATE TABLE IF NOT EXISTS screenings (id INTEGER PRIMARY KEY, date DATE NOT NULL, time TIME NOT NULL, screenid INTEGER REFERENCES screens(id) NOT NULL, movieid INTEGER REFERENCES movies(id) NOT NULL, seatmap BLOB NOT NULL, staff INTEGER[] REFERENCES employees(id) )")
         
-        self.cur.execute("CREATE TABLE IF NOT EXISTS bookings (id INTEGER PRIMARY KEY, screeningid INTEGER references screenings(id) NOT NULL, customerid INTEGER references customers(id), seats text NOT NULL)")
+        self.cur.execute("CREATE TABLE IF NOT EXISTS bookings (id INTEGER PRIMARY KEY, screeningid INTEGER references screenings(id) NOT NULL, customerid INTEGER REFERENCES customers(id), seats text NOT NULL)")
 
 
         self.cur.execute("CREATE TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY, forename text NOT NULL, surname text NOT NULL, email text NOT NULL, phonenumber text NOT NULL, hash text NOT NULL, dob date NOT NULL)")
@@ -171,7 +171,7 @@ class Database:
     def add_screening(self, date, time, screenid, movieid):
         self.cur.execute("SELECT seatmap FROM screens WHERE id=?",(screenid,))
         seatmap = self.cur.fetchone()[0]
-        self.cur.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?,?)",(date,time,screenid,movieid,seatmap))
+        self.cur.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?,?,?)",(date,time,screenid,movieid,seatmap,staff))
 
         self.conn.commit()
 
@@ -183,7 +183,7 @@ class Database:
 
     def update_screening(self, id, data):
 
-        self.cur.execute("UPDATE screenings SET date=?, time=?, screenid=?, movieid=?, seatmap=? WHERE id=?",(*data, id))
+        self.cur.execute("UPDATE screenings SET date=?, time=?, screenid=?, movieid=?, seatmap=?, staff=? WHERE id=?",(*data, id))
 
         self.conn.commit()
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=
@@ -249,7 +249,7 @@ class Database:
         self.cur.execute("UPDATE employees SET forename=?, surname=?, email=?, phonenumber=?, hash=?, isManager=? WHERE id=?",(*data, id))
 
         self.conn.commit()
-
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
     def fetch_customer(self, id):
 
