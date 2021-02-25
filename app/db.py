@@ -1,4 +1,3 @@
-
 import sqlite3 as sql
 from werkzeug.security import generate_password_hash, check_password_hash
 import numpy as np
@@ -140,6 +139,7 @@ class Database:
     """
     def search_movies(self, query):
         return [row for row in self.fetch()[0] if query.lower() in str(row).lower()]
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 #=-=-=-=-=-=-=-=-=SCREENS-=-=-=-=-=-=-=-=-=-=
     def add_screen(self,capacity, n,m):
