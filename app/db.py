@@ -43,7 +43,7 @@ class Database:
         self.cur.execute("PRAGMA foreign_keys = 1")
 
         #Movies table is created (if it does not exist) with the following fields: id (PK), name, blurb, certificate, director, leadactors
-        self.cur.execute("CREATE TABLE IF NOT EXISTS movies (id INTEGER PRIMARY KEY,  name text NOT NULL, blurb text NOT NULL, certificate text NOT NULL, director text NOT NULL, leadactors text NOT NULL)")
+        self.cur.execute("CREATE TABLE IF NOT EXISTS movies (id INTEGER PRIMARY KEY,  name TEXT NOT NULL, blurb TEXT NOT NULL, certificate TEXT NOT NULL, director TEXT NOT NULL, leadactors TEXT NOT NULL, release_date DATE NOT NULL)")
         
         #Screens table is created (if it does not exist) with the following fields: id (PK), capacity, seatmap
         self.cur.execute("CREATE TABLE IF NOT EXISTS screens (id INTEGER PRIMARY KEY, capacity INTEGER NOT NULL, seatmap BLOB NOT NULL)")
@@ -51,12 +51,12 @@ class Database:
         #Screenings table is created (if it does not exist) with the following fields: id (PK), date, time, screenid (FK), movieid (FK), seatmap
         self.cur.execute("CREATE TABLE IF NOT EXISTS screenings (id INTEGER PRIMARY KEY, date DATE NOT NULL, time TIME NOT NULL, screenid INTEGER REFERENCES screens(id) NOT NULL, movieid INTEGER REFERENCES movies(id) NOT NULL, seatmap BLOB NOT NULL, staff INTEGER[] REFERENCES employees(id) )")
         
-        self.cur.execute("CREATE TABLE IF NOT EXISTS bookings (id INTEGER PRIMARY KEY, screeningid INTEGER references screenings(id) NOT NULL, customerid INTEGER REFERENCES customers(id), seats text NOT NULL)")
+        self.cur.execute("CREATE TABLE IF NOT EXISTS bookings (id INTEGER PRIMARY KEY, screeningid INTEGER REFERENCES screenings(id) NOT NULL, customerid INTEGER REFERENCES customers(id), seats TEXT NOT NULL)")
 
 
-        self.cur.execute("CREATE TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY, forename text NOT NULL, surname text NOT NULL, email text NOT NULL, phonenumber text NOT NULL, hash text NOT NULL, dob date NOT NULL)")
+        self.cur.execute("CREATE TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY, forename TEXT NOT NULL, surname TEXT NOT NULL, email TEXT NOT NULL, phonenumber TEXT NOT NULL, hash TEXT NOT NULL, dob DATE NOT NULL)")
         
-        self.cur.execute("CREATE TABLE IF NOT EXISTS employees (id INTEGER PRIMARY KEY, forename text NOT NULL, surname text NOT NULL, email text NOT NULL, phonenumber text NOT NULL, hash text NOT NULL, isManager BIT NOT NULL)")
+        self.cur.execute("CREATE TABLE IF NOT EXISTS employees (id INTEGER PRIMARY KEY, forename TEXT NOT NULL, surname TEXT NOT NULL, email TEXT NOT NULL, phonenumber TEXT NOT NULL, hash TEXT NOT NULL, isManager BIT NOT NULL)")
 
 
         #commit the changes we have made to the database
@@ -103,20 +103,21 @@ class Database:
 
         return movies, screens, screenings, customers, bookings, employees
     
+
+#=-=-=-=-=-=-=-=-=-=-=-=MOVIES-=-=--=-=-=-=-=-=-=-=-=-=-=
     """
         Inserts a new entry into the movies table
     """
-
     def add_movie(self, name,blurb,certificate,director,leadactors):
         #Execute an SQL query to insert a new record into the movies database.
         #We use '?' to prevent against SQL injection attacks.
-        self.cur.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?)", (name,blurb,certificate,director,leadactors))
+        self.cur.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?)", (name, blurb, certificate, director, leadactors, release_date))
         
         #Commit the changes we have made to the database.
         self.conn.commit()
 
     def update_movie(self, id, data):
-        self.cur.execute("UPDATE movies SET name=?, blurb=?, certificate=?, director=?, leadactors=? WHERE id=?",(*data, id))
+        self.cur.execute("UPDATE movies SET name=?, blurb=?, certificate=?, director=?, leadactors=?, release_date=? WHERE id=?",(*data, id))
 
         self.conn.commit()
 
@@ -139,9 +140,7 @@ class Database:
     """
     def search_movies(self, query):
         return [row for row in self.fetch()[0] if query.lower() in str(row).lower()]
-    """
-        Inserts a new entry into the screens table
-    """
+
 #=-=-=-=-=-=-=-=-=SCREENS-=-=-=-=-=-=-=-=-=-=
     def add_screen(self,capacity, n,m):
         
