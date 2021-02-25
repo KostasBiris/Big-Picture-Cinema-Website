@@ -1,5 +1,4 @@
 
-
 import sqlite3 as sql
 from werkzeug.security import generate_password_hash, check_password_hash
 """
@@ -63,8 +62,6 @@ class Database:
         self.cur.execute("CREATE TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY, forename text NOT NULL, surname text NOT NULL, email text NOT NULL, phonenumber text NOT NULL, password text NOT NULL, dob date NOT NULL)")
         
         self.cur.execute("CREATE TABLE IF NOT EXISTS employees (id INTEGER PRIMARY KEY, forename text NOT NULL, surname text NOT NULL, email text NOT NULL, phonenumber text NOT NULL, password text NOT NULL, isManager BIT NOT NULL)")
-
-        self.cur.execute("CREATE TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY, forename text NOT NULL, surname text NOT NULL, email text NOT NULL, phonenumber text NOT NULL, hash text NOT NULL, dob date NOT NULL)")
 
 
         #commit the changes we have made to the database
