@@ -1,6 +1,8 @@
 
 import sqlite3 as sql
 from werkzeug.security import generate_password_hash, check_password_hash
+import numpy as np
+import pickle
 """
     TODO:
         comments and documentation.
@@ -28,6 +30,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
             db.fetch()
                 >>> []
 """
+
+
+
 class Database:
     def __init__(self, db):
         #Set up the database connection and cursor
@@ -40,28 +45,18 @@ class Database:
         #Movies table is created (if it does not exist) with the following fields: id (PK), name, blurb, certificate, director, leadactors
         self.cur.execute("CREATE TABLE IF NOT EXISTS movies (id INTEGER PRIMARY KEY,  name text NOT NULL, blurb text NOT NULL, certificate text NOT NULL, director text NOT NULL, leadactors text NOT NULL)")
         
-        #Screens table is created (if it does not exist) with the following fields: id (PK), capacity
-        self.cur.execute("CREATE TABLE IF NOT EXISTS screens (id INTEGER PRIMARY KEY, capacity INTEGER NOT NULL)")
+        #Screens table is created (if it does not exist) with the following fields: id (PK), capacity, seatmap
+        self.cur.execute("CREATE TABLE IF NOT EXISTS screens (id INTEGER PRIMARY KEY, capacity INTEGER NOT NULL, seatmap BLOB NOT NULL)")
         
-        #Screenings table is created (if it does not exist) with the following fields: id (PK), date, time, screenid (FK), movieid (FK)
-        #TODO: Data structure to store a map of the seats to display bookings for a screening.
-        """
-        Could look something like this, where 0 is booked and 1 is not booked:
-            [[1,1,1,0,0,0,0,0],
-             [0,0,0,0,0,0,0,0],
-             [1,1,0,1,1,0,1,1].
-             [0,0,0,0,0,0,0,0]
-            ]
-        Could store this 'matrix' as a text and create a parser for it, or we could also store it in JSON format I believe
-        """
-        self.cur.execute("CREATE TABLE IF NOT EXISTS screenings (id INTEGER PRIMARY KEY, date DATE NOT NULL, time TIME NOT NULL, screenid INTEGER REFERENCES screens(id) NOT NULL, movieid INTEGER REFERENCES movies(id) NOT NULL)")
+        #Screenings table is created (if it does not exist) with the following fields: id (PK), date, time, screenid (FK), movieid (FK), seatmap
+        self.cur.execute("CREATE TABLE IF NOT EXISTS screenings (id INTEGER PRIMARY KEY, date DATE NOT NULL, time TIME NOT NULL, screenid INTEGER REFERENCES screens(id) NOT NULL, movieid INTEGER REFERENCES movies(id) NOT NULL, seatmap BLOB NOT NULL)")
         
         self.cur.execute("CREATE TABLE IF NOT EXISTS bookings (id INTEGER PRIMARY KEY, screeningid INTEGER references screenings(id) NOT NULL, customerid INTEGER references customers(id), seats text NOT NULL)")
 
 
-        self.cur.execute("CREATE TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY, forename text NOT NULL, surname text NOT NULL, email text NOT NULL, phonenumber text NOT NULL, password text NOT NULL, dob date NOT NULL)")
+        self.cur.execute("CREATE TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY, forename text NOT NULL, surname text NOT NULL, email text NOT NULL, phonenumber text NOT NULL, hash text NOT NULL, dob date NOT NULL)")
         
-        self.cur.execute("CREATE TABLE IF NOT EXISTS employees (id INTEGER PRIMARY KEY, forename text NOT NULL, surname text NOT NULL, email text NOT NULL, phonenumber text NOT NULL, password text NOT NULL, isManager BIT NOT NULL)")
+        self.cur.execute("CREATE TABLE IF NOT EXISTS employees (id INTEGER PRIMARY KEY, forename text NOT NULL, surname text NOT NULL, email text NOT NULL, phonenumber text NOT NULL, hash text NOT NULL, isManager BIT NOT NULL)")
 
 
         #commit the changes we have made to the database
@@ -83,9 +78,19 @@ class Database:
         
         self.cur.execute("SELECT * FROM screens")
         screens = self.cur.fetchall()
-        
+        #make sure seatmap is not bytes
+        for i in range(len(screens)):
+            screens[i] = list(screens[i])
+            screens[i][2] = self.get_seatmap_from_blob(screens[i][2])
+            screens[i] = tuple(screens[i])
+
         self.cur.execute("SELECT * FROM screenings")
         screenings = self.cur.fetchall()
+
+        for i in range(len(screenings)):
+            screenings[i] = list(screenings[i])
+            screenings[i][5] = self.get_seatmap_from_blob(screenings[i][5])
+            screenings[i] = tuple(screenings[i])
 
         self.cur.execute("SELECT * FROM customers")
         customers = self.cur.fetchall()
@@ -93,7 +98,10 @@ class Database:
         self.cur.execute("SELECT * FROM bookings")
         bookings = self.cur.fetchall()
 
-        return movies, screens, screenings, customers, bookings
+        self.cur.execute("SELECT * FROM employees")
+        employees = self.cur.fetchall()
+
+        return movies, screens, screenings, customers, bookings, employees
     
     """
         Inserts a new entry into the movies table
@@ -131,17 +139,15 @@ class Database:
     """
     def search_movies(self, query):
         return [row for row in self.fetch()[0] if query.lower() in str(row).lower()]
-
-
     """
         Inserts a new entry into the screens table
     """
 #=-=-=-=-=-=-=-=-=SCREENS-=-=-=-=-=-=-=-=-=-=
-    def add_screen(self,capacity):
+    def add_screen(self,capacity, n,m):
         
         #Executre an SQL query to insert a new record into the movies database.
         #WE use '?' to prevent against SQL injection attacks.
-        self.cur.execute("INSERT INTO screens VALUES (NULL, ?)", (capacity,))
+        self.cur.execute("INSERT INTO screens VALUES (NULL, ?,?)", (capacity,self.init_seatmap(n,m,).dumps()))
 
         #Commit the changes to the database.
         self.conn.commit()
@@ -154,15 +160,18 @@ class Database:
 
     def update_screen(self, id, data):
 
-        self.cur.execute("UPDATE screens SET capacity=? WHERE id=?",(*data, id))
+        capacity, n,m = data
+        
+        self.cur.execute("UPDATE screens SET capacity=?, seatmap=? WHERE id=?",(capacity, self.init_seatmap(n,m).dumps(), id))
 
         self.conn.commit()
 #=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 #=-=-=-=-=-=-=-=-=SCREENINGS-=-=-=-=-=-=-=-=-=
     def add_screening(self, date, time, screenid, movieid):
-
-        self.cur.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?)",(date,time,screenid,movieid))
+        self.cur.execute("SELECT seatmap FROM screens WHERE id=?",(screenid,))
+        seatmap = self.cur.fetchone()[0]
+        self.cur.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?,?)",(date,time,screenid,movieid,seatmap))
 
         self.conn.commit()
 
@@ -174,7 +183,7 @@ class Database:
 
     def update_screening(self, id, data):
 
-        self.cur.execute("UPDATE screenings SET date=?, time=?, screenid=?, movieid=? WHERE id=?",(*data, id))
+        self.cur.execute("UPDATE screenings SET date=?, time=?, screenid=?, movieid=?, seatmap=? WHERE id=?",(*data, id))
 
         self.conn.commit()
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=
@@ -222,8 +231,8 @@ class Database:
 
 #=-=-=-=-=-=-=-=-=-=EMPLOYEES-=-=-=-=-=-=-=-=-=-=-=-=   
     def add_employee(self, forename, surname, email, phonenumber, password, isManager):
-        
-        self.cur.execute("INSERT INTO employees VALUES (NULL, ?,?,?,?,?,?)",(forename, surname, email, phonenumber, password, isManager))
+        _hash = generate_password_hash(password)
+        self.cur.execute("INSERT INTO employees VALUES (NULL, ?,?,?,?,?,?)",(forename, surname, email, phonenumber, _hash, isManager))
 
         self.conn.commit()
     
@@ -234,11 +243,13 @@ class Database:
         self.conn.commit()
 
     def update_employee(self, id, data):
-
-        self.cur.execute("UPDATE employees SET forename=?, surname=?, email=?, phonenumber=?, password=?, isManager=? WHERE id=?",(*data, id))
+        data = list(data)
+        data[4] = generate_password_hash(data[4])
+        data = tuple(data)
+        self.cur.execute("UPDATE employees SET forename=?, surname=?, email=?, phonenumber=?, hash=?, isManager=? WHERE id=?",(*data, id))
 
         self.conn.commit()
-#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 
     def fetch_customer(self, id):
 
@@ -256,6 +267,14 @@ class Database:
         dictionary = {'movies':0,'screens':1, 'screenings': 2,  'customers': 3, 'bookings': 4, 'employees': 5}
         return [row for row in self.fetch()[dictionary[table.lower()]] if query.lower() in str(row).lower()]
 
+    def init_seatmap(self,n, m):
+        return np.zeros((n,m), dtype=int)
+
+    def get_seatmap_from_blob(self, seatmap):
+        return pickle.loads(seatmap)
+
 
     def __del__(self):
         self.conn.close()
+
+
