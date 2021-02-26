@@ -2,6 +2,7 @@ import sqlite3 as sql
 from werkzeug.security import generate_password_hash, check_password_hash
 import numpy as np
 import pickle
+import string
 """
     TODO:
         comments and documentation.
@@ -48,8 +49,8 @@ class Database:
         self.cur.execute("CREATE TABLE IF NOT EXISTS screens (id INTEGER PRIMARY KEY, capacity INTEGER NOT NULL, seatmap BLOB NOT NULL)")
         
         #Screenings table is created (if it does not exist) with the following fields: id (PK), date, time, screenid (FK), movieid (FK), seatmap
-        self.cur.execute("CREATE TABLE IF NOT EXISTS screenings (id INTEGER PRIMARY KEY, date DATE NOT NULL, time TIME NOT NULL, screenid INTEGER REFERENCES screens(id) NOT NULL, movieid INTEGER REFERENCES movies(id) NOT NULL, seatmap BLOB NOT NULL, staff INTEGER[] REFERENCES employees(id) )")
-        
+       # self.cur.execute("CREATE TABLE IF NOT EXISTS screenings (id INTEGER PRIMARY KEY, date DATE NOT NULL, time TIME NOT NULL, screenid INTEGER REFERENCES screens(id) NOT NULL, movieid INTEGER REFERENCES movies(id) NOT NULL, seatmap BLOB NOT NULL, staff INTEGER[] REFERENCES employees(id) )")
+        self.cur.execute("CREATE TABLE IF NOT EXISTS screenings (id INTEGER PRIMARY KEY, date DATE NOT NULL, time TIME NOT NULL, screenid INTEGER REFERENCES screens(id) NOT NULL, movieid INTEGER REFERENCES movies(id) NOT NULL, seatmap BLOB NOT NULL)")
         self.cur.execute("CREATE TABLE IF NOT EXISTS bookings (id INTEGER PRIMARY KEY, screeningid INTEGER REFERENCES screenings(id) NOT NULL, customerid INTEGER REFERENCES customers(id), seats TEXT NOT NULL)")
 
 
@@ -167,10 +168,10 @@ class Database:
 #=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 #=-=-=-=-=-=-=-=-=SCREENINGS-=-=-=-=-=-=-=-=-=
-    def add_screening(self, date, time, screenid, movieid,staff):
+    def add_screening(self, date, time, screenid, movieid):
         self.cur.execute("SELECT seatmap FROM screens WHERE id=?",(screenid,))
         seatmap = self.cur.fetchone()[0]
-        self.cur.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?,?,?)",(date,time,screenid,movieid,seatmap,staff))
+        self.cur.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?,?)",(date,time,screenid,movieid,seatmap))
 
         self.conn.commit()
 
@@ -185,26 +186,66 @@ class Database:
         self.cur.execute("UPDATE screenings SET date=?, time=?, screenid=?, movieid=?, seatmap=?, staff=? WHERE id=?",(*data, id))
 
         self.conn.commit()
+
+    def get_seatmap(self, id):
+
+        self.cur.execute("SELECT seatmap FROM screenings WHERE id=?",(id,))
+        return self.cur.fetchone()[0]
+
+
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=
 
 #=-=-=-=-=-=-=-=-=-=BOOKINGS-=-=-=-=-=-=-=-=-=-=
-    def add_booking(self, screeningid, customerid, seats):
-        
-        self.cur.execute("INSERT INTO bookings VALUES (NULL, ?,?,?)", (screeningid, customerid, seats))
 
+    #seats should be a list: [A10, A11, A12]
+    def add_booking(self, screeningid, customerid, seats):
+
+        seatmap = self.get_seatmap(screeningid)
+        seatmap = self.update_seatmap(self.get_seatmap_from_blob(seatmap), seats, screeningid,'+')
+        if not seatmap: return False
+        self.cur.execute("INSERT INTO bookings VALUES (NULL, ?,?,?)", (screeningid, customerid, str(seats)))
         self.conn.commit()
     
     def remove_booking(self, id):
         
+        self.cur.execute("SELECT screeningid FROM bookings WHERE id=?",(id,))
+        screeningid = self.cur.fetchone()[0]
+        seatmap = self.get_seatmap(screeningid)
+        self.cur.execute("SELECT seats FROM bookings WHERE ud=?",(id,))
+        seats = self.cur.fetchone()[0]
+        seatmap = self.update_seatmap(self.get_seatmap_from_blob(seatmap), seats, screeningid,'-')
         self.cur.execute("DELETE FROM bookings WHERE id=?",(id,))
 
         self.conn.commit()
 
     def update_booking(self, id, data):
 
+        self.cur.execute("SELECT screeningid FROM bookings WHERE id=?",(id,))
+        screeningid = self.cur.fetchone()[0]
+        seatmap = self.get_seatmap(screeningid)
+        self.cur.execute("SELECT seats FROM bookings WHERE ud=?",(id,))
+        seats = self.cur.fetchone()[0]
+
+        if seats !=data[-1]:
+            self.update_seatmap(seatmap, seats, screeningid, '-')
+            self.update_seatmap(seatmap, data[-1], screeningid, '+')
+
         self.cur.execute("UPDATE bookings SET screeningid=?, customerid=?, seats=? WHERE id=?",(*data, id))
 
         self.conn.commit()
+
+    def update_seatmap(self,seatmap, seats, id, op):
+        d = {chr(y):y-64 for y in range(65,91)}
+        for seat in seats:
+            row = d[seat[0]]-1
+            key = int(seat[1:])-1
+            print(row,key)
+            if op == '+':seatmap[row][key] = 1
+            elif op=='-' : seatmap[row][key] = 0
+        self.cur.execute("UPDATE screenings SET seatmap=? WHERE id=?",(seatmap.dumps(),id))
+        self.conn.commit()
+        return True
+
 #=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=
     
 #=-=-=-=-=-=-=-=-=-=CUSTOMERS-=-=-=-=-=-=-=-=-=-=    
