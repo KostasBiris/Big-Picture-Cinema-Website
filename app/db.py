@@ -107,7 +107,7 @@ class Database:
     """
         Inserts a new entry into the movies table
     """
-    def add_movie(self, name,blurb,certificate,director,leadactors):
+    def add_movie(self, name,blurb,certificate,director,leadactors, release_date):
         #Execute an SQL query to insert a new record into the movies database.
         #We use '?' to prevent against SQL injection attacks.
         self.cur.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?)", (name, blurb, certificate, director, leadactors, release_date))
@@ -167,7 +167,7 @@ class Database:
 #=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 #=-=-=-=-=-=-=-=-=SCREENINGS-=-=-=-=-=-=-=-=-=
-    def add_screening(self, date, time, screenid, movieid):
+    def add_screening(self, date, time, screenid, movieid,staff):
         self.cur.execute("SELECT seatmap FROM screens WHERE id=?",(screenid,))
         seatmap = self.cur.fetchone()[0]
         self.cur.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?,?,?)",(date,time,screenid,movieid,seatmap,staff))
