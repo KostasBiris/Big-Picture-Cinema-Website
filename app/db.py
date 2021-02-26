@@ -57,7 +57,6 @@ class Database:
                                                              seatmap BLOB NOT NULL)")
 
         #Screenings table is created (if it does not exist) with the following fields: id (PK), date, time, screenid (FK), movieid (FK), seatmap
-       # self.cur.execute("CREATE TABLE IF NOT EXISTS screenings (id INTEGER PRIMARY KEY, date DATE NOT NULL, time TIME NOT NULL, screenid INTEGER REFERENCES screens(id) NOT NULL, movieid INTEGER REFERENCES movies(id) NOT NULL, seatmap BLOB NOT NULL, staff INTEGER[] REFERENCES employees(id) )")
         self.cur.execute("CREATE TABLE IF NOT EXISTS screenings (id INTEGER PRIMARY KEY, \
                                                                 date DATE NOT NULL,\
                                                                 time TIME NOT NULL, \
@@ -155,9 +154,37 @@ class Database:
     """
         Removes a movie from the movies table
     """
-    def remove_movie(self, id):
-        #Execute an SQL query to remove the row corresponding to the specified ID
-        self.cur.execute("DELETE FROM movies WHERE id=?",(id,))
+    def remove_movie(self, id = -1, name = "No name", blurb = "No blurb", certificate = -1, director = "No director", leadactors = "No leadactors",release_date = "00-00-00"):
+        
+        if(id == -1):
+            #Remove a specific movie given its name
+            if(name != "No name"):
+                self.cur.execute("DELETE FROM movies WHERE name=?",(name,))
+            
+            #Remove a specific movie given its blurb/description
+            elif(blurb != "No blurb"):
+                self.cur.execute("DELETE FROM movies WHERE blurb=?",(blurb,))
+
+            #Remove all movies of a certain age restriction
+            elif(certificate != -1):
+                self.cur.execute("DELETE FROM movies WHERE certificate=?",(certificate,))
+            
+            #Remove all movies made by a certain director
+            elif(director != "No director"):
+                self.cur.execute("DELETE FROM movies WHERE director=?",(director,))
+            
+            #Remove all movies starring a certain actor or actors
+            elif(leadactors != "No leadactors"):
+                self.cur.execute("DELETE FROM movies WHERE leadactors=?",(leadactors,))
+            
+            #Remove all movies released on a certain date
+            elif(release_date != "00-00-00"):
+                self.cur.execute("DELETE FROM movies WHERE release_date=?",(release_date,))
+        
+        else:
+            #Execute an SQL query to remove the row corresponding to the specified ID
+            self.cur.execute("DELETE FROM movies WHERE id=?",(id,))
+        
         #Commit the changes we have made to the database.
         self.conn.commit()
 
@@ -183,9 +210,15 @@ class Database:
         #Commit the changes to the database.
         self.conn.commit()
 
-    def remove_screen(self, id):
+    def remove_screen(self, id=-1, capacity=-1):
 
-        self.cur.execute("DELETE FROM screens WHERE id=?",(id,))
+        if(id==-1):
+            #Remove all screens of a certain capacity
+            if(capacity!=1):
+                self.cur.execute("DELETE FROM screens WHERE capacity=?",(capacity,))
+
+        else:
+            self.cur.execute("DELETE FROM screens WHERE id=?",(id,))
 
         self.conn.commit()
 
@@ -206,9 +239,32 @@ class Database:
 
         self.conn.commit()
 
-    def remove_screening(self, id):
+    def remove_screening(self, id=-1, date="00-00-00", time="00:01", screenid=-1, movieid=-1, movie_name="No name"):
 
-        self.cur.execute("DELETE FROM screenings WHERE id=?",(id,))
+        if(id==-1):
+            
+            #Remove all screenings on a certain date
+            if(date!="00-00-00"):
+                self.cur.execute("DELETE FROM screenings WHERE date=?",(date,))
+            
+            #Remove all screenings on a certain time
+            elif(time!="00-00-00"):
+                self.cur.execute("DELETE FROM screenings WHERE time=?",(time,))
+
+            #Remove all screenings in a certain screen room
+            elif(screenid!=-1):
+                self.cur.execute("DELETE FROM screenings WHERE screenid=?",(screenid,))
+            
+            #Remove all scrennings of a certain movie using its ID
+            elif(movieid!=-1):
+                self.cur.execute("DELETE FROM screenings WHERE movieid=?",(movieid,))
+
+            #Remove all screenings of a certain movie usings its name
+            elif(movie_name!="No name"):
+                self.cur.execute("DELETE FROM screenings INNER JOIN movies ON screenings.movieid = movies.id WHERE movies.name=?",(movie_name,))
+
+        else:
+            self.cur.execute("DELETE FROM screenings WHERE id=?",(id,))
 
         self.conn.commit()
 
@@ -237,7 +293,16 @@ class Database:
         self.cur.execute("INSERT INTO bookings VALUES (NULL, ?,?,?)", (screeningid, customerid, str(seats)))
         self.conn.commit()
 
-    def remove_booking(self, id):
+    def remove_booking(self, id=-1, screenid=-1, customerid=-1, customer_name="No name"):
+  
+        '''
+        Currently working on it. Still haven't made it work 
+        properly, though it works with just the id.I have made a seperate 
+        copy of this file so that you don't get all the errors when you run it. 
+        Basically the main problem is the seatmap and screeningid 
+        but I think it can be done eventually.
+        ~Konstantinos
+        '''
 
         self.cur.execute("SELECT screeningid FROM bookings WHERE id=?",(id,))
         screeningid = self.cur.fetchone()[0]
@@ -286,9 +351,26 @@ class Database:
         self.cur.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?)",(forename, surname, email, phonenumber, _hash, dob))
         self.conn.commit()
 
-    def remove_customer(self, id):
+    def remove_customer(self, id=-1, forename="No forename", surname="No surname", email="No email", phonenumber=-1,dob=-1):
 
-        self.cur.execute("DELETE FROM customers WHERE id=?",(id,))
+        if(id==-1):
+
+            #Remove a specific customer using their Full Name and either their email or phone number
+            if(forename!="No forename" and surname!="No surname" and (email!="No email" or phonenumber!=-1)):
+                
+                if(email!="No email"):
+                    self.cur.execute("DELETE FROM customers WHERE forename=? AND surname=? AND email=?",(forename,surname,email,))
+                
+                else:
+                    self.cur.execute("DELETE FROM customers WHERE forename=? AND surname=? AND phonenumber=?",(forename,surname,phonenumber,))
+
+            #Remove all customers of a certain age
+            elif(dob!=-1):
+                self.cur.execute("DELETE FROM customers WHERE dob=?",(dob,))
+
+        
+        else:
+            self.cur.execute("DELETE FROM customers WHERE id=?",(id,))
 
         self.conn.commit()
 
@@ -307,9 +389,19 @@ class Database:
 
         self.conn.commit()
 
-    def remove_employee(self, id):
+    def remove_employee(self, id=-1, forename="No forename", surname="No surname", email="No email", phonenumber=-1):
 
-        self.cur.execute("DELETE FROM employees WHERE id=?",(id,))
+        #Remove a specific employee using their Full Name and either their email or phone number
+        if(forename!="No forename" and surname!="No surname" and (email!="No email" or phonenumber!=-1)):
+                
+            if(email!="No email"):
+                self.cur.execute("DELETE FROM employees WHERE forename=? AND surname=? AND email=?",(forename,surname,email,))
+            
+            else:
+                self.cur.execute("DELETE FROM employees WHERE forename=? AND surname=? AND phonenumber=?",(forename,surname,phonenumber,))
+        
+        else:
+            self.cur.execute("DELETE FROM employees WHERE id=?",(id,))
 
         self.conn.commit()
 
