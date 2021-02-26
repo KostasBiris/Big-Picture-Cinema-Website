@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect
-from db import Database
+#from db import Database
 import socket
 
 app = Flask(__name__)
@@ -12,18 +12,24 @@ def mainpage():
 def managepage():
     return render_template('business_main_interface.html')
 
+
+@app.route('/caws')
+def moviepage():
+    return render_template('movie_template.html')
+
+
 @app.route('/primelogin')
 def managerlogin():
     return render_template('manager_login.html')
 
 @app.route('/primelogin', methods =['POST'])
 def _managerlogin():
-    db = Database('cinema.db')
+    #db = Database('cinema.db')
     email = request.form['email']
     pwd = request.form['password']
     _id = request.form['identification']
     print(email, pwd, _id)
-    del db
+    #del db
     return render_template('business_main_interface.html')
 
 @app.route('/register')
@@ -38,10 +44,10 @@ def customer_login():
 def _mainpage():
     #For now, we just search the database based on the entry, and render html showing the results.
     #We need to dynamic html generation.
-    db = Database('cinema.db')
+    #db = Database('cinema.db')
     query = request.form['query']
-    dat = str(db.search(query, 'movies'))
-    del db
+    #dat = str(db.search(query, 'movies'))
+    #del db
     return "<h1 style='color:blue'>" + dat + "</h1>"
 
 @app.route('/register')
@@ -51,7 +57,7 @@ def register():
 @app.route('/register', methods=['POST'])
 def _register():
 
-    db = Database('cinema.db')
+    #db = Database('cinema.db')
     
     first_name = request.form['first_name']
     surname = request.form['last_name']
@@ -59,8 +65,8 @@ def _register():
     email = request.form['email']
     password = request.form['password']
     dob = request.form['birthday']
-    db.add_customer(first_name, surname, phone_number, email, password, dob)
-    del db
+    #db.add_customer(first_name, surname, phone_number, email, password, dob)
+    #del db
     return render_template('customers_main_interface.html')
 
 
@@ -70,11 +76,11 @@ def login():
 
 @app.route('/login', methods = ['POST'])
 def _login():
-    db = Database('cinema.db')
+    #db = Database('cinema.db')
     email = request.form['email']
     pwd = request.form['password']
     print(email, pwd)
-    del db
+    #del db
     return render_template('customer_main_interface.html')
  
 
