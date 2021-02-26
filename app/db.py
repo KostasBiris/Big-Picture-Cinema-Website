@@ -20,7 +20,7 @@ import string
         Example initialisation and usage for movies table:
             db = Database('TheBigPicture.db')
             db.add_movie('On the Waterfront', 'A movie about an ex-prizefighter', '16', 'Elia Kazan', 'Marlon Brando')
-            db.fetch() 
+            db.fetch()
                 >>> [(1,'On the Waterfront', 'A movie about an ex-prizefighter', '16', 'Elia Kazan', 'Marlon Brando')]
             db.search_movies('Marlon')
                 >>> [(1,'On the Waterfront', 'A movie about an ex-prizefighter', '16', 'Elia Kazan', 'Marlon Brando')]
@@ -43,24 +43,55 @@ class Database:
         self.cur.execute("PRAGMA foreign_keys = 1")
 
         #Movies table is created (if it does not exist) with the following fields: id (PK), name, blurb, certificate, director, leadactors
-        self.cur.execute("CREATE TABLE IF NOT EXISTS movies (id INTEGER PRIMARY KEY,  name TEXT NOT NULL, blurb TEXT NOT NULL, certificate TEXT NOT NULL, director TEXT NOT NULL, leadactors TEXT NOT NULL, release_date DATE NOT NULL)")
-        
+        self.cur.execute("CREATE TABLE IF NOT EXISTS movies (id INTEGER PRIMARY KEY,  \
+                                                            name TEXT NOT NULL, \
+                                                            blurb TEXT NOT NULL, \
+                                                            certificate TEXT NOT NULL,\
+                                                            director TEXT NOT NULL, \
+                                                            leadactors TEXT NOT NULL, \
+                                                            release_date DATE NOT NULL)")
+
         #Screens table is created (if it does not exist) with the following fields: id (PK), capacity, seatmap
-        self.cur.execute("CREATE TABLE IF NOT EXISTS screens (id INTEGER PRIMARY KEY, capacity INTEGER NOT NULL, seatmap BLOB NOT NULL)")
-        
+        self.cur.execute("CREATE TABLE IF NOT EXISTS screens (id INTEGER PRIMARY KEY, \
+                                                             capacity INTEGER NOT NULL,\
+                                                             seatmap BLOB NOT NULL)")
+
         #Screenings table is created (if it does not exist) with the following fields: id (PK), date, time, screenid (FK), movieid (FK), seatmap
        # self.cur.execute("CREATE TABLE IF NOT EXISTS screenings (id INTEGER PRIMARY KEY, date DATE NOT NULL, time TIME NOT NULL, screenid INTEGER REFERENCES screens(id) NOT NULL, movieid INTEGER REFERENCES movies(id) NOT NULL, seatmap BLOB NOT NULL, staff INTEGER[] REFERENCES employees(id) )")
-        self.cur.execute("CREATE TABLE IF NOT EXISTS screenings (id INTEGER PRIMARY KEY, date DATE NOT NULL, time TIME NOT NULL, screenid INTEGER REFERENCES screens(id) NOT NULL, movieid INTEGER REFERENCES movies(id) NOT NULL, seatmap BLOB NOT NULL)")
-        self.cur.execute("CREATE TABLE IF NOT EXISTS bookings (id INTEGER PRIMARY KEY, screeningid INTEGER REFERENCES screenings(id) NOT NULL, customerid INTEGER REFERENCES customers(id), seats TEXT NOT NULL)")
+        self.cur.execute("CREATE TABLE IF NOT EXISTS screenings (id INTEGER PRIMARY KEY, \
+                                                                date DATE NOT NULL,\
+                                                                time TIME NOT NULL, \
+                                                                screenid INTEGER REFERENCES screens(id) NOT NULL,\
+                                                                movieid INTEGER REFERENCES movies(id) NOT NULL,\
+                                                                seatmap BLOB NOT NULL, \
+                                                                supervisor INTEGER REFERENCES employees(id) NOT NULL,\
+                                                                upper_section INTEGER REFERENCES employees(id), \
+                                                                middle_section INTEGER REFERENCES employees(id), \
+                                                                lower_section INTEGER REFERENCES employees(id))")
+
+        self.cur.execute("CREATE TABLE IF NOT EXISTS bookings (id INTEGER PRIMARY KEY, \
+                                                              screeningid INTEGER REFERENCES screenings(id) NOT NULL, \
+                                                              customerid INTEGER REFERENCES customers(id), \
+                                                              seats TEXT NOT NULL)")
 
 
-        self.cur.execute("CREATE TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY, forename TEXT NOT NULL, surname TEXT NOT NULL, email TEXT NOT NULL, phonenumber TEXT NOT NULL, hash TEXT NOT NULL, dob DATE NOT NULL)")
-        
-        self.cur.execute("CREATE TABLE IF NOT EXISTS employees (id INTEGER PRIMARY KEY, forename TEXT NOT NULL, surname TEXT NOT NULL, email TEXT NOT NULL, phonenumber TEXT NOT NULL, hash TEXT NOT NULL, isManager BIT NOT NULL)")
+        self.cur.execute("CREATE TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY, \
+                                                               forename TEXT NOT NULL, \
+                                                               surname TEXT NOT NULL, \
+                                                               email TEXT NOT NULL, \
+                                                               phonenumber TEXT NOT NULL, \
+                                                               hash TEXT NOT NULL, \
+                                                               dob DATE NOT NULL)")
+
+        self.cur.execute("CREATE TABLE IF NOT EXISTS employees (id INTEGER PRIMARY KEY, \
+                                                               forename TEXT NOT NULL, \
+                                                               surname TEXT NOT NULL, email TEXT NOT NULL, \
+                                                               phonenumber TEXT NOT NULL, hash TEXT NOT NULL, \
+                                                               isManager BIT NOT NULL)")
 
 
         #commit the changes we have made to the database
-        self.conn.commit()        
+        self.conn.commit()
 
 
 
@@ -72,10 +103,10 @@ class Database:
 
     def fetch(self):
         #Execute a query to extract all rows from each of the tables, and then use fetchall() to gather a list of tuples of all the rows extracted
-        
+
         self.cur.execute("SELECT * FROM movies")
         movies = self.cur.fetchall()
-        
+
         self.cur.execute("SELECT * FROM screens")
         screens = self.cur.fetchall()
         #make sure seatmap is not bytes
@@ -102,7 +133,7 @@ class Database:
         employees = self.cur.fetchall()
 
         return movies, screens, screenings, customers, bookings, employees
-    
+
 
 #=-=-=-=-=-=-=-=-=-=-=-=MOVIES-=-=--=-=-=-=-=-=-=-=-=-=-=
     """
@@ -112,7 +143,7 @@ class Database:
         #Execute an SQL query to insert a new record into the movies database.
         #We use '?' to prevent against SQL injection attacks.
         self.cur.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?)", (name, blurb, certificate, director, leadactors, release_date))
-        
+
         #Commit the changes we have made to the database.
         self.conn.commit()
 
@@ -144,7 +175,7 @@ class Database:
 
 #=-=-=-=-=-=-=-=-=SCREENS-=-=-=-=-=-=-=-=-=-=
     def add_screen(self,capacity, n,m):
-        
+
         #Executre an SQL query to insert a new record into the movies database.
         #WE use '?' to prevent against SQL injection attacks.
         self.cur.execute("INSERT INTO screens VALUES (NULL, ?,?)", (capacity,self.init_seatmap(n,m,).dumps()))
@@ -153,7 +184,7 @@ class Database:
         self.conn.commit()
 
     def remove_screen(self, id):
-        
+
         self.cur.execute("DELETE FROM screens WHERE id=?",(id,))
 
         self.conn.commit()
@@ -161,7 +192,7 @@ class Database:
     def update_screen(self, id, data):
 
         capacity, n,m = data
-        
+
         self.cur.execute("UPDATE screens SET capacity=?, seatmap=? WHERE id=?",(capacity, self.init_seatmap(n,m).dumps(), id))
 
         self.conn.commit()
@@ -171,7 +202,7 @@ class Database:
     def add_screening(self, date, time, screenid, movieid):
         self.cur.execute("SELECT seatmap FROM screens WHERE id=?",(screenid,))
         seatmap = self.cur.fetchone()[0]
-        self.cur.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?,?)",(date,time,screenid,movieid,seatmap))
+        self.cur.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?,?,?,?,?,?)",(date,time,screenid,movieid,seatmap,supervisor,upper_section,middle_section,lower_section))
 
         self.conn.commit()
 
@@ -183,7 +214,7 @@ class Database:
 
     def update_screening(self, id, data):
 
-        self.cur.execute("UPDATE screenings SET date=?, time=?, screenid=?, movieid=?, seatmap=?, staff=? WHERE id=?",(*data, id))
+        self.cur.execute("UPDATE screenings SET date=?, time=?, screenid=?, movieid=?, seatmap=?, supervisor=?, upper_section=?, middle_section=?, lower_section=? WHERE id=?",(*data, id))
 
         self.conn.commit()
 
@@ -205,9 +236,9 @@ class Database:
         if not seatmap: return False
         self.cur.execute("INSERT INTO bookings VALUES (NULL, ?,?,?)", (screeningid, customerid, str(seats)))
         self.conn.commit()
-    
+
     def remove_booking(self, id):
-        
+
         self.cur.execute("SELECT screeningid FROM bookings WHERE id=?",(id,))
         screeningid = self.cur.fetchone()[0]
         seatmap = self.get_seatmap(screeningid)
@@ -247,16 +278,16 @@ class Database:
         return True
 
 #=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=
-    
-#=-=-=-=-=-=-=-=-=-=CUSTOMERS-=-=-=-=-=-=-=-=-=-=    
+
+#=-=-=-=-=-=-=-=-=-=CUSTOMERS-=-=-=-=-=-=-=-=-=-=
     def add_customer(self, forename, surname, email, phonenumber, password, dob):
-        
+
         _hash = generate_password_hash(password)
         self.cur.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?)",(forename, surname, email, phonenumber, _hash, dob))
         self.conn.commit()
-    
+
     def remove_customer(self, id):
-        
+
         self.cur.execute("DELETE FROM customers WHERE id=?",(id,))
 
         self.conn.commit()
@@ -269,15 +300,15 @@ class Database:
         self.conn.commit()
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-#=-=-=-=-=-=-=-=-=-=EMPLOYEES-=-=-=-=-=-=-=-=-=-=-=-=   
+#=-=-=-=-=-=-=-=-=-=EMPLOYEES-=-=-=-=-=-=-=-=-=-=-=-=
     def add_employee(self, forename, surname, email, phonenumber, password, isManager):
         _hash = generate_password_hash(password)
         self.cur.execute("INSERT INTO employees VALUES (NULL, ?,?,?,?,?,?)",(forename, surname, email, phonenumber, _hash, isManager))
 
         self.conn.commit()
-    
+
     def remove_employee(self, id):
-        
+
         self.cur.execute("DELETE FROM employees WHERE id=?",(id,))
 
         self.conn.commit()
@@ -316,5 +347,3 @@ class Database:
 
     def __del__(self):
         self.conn.close()
-
-
