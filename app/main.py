@@ -12,6 +12,12 @@ def mainpage():
 def managepage():
     return render_template('business_main_interface.html')
 
+
+@app.route('/caws')
+def moviepage():
+    return render_template('movie_template.html')
+
+
 @app.route('/primelogin')
 def managerlogin():
     return render_template('manager_login.html')
