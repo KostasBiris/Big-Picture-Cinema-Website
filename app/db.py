@@ -293,21 +293,45 @@ class Database:
         self.cur.execute("INSERT INTO bookings VALUES (NULL, ?,?,?)", (screeningid, customerid, str(seats)))
         self.conn.commit()
 
-    def remove_booking(self, id=-1, screenid=-1, customerid=-1, customer_name="No name"):
+    def remove_booking(self, id=-1, screenid=-1, customerid=-1, customer_forename="No forename", customer_surname="No surname",\
+                        customer_email="No email", customer_phone=-1):
   
-        '''
-        Currently working on it. Still haven't made it work 
-        properly, though it works with just the id.I have made a seperate 
-        copy of this file so that you don't get all the errors when you run it. 
-        Basically the main problem is the seatmap and screeningid 
-        but I think it can be done eventually.
-        ~Konstantinos
-        '''
+        if(id==-1):
+            
+            #Remove all bookings for a certain screen
+            if(screenid!=-1):
+                self.cur.execute("SELECT id FROM bookings WHERE screenid=?",(screenid,))
+                id = self.cur.fetchall()
+            
+            #Remove all bookings made by a certain customer using their ID
+            elif(customerid!=1):
+                self.cur.execute("SELECT id FROM bookings WHERE customerid=?",(customerid,))
+                id = self.cur.fetchall()
+
+            #Remove all bookings made by a certain customer using their Full Name and their Email or Phone number
+            if(forename!="No forename" and surname!="No surname" and (email!="No email" or phonenumber!=-1)):
+    
+                if(email!="No email"):
+                    
+                    self.cur.execute("SELECT customerid FROM customers WHERE forename=? AND surname=? AND email=?",(forename,surname,email,))
+                    customerid = self.cur.fetchall()
+
+                    self.cur.execute("SELECT id FROM bookings WHERE customerid=?",(customerid,))
+                    id = self.cur.fetchall()
+
+                else:
+                    self.cur.execute("SELECT customerid FROM customers WHERE forename=? AND surname=? AND phonenumber=?",(forename,surname,phonenumber,))
+                    customerid = self.cur.fetchall()
+
+                    self.cur.execute("SELECT id FROM bookings WHERE customerid=?",(customerid,))
+                    id = self.cur.fetchall()
+
+                
 
         self.cur.execute("SELECT screeningid FROM bookings WHERE id=?",(id,))
         screeningid = self.cur.fetchone()[0]
         seatmap = self.get_seatmap(screeningid)
-        self.cur.execute("SELECT seats FROM bookings WHERE ud=?",(id,))
+        self.cur.execute("SELECT seats FROM bookings WHERE id=?",(id,))
         seats = self.cur.fetchone()[0]
         seatmap = self.update_seatmap(self.get_seatmap_from_blob(seatmap), seats, screeningid,'-')
         self.cur.execute("DELETE FROM bookings WHERE id=?",(id,))
@@ -319,7 +343,7 @@ class Database:
         self.cur.execute("SELECT screeningid FROM bookings WHERE id=?",(id,))
         screeningid = self.cur.fetchone()[0]
         seatmap = self.get_seatmap(screeningid)
-        self.cur.execute("SELECT seats FROM bookings WHERE ud=?",(id,))
+        self.cur.execute("SELECT seats FROM bookings WHERE id=?",(id,))
         seats = self.cur.fetchone()[0]
 
         if seats !=data[-1]:
