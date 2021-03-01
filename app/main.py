@@ -22,6 +22,10 @@ def moviepage():
 def managerlogin():
     return render_template('manager_login.html')
 
+@app.route('/screen')
+def screen():
+    return render_template('screen.html')
+
 @app.route('/primelogin', methods =['POST'])
 def _managerlogin():
     db = Database('cinema.db')
@@ -69,8 +73,8 @@ def _register():
     del db
     return render_template('customers_main_interface.html')
 
-@app.route('/employee_login')
-def employee_login():
+@app.route('/booklogin')
+def employeelogin():
     return render_template('employee_login.html')
 
 @app.route('/login')
@@ -85,18 +89,11 @@ def _login():
     print(email, pwd)
     del db
     return render_template('customer_main_interface.html')
- 
-
-@app.route('/screen')
-def screen():
-    return render_template('screen.html')
 
 @app.route('/account')
 
 def account():
     return "<h1> STUB ACCOUNT PAGE</h1>"
-
-
 
 if __name__ == '__main__':
     app.run(debug=False, host='localhost', port='4000', threaded=True)
