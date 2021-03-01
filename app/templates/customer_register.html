@@ -4,9 +4,8 @@
     </head>
     <body class="register">
         <img src="{{url_for('static',filename='finlogo.png')}}"  style=" display: block; margin-left: auto; margin-right: auto; width: 300px; height: 190px;">
-        <form class="modal-content" action="{{ url_for('register') }}" method="post">
+        <form class="modal-content-register" action="{{ url_for('register') }}" method="post">
             <div class="container">
-
       			<input class="register_details" type="text" name="first_name" id= "first_name" placeholder="First name" style="color:black;" required/>
       			<br>
       			<input class="register_details"  type="text" name="last_name" id= "last_name" placeholder="Last name" style="color:black;" required/>

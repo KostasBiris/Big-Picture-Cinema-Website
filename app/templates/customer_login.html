@@ -2,15 +2,21 @@
     <head>
         <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='main.css')}}"/>
     </head>
+    
     <body class="register">
-        <img src="{{url_for('static',filename='finlogo.png')}}"  style=" display: block; margin-left: auto; margin-right: auto; width: 300px; height: 190px;">
-        <form action="{{ url_for('login') }}" method="post">
-    			<input type="text" name="email" id="email" placeholder="E-mail address" style="width: 300; height: 20; color:black;" required/>
+        <img  src="{{url_for('static',filename='finlogo.png')}}" style="display: block; margin-left: auto; margin-right: auto; width: 32rem; height: 22rem;"/>
+        <!--<div class="background">-->
+        <form class="modal-content"  action="{{ url_for('login') }}" method="post">
+            <div class="container">
+    			<input class="register_details"  type="text" name="email" id="email" placeholder="E-mail address" style="color:black;" required/>
     			<br>
-    			<input type="password" name="password" id="password" placeholder="Password" style="width: 300;  height: 20; color:black;" required/>
+    			<input class="register_details"  type="password" name="password" id="password" placeholder="Password"style="color:black;"required/>
     			<br>
-    			<input type="submit" value="LOG IN" style="width: 150; color: black; background-color:	paleturquoise;  position: relative; " />
+    			<input class="login_button" type="submit" value="LOG IN" style="color: white; position: relative; " />
+                <p style="text-align: center;">Don't have an account? <a href="#" style="color:dodgerblue">Sign Up</a>.</p>
+                </div>
   			</form>
+       <!-- </div>-->
              <!-- <div  class="big-box" style= "position:fixed; width: 600px; top:250px; height:350px;" ></div>-->
 </body>
 </html>
