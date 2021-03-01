@@ -95,6 +95,10 @@ def _login():
     return render_template('customer_main_interface.html')
  
 
+@app.route('/screen')
+def screen():
+    return render_template('screen.html')
+
 @app.route('/account')
 
 def account():
