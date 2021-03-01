@@ -26,6 +26,10 @@ def managerlogin():
 def screen():
     return render_template('screen.html')
 
+@app.route('/booking')
+def booking():
+    return render_template('employee_main_interface.html')
+
 @app.route('/primelogin', methods =['POST'])
 def _managerlogin():
     db = Database('cinema.db')
