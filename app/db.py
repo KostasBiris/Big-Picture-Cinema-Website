@@ -3,6 +3,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import numpy as np
 import pickle
 import string
+
+
 """
     TODO:
         comments and documentation.
@@ -51,10 +53,12 @@ class Database:
                                                             leadactors TEXT NOT NULL, \
                                                             release_date DATE NOT NULL)")
 
-        #Screens table is created (if it does not exist) with the following fields: id (PK), capacity, seatmap
+        #Screens table is created (if it does not exist) with the following fields: id (PK), capacity, seatmap, rows, columns
         self.cur.execute("CREATE TABLE IF NOT EXISTS screens (id INTEGER PRIMARY KEY, \
                                                              capacity INTEGER NOT NULL,\
-                                                             seatmap BLOB NOT NULL)")
+                                                             seatmap BLOB NOT NULL,\
+                                                             rows INTEGER NOT NULL, \
+                                                             columns INTEGER NOT NULL)")
 
         #Screenings table is created (if it does not exist) with the following fields: id (PK), date, time, screenid (FK), movieid (FK), seatmap
         self.cur.execute("CREATE TABLE IF NOT EXISTS screenings (id INTEGER PRIMARY KEY, \
@@ -84,8 +88,10 @@ class Database:
 
         self.cur.execute("CREATE TABLE IF NOT EXISTS employees (id INTEGER PRIMARY KEY, \
                                                                forename TEXT NOT NULL, \
-                                                               surname TEXT NOT NULL, email TEXT NOT NULL, \
-                                                               phonenumber TEXT NOT NULL, hash TEXT NOT NULL, \
+                                                               surname TEXT NOT NULL, \
+                                                               email TEXT NOT NULL, \
+                                                               phonenumber TEXT NOT NULL, \
+                                                               hash TEXT NOT NULL, \
                                                                isManager BIT NOT NULL)")
 
 
@@ -205,7 +211,7 @@ class Database:
 
         #Executre an SQL query to insert a new record into the movies database.
         #WE use '?' to prevent against SQL injection attacks.
-        self.cur.execute("INSERT INTO screens VALUES (NULL, ?,?)", (capacity,self.init_seatmap(n,m,).dumps()))
+        self.cur.execute("INSERT INTO screens VALUES (NULL, ?,?,?,?)", (capacity,self.init_seatmap(n,m).dumps(),n,m))
 
         #Commit the changes to the database.
         self.conn.commit()
@@ -232,7 +238,7 @@ class Database:
 #=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 #=-=-=-=-=-=-=-=-=SCREENINGS-=-=-=-=-=-=-=-=-=
-    def add_screening(self, date, time, screenid, movieid):
+    def add_screening(self, date, time, screenid, movieid,supervisor,upper_section,middle_section,lower_section):
         self.cur.execute("SELECT seatmap FROM screens WHERE id=?",(screenid,))
         seatmap = self.cur.fetchone()[0]
         self.cur.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?,?,?,?,?,?)",(date,time,screenid,movieid,seatmap,supervisor,upper_section,middle_section,lower_section))
@@ -356,12 +362,34 @@ class Database:
 
     def update_seatmap(self,seatmap, seats, id, op):
         d = {chr(y):y-64 for y in range(65,91)}
+        
         for seat in seats:
             row = d[seat[0]]-1
             key = int(seat[1:])-1
             print(row,key)
-            if op == '+':seatmap[row][key] = 1
-            elif op=='-' : seatmap[row][key] = 0
+
+            #If the seat is booked
+            if op == '+':
+
+                #VIP seat
+                if(seatmap[row][key] == 2):
+                    seatmap[row][key] = 3
+                
+                #Standard seat
+                else:    
+                    seatmap[row][key] = 1
+
+            #If the seat is left vacant
+            elif op=='-' :
+
+                #VIP seat
+                if(seatmap[row][key] == 2):
+                    seatmap[row][key] = 2
+                
+                #Standard seat
+                else:
+                    seatmap[row][key] = 0
+
         self.cur.execute("UPDATE screenings SET seatmap=? WHERE id=?",(seatmap.dumps(),id))
         self.conn.commit()
         return True
@@ -455,7 +483,24 @@ class Database:
         return [row for row in self.fetch()[dictionary[table.lower()]] if query.lower() in str(row).lower()]
 
     def init_seatmap(self,n, m):
-        return np.zeros((n,m), dtype=int)
+        #Initialise a matrix full of 0s
+        new_seatmap = np.zeros((n,m), dtype=int)
+
+        #Go to the middle row of the matrix, where the VIP seats are
+        n = int(len(new_seatmap)/2)
+        
+        #Identify VIP seats and empty space(indexes not representing any seats)
+        for i in range(len(new_seatmap[n])):
+
+            #Empty space
+            if(i==0 or i==1 or i==(len(new_seatmap[n])-2) or i==(len(new_seatmap[n])-1)):
+                new_seatmap[n][i]=-1
+            
+            #VIP seats
+            else:
+                new_seatmap[n][i]=2
+        
+        return new_seatmap
 
     def get_seatmap_from_blob(self, seatmap):
         return pickle.loads(seatmap)
@@ -463,3 +508,32 @@ class Database:
 
     def __del__(self):
         self.conn.close()
+
+
+
+#=-=-=-=-=-=-SEAT MAP APPEARENCE TEST CODE-=-=-=-=-=-=-=
+'''
+db = Database('(exper)test.db')
+db.add_screen(25,5,10)
+db.add_movie('seatmapMovieName', 'seatmapMovieblurb', '16', 'seatmapMovieDirector','seatmapMovieActor', '12-12-2021')
+db.add_customer('seatmapCustomerFName','seatmapCustomerSName', 'seatmapCustomerEmail', 'seatmapCustomerPhone','seatmapCustomerPassword','01-01-01')
+
+db.add_employee("staff1_fn", "staff1_sn", "staff1@email.com", 1, "staff1_password", True)
+db.add_employee("staff2_fn", "staff2_sn", "staff2@email.com", 1, "staff2_password", True)
+db.add_employee("staff3_fn", "staff3_sn", "staff3@email.com", 1, "staff3_password", True)
+db.add_employee("staff4_fn", "staff4_sn", "staff4@email.com", 1, "staff4_password", True)
+
+
+db.add_screening('12-12-2021','18:00', 1,1, 1, 2,3,4)
+
+dat = db.fetch()[2]
+seatmap = dat[0][5]
+
+print(seatmap)
+
+db.add_booking(1,1,['A1','B1','C4'])
+dat = db.fetch()[2]
+seatmap = dat[0][5]
+print(seatmap)
+'''
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
