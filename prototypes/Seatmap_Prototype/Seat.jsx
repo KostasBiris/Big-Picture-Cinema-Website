@@ -7,6 +7,7 @@ export default class Seat extends React.Component{
     static propTypes = {
         isSelected: T.bool,
         isReserved: T.bool,
+        isVip: T.bool,
         seatNumber: T.oneOfType([
             T.string,
             T.number
@@ -23,11 +24,12 @@ export default class Seat extends React.Component{
     }
 
     render() {
-        const { isSelected, isEnabled, isReserved } = this.props;
+        const { isSelected, isEnabled, isReserved, isVip } = this.props;
         const className = cx('Seat',
             { 'Seat--selected': isSelected },
             { 'Seat--enabled': !isSelected && isEnabled && !isReserved},
-            { 'Seat--reserved': isReserved}
+            { 'Seat--reserved': isReserved},
+            { 'Seat--vip': isVip}
         );
         return (
             <div className={className} onClick={this.handleClick}>

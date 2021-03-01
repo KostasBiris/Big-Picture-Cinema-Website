@@ -1,8 +1,7 @@
 import 'core-js/es/map';
 import 'core-js/es/set';
 import React from 'react';
-import ReactDOM from 'react-dom';
-import Immutable, { Map, Set } from 'immutable';
+import { Map, Set } from 'immutable';
 import Row from './Row';
 import Seat from './Seat';
 import Blank from './Blank';
@@ -21,7 +20,8 @@ export default class Seatmap extends React.Component {
                 T.string,
                 T.number
             ]).isRequired,
-            isReserved: T.bool
+            isReserved: T.bool,
+            isVip: T.bool
         }))).isRequired,
         seatWidth: T.number
     };
@@ -108,6 +108,7 @@ export default class Seatmap extends React.Component {
                 isSelected,
                 isReserved: seat.isReserved,
                 isEnabled: size < maxReservableSeats,
+                isVip: seat.isVip,
                 selectSeat: this.selectSeat.bind(this, rowNumber, seat.number),
                 seatNumber: seat.number,
                 key: index

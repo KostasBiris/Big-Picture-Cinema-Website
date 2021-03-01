@@ -1,5 +1,5 @@
 .Seat {
-     background-color: #0051ff;
+     background-color: #4e5b60;
      height: 30px;
      width: 30px;
      color: white;
@@ -10,11 +10,15 @@
      -webkit-border-top-left-radius: 10px;
      -webkit-border-top-right-radius: 10px;
  }
-
+ .Seat--vip {
+    background-color: #eb8e25;
+    height: 35px;
+    width: 35px;
+}
 
  .Seat--enabled {
      cursor: pointer;
-     &:hover { background-color: #1303f4; }
+     &:hover { background-color: #f4dc03; }
  }
 
  .Seat--selected {
@@ -22,7 +26,9 @@
      background-color: #4CAF50;
  }
 
+ 
+
  .Seat--reserved {
      cursor: not-allowed;
-     background-color: #ffc400;
+     background-color: #f9bc50;
  }

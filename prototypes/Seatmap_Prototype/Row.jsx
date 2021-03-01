@@ -1,7 +1,5 @@
 import { PropTypes as T } from 'prop-types';
 import React from 'react';
-import Seat from './Seat';
-import Blank from './Blank';
 import RowNumber from './RowNumber';
 import cx from 'classnames';
 
