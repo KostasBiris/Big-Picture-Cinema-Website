@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect
 from db import Database
 import socket
-import sqlite3
 
 app = Flask(__name__)
 
@@ -13,25 +12,15 @@ def mainpage():
 def managepage():
     return render_template('business_main_interface.html')
 
+
 @app.route('/caws')
 def moviepage():
     return render_template('movie_template.html')
-    
+
+
 @app.route('/primelogin')
 def managerlogin():
     return render_template('manager_login.html')
-
-@app.route('/analytics')
-def manageanalytics():
-    return render_template('manager_analytics.html')
-
-@app.route('/movies')
-def managemovies():
-    return render_template('manage-movies.html')
-
-@app.route('/booking')
-def employeebooking():
-    return render_template('employee_main_interface.html')
 
 @app.route('/primelogin', methods =['POST'])
 def _managerlogin():
@@ -80,6 +69,9 @@ def _register():
     del db
     return render_template('customers_main_interface.html')
 
+@app.route('/employee_login')
+def employee_login():
+    return render_template('employee_login.html')
 
 @app.route('/login')
 def login():
