@@ -56,9 +56,7 @@ class Database:
         #Screens table is created (if it does not exist) with the following fields: id (PK), capacity, seatmap, rows, columns
         self.cur.execute("CREATE TABLE IF NOT EXISTS screens (id INTEGER PRIMARY KEY, \
                                                              capacity INTEGER NOT NULL,\
-                                                             seatmap BLOB NOT NULL,\
-                                                             rows INTEGER NOT NULL, \
-                                                             columns INTEGER NOT NULL)")
+                                                             seatmap BLOB NOT NULL)")
 
         #Screenings table is created (if it does not exist) with the following fields: id (PK), date, time, screenid (FK), movieid (FK), seatmap
         self.cur.execute("CREATE TABLE IF NOT EXISTS screenings (id INTEGER PRIMARY KEY, \
@@ -67,7 +65,7 @@ class Database:
                                                                 screenid INTEGER REFERENCES screens(id) NOT NULL,\
                                                                 movieid INTEGER REFERENCES movies(id) NOT NULL,\
                                                                 seatmap BLOB NOT NULL, \
-                                                                supervisor INTEGER REFERENCES employees(id) NOT NULL,\
+                                                                supervisor INTEGER REFERENCES employees(id),\
                                                                 upper_section INTEGER REFERENCES employees(id), \
                                                                 middle_section INTEGER REFERENCES employees(id), \
                                                                 lower_section INTEGER REFERENCES employees(id))")
@@ -211,7 +209,7 @@ class Database:
 
         #Executre an SQL query to insert a new record into the movies database.
         #WE use '?' to prevent against SQL injection attacks.
-        self.cur.execute("INSERT INTO screens VALUES (NULL, ?,?,?,?)", (capacity,self.init_seatmap(n,m).dumps(),n,m))
+        self.cur.execute("INSERT INTO screens VALUES (NULL, ?,?)", (capacity,self.init_seatmap(n,m).dumps()))
 
         #Commit the changes to the database.
         self.conn.commit()
@@ -292,11 +290,10 @@ class Database:
 
     #seats should be a list: [A10, A11, A12]
     def add_booking(self, screeningid, customerid, seats):
-
         seatmap = self.get_seatmap(screeningid)
-        seatmap = self.update_seatmap(self.get_seatmap_from_blob(seatmap), seats, screeningid,'+')
+        seatmap = self.update_seatmap(self.get_seatmap_from_blob(seatmap), seats.split(","), screeningid,'+')
         if not seatmap: return False
-        self.cur.execute("INSERT INTO bookings VALUES (NULL, ?,?,?)", (screeningid, customerid, str(seats)))
+        self.cur.execute("INSERT INTO bookings VALUES (NULL, ?,?,?)", (screeningid, customerid, seats))
         self.conn.commit()
 
     def remove_booking(self, id=-1, screenid=-1, customerid=-1, customer_forename="No forename", customer_surname="No surname",\
@@ -306,9 +303,9 @@ class Database:
             
             #Remove all bookings for a certain screen
             if(screenid!=-1):
-                self.cur.execute("SELECT id FROM bookings WHERE screenid=?",(screenid,))
-                id = self.cur.fetchall()
-            
+                #self.cur.execute("SELECT id FROM bookings WHERE screenid=?",(screenid,))
+                #id = self.cur.fetchall()
+                i = 0
             #Remove all bookings made by a certain customer using their ID
             elif(customerid!=1):
                 self.cur.execute("SELECT id FROM bookings WHERE customerid=?",(customerid,))
@@ -339,7 +336,7 @@ class Database:
         seatmap = self.get_seatmap(screeningid)
         self.cur.execute("SELECT seats FROM bookings WHERE id=?",(id,))
         seats = self.cur.fetchone()[0]
-        seatmap = self.update_seatmap(self.get_seatmap_from_blob(seatmap), seats, screeningid,'-')
+        seatmap = self.update_seatmap(self.get_seatmap_from_blob(seatmap), seats.split(","), screeningid,'-')
         self.cur.execute("DELETE FROM bookings WHERE id=?",(id,))
 
         self.conn.commit()
@@ -353,8 +350,8 @@ class Database:
         seats = self.cur.fetchone()[0]
 
         if seats !=data[-1]:
-            self.update_seatmap(seatmap, seats, screeningid, '-')
-            self.update_seatmap(seatmap, data[-1], screeningid, '+')
+            self.update_seatmap(self.get_seatmap_from_blob(seatmap), seats.split(","), screeningid, '-')
+            self.update_seatmap(self.get_seatmap_from_blob(seatmap), data[-1].split(","), screeningid, '+')
 
         self.cur.execute("UPDATE bookings SET screeningid=?, customerid=?, seats=? WHERE id=?",(*data, id))
 
@@ -366,13 +363,13 @@ class Database:
         for seat in seats:
             row = d[seat[0]]-1
             key = int(seat[1:])-1
-            print(row,key)
+            
 
             #If the seat is booked
             if op == '+':
 
                 #VIP seat
-                if(seatmap[row][key] == 2):
+                if seatmap[row][key] == 2:
                     seatmap[row][key] = 3
                 
                 #Standard seat
@@ -383,7 +380,7 @@ class Database:
             elif op=='-' :
 
                 #VIP seat
-                if(seatmap[row][key] == 2):
+                if seatmap[row][key] == 3:
                     seatmap[row][key] = 2
                 
                 #Standard seat
@@ -512,8 +509,8 @@ class Database:
 
 
 #=-=-=-=-=-=-SEAT MAP APPEARENCE TEST CODE-=-=-=-=-=-=-=
-'''
-db = Database('(exper)test.db')
+"""
+db = Database('tseter.db')
 db.add_screen(25,5,10)
 db.add_movie('seatmapMovieName', 'seatmapMovieblurb', '16', 'seatmapMovieDirector','seatmapMovieActor', '12-12-2021')
 db.add_customer('seatmapCustomerFName','seatmapCustomerSName', 'seatmapCustomerEmail', 'seatmapCustomerPhone','seatmapCustomerPassword','01-01-01')
@@ -535,5 +532,5 @@ db.add_booking(1,1,['A1','B1','C4'])
 dat = db.fetch()[2]
 seatmap = dat[0][5]
 print(seatmap)
-'''
+"""
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
