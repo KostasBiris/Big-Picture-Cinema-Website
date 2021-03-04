@@ -1,0 +1,31 @@
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='main.css')}}"/>
+</head>
+<body style="background-color: rgb(255, 255, 255);">
+<img src="{{url_for('static',filename='finlogo.png')}}" style="top:1px;width:300px;height:190px;" >
+<img src="{{url_for('static',filename='headerbanner.png')}}" style="position:absolute;top:10px;left:340px;width:980px;height:105px;" >
+
+<div class="text">
+    <button class="tab_background" style="position:absolute;top:125px;left:340px;width:150px;height:40px;">MOVIES</button>
+    <button class="tab_background" style="position:absolute;top:125px;left:510px;width:150px;height:40px;">TICKETS</button>
+    <button class="tab_background" style="position:absolute;top:125px;left:680px;width:150px;height:40px;">EMPLOYEES</button>
+    <button class="tab_background" style="position:absolute;top:125px;left:850px;width:150px;height:40px;">ANALYTICS</button>
+    
+</div>
+    <form action="{{ url_for('mainpage') }}" method="post" >
+        <input class="search_bar" name = "query" id="query" type="text" placeholder="Search here.." style="position:absolute;top:125px;left:1020px"/>
+        <!--fix sizing in search bar-->
+        <input class="search_icon" type="image" src = "{{url_for('static',filename='search.png')}}" style="position:absolute;top:125px;left:1270px;width:50px;height:40px;"/>
+
+    </form>
+<div>
+    <input type="image" src="{{url_for('static',filename='usericon.png')}}"style="position:absolute;top:125px;left:1340px;width:40px;height:40px;" />
+    <button class="text_button"style="position:absolute;top:125px;left:1390px;width:60px;height:40px;">LOG OUT</button>
+</div>
+<br>
+<div class="header_text">
+    <h1 style="position:absolute; left:25px; color: #4e5b60;">ANALYTICS</h1>
+</div>
+</body>
+</html>
