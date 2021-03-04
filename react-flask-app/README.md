@@ -4,10 +4,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## React requirements
 
-nodejs - https://github.com/nodesource/distributions/blob/master/README.md \
+nodejs - https://github.com/nodesource/distributions/blob/master/README.md  
 
-yarn - https://classic.yarnpkg.com/en/docs/install/#debian-stable  \
-Note that yarn is installed with npm which is the package manager for nodejs. Therefore, yarn is installed whithin nodejs installation. \
+yarn - https://classic.yarnpkg.com/en/docs/install/#debian-stable  
+Note that yarn is installed with npm which is the package manager for nodejs. Therefore, yarn is installed whithin nodejs installation.  
 
 ## Available Scripts
 
@@ -15,39 +15,39 @@ In the project directory, you can run:
 
 ### `yarn start`
 
-Runs the app in the development mode.\
+Runs the app in the development mode.  
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console. \
+The page will reload if you make edits.  
+You will also see any lint errors in the console.  
 
 React server runs on port localhost:3000 
 
 ### `yarn start-api`
 
-Starts flask server and runs on port localhost:5000 \
-You can see how this command executes in package.json file (line 17). Currently it is set up to enter a python virtual env inside api/ dir and execute flask from there. Otherwise you would need to find the path in your system to your flask executable, for example '/usr/lib/python3/dist-packages/flask'. \
-Flask server can also be ran separatly, in two different ways: \ 
+Starts flask server and runs on port localhost:5000  
+You can see how this command executes in package.json file (line 17). Currently it is set up to enter a python virtual env inside api/ dir and execute flask from there. Otherwise you would need to find the path in your system to your flask executable, for example '/usr/lib/python3/dist-packages/flask'.  
+Flask server can also be ran separatly, in two different ways:  
 * Not using yarn, by just running 'python3 api/main.py' which will also ran on port localhost:5000.\
-* Also by running 'flask run' on terminal. \
-Even though these two servers run on different ports, they are both connected as if they were one port by the proxy that is set up in package.json (line 39). \
+* Also by running 'flask run' on terminal.  
+Even though these two servers run on different ports, they are both connected as if they were one port by the proxy that is set up in package.json (line 39).  
 
 ### `How to run flask and react together`
 Once you have react requirements installed. Open two terminal sessions from /react-flask-app dir.\ 
-First terminal: yarn start (this starts reactjs server on local port 3000)\
-Second terminal: yarn start-api (this starts flask server on local port 5000) \
+First terminal: yarn start (this starts reactjs server on local port 3000)  
+Second terminal: yarn start-api (this starts flask server on local port 5000)  
 
 ### `yarn test`
 
-Launches the test runner in the interactive watch mode.\
+Launches the test runner in the interactive watch mode.  
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ### `yarn build`
 
-Builds the app for production to the `build` folder.\
+Builds the app for production to the `build` folder.  
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
+The build is minified and the filenames include the hashes.  
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
