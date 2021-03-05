@@ -12,6 +12,36 @@ def mainpage():
 def managepage():
     return render_template('business_main_interface.html')
 
+def serialize(res):
+
+    return {
+        'id': res[0],
+        'name':res[1],
+        'blurb':res[2],
+        'certificate':res[3],
+        'director':res[4],
+        'leadactors':res[5],
+        'releasedate':res[6]
+    }
+
+def serialize_all(res):
+
+    dic = {}
+    
+    for i in range(len(res)):
+        dic[i] =serialize(res[i])
+    return dic
+
+
+@app.route('/movie/<name>')
+def view_movie(name):
+    name = name.replace("_", " ")
+    print(name)
+    db = Database('cinema.db')
+    movie = db.find_movie(name)
+    if not movie: pass
+    print(movie)
+    return serialize(movie)
 
 @app.route('/caws')
 def moviepage():

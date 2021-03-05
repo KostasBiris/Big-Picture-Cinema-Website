@@ -202,6 +202,12 @@ class Database:
     """
     def search_movies(self, query):
         return [row for row in self.fetch()[0] if query.lower() in str(row).lower()]
+
+    def find_movie(self, name):
+
+        self.cur.execute("SELECT * FROM movies WHERE name=?",(name,))
+        return self.cur.fetchone()
+
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 #=-=-=-=-=-=-=-=-=SCREENS-=-=-=-=-=-=-=-=-=-=
@@ -510,9 +516,9 @@ class Database:
 
 #=-=-=-=-=-=-SEAT MAP APPEARENCE TEST CODE-=-=-=-=-=-=-=
 """
-db = Database('tseter.db')
+db = Database('cinema.db')
 db.add_screen(25,5,10)
-db.add_movie('seatmapMovieName', 'seatmapMovieblurb', '16', 'seatmapMovieDirector','seatmapMovieActor', '12-12-2021')
+db.add_movie('seatmap Movie Name', 'seatmapMovieblurb', '16', 'seatmapMovieDirector','seatmapMovieActor', '12-12-2021')
 db.add_customer('seatmapCustomerFName','seatmapCustomerSName', 'seatmapCustomerEmail', 'seatmapCustomerPhone','seatmapCustomerPassword','01-01-01')
 
 db.add_employee("staff1_fn", "staff1_sn", "staff1@email.com", 1, "staff1_password", True)
