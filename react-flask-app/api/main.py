@@ -39,12 +39,20 @@ def serialize_all(res):
 @app.route('/movie/<name>', methods = ['POST'])
 def view_movie(name):
     name = name.replace("_", " ")
-    print(name)
     db = Database('cinema.db')
     movie = db.search_movies(name)
     if not movie: pass
-    print(movie)
     return serialize_all(movie)
+@app.route('/movie/<name>/page', methods= ['POST'])
+def _view_movie(name):
+    name = name.replace("_", " ")
+    name = name.lower()
+    db = Database('cinema.db')
+    print(name)
+    movie = db.find_movie(name)
+    print(movie)
+    if not movie: pass
+    return serialize(movie)
 
 @app.route('/caws')
 def moviepage():

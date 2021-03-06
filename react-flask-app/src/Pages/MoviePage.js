@@ -1,22 +1,47 @@
 import React from 'react'
 
-import { Card } from '../Components/Card/card'
 
-const MoviePage = ( { name })=> {
-    return (
-        <>
-            {res.map(res_=> {
-                return (
-                    <div>
-                        <p>{res_.name}</p>
-                        <p>{res_.blurb}</p>
-                        <p>{res_.director}</p>
-                        <p>{res_.leadactors}</p>
-                        <p>{res_.releasedate}</p>
-                        <p>{res_.certificate}</p>
-                    </div>
-                )
-            })}
-        </>
-    )
+class MoviePage extends React.Component {
+    constructor(props) {
+        super(props);
+        this.title = props.match.params.title;
+        
+        //this.componentDidMount = this.componentDidMount.bind(this);
+        this.getData = this.getData.bind(this);
+        //this.getData();
+        this.state = {data: []};
+        this.getData();
+    }
+
+    getData = () => {
+    var fet = '/movie/' + this.title + '/page';
+    fetch (fet, {
+        method: 'POST' ,
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({movie: this.title})})
+        .then(response => response.json()).then(data => {
+        this.setState({data :data})});
+    }
+    
+
+    render() {
+        return (
+            
+            <div>
+                Movie Name: {this.state.data.name}<br/>
+                Blurb: {this.state.data.blurb}<br/>
+                Director: {this.state.data.director}<br/>
+                Lead Actors: {this.state.data.leadactors}<br/>
+                Release Date: {this.state.data.releasedate}<br/>
+                Certificate: {this.state.data.certificate}<br/>    
+                
+            </div>
+        )
+    }
 }
+
+
+
+export default MoviePage;

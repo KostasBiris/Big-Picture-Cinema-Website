@@ -203,10 +203,18 @@ class Database:
     def search_movies(self, query):
         return [row for row in self.fetch()[0] if query.lower() in str(row).lower()]
 
-    def find_movie(self, name):
+    def find_movie(self, query):
 
-        self.cur.execute("SELECT * FROM movies WHERE name=?",(name,))
-        return self.cur.fetchone()
+        self.cur.execute("SELECT id,name FROM movies")
+        data = self.cur.fetchall()
+        for tup in data:
+            if tup[1].lower() == query.lower():
+                self.cur.execute("SELECT * FROM movies WHERE id=?",(tup[0],))
+                return self.cur.fetchone()
+        #return [row for row in self.fetch()[0] if query.lower() == str(row)[1].lower()]
+        
+        #self.cur.execute("SELECT * FROM movies WHERE name=?",(name,))
+        #return self.cur.fetchone()[0]
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 

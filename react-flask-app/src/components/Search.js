@@ -1,7 +1,8 @@
 import SearchForm from './SearchForm';
 import React, { useState } from 'react';
-
-
+import CustomerHomePage from '../Pages/CustomerHomePage';
+import SearchResult from './SearchResult';
+import main from '../static/main.css';
 
 /*const Search = () => {
 
@@ -52,13 +53,25 @@ class SearchResults extends React.Component{
     if (this.state.returnedData.length > 0) {
       return (
         <>
-          {this.state.returnedData.map(res=> {
+        <head>
+          <link rel="stylesheet" type="text/css" href={main}/>
+        </head>
+          <body>
+          <CustomerHomePage/>
+          <div style={{position: 'relative', paddingLeft: '20%', paddingRight: '80%', paddingTop: '10%%', paddingBottom: '90%', width: '30%'}}>
+          {this.state.returnedData.map(res_=> {
             return (
+
               <ul>
-                <li>{res.name}</li>
+                <li><SearchResult res={res_}/></li>
               </ul>
+              
+              
             )
           })}
+          </div>
+          
+          </body>
         </>
       )
     }else {
