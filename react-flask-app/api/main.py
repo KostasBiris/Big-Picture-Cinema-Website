@@ -3,6 +3,11 @@ from db import Database
 import socket
 
 app = Flask(__name__)
+db = Database('cinema.db')
+db.add_movie('seatmap Movie Name', 'seatmapMovieblurb', '16', 'seatmapMovieDirector','seatmapMovieActor', '12-12-2021')
+
+
+
 
 @app.route('/')
 def mainpage():
@@ -33,15 +38,15 @@ def serialize_all(res):
     return dic
 
 
-@app.route('/movie/<name>')
+@app.route('/movie/<name>', methods = ['POST'])
 def view_movie(name):
     name = name.replace("_", " ")
     print(name)
     db = Database('cinema.db')
-    movie = db.find_movie(name)
+    movie = db.search_movies(name)
     if not movie: pass
     print(movie)
-    return serialize(movie)
+    return serialize_all(movie)
 
 @app.route('/caws')
 def moviepage():

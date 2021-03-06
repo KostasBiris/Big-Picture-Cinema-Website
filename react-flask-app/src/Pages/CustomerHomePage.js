@@ -15,9 +15,9 @@ import left from '../static/left.png'
 import right from '../static/right.png'
 import main from '../static/main.css';
 import { shiftLeft, shiftRight } from './scripts/scripts'
+import Search from '../components/Search';
 function searchMovie () {
-    //Juan, implement search code here.
-    return 0;
+
 }
 
 function login() {
@@ -33,6 +33,22 @@ function account() {
 }
 
 class CustomerHomePage extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state = { query: ''};
+        this.handleSearchChange = this.handleSearchChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleSearchChange = (e) => {
+        this.setState( { query: e.target.value});
+        console.log(this.state.query);
+    }
+
+    handleSubmit = (e) => {
+        var go = '/search/' + this.state.query;
+        this.props.history.push(go);
+    }
     render() {
         return (
         <body>
@@ -51,8 +67,8 @@ class CustomerHomePage extends React.Component{
     <button className="tab_background" style={{position:'absolute', top:'125px', left: '850px', width:'150px', height:'40px'}}>INFO</button>
 </div>
     <form>
-        <input className="search_bar" name = "query" id="query" type="text" placeholder="Search here.." style={{position:'absolute',top:'125px',left:'1020px'}}/>
-        <input onClick={search} className="search_icon" type="image" src={search} style={{position:'absolute',top:'125px',left:'1270px',width:'50px',height:'40px'}}/>
+        <input onChange = {this.handleSearchChange} value = {this.state.query} className="search_bar" name = "query" id="query" type="text" placeholder="Search here.." style={{position:'absolute',top:'125px',left:'1020px'}}/>
+        <input onClick={this.handleSubmit} className="search_icon" type="image" src={search} style={{position:'absolute',top:'125px',left:'1270px',width:'50px',height:'40px'}}/>
     </form>
 <div>
     <button onClick = {login} type = "submit" id = "login" class="text_button"style={{position:'absolute',top:'125px',left:'1390px',width:'60px',height:'40px'}}>LOG IN</button>

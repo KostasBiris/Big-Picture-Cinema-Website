@@ -1,7 +1,9 @@
 import SearchForm from './SearchForm';
 import React, { useState } from 'react';
 
-const Search = () => {
+
+
+/*const Search = () => {
 
   const [returnedData, setReturnedData] = useState('');
 
@@ -25,6 +27,49 @@ const Search = () => {
       <p>{returnedData.data}</p>
     </div>
   )
-}
+}*/
 
-export default Search
+class SearchResults extends React.Component{
+  constructor(props) {
+    super(props);
+    this.getMovie = this.getMovie.bind(this);
+    this.state ={ returnedData: []};
+    this.getMovie(this.props.match.params.query);
+  }
+  getMovie = (movie) => {
+    var fet = '/movie/' + movie;
+      fetch (fet, {
+        method: 'POST' ,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({movie: movie})})
+        .then(response => response.json()).then(data => {
+         this.setState({ returnedData : Object.values(data)})
+        });
+      }
+  render() {
+    if (this.state.returnedData.length > 0) {
+      return (
+        <>
+          {this.state.returnedData.map(res=> {
+            return (
+              <ul>
+                <li>{res.name}</li>
+              </ul>
+            )
+          })}
+        </>
+      )
+    }else {
+      return (
+        <>
+          <p>No results found.</p>
+        </>
+      )
+    }
+  } 
+};
+
+
+export default SearchResults;
