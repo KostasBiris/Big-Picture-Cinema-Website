@@ -3,8 +3,6 @@ from db import Database
 import socket
 
 app = Flask(__name__)
-db = Database('cinema.db')
-db.add_movie('seatmap Movie Name', 'seatmapMovieblurb', '16', 'seatmapMovieDirector','seatmapMovieActor', '12-12-2021')
 
 
 
