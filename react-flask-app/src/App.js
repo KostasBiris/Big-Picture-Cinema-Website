@@ -8,7 +8,11 @@ import Search from './components/Search'
 import SearchResults from "./components/Search";
 import MoviePage from "./Pages/MoviePage";
 
+
+
 const App = () => (
+    //Set up routing for our web application.
+    //Redirce '/' to '/home' by default.
     <BrowserRouter>
       <Switch>
         <Route exact path="/" render={() => (<Redirect to="/home" />)} />
@@ -20,4 +24,4 @@ const App = () => (
     </BrowserRouter>
   
 );
-export default App
+export default App;

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import CustomerHomePage from '../Pages/CustomerHomePage';
 import SearchResult from './SearchResult';
 import main from '../static/main.css';
-
+import { BrowserRouter, Route } from 'react-router-dom';
 /*const Search = () => {
 
   const [returnedData, setReturnedData] = useState('');
@@ -30,13 +30,22 @@ import main from '../static/main.css';
   )
 }*/
 
+
+//Component for getting and displaying search results.
 class SearchResults extends React.Component{
   constructor(props) {
     super(props);
+    //Bind our method.
     this.getMovie = this.getMovie.bind(this);
+
+    //By default the state is an empty array.
     this.state ={ returnedData: []};
+
+    //Call our method, using the query given.
     this.getMovie(this.props.match.params.query);
   }
+
+  //Invoke a request to our rest API to search the database for movies matching our query.
   getMovie = (movie) => {
     var fet = '/movie/' + movie;
       fetch (fet, {
@@ -48,8 +57,12 @@ class SearchResults extends React.Component{
         .then(response => response.json()).then(data => {
          this.setState({ returnedData : Object.values(data)})
         });
-      }
+  }
+
+
   render() {
+    //Results found.
+    //Render the results in a list format.
     if (this.state.returnedData.length > 0) {
       return (
         <>
@@ -61,12 +74,9 @@ class SearchResults extends React.Component{
           <div style={{position: 'relative', paddingLeft: '20%', paddingRight: '80%', paddingTop: '10%%', paddingBottom: '90%', width: '30%'}}>
           {this.state.returnedData.map(res_=> {
             return (
-
               <ul>
                 <li><SearchResult res={res_}/></li>
               </ul>
-              
-              
             )
           })}
           </div>
@@ -75,6 +85,7 @@ class SearchResults extends React.Component{
         </>
       )
     }else {
+      //No results found.
       return (
         <>
           <p>No results found.</p>
