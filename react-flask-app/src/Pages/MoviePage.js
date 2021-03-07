@@ -1,18 +1,27 @@
 import React from 'react'
-
+var publicIP = require('public-ip')
 //Generic component for individual Movie Pages.
 class MoviePage extends React.Component {
     constructor(props) {
         super(props);
         this.title = props.match.params.title;
+        this.state = {IP: null};
         //Bind our method.
         this.getData = this.getData.bind(this);
+        this.getClientIP = this.getClientIP.bind(this);
         //By default the state is an empty array.
         this.state = { data: [] };
         //Call our method.
         this.getData();
-    }
+        this.getClientIP();
 
+    }
+    getClientIP = () => {
+        (async () => {
+            this.setState({IP: await publicIP.v4()})
+        })();
+
+    }
     //Method for getting the data of the specific requested movie.
     getData = () => {
         //Invoke a request to our rest API to get the data of the movie.

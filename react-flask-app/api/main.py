@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, jsonify
 from db import Database
 import socket
 
@@ -99,24 +99,17 @@ def _mainpage():
     del db
     return "<h1 style='color:blue'>" + dat + "</h1>"
 
-@app.route('/register')
-def register():
-    return render_template('customer_register.html')
-
 @app.route('/register', methods=['POST'])
 def _register():
 
+    data = request.json['data']
     db = Database('cinema.db')
-    
-    first_name = request.form['first_name']
-    surname = request.form['last_name']
-    phone_number = request.form['phone_number']
-    email = request.form['email']
-    password = request.form['password']
-    dob = request.form['birthday']
-    db.add_customer(first_name, surname, phone_number, email, password, dob)
+    db.add_customer(data['forename'], data['surname'], data['email'],
+    data['phonenumber'],  data['password'],
+    data['dob'])
     del db
-    return render_template('customers_main_interface.html')
+    return jsonify({'result': 'OK'})
+
 
 @app.route('/booklogin')
 def employeelogin():

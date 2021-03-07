@@ -7,6 +7,7 @@ import reactDom from 'react-dom';
 import Search from './components/Search'
 import SearchResults from "./components/Search";
 import MoviePage from "./Pages/MoviePage";
+import CustomerRegister from "./Pages/CustomerRegister";
 
 
 
@@ -20,6 +21,7 @@ const App = () => (
         <Route exact path="/login" component={LoginPage} />
         <Route exact path="/search/:query" component={SearchResults}/>
         <Route exact path="/movie/:title" component={MoviePage}/>
+        <Route exact path="/register" component={CustomerRegister}/>
       </Switch>
     </BrowserRouter>
   

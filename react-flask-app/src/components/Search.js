@@ -29,7 +29,7 @@ import { BrowserRouter, Route } from 'react-router-dom';
     </div>
   )
 }*/
-
+var publicIP = require('public-ip')
 
 //Component for getting and displaying search results.
 class SearchResults extends React.Component{
@@ -37,14 +37,22 @@ class SearchResults extends React.Component{
     super(props);
     //Bind our method.
     this.getMovie = this.getMovie.bind(this);
-
+    this.getClientIP = this.getClientIP.bind(this);
     //By default the state is an empty array.
-    this.state ={ returnedData: []};
+    this.state ={ returnedData: [], IP: null};
+
 
     //Call our method, using the query given.
     this.getMovie(this.props.match.params.query);
+    this.getClientIP();
   }
 
+  getClientIP = () => {
+    (async () => {
+        this.setState({IP: await publicIP.v4()})
+    })();
+
+  }
   //Invoke a request to our rest API to search the database for movies matching our query.
   getMovie = (movie) => {
     var fet = '/movie/' + movie;

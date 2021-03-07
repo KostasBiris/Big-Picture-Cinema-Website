@@ -18,17 +18,27 @@ import { shiftLeft, shiftRight } from './scripts/scripts'
 import Search from '../components/Search';
 import { BrowserRouter, Route } from 'react-router-dom';
 
+var publicIP = require('public-ip')
 
 //Component for the main page of the customers.
 class CustomerHomePage extends React.Component {
     constructor(props) {
         super(props);
         //By default the state is a blank query.
-        this.state = { query: '' };
+        this.state = { query: '', IP: null };
         //Bind our methods.
         this.handleSearchChange = this.handleSearchChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleLogin = this.handleLogin.bind(this);
+        this.getClientIP = this.getClientIP.bind(this);
+        this.getClientIP();
+    }
+
+    getClientIP = () => {
+        (async () => {
+            this.setState({IP: await publicIP.v4()})
+        })();
+
     }
 
     //Method for handling a change in the search query field.
@@ -78,7 +88,7 @@ class CustomerHomePage extends React.Component {
                     <button href="/register" id="register" type="submit" class="text_button" style={{ position: 'absolute', top: '125px', left: '1460px', width: '60px', height: '40px' }}>SIGN UP</button>
                     <button onClick={this.handleLogin} className="text_button" style={{ position: 'absolute', top: '125px', left: '1390px', width: '60px', height: '40px' }}>LOG IN</button>
                     <button className="text_button" style={{ position: 'absolute', top: '125px', left: '1460px', width: '60px', height: '40px' }}>SIGN UP</button>
-                    <input href = "/home" id="account" type="image" src={usericon} style={{ position: 'absolute', top: '125px', left: '1340px', width: '40px', height: '40px' }} />
+                    <input href="/home" id="account" type="image" src={usericon} style={{ position: 'absolute', top: '125px', left: '1340px', width: '40px', height: '40px' }} />
                 </div>
             </body>
 

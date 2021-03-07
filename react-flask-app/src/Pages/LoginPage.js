@@ -3,20 +3,29 @@ import main from '../static/main.css';
 import logo from '../static/finlogo.png'
 
 
-
+var publicIP = require('public-ip')
 
 //Component for the login page.
 class LoginPage extends React.Component{
     constructor(props) {
         super(props);
         //By default, the state is such that the user is unauthorised, the email and password are blank.
-        this.state = {auth : false, email: '', password: ''};
+        this.state = {auth : false, email: '', password: '', IP: null};
         //Bind our methods.
         this.handleLogin = this.handleLogin.bind(this);
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.validate = this.validate.bind(this);
         this.login = this.login.bind(this);
+        this.getClientIP = this.getClientIP.bind(this);
+        this.getClientIP();
+    }
+
+    getClientIP = () => {
+        (async () => {
+            this.setState({IP: await publicIP.v4()})
+        })();
+
     }
 
     //Method for validating the email and password.
