@@ -91,7 +91,14 @@ class Database:
                                                                phonenumber TEXT NOT NULL, \
                                                                hash TEXT NOT NULL, \
                                                                isManager BIT NOT NULL)")
-
+          
+        self.cur.execute("CREATE TABLE IF NOT EXISTS sessions  (id INTEGER PRIMARY KEY, \
+                                                               time_logged_in DATETIME NOT NULL, \
+                                                               time_logged_out DATETIME NOT NULL, \
+                                                               account_type INTEGER NOT NULL, \
+                                                               customer_id INTEGER REFERENCES customers(id), \
+                                                               employee_id INTEGER REFERENCES employees(id), \
+                                                               manager_id INTEGER REFERENCES employees(id)")
 
         #commit the changes we have made to the database
         self.conn.commit()
