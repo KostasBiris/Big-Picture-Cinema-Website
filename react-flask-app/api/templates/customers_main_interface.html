@@ -1,55 +1,58 @@
 <html lang="en">
 <head>
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='main.css')}}" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">   
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='main.css')}}" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 </head>
 
-<body>
-    <img src="{{url_for('static',filename='finlogo.png')}}" style="top:1px;width:300px;height:190px;">
-    <img src="{{url_for('static',filename='headerbanner.png')}}" style="position:absolute;top:10px;left:340px;width:980px;height:105px;">
-    <img src="{{url_for('static',filename='follow.png')}}" style="position: absolute; top: 10px; left: 1380px; width:100px;height:105px;">
-    <div class="text">
-        <!--Tabs for customer-->
-        <button class="tab_background" style="position:absolute;top:125px;left:340px;width:150px;height:40px;">WHAT'S NEW </button>
-        <button class="tab_background" style="position:absolute;top:125px;left:510px;width:150px;height:40px;">TICKETS</button>
-        <button class="tab_background" style="position:absolute;top:125px;left:680px;width:150px;height:40px;">SCREENS</button>
-        <button class="tab_background" style="position:absolute;top:125px;left:850px;width:150px;height:40px;">INFO</button>
-    </div>
-    <form action="{{ url_for('mainpage') }}" method="post">
-        <!--Search bar...-->
-        <input class="search_bar" name="query" id="query" type="text" placeholder="Search here.." style="position:absolute;top:125px;left:1020px"/>
-        <!--fix sizing in search bar-->
-        <input class="search_icon" type="image" src="{{url_for('static',filename='search.png')}}" style="position:absolute;top:125px;left:1270px;width:50px;height:40px;"/>
+<body style="background-color:rgba(78,91,96, 0.3)">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#"><img src="{{url_for('static',filename='finlogo.png')}}" style="top:1px;width:300px;height:190px;"></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <button class="tab_background text mr-3">WHAT'S NEW</button>
+      </li>
+      <li class="nav-item">
+        <button class="tab_background text mr-3">TICKETS</button>
+      </li>
+      <li class="nav-item dropdown">
+        <button class="tab_background dropdown-toggle text mr-3"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">SCREENS</button>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <button class="dropdown-item" style="color:#f9bc50;" >SILVER Screens</button>
+          <button class="dropdown-item" style="color:#f9bc50;">IMAX experience</buttom>
+          <button class="dropdown-item" style="color:#f9bc50;" >GOLDEN screens</button>
+        </div>
+      </li>
+      <li class="nav-item">
+        <button class="tab_background text mr-3" >EVENTS</button>
+      </li>
+      <li class="nav-item">
+        <button class="tab_background text mr-9">INFO</button>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2 search_bar" type="search" placeholder="Search here.." aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>
     </form>
-    <div>
-        <input id="account" type="image" src="{{url_for('static',filename='usericon.png')}}" style="position:absolute;top:125px;left:1340px;width:40px;height:40px;" />
-        <script type="text/javascript">
-        document.getElementById("account").onclick = function () {
-            location.href = "{{ url_for('account') }}";
-        };
-        </script>
-        <button type="submit" id="login" class="text_button"
-        style="position:absolute;top:125px;left:1390px;width:60px;height:40px;">LOG IN</button>
-        <script type="text/javascript">
-        document.getElementById("login").onclick = function () {
-            location.href = "{{ url_for('login') }}";
-        };
-        </script>
-        <button id="register" type="submit" class="text_button"style="position:absolute;top:125px;left:1460px;width:60px;height:40px;">SIGN UP</button>
-        <script type="text/javascript">
-        document.getElementById("register").onclick = function () {
-            location.href = "{{ url_for('register') }}";
-        };
-        </script>
-        <input type="image" src="{{url_for('static',filename='usericon.png')}}"
-            style="position:absolute;top:125px;left:1340px;width:40px;height:40px;" />
-        <!--Login and signup button-->
-        <button class="text_button" style="position:absolute;top:125px;left:1390px;width:60px;height:40px;">LOG
-            IN</button>
-        <button class="text_button" style="position:absolute;top:125px;left:1460px;width:60px;height:40px;">SIGN
-            UP</button>
-            <button class="text_button" style="position:absolute;top:125px;left:1530px;width:60px;height:40px;">LOG OUT</button>
-        <!-- HEADER ENDS-->
+  </div>
+</nav>
+ </form>
+  <input id="account" type="image" src="{{url_for('static',filename='usericon.png')}}" style="position:absolute;top:125px;left:1340px;width:40px;height:40px;" />
+        <input type="image" src="{{url_for('static',filename='usericon.png')}}" style="position:absolute;top:125px;left:1340px;width:40px;height:40px;"/>
+        <button class="text_button" style="position:absolute;top:125px;left:1390px;width:60px;height:40px;">LOG IN</button>
+        <button class="text_button" style="position:absolute;top:125px;left:1460px;width:60px;height:40px;">SIGN UP</button>
+        </nav>
+         <div class="overlay">
+         
+         <video playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop" class="embed-responsive-item" src="{{url_for('static', filename='vid.mp4')}}" type="video/mp4"</video>
+     
+         </div>
         <!--Carousel movies-->
         <div class="container_movies">
             <div class="button" onclick="shiftLeft()"><img src="{{url_for('static',filename='left.png')}}"></div>
@@ -111,7 +114,7 @@ function shiftRight() {
 }
 </script>
 <div class="header_text">
-    <h1 style="position:absolute; left:25px; color: #4e5b60;">COMING SOON</h1>
+    <h1 style="position:absolute; left:25px; color: #4e5b60;">PLAYING NOW</h1>
 </div>
     <div class="container_new">
         <div class="hover01 column">
@@ -130,5 +133,8 @@ function shiftRight() {
 
 </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>
