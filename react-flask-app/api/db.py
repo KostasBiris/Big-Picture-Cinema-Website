@@ -50,6 +50,7 @@ class Database:
                                                             blurb TEXT NOT NULL, \
                                                             certificate TEXT NOT NULL,\
                                                             director TEXT NOT NULL, \
+                                                            writers TEXT NOT NULL, \
                                                             leadactors TEXT NOT NULL, \
                                                             release_date DATE NOT NULL)")
 
@@ -149,10 +150,10 @@ class Database:
     """
         Inserts a new entry into the movies table
     """
-    def add_movie(self, name,blurb,certificate,director,leadactors, release_date):
+    def add_movie(self, name,blurb,certificate,director, writers,leadactors, release_date):
         #Execute an SQL query to insert a new record into the movies database.
         #We use '?' to prevent against SQL injection attacks.
-        self.cur.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?)", (name, blurb, certificate, director, leadactors, release_date))
+        self.cur.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?,?)", (name, blurb, certificate, director, writers, leadactors, release_date))
 
         #Commit the changes we have made to the database.
         self.conn.commit()
@@ -165,7 +166,8 @@ class Database:
     """
         Removes a movie from the movies table
     """
-    def remove_movie(self, id = -1, name = "No name", blurb = "No blurb", certificate = -1, director = "No director", leadactors = "No leadactors",release_date = "00-00-00"):
+    def remove_movie(self, id = -1, name = "No name", blurb = "No blurb", certificate = -1, director = "No director", writers = "No writers",\
+                                                                                        leadactors = "No leadactors",release_date = "00-00-00"):
         
         if(id == -1):
             #Remove a specific movie given its name
