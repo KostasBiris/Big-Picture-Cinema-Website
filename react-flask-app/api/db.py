@@ -93,8 +93,8 @@ class Database:
                                                                isManager BIT NOT NULL)")
           
         self.cur.execute("CREATE TABLE IF NOT EXISTS sessions  (id INTEGER PRIMARY KEY, \
-                                                               time_logged_in DATETIME NOT NULL, \
-                                                               time_logged_out DATETIME NOT NULL, \
+                                                               time_connected DATETIME NOT NULL, \
+                                                               time_disconnected DATETIME NOT NULL, \
                                                                account_type INTEGER NOT NULL, \
                                                                customer_id INTEGER REFERENCES customers(id), \
                                                                employee_id INTEGER REFERENCES employees(id), \
@@ -527,6 +527,14 @@ class Database:
     def __del__(self):
         self.conn.close()
 
+#=-=-=-=-=-=-=-=-=-=SESSIONS-=-=-=-=-=-=-=-=-=-=-=-=
+    def add_session(self, ip, time_connected, time_disconnected, account_type, customer_id, employee_id, manager_id):
+        _hash = generate_password_hash(password)
+        self.cur.execute("INSERT INTO sessions VALUES (NULL, ?,?,?,?,?,?,?)",(ip, time_connected, time_disconnected, account_type, customer_id, employee_id, manager_id))
+
+
+        self.conn.commit()
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 """
 db = Database('cinema.db')
