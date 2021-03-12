@@ -76,6 +76,12 @@ class Database:
                                                               customerid INTEGER REFERENCES customers(id), \
                                                               seats TEXT NOT NULL)")
 
+        self.cur.execute("CREATE TABLE IF NOT EXISTS tickets (id INTEGER PRIMARY KEY, \
+                                                              booking_id INTEGER REFERENCES bookings(id) NOT NULL, \
+                                                              forename TEXT NOT NULL, \
+                                                              surname TEXT NOT NULL, \
+                                                              qr INTEGER NOT NULL, \
+                                                              email TEXT NOT NULL)")
 
         self.cur.execute("CREATE TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY, \
                                                                forename TEXT NOT NULL, \
