@@ -367,6 +367,7 @@ class Database:
         seats = self.cur.fetchone()[0]
         seatmap = self.update_seatmap(self.get_seatmap_from_blob(seatmap), seats.split(","), screeningid,'-')
         self.cur.execute("DELETE FROM bookings WHERE id=?",(id,))
+        remove_ticket(self, id)
 
         self.conn.commit()
 
@@ -422,12 +423,27 @@ class Database:
 
 #=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=
 
-#=-=-=-=-=-=-=-=-=-=CUSTOMERS-=-=-=-=-=-=-=-=-=-=
-    def add_customer(self, forename, surname, email, phonenumber, password, dob):
+#=-=-=-=-=-=-=-=-=-=TICKETS-=-=-=-=-=-=-=-=-=-=
 
+    def add_ticket(self, booking_id, forename, surname, qr, email):
+
+        self.cur.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?)",(booking_id, forename, surname, qr, email))
+        self.conn.commit()
+
+    #Removes a ticket when the booking is removed
+    def remove_ticket(self, booking_id):
+        self.cur.execute("DELETE FROM tickets WHERE booking_id=?",(booking_id,))
+        self.conn.commit()
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=
+
+#=-=-=-=-=-=-=-=-=-=CUSTOMERS-=-=-=-=-=-=-=-=-=-=
+    
+    def add_customer(self, forename, surname, email, phonenumber, password, dob):
         _hash = generate_password_hash(password)
         self.cur.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?)",(forename, surname, email, phonenumber, _hash, dob))
         self.conn.commit()
+
 
     def remove_customer(self, id=-1, forename="No forename", surname="No surname", email="No email", phonenumber=-1,dob=-1):
 
@@ -537,10 +553,7 @@ class Database:
 
 #=-=-=-=-=-=-=-=-=-=SESSIONS-=-=-=-=-=-=-=-=-=-=-=-=
     def add_session(self, ip, time_connected, time_disconnected, account_type, customer_id, employee_id, manager_id):
-        _hash = generate_password_hash(password)
         self.cur.execute("INSERT INTO sessions VALUES (NULL, ?,?,?,?,?,?,?)",(ip, time_connected, time_disconnected, account_type, customer_id, employee_id, manager_id))
-
-
         self.conn.commit()
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
