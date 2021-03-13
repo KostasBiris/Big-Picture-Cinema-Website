@@ -9,18 +9,23 @@ class CustomerAccountPage extends React.Component {
         super(props);
         this.state = {data: [], auth: false}
         this.stepUp = this.stepUp.bind(this);
+        this.stepUp();
     }
-
-
 
     stepUp = async () => {
         await (async () => {
             this.setState({IP: await publicIP.v4()})
         })();
         this.assertAuth();
+        this.forceUpdate();
+
     }
 
     componentDidMount() {
+        window.addEventListener('load', this.stepUp);
+    }
+
+    componentDidUpdate() {
         window.addEventListener('load', this.stepUp);
     }
 
@@ -38,14 +43,21 @@ class CustomerAccountPage extends React.Component {
             body: JSON.stringify({ data: this.IP })
         })
             .then(response => response.json()).then(data => {
-                this.setState({ auth: true , data: data})})
+                this.setState({ auth: true , data: data.response})})
     };
 
 
 
     render() {
         return (
-            <div>STUB!</div>
+            <div>
+                id: {this.state.data.id} <br />
+                Forename: {this.state.data.forename}<br />
+                Surname: {this.state.data.surname}<br />
+                Email: {this.state.data.email}<br />
+                Phone Number: {this.state.data.phone}<br />
+                DoB: {this.state.data.dob}<br />
+            </div>
     );
     }
 }

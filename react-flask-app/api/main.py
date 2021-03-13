@@ -124,8 +124,16 @@ def insession(ip):
     if not rq:
         del db
         return jsonify({'response': 'error'})
-    data = db.fetch_customer(rq[5])
+    data = db.fetch_customer(rq[4])
     return jsonify({'response':serialize_user(data)})
+
+
+@app.route('/logout/<ip>', methods = ['POST'])
+def logout(ip):
+    db = Database('cinema.db')
+    db.logout(ip)
+    return jsonify({'response': 'OK'})
+
 
 @app.route('/register', methods=['POST'])
 def _register():
@@ -154,7 +162,7 @@ def _login():
     print(email, password, ip)
     res, id = db.validate_customer(email, password)
     if res:
-        db.add_session(ip, time.time(), 'NULL', 1, id, 'NULL', 'NULL')
+        db.add_session(ip, time.time(), 1, id, 'NULL', 'NULL')
         del db
         return jsonify({'response': 'OK'})
     del db

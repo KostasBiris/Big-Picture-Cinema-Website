@@ -39,7 +39,7 @@ class SearchResults extends React.Component{
     this.getMovie = this.getMovie.bind(this);
     this.getClientIP = this.getClientIP.bind(this);
     //By default the state is an empty array.
-    this.state ={ returnedData: [], IP: null};
+    this.state ={ returnedData: [], IP: null, auth: false};
 
 
     //Call our method, using the query given.

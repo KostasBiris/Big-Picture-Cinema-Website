@@ -102,7 +102,6 @@ class Database:
         self.cur.execute("CREATE TABLE IF NOT EXISTS sessions  (id INTEGER PRIMARY KEY, \
                                                                ip TEXT NOT NULL, \
                                                                time_connected INTEGER NOT NULL, \
-                                                               time_disconnected INTEGER NOT NULL, \
                                                                account_type INTEGER NOT NULL, \
                                                                customer_id INTEGER REFERENCES customers(id), \
                                                                employee_id INTEGER REFERENCES employees(id), \
@@ -554,15 +553,15 @@ class Database:
         self.conn.close()
 
 #=-=-=-=-=-=-=-=-=-=SESSIONS-=-=-=-=-=-=-=-=-=-=-=-=
-    def add_session(self, ip, time_connected, time_disconnected, account_type, customer_id, employee_id, manager_id):
+    def add_session(self, ip, time_connected, account_type, customer_id, employee_id, manager_id):
         #_hash = generate_password_hash(password)
 
         if customer_id!='NULL':
-            self.cur.execute("INSERT INTO sessions VALUES (NULL, ?,?,?,?,?,NULL,NULL)",(ip, time_connected, time_disconnected, account_type, customer_id))
+            self.cur.execute("INSERT INTO sessions VALUES (NULL, ?,?,?,?,NULL,NULL)",(ip, time_connected,  account_type, customer_id))
         elif employee_id!='NULL':
-            self.cur.execute("INSERT INTO sessions VALUES (NULL, ?,?,?,?,NULL,?,NULL)",(ip, time_connected, time_disconnected, account_type, employee_id))
+            self.cur.execute("INSERT INTO sessions VALUES (NULL, ?,?,?,NULL,?,NULL)",(ip, time_connected, account_type, employee_id))
         elif manager_id!='NULL':
-            self.cur.execute("INSERT INTO sessions VALUES (NULL, ?,?,?,?,NULL,NULL,?)",(ip, time_connected, time_disconnected, account_type, manager_id))
+            self.cur.execute("INSERT INTO sessions VALUES (NULL, ?,?,?,NULL,NULL,?)",(ip, time_connected,  account_type, manager_id))
         
         self.conn.commit()
 
@@ -573,6 +572,14 @@ class Database:
         return self.cur.fetchone()
 
 
+    def logout(self, ip):
+        self.cur.execute("SELECT * FROM sessions WHERE ip=?",(ip,))
+        data = self.cur.fetchone()
+        if not data: return False
+        id_ = data[0]
+        self.cur.execute("DELETE FROM sessions WHERE id=?",(id_,))
+        self.conn.commit()
+        return True
         #self.cur.execute("INSERT INTO sessions VALUES (NULL, ?,?,?,?,?,?,?)",(ip, time_connected, time_disconnected, account_type, customer_id, employee_id, manager_id))
         #self.conn.commit()
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
