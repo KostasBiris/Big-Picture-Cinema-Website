@@ -3,7 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import numpy as np
 import pickle
 import string
-
+import qrcode
 
 """
     TODO:
@@ -435,6 +435,22 @@ class Database:
         self.cur.execute("DELETE FROM tickets WHERE booking_id=?",(booking_id,))
         self.conn.commit()
 
+        #Generates the QR code of the ticket which will be sent over email
+    def qr_code_generator(self, booking_id, forename, surname):
+        
+        qr = qrcode.QRCode(
+            version = 1,
+            box_size = 10,
+            border = 5
+        )
+
+        self.cur.execute("SELECT * FROM bookings WHERE id=?",(booking_id,))
+        data = self.cur.fetchall()
+        
+        qr.add_data(data)
+        qr.make(fit=True)
+        img = qr.make_image(fill = 'black', back_color = 'white')
+        img.save("QRCODE.png")
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=
 
 #=-=-=-=-=-=-=-=-=-=CUSTOMERS-=-=-=-=-=-=-=-=-=-=
