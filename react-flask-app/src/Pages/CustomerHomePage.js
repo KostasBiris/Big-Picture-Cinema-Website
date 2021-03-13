@@ -39,6 +39,8 @@ class CustomerHomePage extends React.Component {
 
 
     }
+
+
     getClientIP = () => {
         (async () => {
             this.setState({ IP: await publicIP.v4() })
@@ -64,7 +66,7 @@ class CustomerHomePage extends React.Component {
         window.addEventListener('load', this.stepUp);
     }
 
-    componentWillUnmount() {
+    componentWillUnmount = () => {
         window.removeEventListener('load', this.stepUp)
     }
 
@@ -83,6 +85,7 @@ class CustomerHomePage extends React.Component {
 
     //Method for handling a change in the search query field.
     handleSearchChange = (e) => {
+        e.preventDefault();
         //Update the state to represent the changes to the field.
         this.setState({ query: e.target.value });
     }
@@ -91,13 +94,30 @@ class CustomerHomePage extends React.Component {
     //Called when the submit button is pressed.
     handleSubmit = (e) => {
         //Redirect the route to execute the search query.
-        var go = '/search/' + this.state.query;
-        this.props.history.push(go);
+        // e.preventDefault();
+        console.log(this.props.match)
+        var go = ''
+        
+        console.log(this.props.match.url)
+        if (this.props.match.url != "/home")
+        {
+            console.log("TRUEEEEEEEEEEEEEEEEEEEE")
+            this.props.history.go(2);
+            go = '/search/' + this.state.query;
+            this.props.history.push(go);
+        }
+        else
+        {
+            go = '/search/' + this.state.query.split(' ').join('_');
+            this.props.history.push(go);
+        }
+        
     }
 
     //Method for handling the login button.
     //Called when it is pressed.
     handleLogin = (e) => {
+        e.preventDefault();
         //Redirect the route to the login page/
         this.props.history.push('/login');
     }
@@ -185,7 +205,7 @@ class CustomerHomePage extends React.Component {
 
         );
     }
-};
+}
 
 export default CustomerHomePage;
 

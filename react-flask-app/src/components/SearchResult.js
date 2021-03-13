@@ -9,23 +9,24 @@ class SearchResult extends React.Component{
 
         this.prop = this.props.res;
         //Replace spaces in the name with '_' so we can use it in the URL.
-        this.name = this.prop.name.split(' ').join('_');
+        this.name = this.prop.Title.split(' ').join('_');
+        this.id = this.prop.imdbID
         //URL for redirection.
-        this.href = '/movie/' + this.name;
+        this.href = '/movie/' + this.name + '/' + this.id;
     }
+
+
     render () {
         return (
             <>
             <div>
-                <a href={this.href}>
-                Movie Name: {this.prop.name}<br/>
-                Blurb: {this.prop.blurb}<br/>
-                Director: {this.prop.director}<br/>
-                Lead Actors: {this.prop.leadactors}<br/>
-                Release Date: {this.prop.releasedate}<br/>
-                Certificate: {this.prop.certificate}<br/>
+                <a  href={this.href}>
+                <img src={this.prop.Poster} alt={this.prop.Title} width="200" height="200"></img><br />
+                Movie Name: {this.prop.Title}<br/>
+                Year: {this.prop.Year}<br/>
                 </a>
             </div>
+            
         </>
         )
     }
