@@ -7,7 +7,8 @@ class SearchIMDB extends React.Component{
       super(props);
       this.getAllMoviesData = this.getAllMoviesData.bind(this);
       this.getMovieData = this.getMovieData.bind(this)
-      // this.stepUp = this.stepUp.bind(this);
+      
+      // check whether the request is to get all the movies or just the details of a movie
       if(props.getAllMovies == 'True')
         this.getAllMoviesData(this.props.movieName);
       else
@@ -16,7 +17,7 @@ class SearchIMDB extends React.Component{
   }
 
   
-
+  // fetch omdb api (IMDB open source database) using movie name. Returns all the movies
   getAllMoviesData = (movieName) => {
       fetch(`http://www.omdbapi.com/?s=${movieName}&apikey=21f186c3`, {
       method: 'GET',
@@ -26,7 +27,7 @@ class SearchIMDB extends React.Component{
 
     });
   }
-
+  // fetch that returns only the details for a specific movie
   getMovieData = (movieID) => {
     fetch(`http://www.omdbapi.com/?i=${movieID}&apikey=21f186c3`, {
     method: 'GET',
@@ -45,45 +46,5 @@ class SearchIMDB extends React.Component{
     )
   }
 }
-
-  // const SearchIMDB = ({onGetMovie}) => {
-  //   // const[dataReturned, setDataReturned] = useState([])
-  //   const[movieData, setMovieData] = useState([]) 
-  //   const[movieName, setMovieName] = useState('')
-
-  //   const getAllMoviesData = () => {
-  //     // e.preventDefault();
-  //       console.log('geting here')
-
-  //       fetch(`http://www.omdbapi.com/?s=${movieName}&apikey=21f186c3`, {
-  //       method: 'GET',
-  //       })
-  //       .then(response => response.json()).then(data => {
-  //         setMovieData(data.Search)
-  //     });
-      
-      // onGetMovie(movieData)
-      // // get movie using movie ID
-      // fetch(`http://www.omdbapi.com/?i=${movieID}&apikey=21f186c3`, {
-      //   method: 'GET',
-      //   })
-      //   .then(response => response.json()).then(data => { 
-      //   setMovieReturned(data)
-      // });
-    // }
-
-
-  //   return (
-  //     <div>
-  //         <form onSubmit={getAllMoviesData}>
-  //             <label>
-  //                 Name: 
-  //                 <input type="text" placeholder="Movie Name" value={movieName} 
-  //                   onChange={(e) => setMovieName(e.target.value)} />
-  //                 <input type="submit" value='Search'></input>
-  //             </label>
-  //         </form>
-  //     </div>
-  // )
 
 export default SearchIMDB

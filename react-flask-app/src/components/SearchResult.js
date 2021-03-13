@@ -10,6 +10,7 @@ class SearchResult extends React.Component{
         this.prop = this.props.res;
         //Replace spaces in the name with '_' so we can use it in the URL.
         this.name = this.prop.Title.split(' ').join('_');
+        // get the ID of the movie
         this.id = this.prop.imdbID
         //URL for redirection.
         this.href = '/movie/' + this.name + '/' + this.id;

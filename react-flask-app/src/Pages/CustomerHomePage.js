@@ -37,7 +37,6 @@ class CustomerHomePage extends React.Component {
         this.assertAuth = this.assertAuth.bind(this);
         this.stepUp = this.stepUp.bind(this);
 
-
     }
 
 
@@ -56,7 +55,7 @@ class CustomerHomePage extends React.Component {
 
     isAuth = () => {
         if (this.state.response === "error" || this.state.response === undefined) {
-            console.log(this.state.response);
+            // console.log(this.state.response);
             return false;
         }
         return true;
@@ -79,13 +78,13 @@ class CustomerHomePage extends React.Component {
             }
         })
             .then(response => response.json()).then(data => {
-                 this.setState({ response: data.response })})
+                this.setState({ response: data.response })})
             .then(() => alert('WELCOME BACK, '.concat(this.state.response.forename).concat(" ").concat(this.state.response.surname).concat("!")))
     };
 
     //Method for handling a change in the search query field.
     handleSearchChange = (e) => {
-        e.preventDefault();
+        // e.preventDefault();
         //Update the state to represent the changes to the field.
         this.setState({ query: e.target.value });
     }
@@ -94,22 +93,18 @@ class CustomerHomePage extends React.Component {
     //Called when the submit button is pressed.
     handleSubmit = (e) => {
         //Redirect the route to execute the search query.
-        // e.preventDefault();
-        console.log(this.props.match)
         var go = ''
-        
-        console.log(this.props.match.url)
-        if (this.props.match.url != "/home")
-        {
-            console.log("TRUEEEEEEEEEEEEEEEEEEEE")
-            this.props.history.go(2);
-            go = '/search/' + this.state.query;
-            this.props.history.push(go);
-        }
-        else
-        {
+
+        try{
             go = '/search/' + this.state.query.split(' ').join('_');
             this.props.history.push(go);
+        }
+        catch(error) // TypeError is catched if this.props.history is undefined == Very likely that it is a redirection attempt
+        {
+            console.log('catched the error!')
+            this.props.props.history.go(2);     // Moves the pointer in the history stack by n entries
+            go = '/search/' + this.state.query.split(' ').join('_');
+            this.props.props.history.push(go);
         }
         
     }
@@ -117,7 +112,7 @@ class CustomerHomePage extends React.Component {
     //Method for handling the login button.
     //Called when it is pressed.
     handleLogin = (e) => {
-        e.preventDefault();
+        // e.preventDefault();
         //Redirect the route to the login page/
         this.props.history.push('/login');
     }

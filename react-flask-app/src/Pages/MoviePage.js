@@ -13,8 +13,6 @@ class MoviePage extends React.Component {
         //Bind our method.
         this.getMovieData = this.getMovieData.bind(this);
         this.getClientIP = this.getClientIP.bind(this);
-        //By default the state is an empty array.
-        // this.state = { data: [] };
         //Call our method.
         this.getMovieData();
         this.getClientIP();
@@ -26,21 +24,9 @@ class MoviePage extends React.Component {
 
     }
 
-    // componentDidMount() {
-    //     window.addEventListener('load', (event) => {
-    //         event.preventDefault();
-    //         this.getMovieData();
-    //       });
-    //   }
-    
-    //   componentWillUnmount() {
-    //     window.removeEventListener('load', this.getMovieData)
-    //   }
-
     //Method for getting the data of the specific requested movie.
     getMovieData = (data) => {
         this.setState({ returnedData : data})
-        // console.log(this.state.returnedData.Title)
     }
     //     //Invoke a request to our rest API to get the data of the movie.
     //     var fet = '/movie/' + this.title + '/page';
