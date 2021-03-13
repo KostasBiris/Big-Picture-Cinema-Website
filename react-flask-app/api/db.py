@@ -3,7 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import numpy as np
 import pickle
 import string
-
+import qrcode
 
 """
     TODO:
@@ -76,6 +76,12 @@ class Database:
                                                               customerid INTEGER REFERENCES customers(id), \
                                                               seats TEXT NOT NULL)")
 
+        self.cur.execute("CREATE TABLE IF NOT EXISTS tickets (id INTEGER PRIMARY KEY, \
+                                                              booking_id INTEGER REFERENCES bookings(id) NOT NULL, \
+                                                              forename TEXT NOT NULL, \
+                                                              surname TEXT NOT NULL, \
+                                                              qr INTEGER NOT NULL, \
+                                                              email TEXT NOT NULL)")
 
         self.cur.execute("CREATE TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY, \
                                                                forename TEXT NOT NULL, \
@@ -94,12 +100,12 @@ class Database:
                                                                isManager BIT NOT NULL)")
           
         self.cur.execute("CREATE TABLE IF NOT EXISTS sessions  (id INTEGER PRIMARY KEY, \
-                                                               time_connected DATETIME NOT NULL, \
-                                                               time_disconnected DATETIME NOT NULL, \
+                                                               ip TEXT NOT NULL, \
+                                                               time_connected INTEGER NOT NULL, \
                                                                account_type INTEGER NOT NULL, \
                                                                customer_id INTEGER REFERENCES customers(id), \
                                                                employee_id INTEGER REFERENCES employees(id), \
-                                                               manager_id INTEGER REFERENCES employees(id)")
+                                                               manager_id INTEGER REFERENCES employees(id))")
 
         #commit the changes we have made to the database
         self.conn.commit()
@@ -361,6 +367,7 @@ class Database:
         seats = self.cur.fetchone()[0]
         seatmap = self.update_seatmap(self.get_seatmap_from_blob(seatmap), seats.split(","), screeningid,'-')
         self.cur.execute("DELETE FROM bookings WHERE id=?",(id,))
+        remove_ticket(self, id)
 
         self.conn.commit()
 
@@ -416,12 +423,43 @@ class Database:
 
 #=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=
 
-#=-=-=-=-=-=-=-=-=-=CUSTOMERS-=-=-=-=-=-=-=-=-=-=
-    def add_customer(self, forename, surname, email, phonenumber, password, dob):
+#=-=-=-=-=-=-=-=-=-=TICKETS-=-=-=-=-=-=-=-=-=-=
 
+    def add_ticket(self, booking_id, forename, surname, qr, email):
+
+        self.cur.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?)",(booking_id, forename, surname, qr, email))
+        self.conn.commit()
+
+    #Removes a ticket when the booking is removed
+    def remove_ticket(self, booking_id):
+        self.cur.execute("DELETE FROM tickets WHERE booking_id=?",(booking_id,))
+        self.conn.commit()
+
+        #Generates the QR code of the ticket which will be sent over email
+    def qr_code_generator(self, booking_id, forename, surname):
+        
+        qr = qrcode.QRCode(
+            version = 1,
+            box_size = 10,
+            border = 5
+        )
+
+        self.cur.execute("SELECT * FROM bookings WHERE id=?",(booking_id,))
+        data = self.cur.fetchall()
+        
+        qr.add_data(data)
+        qr.make(fit=True)
+        img = qr.make_image(fill = 'black', back_color = 'white')
+        img.save("QRCODE.png")
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=
+
+#=-=-=-=-=-=-=-=-=-=CUSTOMERS-=-=-=-=-=-=-=-=-=-=
+    
+    def add_customer(self, forename, surname, email, phonenumber, password, dob):
         _hash = generate_password_hash(password)
         self.cur.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?)",(forename, surname, email, phonenumber, _hash, dob))
         self.conn.commit()
+
 
     def remove_customer(self, id=-1, forename="No forename", surname="No surname", email="No email", phonenumber=-1,dob=-1):
 
@@ -494,8 +532,9 @@ class Database:
     def validate_customer(self, email, password):
         self.cur.execute("SELECT * from customers WHERE email =?", (email,))
         u = self.cur.fetchone()
-        if not u : return False
-        return check_password_hash(u[5], password)
+        print(u)
+        if not u : return False,-1
+        return check_password_hash(u[5], password), u[0]
 
 
     def search(self, query, table):
@@ -530,12 +569,35 @@ class Database:
         self.conn.close()
 
 #=-=-=-=-=-=-=-=-=-=SESSIONS-=-=-=-=-=-=-=-=-=-=-=-=
-    def add_session(self, ip, time_connected, time_disconnected, account_type, customer_id, employee_id, manager_id):
-        _hash = generate_password_hash(password)
-        self.cur.execute("INSERT INTO sessions VALUES (NULL, ?,?,?,?,?,?,?)",(ip, time_connected, time_disconnected, account_type, customer_id, employee_id, manager_id))
+    def add_session(self, ip, time_connected, account_type, customer_id, employee_id, manager_id):
+        #_hash = generate_password_hash(password)
 
-
+        if customer_id!='NULL':
+            self.cur.execute("INSERT INTO sessions VALUES (NULL, ?,?,?,?,NULL,NULL)",(ip, time_connected,  account_type, customer_id))
+        elif employee_id!='NULL':
+            self.cur.execute("INSERT INTO sessions VALUES (NULL, ?,?,?,NULL,?,NULL)",(ip, time_connected, account_type, employee_id))
+        elif manager_id!='NULL':
+            self.cur.execute("INSERT INTO sessions VALUES (NULL, ?,?,?,NULL,NULL,?)",(ip, time_connected,  account_type, manager_id))
+        
         self.conn.commit()
+
+
+    def ip_in_session(self, ip):
+
+        self.cur.execute("SELECT * FROM sessions WHERE ip=?",(ip,))
+        return self.cur.fetchone()
+
+
+    def logout(self, ip):
+        self.cur.execute("SELECT * FROM sessions WHERE ip=?",(ip,))
+        data = self.cur.fetchone()
+        if not data: return False
+        id_ = data[0]
+        self.cur.execute("DELETE FROM sessions WHERE id=?",(id_,))
+        self.conn.commit()
+        return True
+        #self.cur.execute("INSERT INTO sessions VALUES (NULL, ?,?,?,?,?,?,?)",(ip, time_connected, time_disconnected, account_type, customer_id, employee_id, manager_id))
+        #self.conn.commit()
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 """

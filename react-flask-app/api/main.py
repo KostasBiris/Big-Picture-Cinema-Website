@@ -1,11 +1,15 @@
 from flask import Flask, render_template, request, redirect, jsonify
 from db import Database
 import socket
-
+import time
+from flask_cors import CORS, cross_origin
+import os
+import json
+import stripe
 app = Flask(__name__)
+CORS(app)
 
-
-
+stripe.api_key = "sk_test_51ISQ7OC2YcxFx25Ty8LGkfEVQczFPRVHPyDqa6WJRtwNXNUST7GJbzEpWdWFWBZftAMgeM1U8LVfDrwb8R768K0800R2icalhU"
 
 @app.route('/')
 def mainpage():
@@ -15,7 +19,7 @@ def mainpage():
 def managepage():
     return render_template('business_main_interface.html')
 
-def serialize(res):
+def serialize_movie(res):
 
     return {
         'id': res[0],
@@ -27,12 +31,25 @@ def serialize(res):
         'releasedate':res[6]
     }
 
-def serialize_all(res):
+def serialize_user(res):
+
+
+    return {
+        'id': res[0],
+        'forename': res[1],
+        'surname': res[2],
+        'email': res[3],
+        'phone': res[4],
+        'dob' : res[6]
+    }
+
+
+def serialize_all_movies(res):
 
     dic = {}
     
     for i in range(len(res)):
-        dic[i] =serialize(res[i])
+        dic[i] =serialize_movie(res[i])
     return dic
 
 
@@ -42,7 +59,7 @@ def view_movie(name):
     db = Database('cinema.db')
     movie = db.search_movies(name)
     if not movie: pass
-    return serialize_all(movie)
+    return serialize_all_movies(movie)
 @app.route('/movie/<name>/page', methods= ['POST'])
 def _view_movie(name):
     name = name.replace("_", " ")
@@ -52,7 +69,7 @@ def _view_movie(name):
     movie = db.find_movie(name)
     print(movie)
     if not movie: pass
-    return serialize(movie)
+    return serialize_movie(movie)
 
 @app.route('/caws')
 def moviepage():
@@ -103,6 +120,25 @@ def _mainpage():
     del db
     return "<h1 style='color:blue'>" + dat + "</h1>"
 
+
+@app.route('/insession/<ip>', methods=['POST'])
+def insession(ip):
+    db = Database('cinema.db')
+    rq = db.ip_in_session(ip)
+    if not rq:
+        del db
+        return jsonify({'response': 'error'})
+    data = db.fetch_customer(rq[4])
+    return jsonify({'response':serialize_user(data)})
+
+
+@app.route('/logout/<ip>', methods = ['POST'])
+def logout(ip):
+    db = Database('cinema.db')
+    db.logout(ip)
+    return jsonify({'response': 'OK'})
+
+
 @app.route('/register', methods=['POST'])
 def _register():
 
@@ -119,23 +155,46 @@ def _register():
 def employeelogin():
     return render_template('employee_login.html')
 
-@app.route('/login')
-def login():
-    return render_template('customer_login.html')
 
 @app.route('/login', methods = ['POST'])
 def _login():
     db = Database('cinema.db')
-    email = request.form['email']
-    pwd = request.form['password']
-    print(email, pwd)
+    data = request.json['data']
+    email = data['email']
+    password = data['password']
+    ip = data['IP']
+    print(email, password, ip)
+    res, id = db.validate_customer(email, password)
+    if res:
+        db.add_session(ip, time.time(), 1, id, 'NULL', 'NULL')
+        del db
+        return jsonify({'response': 'OK'})
     del db
-    return render_template('customer_main_interface.html')
+    return jsonify({'response' : 'BAD'})
+    
+    
 
 @app.route('/account')
 
 def account():
     return "<h1> STUB ACCOUNT PAGE</h1>"
+
+def calculate_order_amount(items):
+    return 100
+
+@app.route('/create-payment-intent', methods=['POST'])
+def create_payment():
+    try:
+        data = json.loads(request.data)
+        intent = stripe.PaymentIntent.create(
+            amount=calculate_order_amount(data['items']),
+            currency='gbp'
+        )
+        return jsonify({
+            'clientSecret': intent['client_secret']
+        })
+    except Exception as e:
+        return jsonify(error=str(e)), 403    
 
 if __name__ == '__main__':
     app.run(debug=False, host='localhost', port='5000', threaded=True)
