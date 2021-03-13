@@ -11,16 +11,17 @@ import CustomerRegister from "./Pages/CustomerRegister";
 import CustomerAccountPage from "./Pages/CustomerAccountPage";
 
 
+
 const App = () => (
-    //Set up routing for our web application.
-    //Redirce '/' to '/home' by default.
+    // Set up routing for our web application.
+    // Redirce '/' to '/home' by default.
     <BrowserRouter>
       <Switch>
         <Route exact path="/" render={() => (<Redirect to="/home" />)} />
         <Route exact path="/home" component={CustomerHomePage} />
         <Route exact path="/login" component={LoginPage} />
         <Route exact path="/search/:query" component={SearchResults}/>
-        <Route exact path="/movie/:title" component={MoviePage}/>
+        <Route exact path="/movie/:title/:movieID" component={MoviePage}/>
         <Route exact path="/register" component={CustomerRegister}/>
         <Route exact path ="/account" component={CustomerAccountPage}/>
       </Switch>
