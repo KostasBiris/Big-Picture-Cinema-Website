@@ -67,9 +67,13 @@ def managerlogin():
 def screen():
     return render_template('screen.html')
 
-@app.route('/booking')
+@app.route('/adminbooking')
 def booking():
     return render_template('employee_main_interface.html')
+
+@app.route('/book-tickets')
+def booktickets():
+    return render_template('book_tickets.html')
 
 @app.route('/primelogin', methods =['POST'])
 def _managerlogin():
@@ -134,6 +138,6 @@ def account():
     return "<h1> STUB ACCOUNT PAGE</h1>"
 
 if __name__ == '__main__':
-    app.run(debug=False, host='localhost', port='4000', threaded=True)
+    app.run(debug=False, host='localhost', port='5000', threaded=True)
 
 

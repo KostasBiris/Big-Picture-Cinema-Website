@@ -176,8 +176,8 @@
   padding: 16px;
 }
 
-.modal-content {
-  background-color: #fefefe;
+.modal-content{
+  background-color: #f5f0f0ec;
   border-radius:10px;
   border: 1px solid #888;
   width: 35%; 
@@ -190,12 +190,16 @@
 }
 
 .modal-content-register {
-  background-color: #fefefe;
+  background-color: #f5f0f0ec;
   border-radius:10px;
   border: 1px solid #888;
   width: 35%; 
   margin-left: auto;
   margin-right: auto;
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .container_movies {
@@ -660,26 +664,124 @@ body {
   padding-left: 0;
 }
 
+label {
+  cursor: pointer;
+  filter: grayscale(100%);
+}
+
+label:hover {
+  filter: grayscale(0);
+}
+input[type="radio"]:checked + label {
+  filter: grayscale(0);
+}
+
+.sr-only{
+  position:absolute;
+  width:1px;
+  height:1px;
+  padding:0;
+  margin:-1px;
+  overflow:hidden;
+  clip:rect(0,0,0,0);
+  border:0
+}
+.sr-only-focusable:active
+.sr-only-focusable:focus{
+  position:static;
+  width:auto;
+  height:auto;
+  margin:0;
+  overflow:visible;
+  clip:auto
+}
+
+}
+/*change this*/
+
+.time-input {
+  padding: 10px 20px !important;
+  border: 1px solid #000 !important;
+  border-radius: 10px;
+  box-sizing: border-box;
+  background-color: #616161 !important;
+  color: #fff !important;
+  font-size: 16px;
+  letter-spacing: 1px;
+  width: 180px
+}
+
+.time-input:focus {
+  -moz-box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+  border: 1px solid #512DA8;
+  outline-width: 0
+}
 
 
-.stack-top{
-        z-index: 9;
-        margin: 20px; /* for demo purpose  */
-    }
-    
-video{
-  z-index:-10;
-  filter:opacity(60%);
-  position:relative;
-  z-index:-1;
-  }
-  
-  .responsive-iframe {
-  position: absolute;
+::placeholder {
+  color: #fff;
+  opacity: 1
+}
+
+:-ms-input-placeholder {
+  color: #fff
+}
+
+::-ms-input-placeholder {
+  color: #fff
+}
+
+thead tr:nth-child(3) th {
+  color: #fff !important;
+  font-weight: bold;
+  padding-top: 20px;
+  padding-bottom: 10px
+}
+
+
+.cell {
+  border: 1px solid #BDBDBD;
+  margin: 2px;
+  cursor: pointer
+}
+
+.cell:hover {
+  border: 1px solid #3D5AFE
+}
+
+.cell.select {
+  background-color: #3D5AFE;
+  color: #fff
+}
+
+.fa-calendar {
+  color: #fff;
+  font-size: 30px;
+  padding-top: 8px;
+  padding-left: 5px;
+  cursor: pointer
+}
+
+/*-----------------------*/
+.baslik
+{
+    color: #fff;
+    text-align: center;
+    font-family: 'Fira Sans', sans-serif;
+}
+
+::placeholder { 
+  color:black;
+  opacity: 1; 
+}
+
+video {
+  object-fit: cover;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
   top: 0;
   left: 0;
-  bottom: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
-  }
+}

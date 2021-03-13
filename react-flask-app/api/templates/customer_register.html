@@ -1,11 +1,18 @@
 <html lang="en">
     <head>
         <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='main.css')}}"/>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     </head>
-    <body class="register">
-        <img src="{{url_for('static',filename='finlogo.png')}}"  style=" display: block; margin-left: auto; margin-right: auto; width: 300px; height: 190px;">
-        <form class="modal-content-register" action="{{ url_for('register') }}" method="post">
+    <video playsinline autoplay muted loop id="bgvid">
+        <source src="../static/vid.mp4" type="video/mp4">
+      </video>
+      <body>
+        <div class="register">
+        <form class="modal-content-register"  action="{{ url_for('login') }}" method="post">
             <div class="container">
+                 <!--logo-->
+                <img src="{{url_for('static',filename='finlogo.png')}}" style="display: block; margin: auto; width:10rem; height: 7rem;"/>
       			<input class="register_details" type="text" name="first_name" id= "first_name" placeholder="First name" style="color:black;" required/>
       			<br>
       			<input class="register_details"  type="text" name="last_name" id= "last_name" placeholder="Last name" style="color:black;" required/>
@@ -22,7 +29,8 @@
                 <label>
                     <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember me
                 </label>
-                  <p>By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
+                    <p style="text-align:center;">Already have an account? <a href="#" style="color:dodgerblue">Log in</a>.</p>
+                  <p style="text-align: center;">By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
                   </div>
   			</form>
              <!-- <div  class="big-box" style= "position:fixed; width: 600px; top:250px; height:350px;" ></div>-->
