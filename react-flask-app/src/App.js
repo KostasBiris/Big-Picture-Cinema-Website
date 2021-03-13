@@ -8,7 +8,7 @@ import Search from './components/Search'
 import SearchResults from "./components/Search";
 import MoviePage from "./Pages/MoviePage";
 import CustomerRegister from "./Pages/CustomerRegister";
-
+import CustomerAccountPage from "./Pages/CustomerAccountPage";
 
 
 const App = () => (
@@ -22,6 +22,7 @@ const App = () => (
         <Route exact path="/search/:query" component={SearchResults}/>
         <Route exact path="/movie/:title" component={MoviePage}/>
         <Route exact path="/register" component={CustomerRegister}/>
+        <Route exact path ="/account" component={CustomerAccountPage}/>
       </Switch>
     </BrowserRouter>
   

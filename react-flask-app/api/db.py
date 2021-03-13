@@ -94,12 +94,13 @@ class Database:
                                                                isManager BIT NOT NULL)")
           
         self.cur.execute("CREATE TABLE IF NOT EXISTS sessions  (id INTEGER PRIMARY KEY, \
-                                                               time_connected DATETIME NOT NULL, \
-                                                               time_disconnected DATETIME NOT NULL, \
+                                                               ip TEXT NOT NULL, \
+                                                               time_connected INTEGER NOT NULL, \
+                                                               time_disconnected INTEGER NOT NULL, \
                                                                account_type INTEGER NOT NULL, \
                                                                customer_id INTEGER REFERENCES customers(id), \
                                                                employee_id INTEGER REFERENCES employees(id), \
-                                                               manager_id INTEGER REFERENCES employees(id)")
+                                                               manager_id INTEGER REFERENCES employees(id))")
 
         #commit the changes we have made to the database
         self.conn.commit()
@@ -494,8 +495,9 @@ class Database:
     def validate_customer(self, email, password):
         self.cur.execute("SELECT * from customers WHERE email =?", (email,))
         u = self.cur.fetchone()
-        if not u : return False
-        return check_password_hash(u[5], password)
+        print(u)
+        if not u : return False,-1
+        return check_password_hash(u[5], password), u[0]
 
 
     def search(self, query, table):
@@ -531,11 +533,26 @@ class Database:
 
 #=-=-=-=-=-=-=-=-=-=SESSIONS-=-=-=-=-=-=-=-=-=-=-=-=
     def add_session(self, ip, time_connected, time_disconnected, account_type, customer_id, employee_id, manager_id):
-        _hash = generate_password_hash(password)
-        self.cur.execute("INSERT INTO sessions VALUES (NULL, ?,?,?,?,?,?,?)",(ip, time_connected, time_disconnected, account_type, customer_id, employee_id, manager_id))
+        #_hash = generate_password_hash(password)
 
-
+        if customer_id!='NULL':
+            self.cur.execute("INSERT INTO sessions VALUES (NULL, ?,?,?,?,?,NULL,NULL)",(ip, time_connected, time_disconnected, account_type, customer_id))
+        elif employee_id!='NULL':
+            self.cur.execute("INSERT INTO sessions VALUES (NULL, ?,?,?,?,NULL,?,NULL)",(ip, time_connected, time_disconnected, account_type, employee_id))
+        elif manager_id!='NULL':
+            self.cur.execute("INSERT INTO sessions VALUES (NULL, ?,?,?,?,NULL,NULL,?)",(ip, time_connected, time_disconnected, account_type, manager_id))
+        
         self.conn.commit()
+
+
+    def ip_in_session(self, ip):
+
+        self.cur.execute("SELECT * FROM sessions WHERE ip=?",(ip,))
+        return self.cur.fetchone()
+
+
+        #self.cur.execute("INSERT INTO sessions VALUES (NULL, ?,?,?,?,?,?,?)",(ip, time_connected, time_disconnected, account_type, customer_id, employee_id, manager_id))
+        #self.conn.commit()
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 """

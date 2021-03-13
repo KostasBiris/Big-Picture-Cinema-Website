@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request, redirect, jsonify
 from db import Database
 import socket
-
+import time
+from flask_cors import CORS, cross_origin
 app = Flask(__name__)
-
+CORS(app)
 
 
 
@@ -15,7 +16,7 @@ def mainpage():
 def managepage():
     return render_template('business_main_interface.html')
 
-def serialize(res):
+def serialize_movie(res):
 
     return {
         'id': res[0],
@@ -27,12 +28,25 @@ def serialize(res):
         'releasedate':res[6]
     }
 
-def serialize_all(res):
+def serialize_user(res):
+
+
+    return {
+        'id': res[0],
+        'forename': res[1],
+        'surname': res[2],
+        'email': res[3],
+        'phone': res[4],
+        'dob' : res[6]
+    }
+
+
+def serialize_all_movies(res):
 
     dic = {}
     
     for i in range(len(res)):
-        dic[i] =serialize(res[i])
+        dic[i] =serialize_movie(res[i])
     return dic
 
 
@@ -42,7 +56,7 @@ def view_movie(name):
     db = Database('cinema.db')
     movie = db.search_movies(name)
     if not movie: pass
-    return serialize_all(movie)
+    return serialize_all_movies(movie)
 @app.route('/movie/<name>/page', methods= ['POST'])
 def _view_movie(name):
     name = name.replace("_", " ")
@@ -52,7 +66,7 @@ def _view_movie(name):
     movie = db.find_movie(name)
     print(movie)
     if not movie: pass
-    return serialize(movie)
+    return serialize_movie(movie)
 
 @app.route('/caws')
 def moviepage():
@@ -99,6 +113,17 @@ def _mainpage():
     del db
     return "<h1 style='color:blue'>" + dat + "</h1>"
 
+
+@app.route('/insession/<ip>', methods=['POST'])
+def insession(ip):
+    db = Database('cinema.db')
+    rq = db.ip_in_session(ip)
+    if not rq:
+        del db
+        return jsonify({'response': 'error'})
+    data = db.fetch_customer(rq[5])
+    return jsonify({'response':serialize_user(data)})
+
 @app.route('/register', methods=['POST'])
 def _register():
 
@@ -115,18 +140,24 @@ def _register():
 def employeelogin():
     return render_template('employee_login.html')
 
-@app.route('/login')
-def login():
-    return render_template('customer_login.html')
 
 @app.route('/login', methods = ['POST'])
 def _login():
     db = Database('cinema.db')
-    email = request.form['email']
-    pwd = request.form['password']
-    print(email, pwd)
+    data = request.json['data']
+    email = data['email']
+    password = data['password']
+    ip = data['IP']
+    print(email, password, ip)
+    res, id = db.validate_customer(email, password)
+    if res:
+        db.add_session(ip, time.time(), 'NULL', 1, id, 'NULL', 'NULL')
+        del db
+        return jsonify({'response': 'OK'})
     del db
-    return render_template('customer_main_interface.html')
+    return jsonify({'response' : 'BAD'})
+    
+    
 
 @app.route('/account')
 

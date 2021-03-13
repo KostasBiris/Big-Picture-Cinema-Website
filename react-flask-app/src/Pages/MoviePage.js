@@ -5,7 +5,7 @@ class MoviePage extends React.Component {
     constructor(props) {
         super(props);
         this.title = props.match.params.title;
-        this.state = {IP: null};
+        this.state = {IP: null, auth: false};
         //Bind our method.
         this.getData = this.getData.bind(this);
         this.getClientIP = this.getClientIP.bind(this);
