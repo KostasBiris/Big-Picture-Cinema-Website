@@ -3,10 +3,13 @@ from db import Database
 import socket
 import time
 from flask_cors import CORS, cross_origin
+import os
+import json
+import stripe
 app = Flask(__name__)
 CORS(app)
 
-
+stripe.api_key = "sk_test_51ISQ7OC2YcxFx25Ty8LGkfEVQczFPRVHPyDqa6WJRtwNXNUST7GJbzEpWdWFWBZftAMgeM1U8LVfDrwb8R768K0800R2icalhU"
 
 @app.route('/')
 def mainpage():
@@ -163,6 +166,23 @@ def _login():
 
 def account():
     return "<h1> STUB ACCOUNT PAGE</h1>"
+
+def calculate_order_amount(items):
+    return 100
+
+@app.route('/create-payment-intent', methods=['POST'])
+def create_payment():
+    try:
+        data = json.loads(request.data)
+        intent = stripe.PaymentIntent.create(
+            amount=calculate_order_amount(data['items']),
+            currency='gbp'
+        )
+        return jsonify({
+            'clientSecret': intent['client_secret']
+        })
+    except Exception as e:
+        return jsonify(error=str(e)), 403    
 
 if __name__ == '__main__':
     app.run(debug=False, host='localhost', port='4000', threaded=True)
