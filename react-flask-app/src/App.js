@@ -10,7 +10,11 @@ import MoviePage from "./Pages/MoviePage";
 import CustomerRegister from "./Pages/CustomerRegister";
 import CustomerAccountPage from "./Pages/CustomerAccountPage";
 import Payment from "./Payment/Payment";
-import Seatmap from "./Seatmap/SeatRender"
+import Screen1 from "./Seatmap/Screen1"
+import Screen2 from "./Seatmap/Screen2"
+import Screen3 from "./Seatmap/Screen3"
+import ScreenVIP from "./Seatmap/ScreenVIP"
+import ScreenIMAX from "./Seatmap/ScreenIMAX"
 
 
 
@@ -27,7 +31,11 @@ const App = () => (
         <Route exact path="/register" component={CustomerRegister}/>
         <Route exact path ="/account" component={CustomerAccountPage}/>
         <Route exact path="/payment" render={Payment}/>
-        <Route exact path="/screen" render={Seatmap}/>
+        <Route exact path="/screen1" render={Screen1}/>
+        <Route exact path="/screen2" render={Screen2}/>
+        <Route exact path="/screen3" render={Screen3}/>
+        <Route exact path="/screenVIP" render={ScreenVIP}/>
+        <Route exact path="/screenIMAX" render={ScreenIMAX}/>
       </Switch>
     </BrowserRouter>
   
