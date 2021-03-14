@@ -9,6 +9,8 @@ import SearchResults from "./components/Search";
 import MoviePage from "./Pages/MoviePage";
 import CustomerRegister from "./Pages/CustomerRegister";
 import CustomerAccountPage from "./Pages/CustomerAccountPage";
+import Payment from "./Payment/Payment";
+import Seatmap from "./Seatmap/SeatRender"
 
 
 
@@ -24,6 +26,8 @@ const App = () => (
         <Route exact path="/movie/:title/:movieID" component={MoviePage}/>
         <Route exact path="/register" component={CustomerRegister}/>
         <Route exact path ="/account" component={CustomerAccountPage}/>
+        <Route exact path="/payment" render={Payment}/>
+        <Route exact path="/screen" render={Seatmap}/>
       </Switch>
     </BrowserRouter>
   
