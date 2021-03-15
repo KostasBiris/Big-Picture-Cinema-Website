@@ -41,31 +41,31 @@ class BookTickets extends React.Component{
                     <div className="hover01 column">
                         <input type="radio" name="gender" className="sr-only" id="1" />
                         <label for="1">
-                            <figure><img className="image_box" src={{poster8}} className="new_movies" style={{position: 'relative'}} /></figure>
+                            <figure><img className="image_box" src={poster8} className="new_movies" style={{position: 'relative'}} /></figure>
                         </label>
                         <input type="radio" name="gender" className="sr-only" id="2" />
                         <label for="2">
-                            <figure><img className="image_box" src={{poster8}} className="new_movies" style={{position: 'relative'}} /></figure>
+                            <figure><img className="image_box" src={poster8} className="new_movies" style={{position: 'relative'}} /></figure>
                         </label>
                         <input type="radio" name="gender" className="sr-only" id="3" />
                         <label for="3">
-                            <figure><img className="image_box" src={{poster8}} className="new_movies" style={{position: 'relative'}} /></figure>
+                            <figure><img className="image_box" src={poster8} className="new_movies" style={{position: 'relative'}} /></figure>
                         </label>
                         <input type="radio" name="gender" className="sr-only" id="4" />
                         <label for="4">
-                            <figure><img className="image_box" src={{poster8}} className="new_movies" style={{position: 'relative'}} /></figure>
+                            <figure><img className="image_box" src={poster8} className="new_movies" style={{position: 'relative'}} /></figure>
                         </label>
                         <input type="radio" name="gender" className="sr-only" id="5" />
                         <label for="5">
-                            <figure><img className="image_box" src={{poster8}} className="new_movies" style={{position: 'relative'}} /></figure>
+                            <figure><img className="image_box" src={poster8} className="new_movies" style={{position: 'relative'}} /></figure>
                         </label>
                         <input type="radio" name="gender" className="sr-only" id="6" />
                         <label for="6">
-                            <figure><img className="image_box" src={{poster8}} className="new_movies" style={{position: 'relative'}} /></figure>
+                            <figure><img className="image_box" src={poster8} className="new_movies" style={{position: 'relative'}} /></figure>
                         </label>
                         <input type="radio" name="gender" className="sr-only" id="7" />
                         <label for="7">
-                            <figure><img className="image_box" src={{poster8}} className="new_movies" style={{position: 'relative'}} /></figure>
+                            <figure><img className="image_box" src={poster8} className="new_movies" style={{position: 'relative'}} /></figure>
                         </label>
                     </div>
                 </div>
