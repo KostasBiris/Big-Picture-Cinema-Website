@@ -499,52 +499,20 @@ class Database:
         pdf = canvas.Canvas(fileName)
         pdf.setTitle(documentTitle)
 
+        #----------Fonts and Text--------------------
 
-
-        # ###################################
-        # 1) Title :: Set fonts 
-        # # Print available fonts
-        # for font in pdf.getAvailableFonts():
-        #     print(font)
-
-        # Register a new font
+        #Title    
         pdf.drawCentredString(300, 770, title)
 
-
-
-
-
-
-
-
-
-        # ###################################
-        # 2) Sub Title 
-        # RGB - Red Green and Blue
+        #Subtitle
         pdf.setFillColorRGB(0, 0, 255)
         pdf.setFont("Courier-Bold", 24)
         pdf.drawCentredString(290,720, subTitle)
 
-
-
-
-
-
-        # ###################################
-        # 3) Draw a line
+        #Line underneath the Subtitle
         pdf.line(30, 710, 550, 710)
 
-
-
-
-
-
-
-
-
-        # ###################################
-        # 4) Text object :: for large amounts of text
-
+        #Actual text containing booking info
         text = pdf.beginText(40, 680)
         text.setFont("Courier", 18)
         text.setFillColor(colors.red)
@@ -553,12 +521,7 @@ class Database:
 
         pdf.drawText(text)
 
-
-
-
-
-        # ###################################
-        # 5) Draw a image
+        #QR Code image
         pdf.drawInlineImage(image, 130, 100)
         #--------------------------------------------
         pdf.save()
