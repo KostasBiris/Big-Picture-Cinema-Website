@@ -1,0 +1,35 @@
+<html lang="en">
+    <head>
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='main.css')}}" />
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    </head>
+    <!--background video-->
+    <video playsinline autoplay muted loop id="bgvid">
+        <source src="../static/vid.mp4" type="video/mp4">
+      </video>
+      <body>
+        <div class="register">
+        <form class="modal-content"  action="{{ url_for('login') }}" method="post">
+            <div class="container-start">
+                 <!--logo-->
+                <img src="{{url_for('static',filename='finlogo.png')}}" style="display: block; margin: auto; width:13rem; height: 10rem;"/>
+                 <!--email and password-->
+    			<input class="register_details"  type="text" name="email" id="email" placeholder="E-mail address"  required/>
+    			<br>
+    			<input class="register_details"  type="password" name="password" id="password" placeholder="Password" required/>
+    			<br>
+                 <!--rememmber me checkbox-->
+                <label>
+                    <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember me
+                </label>
+                 <!--login button-->
+    			<input class="login_button" type="submit" value="LOG IN" style="color: white; position: relative; " />
+                 <!--register redirect-->
+                <p style="text-align: center;">Don't have an account? <a href="#" style="color:dodgerblue">Sign Up</a>.</p>
+                </div>
+  			</form>
+        </div>
+</body>
+</html>
+

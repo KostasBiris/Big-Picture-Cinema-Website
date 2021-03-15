@@ -1,0 +1,52 @@
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">   
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='main.css')}}"/>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    </head>
+    <video playsinline autoplay muted loop id="bgvid">
+        <source src="../static/vid.mp4" type="video/mp4">
+      </video>
+      <body>
+        <div class="checkout">
+        <form class="modal-content-register"  action="{{ url_for('checkout') }}" method="post">
+        <form class="modal-content-register" action="{{ url_for}}">
+            <div class="container">
+                <img src="{{url_for('static',filename='finlogo.png')}}" style="display: block; margin: auto; width:10rem; height: 7rem;"/>
+                <div> <span class="header_text">Biling Address</span></div>
+      			<input class="register_details" type="text" name="first_name" id= "first_name" placeholder="First name" style="color:black;" required/>
+      			<br>
+                <input class="register_details"  type="text" name="last_name" id= "last_name" placeholder="Last name" style="color:black;" required/>
+                <br>
+    			<input class="register_details"  type="text" name="email" id="email" placeholder="E-mail address" style="color:black;" required/>
+    			<br>
+    			<input class="register_details"  type="address1" name="address1" id="address1" placeholder="Address 1 " style="color:black;" required/>
+    			<br>
+    			<input class="register_details"  type="address" name="address" id="address" placeholder="Address 2" style="color:black;" required/>
+    			<br>
+                <input class="register_details"  type="country" name="country" id="country" placeholder="Country" style="color:black;" required/>
+    			<br>
+                <input class="register_details"  type="post_code" name="post_code" id="post_code" placeholder="Post Code" style="color:black;" required/>
+                <br>
+                <div> <span class="header_text">Payment</span></div>
+                <input class="register_details" type="text" name="card_name" id= "card_name" placeholder="Name on card" style="color:black;" required/>
+                <br>
+                <input class="register_details"  type="text" name="credit_card_no" id= "credit_card_no" placeholder="Credit card number" style="color:black;" required/>
+                <br>
+                <input class="register_details"  type="text" name="expiration_date" id="expiration_date" placeholder="Expiration" style="color:black;" required/>
+                <br>
+                <input class="register_details"  type="cvv" name="cvv" id="cvv" placeholder="CVV " style="color:black;" required/>
+                <br>
+                <input class="signup_button" type="submit"  value="SAVE" style="color: white; position: relative; " />
+                <label>
+                    <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember the payment details
+                </label>
+                </div>
+             <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+             <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+             
+</body>
+</html>

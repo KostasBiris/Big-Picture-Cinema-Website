@@ -1,0 +1,28 @@
+<html lang="en">
+    <head>
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='main.css')}}"/>
+    </head>
+    <style>
+        body {
+          background-image: url("../static/cinema.jpg");
+          background-repeat: no-repeat;
+          background-attachment: fixed;
+          background-size: cover;
+        }
+        </style> 
+      <body>
+        <div class="register">
+        <form class="modal-content" action="/booklogin" method="post">
+            <div class="container-start">
+                 <!--logo-->
+                <img src="{{url_for('static',filename='finlogo.png')}}" style="display: block; margin: auto; width:13rem; height: 10rem;"/>
+    			<input class="register_details" type="text" name="identification" id="id" placeholder="Employee ID" style="color:black;" required/>
+    			<br>
+    			<input class="register_details" type="password" name="password" id="password" placeholder="Password" style="color:black;" required/>
+    			<br>
+    			<input  class="login_button"type="submit" value="LOG IN" style=" color:white; position: relative; " />
+            </div>
+  			</form>
+             <!-- <div  class="big-box" style= "position:fixed; width: 600px; top:250px; height:350px;" ></div>-->
+</body>
+</html>
