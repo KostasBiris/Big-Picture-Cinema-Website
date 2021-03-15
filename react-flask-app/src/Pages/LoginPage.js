@@ -82,7 +82,7 @@ class LoginPage extends React.Component {
         if (this.state.response === "OK") {
             this.setState({ email: '', password: '' });
             console.log('LOGIN: SUCCESS');
-            this.props.history.push('/home');
+            this.props.history.push('/home', {auth: true, IP: this.state.IP});
         }
         if (this.state.response === "BAD") {
             alert('LOGIN: FAILED');

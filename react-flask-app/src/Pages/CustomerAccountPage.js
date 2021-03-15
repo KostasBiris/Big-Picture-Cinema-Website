@@ -25,9 +25,6 @@ class CustomerAccountPage extends React.Component {
         window.addEventListener('load', this.stepUp);
     }
 
-    componentDidUpdate() {
-        window.addEventListener('load', this.stepUp);
-    }
 
     componentWillUnmount() {
         window.removeEventListener('load', this.stepUp)

@@ -20,6 +20,7 @@ import { BrowserRouter, Route } from 'react-router-dom';
 
 var publicIP = require('public-ip')
 
+let interval;
 //Component for the main page of the customers.
 class CustomerHomePage extends React.Component {
     constructor(props) {
@@ -54,7 +55,15 @@ class CustomerHomePage extends React.Component {
     }
 
     isAuth = () => {
-        if (this.state.response === "error" || this.state.response === undefined) {
+        if (this.props.location.state !== undefined) {
+            if (this.props.location.state.auth === true) {
+                this.auth = true;
+                this.props.location.state.auth = false;
+                this.state.IP = this.props.location.state.IP;
+                return true;
+            }
+        }
+        if (this.state.response === "error" || this.state.response === undefined || this.auth === false) {
             // console.log(this.state.response);
             return false;
         }
@@ -63,13 +72,21 @@ class CustomerHomePage extends React.Component {
 
     componentDidMount() {
         window.addEventListener('load', this.stepUp);
+        interval = setInterval(() => {
+            if (this.IP !== null) {
+                this.assertAuth();
+            }
+        }, 5000)
+
     }
 
     componentWillUnmount = () => {
         window.removeEventListener('load', this.stepUp)
     }
 
+
     assertAuth = () => {
+        if (this.state.IP === null) {this.stepUp()}
         var go = '/insession/' + this.state.IP;
         fetch(go, {
             method: 'POST',
@@ -78,8 +95,8 @@ class CustomerHomePage extends React.Component {
             }
         })
             .then(response => response.json()).then(data => {
-                this.setState({ response: data.response })})
-            .then(() => alert('WELCOME BACK, '.concat(this.state.response.forename).concat(" ").concat(this.state.response.surname).concat("!")))
+                this.setState({ response: data.response })
+            })
     };
 
     //Method for handling a change in the search query field.
@@ -95,18 +112,18 @@ class CustomerHomePage extends React.Component {
         //Redirect the route to execute the search query.
         var go = ''
 
-        try{
+        try {
             go = '/search/' + this.state.query.split(' ').join('_');
             this.props.history.push(go);
         }
-        catch(error) // TypeError is catched if this.props.history is undefined == Very likely that it is a redirection attempt
+        catch (error) // TypeError is catched if this.props.history is undefined == Very likely that it is a redirection attempt
         {
             console.log('catched the error!')
             this.props.props.history.go(2);     // Moves the pointer in the history stack by n entries
             go = '/search/' + this.state.query.split(' ').join('_');
             this.props.props.history.push(go);
         }
-        
+
     }
 
     //Method for handling the login button.
@@ -128,13 +145,13 @@ class CustomerHomePage extends React.Component {
     handleLogout = (e) => {
 
         var go = '/logout/' + this.state.IP;
-        
+
         fetch(go, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).then(response => response.json()).then(() => this.setState({response: undefined}))
+        }).then(response => response.json()).then(() => this.setState({ response: undefined }))
 
     }
 
@@ -169,36 +186,36 @@ class CustomerHomePage extends React.Component {
 
         } else {
 
-        }
-        return (
-            <body>
-                <head>
-                    <link rel="stylesheet" type="text/css" href={main} />
-                    <link rel="icon" href="data:;base64,iVBORw0KGgo" />
-                </head>
-                <body style={{ backgroundColor: 'rgb(255,255,255)' }} />
-                <img src={logo} style={{ top: '1px', width: '300px', height: '190px' }} />
-                <img src={headerbanner} style={{ position: 'absolute', top: '10px', left: '340px', width: '980px', height: '105px' }} />
-                <img src={follow} style={{ position: 'absolute', top: '10px', left: '1380px', width: '100px', height: '105px' }} />
-                <div class="text">
-                    <button className="tab_background" style={{ position: 'absolute', top: '125px', left: '340px', width: '150px', height: '40px' }}>WHAT'S NEW </button>
-                    <button className="tab_background" style={{ position: 'absolute', top: '125px', left: '510px', width: '150px', height: '40px' }}>TICKETS</button>
-                    <button className="tab_background" style={{ position: 'absolute', top: '125px', left: '680px', width: '150px', height: '40px' }}>SCREENS</button>
-                    <button className="tab_background" style={{ position: 'absolute', top: '125px', left: '850px', width: '150px', height: '40px' }}>INFO</button>
-                </div>
-                <form>
-                    <input onChange={this.handleSearchChange} value={this.state.query} className="search_bar" name="query" id="query" type="text" placeholder="Search here.." style={{ position: 'absolute', top: '125px', left: '1020px' }} />
-                    <input onClick={this.handleSubmit} className="search_icon" type="image" src={search} style={{ position: 'absolute', top: '125px', left: '1270px', width: '50px', height: '40px' }} />
-                </form>
-                <div>
-                    <button type="submit" id="login" className="text_button" style={{ position: 'absolute', top: '125px', left: '1390px', width: '60px', height: '40px' }}>LOG IN</button>
-                    <button id="register" type="submit" className="text_button" style={{ position: 'absolute', top: '125px', left: '1460px', width: '60px', height: '40px' }}>SIGN UP</button>
-                    <button onClick={this.handleLogin} className="text_button" style={{ position: 'absolute', top: '125px', left: '1390px', width: '60px', height: '40px' }}>LOG IN</button>
-                    <button onClick={this.handleRegister} className="text_button" style={{ position: 'absolute', top: '125px', left: '1460px', width: '60px', height: '40px' }}>SIGN UP</button>
-                </div>
-            </body>
+            return (
+                <body>
+                    <head>
+                        <link rel="stylesheet" type="text/css" href={main} />
+                        <link rel="icon" href="data:;base64,iVBORw0KGgo" />
+                    </head>
+                    <body style={{ backgroundColor: 'rgb(255,255,255)' }} />
+                    <img src={logo} style={{ top: '1px', width: '300px', height: '190px' }} />
+                    <img src={headerbanner} style={{ position: 'absolute', top: '10px', left: '340px', width: '980px', height: '105px' }} />
+                    <img src={follow} style={{ position: 'absolute', top: '10px', left: '1380px', width: '100px', height: '105px' }} />
+                    <div class="text">
+                        <button className="tab_background" style={{ position: 'absolute', top: '125px', left: '340px', width: '150px', height: '40px' }}>WHAT'S NEW </button>
+                        <button className="tab_background" style={{ position: 'absolute', top: '125px', left: '510px', width: '150px', height: '40px' }}>TICKETS</button>
+                        <button className="tab_background" style={{ position: 'absolute', top: '125px', left: '680px', width: '150px', height: '40px' }}>SCREENS</button>
+                        <button className="tab_background" style={{ position: 'absolute', top: '125px', left: '850px', width: '150px', height: '40px' }}>INFO</button>
+                    </div>
+                    <form>
+                        <input onChange={this.handleSearchChange} value={this.state.query} className="search_bar" name="query" id="query" type="text" placeholder="Search here.." style={{ position: 'absolute', top: '125px', left: '1020px' }} />
+                        <input onClick={this.handleSubmit} className="search_icon" type="image" src={search} style={{ position: 'absolute', top: '125px', left: '1270px', width: '50px', height: '40px' }} />
+                    </form>
+                    <div>
+                        <button type="submit" id="login" className="text_button" style={{ position: 'absolute', top: '125px', left: '1390px', width: '60px', height: '40px' }}>LOG IN</button>
+                        <button id="register" type="submit" className="text_button" style={{ position: 'absolute', top: '125px', left: '1460px', width: '60px', height: '40px' }}>SIGN UP</button>
+                        <button onClick={this.handleLogin} className="text_button" style={{ position: 'absolute', top: '125px', left: '1390px', width: '60px', height: '40px' }}>LOG IN</button>
+                        <button onClick={this.handleRegister} className="text_button" style={{ position: 'absolute', top: '125px', left: '1460px', width: '60px', height: '40px' }}>SIGN UP</button>
+                    </div>
+                </body>
 
-        );
+            );
+        }
     }
 }
 

@@ -12,7 +12,7 @@ from reportlab.pdfgen import canvas
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
 from reportlab.lib import colors
-
+import time
 
 """
     TODO:
@@ -688,15 +688,17 @@ class Database:
 #=-=-=-=-=-=-=-=-=-=SESSIONS-=-=-=-=-=-=-=-=-=-=-=-=
     def add_session(self, ip, time_connected, account_type, customer_id, employee_id, manager_id):
         #_hash = generate_password_hash(password)
-
+        print('add session, ',ip)
         if customer_id!='NULL':
             self.cur.execute("INSERT INTO sessions VALUES (NULL, ?,?,?,?,NULL,NULL)",(ip, time_connected,  account_type, customer_id))
+            self.conn.commit()
         elif employee_id!='NULL':
             self.cur.execute("INSERT INTO sessions VALUES (NULL, ?,?,?,NULL,?,NULL)",(ip, time_connected, account_type, employee_id))
+            self.conn.commit()
         elif manager_id!='NULL':
             self.cur.execute("INSERT INTO sessions VALUES (NULL, ?,?,?,NULL,NULL,?)",(ip, time_connected,  account_type, manager_id))
+            self.conn.commit()
         
-        self.conn.commit()
 
 
     def ip_in_session(self, ip):
@@ -713,6 +715,24 @@ class Database:
         self.cur.execute("DELETE FROM sessions WHERE id=?",(id_,))
         self.conn.commit()
         return True
+
+    def clear_sessions(self):
+        self.cur.execute("SELECT * FROM sessions")
+        data = self.cur.fetchall()
+
+        for d in data:
+            if (time.time()-float(d[2])) > 1800:
+                self.cur.execute("SELECT * FROM sessions WHERE id=?",(d[0],))
+                self.remove_session(d[0])
+                self.conn.commit()
+        
+
+
+    def remove_session(self,id):
+        self.cur.execute("DELETE FROM sessions WHERE id=?",(id,))
+        self.conn.commit()
+
+    
         #self.cur.execute("INSERT INTO sessions VALUES (NULL, ?,?,?,?,?,?,?)",(ip, time_connected, time_disconnected, account_type, customer_id, employee_id, manager_id))
         #self.conn.commit()
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

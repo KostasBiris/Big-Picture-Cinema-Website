@@ -6,6 +6,7 @@ from flask_cors import CORS, cross_origin
 import os
 import json
 import stripe
+from threading import Thread
 app = Flask(__name__)
 CORS(app)
 
@@ -168,9 +169,9 @@ def _login():
     password = data['password']
     ip = data['IP']
     print(email, password, ip)
-    res, id = db.validate_customer(email, password)
+    res, id_ = db.validate_customer(email, password)
     if res:
-        db.add_session(ip, time.time(), 1, id, 'NULL', 'NULL')
+        db.add_session(ip, time.time(), 1, id_, 'NULL', 'NULL')
         del db
         return jsonify({'response': 'OK'})
     del db
@@ -200,7 +201,15 @@ def create_payment():
     except Exception as e:
         return jsonify(error=str(e)), 403    
 
+
+def spinner():
+    db = Database('cinema.db')
+    print('hi!')
+    while True:
+        db.clear_sessions()
+        #pass
 if __name__ == '__main__':
+    thread = Thread(target=spinner, args=())
+    thread.daemon = True
+    thread.start()
     app.run(debug=False, host='localhost', port='4000', threaded=True)
-
-
