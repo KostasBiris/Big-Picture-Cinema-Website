@@ -102,6 +102,10 @@ def _managerlogin():
     del db
     return render_template('business_main_interface.html')
 
+@app.route('/checkout')
+def checkout():
+    return render_template('checkout.html')
+
 @app.route('/register')
 def customer_register():
     return render_template('customer_register.html')
@@ -197,6 +201,6 @@ def create_payment():
         return jsonify(error=str(e)), 403    
 
 if __name__ == '__main__':
-    app.run(debug=False, host='localhost', port='5000', threaded=True)
+    app.run(debug=False, host='localhost', port='4000', threaded=True)
 
 

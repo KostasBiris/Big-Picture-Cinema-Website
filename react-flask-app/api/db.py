@@ -4,6 +4,15 @@ import numpy as np
 import pickle
 import string
 import qrcode
+import smtplib, ssl
+import os
+from email.message import EmailMessage
+import imghdr
+from reportlab.pdfgen import canvas
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfbase import pdfmetrics
+from reportlab.lib import colors
+
 
 """
     TODO:
@@ -435,7 +444,7 @@ class Database:
         self.cur.execute("DELETE FROM tickets WHERE booking_id=?",(booking_id,))
         self.conn.commit()
 
-        #Generates the QR code of the ticket which will be sent over email
+    #Generates the QR code of the ticket which will be sent over email
     def qr_code_generator(self, booking_id, forename, surname):
         
         qr = qrcode.QRCode(
@@ -444,13 +453,121 @@ class Database:
             border = 5
         )
 
-        self.cur.execute("SELECT * FROM bookings WHERE id=?",(booking_id,))
-        data = self.cur.fetchall()
-        
+        #self.cur.execute("SELECT * FROM bookings WHERE id=?",(booking_id,))
+        #data = self.cur.fetchall()
+        data = [booking_id,forename,surname,'A1,A2,A3']
         qr.add_data(data)
-        qr.make(fit=True)
+        #qr.add_data(data)
+        qr_code  = qr.make(fit=True)
+        
         img = qr.make_image(fill = 'black', back_color = 'white')
-        img.save("QRCODE.png")
+        img.save("QR_Code.png")
+        return qr_code
+
+
+
+    def ticket_to_pdf(self, booking_id, forename, surname):
+
+        #self.cur.execute("SELECT id FROM bookings WHERE id=?",(id,))
+        #booking_info = self.cur.fetchone()
+
+        booking_info = (1,1,1,['A1','A2','A3'])
+        screening_id = booking_info[1]
+        customer_id = booking_info[2]
+        seats = booking_info[3]
+
+        #---------Contents-------------------------
+        fileName = 'yourCinemaTickets.pdf'
+        documentTitle = 'Cinema Tickets'
+        title = 'The Big Picture Cinema'
+        subTitle = 'Your cinema Tickets'
+
+        textLines = [
+        f'Booking ID: {booking_id}',
+        f'Screening ID: {screening_id}',
+        f'Customer ID: {customer_id}',
+        f'Seats: {seats}',
+        '',
+        f'Forename: {forename}',
+        f'Surname: {surname}'
+        ]
+
+        image = 'QR_Code.png'
+        #--------------------------------------------
+
+        #----------PDF Creator-----------------------
+        
+        pdf = canvas.Canvas(fileName)
+        pdf.setTitle(documentTitle)
+
+        #----------Fonts and Text--------------------
+
+        #Title    
+        pdf.drawCentredString(300, 770, title)
+
+        #Subtitle
+        pdf.setFillColorRGB(0, 0, 255)
+        pdf.setFont("Courier-Bold", 24)
+        pdf.drawCentredString(290,720, subTitle)
+
+        #Line underneath the Subtitle
+        pdf.line(30, 710, 550, 710)
+
+        #Actual text containing booking info
+        text = pdf.beginText(40, 680)
+        text.setFont("Courier", 18)
+        text.setFillColor(colors.red)
+        for line in textLines:
+            text.textLine(line)
+
+        pdf.drawText(text)
+
+        #QR Code image
+        pdf.drawInlineImage(image, 130, 100)
+        #--------------------------------------------
+        
+        pdf.save()
+
+
+    def email_ticket(self, cust_forename, cust_surname, cust_email, qr_code):
+        cinema_email = 'theBigPictureCinema2021@gmail.com'
+        cinema_password = 'thebigpicture2021'
+
+        message = EmailMessage()
+        message['from'] = cinema_email
+        message['to'] = cust_email
+        message['subject'] = "Your tickets from the Big Picture Cinema"
+        
+        msg = f"""
+
+            <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Your Tickets from the Big Picture Cinema</title>
+                </head>
+                <body>
+                    <h3>Dear {cust_forename} {cust_surname}, thank you for your purchase. Please find your tickets attached to this email</h3>
+                </body>
+            </html>
+        """
+         
+        message.add_alternative(msg,'html')
+
+        files = ['yourCinemaTickets.pdf']
+
+        for file in files:
+            with open(file, 'rb') as f:
+                file_data = f.read()
+                file_name = f.name
+            message.add_attachment(file_data, maintype='application', subtype='octet-stream', filename=file_name)
+
+        print('Sending Email...')
+        smtp = smtplib.SMTP(host='smtp.gmail.com',port=587)
+        smtp.starttls()
+        smtp.login(cinema_email,cinema_password)
+        smtp.send_message(message)
+        print('Email Sent')
+
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=
 
 #=-=-=-=-=-=-=-=-=-=CUSTOMERS-=-=-=-=-=-=-=-=-=-=
@@ -641,3 +758,7 @@ seatmap = dat[0][5]
 print(seatmap)
 """
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+#db = Database('cinema.db')
+#db.qr_code_generator(1,'yourForename','yourSurname')
+#db.ticket_to_pdf(1, 'yourForename', 'yourSurname')
+#db.email_ticket('yourForename', 'yourSurname', 'yourEmail', 5)
