@@ -8,6 +8,11 @@ import smtplib, ssl
 import os
 from email.message import EmailMessage
 import imghdr
+from reportlab.pdfgen import canvas
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfbase import pdfmetrics
+from reportlab.lib import colors
+
 
 """
     TODO:
@@ -460,6 +465,112 @@ class Database:
 
 
 
+    def ticket_to_pdf(self, booking_id, forename, surname):
+
+        #self.cur.execute("SELECT id FROM bookings WHERE id=?",(id,))
+        #booking_info = self.cur.fetchone()
+
+        booking_info = (1,1,1,['A1','A2','A3'])
+        screening_id = booking_info[1]
+        customer_id = booking_info[2]
+        seats = booking_info[3]
+
+        #---------Contents-------------------------
+        fileName = 'yourCinemaTickets.pdf'
+        documentTitle = 'The Big Picture Cinema'
+        title = 'Cinema Tickets'
+        subTitle = 'Your cinema Tickets'
+
+        textLines = [
+        f'Booking ID: {booking_id}',
+        f'Screening ID: {screening_id}',
+        f'Customer ID: {customer_id}',
+        f'Seats: {seats}',
+        '',
+        f'Forename: {forename}',
+        f'Surname: {surname}'
+        ]
+
+        image = 'QR_Code.png'
+        #--------------------------------------------
+
+        #----------PDF Creator-----------------------
+        
+        pdf = canvas.Canvas(fileName)
+        pdf.setTitle(documentTitle)
+
+
+
+        # ###################################
+        # 1) Title :: Set fonts 
+        # # Print available fonts
+        # for font in pdf.getAvailableFonts():
+        #     print(font)
+
+        # Register a new font
+        pdf.drawCentredString(300, 770, title)
+
+
+
+
+
+
+
+
+
+        # ###################################
+        # 2) Sub Title 
+        # RGB - Red Green and Blue
+        pdf.setFillColorRGB(0, 0, 255)
+        pdf.setFont("Courier-Bold", 24)
+        pdf.drawCentredString(290,720, subTitle)
+
+
+
+
+
+
+        # ###################################
+        # 3) Draw a line
+        pdf.line(30, 710, 550, 710)
+
+
+
+
+
+
+
+
+
+        # ###################################
+        # 4) Text object :: for large amounts of text
+
+        text = pdf.beginText(40, 680)
+        text.setFont("Courier", 18)
+        text.setFillColor(colors.red)
+        for line in textLines:
+            text.textLine(line)
+
+        pdf.drawText(text)
+
+
+
+
+
+        # ###################################
+        # 5) Draw a image
+        pdf.drawInlineImage(image, 130, 100)
+        #--------------------------------------------
+        pdf.save()
+
+
+
+
+
+
+
+
+
 
     def email_ticket(self, cust_forename, cust_surname, cust_email, qr_code):
         cinema_email = 'theBigPictureCinema2021@gmail.com'
@@ -759,4 +870,5 @@ print(seatmap)
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 db = Database('cinema.db')
 #db.qr_code_generator(1,'Kostas','Biris')
-db.email_ticket('Kostas', 'Biris', 'sc19kb@leeds.ac.uk', 5)
+#db.email_ticket('Kostas', 'Biris', 'sc19kb@leeds.ac.uk', 5)
+db.ticket_to_pdf(1, 'Kostas', 'Biris')
