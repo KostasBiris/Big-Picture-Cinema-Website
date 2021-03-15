@@ -455,7 +455,8 @@ class Database:
 
         #self.cur.execute("SELECT * FROM bookings WHERE id=?",(booking_id,))
         #data = self.cur.fetchall()
-        qr.add_data("LOL")
+        data = [booking_id,forename,surname,'A1,A2,A3']
+        qr.add_data(data)
         #qr.add_data(data)
         qr_code  = qr.make(fit=True)
         
@@ -477,8 +478,8 @@ class Database:
 
         #---------Contents-------------------------
         fileName = 'yourCinemaTickets.pdf'
-        documentTitle = 'The Big Picture Cinema'
-        title = 'Cinema Tickets'
+        documentTitle = 'Cinema Tickets'
+        title = 'The Big Picture Cinema'
         subTitle = 'Your cinema Tickets'
 
         textLines = [
@@ -524,15 +525,8 @@ class Database:
         #QR Code image
         pdf.drawInlineImage(image, 130, 100)
         #--------------------------------------------
+        
         pdf.save()
-
-
-
-
-
-
-
-
 
 
     def email_ticket(self, cust_forename, cust_surname, cust_email, qr_code):
@@ -552,15 +546,14 @@ class Database:
                     <title>Your Tickets from the Big Picture Cinema</title>
                 </head>
                 <body>
-                    <h2>Dear {cust_forename} {cust_surname}, thank you for your purchase. Please find your tickets' QR code attached to this email</h2>
-                    <img src="QR_Code.png" alt="QR Code">
+                    <h3>Dear {cust_forename} {cust_surname}, thank you for your purchase. Please find your tickets attached to this email</h3>
                 </body>
             </html>
         """
          
         message.add_alternative(msg,'html')
 
-        files = ['MyDoc.pdf']
+        files = ['yourCinemaTickets.pdf']
 
         for file in files:
             with open(file, 'rb') as f:
@@ -568,79 +561,13 @@ class Database:
                 file_name = f.name
             message.add_attachment(file_data, maintype='application', subtype='octet-stream', filename=file_name)
 
-
+        print('Sending Email...')
         smtp = smtplib.SMTP(host='smtp.gmail.com',port=587)
         smtp.starttls()
         smtp.login(cinema_email,cinema_password)
         smtp.send_message(message)
+        print('Email Sent')
 
-
-
-
-
-
-
-
-
-
-
-
-        '''
-        cinema_email = 'theBigPictureCinema2021@gmail.com'
-        cinema_password = 'thebigpicture2021'
-
-        message = EmailMessage()
-        message['from'] = cinema_email
-        message['to'] = cust_email
-        message['subject'] = "Your tickets from the Big Picture Cinema"
-
-        
-        message.set_content('Your cinema tickets')
-        html_message = open('tickets_email.html').read()
-        message.add_alternative(html_message, subtype='html')
-        port = 465
-
-        with open('QR_Code.png','rb') as attach_file:
-            image_name = attach_file.name
-            image_type = imghdr.what(attach_file.name)
-            image_data = attach_file.read()
-
-        print("Sending Email . . .")
-        with smtplib.SMTP_SSL("smtp.gmail.com", port) as server:
-            server.login(cinema_email,cinema_password)
-            server.send_message(message)
-        print("Email Sent")
-        '''
-
-
-
-
-
-
-        
-        
-        '''
-        cinema_mail = 'theBigPictureCinema2021@gmail.com'
-        cinema_password = 'thebigpicture2021'
-
-        port = 465 
-
-        message = """\
-        Subject: Your tickets from The Big Picture Cinema
-        
-        Dear customer,
-
-        IT'S WORKING !!!
-        """
-
-        context = ssl.create_default_context()
-
-        print("Sending Email . . .")
-        with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context,) as server:
-            server.login(cinema_mail,cinema_password)
-            server.sendmail(cinema_mail, cust_email, message)
-        print("Email Sent")
-        '''
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=
 
 #=-=-=-=-=-=-=-=-=-=CUSTOMERS-=-=-=-=-=-=-=-=-=-=
@@ -831,7 +758,7 @@ seatmap = dat[0][5]
 print(seatmap)
 """
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-db = Database('cinema.db')
-#db.qr_code_generator(1,'Kostas','Biris')
-#db.email_ticket('Kostas', 'Biris', 'sc19kb@leeds.ac.uk', 5)
-db.ticket_to_pdf(1, 'Kostas', 'Biris')
+#db = Database('cinema.db')
+#db.qr_code_generator(1,'yourForename','yourSurname')
+#db.ticket_to_pdf(1, 'yourForename', 'yourSurname')
+#db.email_ticket('yourForename', 'yourSurname', 'yourEmail', 5)
