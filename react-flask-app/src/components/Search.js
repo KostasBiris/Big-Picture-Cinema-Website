@@ -4,7 +4,7 @@ import CustomerHomePage from '../Pages/CustomerHomePage';
 import SearchResult from './SearchResult';
 import main from '../static/main.css';
 import { BrowserRouter, Route } from 'react-router-dom';
-
+import Banner from './Banner';
 var publicIP = require('public-ip')
 
 
@@ -43,7 +43,7 @@ class SearchResults extends React.Component{
         </head>
           <body>
             <SearchIMDB onGetMovie={this.getMovies} movieName={this.props.match.params.query} getAllMovies={'True'} />
-            <CustomerHomePage props={this.props}/> {/*pass props to keep track of props.history.push from CustomerHomePage*/}
+            <Banner props={this.props}/> {/*pass props to keep track of props.history.push from CustomerHomePage*/}
             <div style={{position: 'relative', paddingLeft: '20%', paddingRight: '80%', paddingTop: '10%%', paddingBottom: '90%', width: '30%'}}>
             {/* Render element conditionally  */}
             {this.state.returnedData.length > 0 ?
