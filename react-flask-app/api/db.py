@@ -13,7 +13,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
 from reportlab.lib import colors
 import time
-
+import PIL
 """
     TODO:
         comments and documentation.
@@ -89,7 +89,7 @@ class Database:
                                                               booking_id INTEGER REFERENCES bookings(id) NOT NULL, \
                                                               forename TEXT NOT NULL, \
                                                               surname TEXT NOT NULL, \
-                                                              qr INTEGER NOT NULL, \
+                                                              qr BLOB NOT NULL, \
                                                               email TEXT NOT NULL)")
 
         self.cur.execute("CREATE TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY, \
@@ -326,13 +326,18 @@ class Database:
 
 #=-=-=-=-=-=-=-=-=-=BOOKINGS-=-=-=-=-=-=-=-=-=-=
 
-    #seats should be a list: [A10, A11, A12]
     def add_booking(self, screeningid, customerid, seats):
         seatmap = self.get_seatmap(screeningid)
         seatmap = self.update_seatmap(self.get_seatmap_from_blob(seatmap), seats.split(","), screeningid,'+')
         if not seatmap: return False
         self.cur.execute("INSERT INTO bookings VALUES (NULL, ?,?,?)", (screeningid, customerid, seats))
         self.conn.commit()
+        self.cur.execute("SELECT id FROM bookings WHERE screeningid=? AND customerid=? AND seats=?",(screeningid, customerid, seats))
+        bookingid = self.cur.fetchone()[0]
+        self.cur.execute("SELECT forename, surname, email FROM customers WHERE id=?",(customerid,))
+        forename, surname, email = self.cur.fetchone()
+        qr = self.qr_code_generator(bookingid, forename, surname)
+        db.add_ticket(bookingid, forename, surname, self.qr_to_blob(qr),email)
 
     def remove_booking(self, id=-1, screenid=-1, customerid=-1, customer_forename="No forename", customer_surname="No surname",\
                         customer_email="No email", customer_phone=-1):
@@ -436,7 +441,7 @@ class Database:
 
     def add_ticket(self, booking_id, forename, surname, qr, email):
 
-        self.cur.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?)",(booking_id, forename, surname, qr, email))
+        self.cur.execute("INSERT INTO tickets VALUES (NULL, ?,?,?,?,?)",(booking_id, forename, surname, qr, email))
         self.conn.commit()
 
     #Removes a ticket when the booking is removed
@@ -462,9 +467,14 @@ class Database:
         
         img = qr.make_image(fill = 'black', back_color = 'white')
         img.save("QR_Code.png")
-        return qr_code
+        return img
 
 
+    def qr_to_blob(self, qr):
+        return np.asarray(qr).dumps()
+
+    def im_from_byes(self, bytes):
+        return PIL.Image.frombytes(mode='1', size = bytes.shape[::-1], data=np.packbits(bytes, axis=1))
 
     def ticket_to_pdf(self, booking_id, forename, surname):
 
@@ -756,7 +766,7 @@ db.add_movie('Captain America: Civil War',  'Political involvement in the Avenge
 """
 db = Database('cinema.db')
 db.add_screen(25,5,10)
-db.add_movie('seatmap Movie Name', 'seatmapMovieblurb', '16', 'seatmapMovieDirector','seatmapMovieActor', '12-12-2021')
+db.add_movie('seatmap Movie Name', 'seatmapMovieblurb', '16' ,'writer', 'seatmapMovieDirector','seatmapMovieActor', '12-12-2021')
 db.add_customer('seatmapCustomerFName','seatmapCustomerSName', 'seatmapCustomerEmail', 'seatmapCustomerPhone','seatmapCustomerPassword','01-01-01')
 
 db.add_employee("staff1_fn", "staff1_sn", "staff1@email.com", 1, "staff1_password", True)
@@ -770,12 +780,12 @@ db.add_screening('12-12-2021','18:00', 1,1, 1, 2,3,4)
 dat = db.fetch()[2]
 seatmap = dat[0][5]
 
-print(seatmap)
+#print(seatmap)
 
-db.add_booking(1,1,['A1','B1','C4'])
+db.add_booking(1,1,'A1,B1,C4')
 dat = db.fetch()[2]
 seatmap = dat[0][5]
-print(seatmap)
+#print(seatmap)
 """
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 #db = Database('cinema.db')
