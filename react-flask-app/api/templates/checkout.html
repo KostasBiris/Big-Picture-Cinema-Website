@@ -1,52 +1,168 @@
 <html lang="en">
-    <head>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">   
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='main.css')}}"/>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    </head>
-    <video playsinline autoplay muted loop id="bgvid">
-        <source src="../static/vid.mp4" type="video/mp4">
-      </video>
-      <body>
-        <div class="checkout">
-        <form class="modal-content-register"  action="{{ url_for('checkout') }}" method="post">
-        <form class="modal-content-register" action="{{ url_for}}">
-            <div class="container">
-                <img src="{{url_for('static',filename='finlogo.png')}}" style="display: block; margin: auto; width:10rem; height: 7rem;"/>
-                <div> <span class="header_text">Biling Address</span></div>
-      			<input class="register_details" type="text" name="first_name" id= "first_name" placeholder="First name" style="color:black;" required/>
-      			<br>
-                <input class="register_details"  type="text" name="last_name" id= "last_name" placeholder="Last name" style="color:black;" required/>
-                <br>
-    			<input class="register_details"  type="text" name="email" id="email" placeholder="E-mail address" style="color:black;" required/>
-    			<br>
-    			<input class="register_details"  type="address1" name="address1" id="address1" placeholder="Address 1 " style="color:black;" required/>
-    			<br>
-    			<input class="register_details"  type="address" name="address" id="address" placeholder="Address 2" style="color:black;" required/>
-    			<br>
-                <input class="register_details"  type="country" name="country" id="country" placeholder="Country" style="color:black;" required/>
-    			<br>
-                <input class="register_details"  type="post_code" name="post_code" id="post_code" placeholder="Post Code" style="color:black;" required/>
-                <br>
-                <div> <span class="header_text">Payment</span></div>
-                <input class="register_details" type="text" name="card_name" id= "card_name" placeholder="Name on card" style="color:black;" required/>
-                <br>
-                <input class="register_details"  type="text" name="credit_card_no" id= "credit_card_no" placeholder="Credit card number" style="color:black;" required/>
-                <br>
-                <input class="register_details"  type="text" name="expiration_date" id="expiration_date" placeholder="Expiration" style="color:black;" required/>
-                <br>
-                <input class="register_details"  type="cvv" name="cvv" id="cvv" placeholder="CVV " style="color:black;" required/>
-                <br>
-                <input class="signup_button" type="submit"  value="SAVE" style="color: white; position: relative; " />
-                <label>
-                    <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember the payment details
-                </label>
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='main.css')}}" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+
+<body id="grad1">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#"><img src="{{url_for('static',filename='finlogo.png')}}"
+                style="top:1px;width:rem;height:8rem;"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <button class="tab_background text mr-3">WHAT'S NEW</button>
+                </li>
+                <li class="nav-item">
+                    <button class="tab_background text mr-3">TICKETS</button>
+                </li>
+                <li class="nav-item dropdown">
+                    <button class="tab_background dropdown-toggle text mr-3" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">SCREENS</button>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <button class="dropdown-item" style="color:#f9bc50;">SILVER Screens</button>
+                        <button class="dropdown-item" style="color:#f9bc50;">VMAX Screens</buttom>
+                            <button class="dropdown-item" style="color:#f9bc50;">GOLDEN Screens</button>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <button class="tab_background text mr-3">EVENTS</button>
+                </li>
+                <li class="nav-item">
+                    <button class="tab_background text mr-9">INFO</button>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <button class="tab_background mr-3">LOG IN</button>
+                <button class="tab_background mr-5">SIGN UP</button>
+                <input class="mr-3" type="image" style="width:2rem;height:2rem;"
+                    src="{{url_for('static',filename='usericon.png')}}" />
+                <input class="form-control mr-sm-2 search_bar" type="search" placeholder="Search here.."
+                    aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>
+            </form>
+        </div>
+    </nav>
+    <br>
+    <br>
+    <br>
+        <form class="modal-content-payment">
+            <br>
+            <div class="header_text">
+                <h2 style="position:absolute; left:25px; color: #4e5b60; font-weight: bold;">CHECKOUT DETAILS</h2>
+              </div>
+              <br>
+              <br>
+            <div class="container p-3 my-3 border">
+                <div class="md-form mb-2">
+                    <input class="register_details form-control" type="text" name="first_name" id="first_name"
+                        placeholder="First name" style="color:black;" required />
                 </div>
-             <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-             <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-             
+                <div class="md-form mb-2">
+                    <input class="register_details form-control" type="text" name="last_name" id="last_name"
+                        placeholder="Last name" style="color:black;" required />
+                </div>
+                <div class="md-form mb-2">
+                    <input class="register_details form-control" type="text" name="email" id="email"
+                        placeholder="E-mail address" style="color:black;" required />
+                </div>
+                <div class="md-form mb-2">
+                    <input class="register_details form-control" type="text" name="address" id="address"
+                        placeholder="Address Line 1" style="color:black;" required />
+                </div>
+                <div class="md-form mb-2">
+                    <input class="register_details form-control" type="text" name="address" id="address-2"
+                        placeholder="Address Line 2 (Optional)" style="color:black;" />
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-md-12 mb-4">
+                        <select class="register-details custom-select d-block w-100" id="country" required>
+                            <option value="">Country</option>
+                            <option>United Kingdom</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select a valid country.
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <input type="text" class="register-details form-control" id="zip" placeholder="Postcode" required>
+                        <div class="invalid-feedback">
+                            Postcode required.
+                        </div>
+                    </div>
+                </div>
+                <hr class="mb-4">
+                <button class="btn btn-primary btn-lg btn-block" type="submit">PAY NOW</button>
+        </form>
+    </div>
+    </div>
+
+    <div class="container-fluid p-3 my-3 border modal-content-card">
+            <div class="header_text">
+                <h3 style="position:absolute; left:25px; color: #4e5b60; font-weight: bold;">ORDER SUMMARY</h3>
+              </div>
+              <br>
+              <br>
+              <br>
+              <br>
+              <div class="mb-4">
+          <ul class="list-group mb-3 z-depth-1">
+            <li class="d-flex justify-content-between">
+              <div>
+                <h4 class="my-0">2x Adult Tickets</h4>
+                <h5 class="text-muted">The Avengers, 03/07/2021, 21:00</h5>
+              </div>
+              <span class="text-muted">$15</span>
+            </li>
+            <li class="d-flex justify-content-between ">
+              <div>
+                <h4 class="my-0">1x Vip Tickets</h4>
+                <h5 class="text-muted">Casablanca, 06/08/2021, 19:00</h5>
+              </div>
+              <span class="text-muted">$13.50</span>
+            </li>
+            <li class=" d-flex justify-content-between ">
+              <div>
+                <h4 class="my-0">3x Kids Tickets</h4>
+                <h5 class="text-muted">Toy Story 4, 17/05/2021, 21:00</h5>
+              </div>
+              <span class="text-muted">$16.50</span>
+            </li>
+            <li>
+                <hr class="mb-4">
+            </li>
+            <li class="d-flex justify-content-between">
+              <h4>Total (USD)</h4>
+              <h4>$45</h4>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+
+    <!--PAYMENT SYSTEM
+ <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember the payment details-->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
 </body>
+
 </html>
