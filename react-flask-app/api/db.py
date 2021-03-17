@@ -86,11 +86,16 @@ class Database:
                                                               seats TEXT NOT NULL)")
 
         self.cur.execute("CREATE TABLE IF NOT EXISTS tickets (id INTEGER PRIMARY KEY, \
-                                                              booking_id INTEGER REFERENCES bookings(id) NOT NULL, \
+                                                              booking_id INTEGER REFERENCES bookings(id) NOT NULL,\
+                                                              movie_id INTEGER REFERENCES movies(id) NOT NULL,\
+                                                              price FLOAT NOT NULL,\
                                                               forename TEXT NOT NULL, \
                                                               surname TEXT NOT NULL, \
+                                                              email TEXT NOT NULL,\
                                                               qr BLOB NOT NULL, \
-                                                              email TEXT NOT NULL)")
+                                                              num_VIPs INTEGER NOT NULL,\
+                                                              num_children INTEGER NOT NULL,\
+                                                              num_elders INTEGER NOT NULL)")
 
         self.cur.execute("CREATE TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY, \
                                                                forename TEXT NOT NULL, \
@@ -437,11 +442,25 @@ class Database:
 
 #=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=
 
+
+
+
+        self.cur.execute("CREATE TABLE IF NOT EXISTS tickets (id INTEGER PRIMARY KEY, \
+                                                              booking_id INTEGER REFERENCES bookings(id) NOT NULL,\
+                                                              movie_id INTEGER REFERENCES movies(id) NOT NULL,\
+                                                              price FLOAT NOT NULL,\
+                                                              forename TEXT NOT NULL, \
+                                                              surname TEXT NOT NULL, \
+                                                              email TEXT NOT NULL,\
+                                                              qr BLOB NOT NULL, \
+                                                              num_VIPs INTEGER NOT NULL,\
+                                                              num_children INTEGER NOT NULL,\
+                                                              num_elders INTEGER NOT NULL)")
 #=-=-=-=-=-=-=-=-=-=TICKETS-=-=-=-=-=-=-=-=-=-=
 
-    def add_ticket(self, booking_id, forename, surname, qr, email):
+    def add_ticket(self, booking_id, movie_id, price, forename, surname, email, qr, num_VIPs = 0, num_children = 0, num_elders = 0):
 
-        self.cur.execute("INSERT INTO tickets VALUES (NULL, ?,?,?,?,?)",(booking_id, forename, surname, qr, email))
+        self.cur.execute("INSERT INTO tickets VALUES (NULL, ?,?,?,?,?,?,?,?,?,?)",(booking_id, movie_id, price, forename, surname, email, qr, num_VIPs, num_children, num_elders))
         self.conn.commit()
 
     #Removes a ticket when the booking is removed
