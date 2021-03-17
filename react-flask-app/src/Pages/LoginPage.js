@@ -1,7 +1,7 @@
 import React from 'react';
 import main from '../static/main.css';
-import logo from '../static/finlogo.png'
-
+import logo from '../static/finlogo.png';
+import vid from '../static/vid.mp4';
 
 var publicIP = require('public-ip')
 
@@ -108,24 +108,33 @@ class LoginPage extends React.Component {
 
     render() {
         return (
-            <body>
-                <head>
-                    <link rel="stylesheet" type="text/css" href={main} />
-                </head>
-                <body className="register">
-                    <img src={logo} style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto', width: '32rem', height: '22rem' }} />
-                    <form className="modal-content">
-                        <div className="container">
-                            <input onChange={this.handleEmailChange} value={this.state.email} className="register_details" type="text" name="email" id="email" placeholder="E-mail address" style={{ color: 'black' }} required />
-                            <br />
-                            <input onChange={this.handlePasswordChange} value={this.state.password} className="register_details" type="password" name="password" id="password" placeholder="Password" style={{ color: 'black' }} required />
-                            <br />
-                            <input onClick={this.handleLogin} className="login_button" type="submit" value="LOG IN" onClick={this.handleLogin} style={{ color: 'white', position: 'relative' }} />
-                            <p style={{ textAlign: 'center' }}>Don't have an account? <a href="/register" style={{ color: 'dodgerblue' }}>Sign Up</a></p>
-                        </div>
-                    </form>
-                </body>
-            </body>
+        <body>
+            <head>
+                <link rel="stylesheet" type="text/css" href={main} />
+                    <meta charset="utf-8" />
+                    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+            </head>
+            <video playsInline autoPlay muted loop>
+                <source src={vid} type="video/mp4"/>
+            </video>
+
+            <div className="register">
+                <form className="modalContent">
+                    <div className="containerStart">
+                        <img src={logo} style={{display: 'block', margin: 'auto', width:'13rem', height: '10rem'}}/>
+                        <input onChange={this.handleEmailChange} value={this.state.email} className="registerDetails"  type="text" name="email" id="email" placeholder="E-mail address"  required/>
+                        <br/>
+                        <input onChange={this.handlePasswordChange} value={this.state.password} className="registerDetails"  type="password" name="password" id="password" placeholder="Password" required/>
+                        <br/>
+                        <label>
+                            <input type="checkbox" checked="checked" name="remember" style={{marginBottom:'15px'}}/> Remember me
+                        </label>
+                        <input onClick={this.handleLogin} className="loginButton" type="submit" value="LOG IN" style={{color: 'white', position: 'relative'}} />
+                        <p style={{textAlign: 'center'}}>Don't have an account? <a href="/register" style={{color:'dodgerblue'}}>Sign Up</a>.</p>
+                    </div>
+                </form>
+            </div>
+        </body>
         );
     }
 }

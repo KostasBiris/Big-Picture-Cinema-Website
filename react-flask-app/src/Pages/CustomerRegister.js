@@ -3,6 +3,9 @@ import main from '../static/main.css';
 import logo from '../static/finlogo.png'
 import Moment from 'react-moment';
 import moment, { min } from 'moment';
+import vid from '../static/vid.mp4';
+
+
 var publicIP = require('public-ip')
 
 class CustomerRegister extends React.Component {
@@ -127,44 +130,42 @@ class CustomerRegister extends React.Component {
             body: JSON.stringify({data: this.state})})
             .then(response => response.json())
         };
-
-
-
-
-
-
     render() {
         return (
+        <body>
+            <head>
+                <link rel="stylesheet" type="text/css" href={main}/>
+                <meta charset="utf-8"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+            </head>
+            <video playsInline autoPlay muted loop id="bgvid">
+                <source src={vid} type="video/mp4" />
+            </video>
             <body>
-                <head>
-                    <link rel="stylesheet" type="text/css" href={main} />
-                </head>
-                <body className="register">
-                    <img src={logo} style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto', width: '300px', height: '190px' }} />
-                    <form className="modal-content-register">
-                        <div className="container">
-                            <input onChange={this.handleFornameChange} value={this.state.forename} className="register_details" type="text" name="first_name" id="first_name" placeholder="First name" style={{ color: 'black' }} required />
-                            <br />
-                            <input onChange={this.handleSurnameChange} value={this.state.surname} className="register_details" type="text" name="last_name" id="last_name" placeholder="Last name" style={{ color: 'black' }} required />
-                            <br />
-                            <input onChange={this.handlePhoneNumberChange} value={this.state.phonenumber} className="register_details" type="text" name="phone_number" id="phone_number" placeholder="Phone number" style={{ color: 'black' }} required />
-                            <br />
-                            <input onChange={this.handleEmailChange} value={this.state.email} className="register_details" type="text" name="email" id="email" placeholder="E-mail address" style={{ color: 'black' }} required />
-                            <br />
-                            <input onChange={this.handlePasswordChange} value={this.state.password} className="register_details" type="password" name="password" id="password" placeholder="Password" style={{ color: 'black' }} required />
-                            <br />
-                            <input onChange={this.handleDOBChange} value={this.state.dob} className="register_details" type="date" name="birthday" id="birthday" placeholder="Date of Birth" style={{ color: 'black' }} required />
-                            <br />
-                            <input onClick={this.handleSubmit} className="signup_button" type="submit" value="SIGN UP" style={{ color: 'white', position: 'relative' }} />
+                <div className="register">
+
+                    <form className="modalContentRegister">
+                        <div className="containerStart">
+                            
+                            <img src={logo} style={{display: 'block', margin: 'auto', width:'10rem', height: '7rem'}}/>
+                            <input onChange={this.handleFornameChange} value={this.state.forename} className="registerDetails" type="text" name="first_name" id= "first_name" placeholder="First name" style={{color:'black'}} required/>
+                            <input onChange={this.handleSurnameChange} value={this.state.surname} className="registerDetails"  type="text" name="last_name" id= "last_name" placeholder="Last name" style={{color:'black'}} required/>
+                            <input onChange={this.handlePhoneNumberChange} value={this.state.phonenumber} className="registerDetails"  type="text" name="phone_number" id= "phone_number" placeholder="Phone number" style={{color:'black'}} required/>
+                            <input onChange={this.handleEmailChange} value={this.state.email} className="registerDetails"  type="text" name="email" id="email" placeholder="E-mail address" style={{color:'black'}} required/>
+                            <input onChange={this.handlePasswordChange} value={this.state.password} className="registerDetails"  type="password" name="password" id="password" placeholder="Password" style={{color:'black'}} required/>
+                            <input onChange={this.handleDOBChange} value={this.state.dob} className="registerDetails"  type="date" name="birthday" id="birthday" placeholder="Date of Birth" style={{color:'black'}} required/>
+                            <input onClick={this.handleSubmit} className="signupButton" type="submit"  value="SIGN UP" style={{color: 'white', position: 'relative' }} />
                             <label>
-                                <input type="checkbox" checked="checked" name="remember" style={{ marginBottom: '15px' }} /> Remember me
-                    </label>
-                            <p>By creating an account you agree to our <a href="#" style={{ color: 'dodgerblue' }}>Terms & Privacy</a>.</p>
+                                <input type="checkbox" checked="checked" name="remember" style={{marginBottom:'15px'}}/> Remember me
+                            </label>
+                            <p style={{textAlign:'center'}}>Already have an account? <a href="/login" style={{color:'dodgerblue'}}>Log in</a>.</p>
+                            <p style={{textAlign: 'center'}}>By creating an account you agree to our <a href="#" style={{color:'dodgerblue'}}>Terms & Privacy</a>.</p>
                         </div>
-                    </form>
-                </body>
+  			        </form>
+                </div>
             </body>
-        )
+        </body>
+        );
     }
 }
 

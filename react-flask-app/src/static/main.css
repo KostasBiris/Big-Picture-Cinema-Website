@@ -139,7 +139,7 @@
   background:rgba(249, 187, 80, 0.4);
 }
 
-.register_details {
+.registerDetails {
   width: 100%;
   padding: 20px;
   margin: 5px 0 22px 0;
@@ -149,7 +149,7 @@
   border-radius:12px;
 }
 
-.signup_button{
+.signupButton{
   width: 100%;
   padding: 20px;
   margin: 5px 0 22px 0;
@@ -158,7 +158,7 @@
   background:#f9bc50;
   border-radius:12px;
 }
-.login_button{
+.loginButton{
     width: 100%;
     padding: 20px;
     margin: 5px 0 22px 0;
@@ -172,18 +172,18 @@
   outline: none;
 }
 
-.signup_button:hover{
+.signupButton:hover{
   background:#4e5b60;
 }
 
-.login_button:hover{
+.loginButton:hover{
     background:#4e5b60;
   }
-.container-start {
+.containerStart {
   padding: 16px;
 }
 
-.modal-content{
+.modalContent{
   background-color: #f5f0f0ec;
   border-radius:10px;
   border: 1px solid #888;
@@ -196,18 +196,34 @@
   transform: translate(-50%, -50%);
 }
 
-.modal-content-register {
+.modalContentRegister {
   background-color: #f5f0f0ec;
   border-radius:10px;
   border: 1px solid #888;
-  width: 35%; 
+  width: 35%;
   margin-left: auto;
   margin-right: auto;
   position: absolute;
-  top: 70%;
   left: 50%;
+  top:50%;
   transform: translate(-50%, -50%);
 }
+/*
+@media only screen and (max-width: 800px) {
+  .modalContentRegister {
+    top:70%;
+  }
+
+}
+@media only screen and (min-width: 800px) {
+  .modalContentRegister {
+    top:50%;
+  }
+
+}*/
+
+
+
 
 .container_movies {
     display: flex;
