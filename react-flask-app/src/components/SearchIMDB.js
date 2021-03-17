@@ -6,13 +6,16 @@ class SearchIMDB extends React.Component{
   constructor(props) {
       super(props);
       this.getAllMoviesData = this.getAllMoviesData.bind(this);
-      this.getMovieData = this.getMovieData.bind(this)
+      this.getMovieData = this.getMovieData.bind(this);
+      this.getTrandingtMoviesData = this.getTrandingMoviesData.bind(this);
       
       // check whether the request is to get all the movies or just the details of a movie
       if(props.getAllMovies == 'True')
         this.getAllMoviesData(this.props.movieName);
+      if(props.getTranding == 'True')
+        this.getTrandingMoviesData()
       else
-        this.getMovieData = this.getMovieData(this.props.movieID);//else return just the one movie with all of the details
+        this.getMovieData(this.props.movieID);//else return just the one movie with all of the details
       
   }
 
@@ -38,6 +41,17 @@ class SearchIMDB extends React.Component{
     })
     .then(response => response.json()).then(data => {
       console.log(data)
+      this.props.onGetMovie(data); // depends on the function that is passed as a prop
+  });
+  }
+
+  getTrandingMoviesData = () => {
+    // fetch(`http://www.omdbapi.com/?i=${movieID}&apikey=21f186c3`, {
+    fetch(`https://api.themoviedb.org/3/trending/movie/week?api_key=271393256b89c9461c48c1688804f774`, {
+    method: 'GET',
+    })
+    .then(response => response.json()).then(data => {
+      // console.log(data)
       this.props.onGetMovie(data); // depends on the function that is passed as a prop
   });
   }
