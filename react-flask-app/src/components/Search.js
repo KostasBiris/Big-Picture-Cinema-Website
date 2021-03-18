@@ -7,7 +7,6 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import Banner from './Banner';
 var publicIP = require('public-ip')
 
-
 //Component for getting and displaying search results.
 class SearchResults extends React.Component{
   constructor(props) {
@@ -16,10 +15,15 @@ class SearchResults extends React.Component{
     this.getMovies = this.getMovies.bind(this);
     this.getClientIP = this.getClientIP.bind(this);
     //By default the state is an empty array.
-    this.state ={ returnedData: [], IP: null, auth: false};
+    this.state ={ returnedData: [], IP: null, auth: false, manager: true};
     //Call our method, using the query given.
+    
+  }
+
+  componentDidMount() {
     this.getClientIP();
   }
+
 
   getClientIP = () => {
     (async () => {
@@ -42,15 +46,15 @@ class SearchResults extends React.Component{
           <link rel="stylesheet" type="text/css" href={main}/>
         </head>
           <body>
-            <SearchIMDB onGetMovie={this.getMovies} movieName={this.props.match.params.query} getAllMovies={'True'} />
+            <SearchIMDB onGetMovie={this.getMovies} movieName={this.props.match.params.query} getAllMovies={"True"} getTranding={"False"} />
             <Banner props={this.props}/> {/*pass props to keep track of props.history.push from CustomerHomePage*/}
-            <div style={{position: 'relative', paddingLeft: '20%', paddingRight: '80%', paddingTop: '10%%', paddingBottom: '90%', width: '30%'}}>
+            <div style={{position: 'relative', paddingLeft: '20%', paddingRight: '80%', paddingTop: '10%%', paddingBottom: '90%', width: '50%'}}>
             {/* Render element conditionally  */}
             {this.state.returnedData.length > 0 ?
             this.state.returnedData.map(res_=> {
               return (
                 
-                <ul>
+                <ul style={{display: 'inline'}}>
                   <SearchResult res={res_} />
                 </ul>
               )
@@ -61,6 +65,8 @@ class SearchResults extends React.Component{
           </body>
         </>
       )
+  
+
   } 
 }
 

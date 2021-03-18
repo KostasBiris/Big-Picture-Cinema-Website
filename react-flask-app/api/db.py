@@ -61,7 +61,8 @@ class Database:
                                                             director TEXT NOT NULL, \
                                                             writers TEXT NOT NULL, \
                                                             leadactors TEXT NOT NULL, \
-                                                            release_date DATE NOT NULL)")
+                                                            release_date DATE NOT NULL, \
+                                                            omdbid INTEGER NOT NULL)")
 
         #Screens table is created (if it does not exist) with the following fields: id (PK), capacity, seatmap, rows, columns
         self.cur.execute("CREATE TABLE IF NOT EXISTS screens (id INTEGER PRIMARY KEY, \
@@ -170,16 +171,22 @@ class Database:
     """
         Inserts a new entry into the movies table
     """
-    def add_movie(self, name,blurb,certificate,director, writers,leadactors, release_date):
+    def add_movie(self, name,blurb,certificate,director, writers,leadactors, release_date, omdbid):
         #Execute an SQL query to insert a new record into the movies database.
         #We use '?' to prevent against SQL injection attacks.
-        self.cur.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?,?)", (name, blurb, certificate, director, writers, leadactors, release_date))
+        self.cur.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?,?,?)", (name, blurb, certificate, director, writers, leadactors, release_date, omdbid))
 
         #Commit the changes we have made to the database.
         self.conn.commit()
 
+    def omdbid(self, id):
+        self.cur.execute("SELECT * FROM movies WHERE omdbid=?",(id,))
+        return self.cur.fetchone()
+
+
+
     def update_movie(self, id, data):
-        self.cur.execute("UPDATE movies SET name=?, blurb=?, certificate=?, director=?, leadactors=?, release_date=? WHERE id=?",(*data, id))
+        self.cur.execute("UPDATE movies SET name=?, blurb=?, certificate=?, director=?, leadactors=?, release_date=?, omdbid=? WHERE id=?",(*data, id))
 
         self.conn.commit()
 

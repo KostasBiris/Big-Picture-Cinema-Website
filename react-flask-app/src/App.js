@@ -15,6 +15,7 @@ import Screen2 from "./Seatmap/Screen2"
 import Screen3 from "./Seatmap/Screen3"
 import ScreenVIP from "./Seatmap/ScreenVIP"
 import ScreenIMAX from "./Seatmap/ScreenIMAX"
+import BookTickets from "./Pages/BookTicketsPage";
 
 
 
@@ -36,6 +37,7 @@ const App = () => (
         <Route exact path="/screen3" render={Screen3}/>
         <Route exact path="/screenVIP" render={ScreenVIP}/>
         <Route exact path="/screenIMAX" render={ScreenIMAX}/>
+        <Route exact path="/book" component={BookTickets}/>
       </Switch>
     </BrowserRouter>
   

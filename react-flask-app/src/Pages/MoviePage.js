@@ -1,19 +1,5 @@
 import React from 'react'
 import SearchIMDB from '../components/SearchIMDB';
-import search from '../static/search.png'
-import logo from '../static/finlogo.png'
-import headerbanner from '../static/headerbanner.png'
-import follow from '../static/follow.png'
-import usericon from '../static/usericon.png'
-import poster1 from '../static/poster1.jpg'
-import poster2 from '../static/poster2.jpg'
-import poster3 from '../static/poster3.jpg'
-import poster4 from '../static/poster4.jpg'
-import poster5 from '../static/poster5.jpg'
-import poster6 from '../static/poster6.jpg'
-import poster7 from '../static/poster7.jpg'
-import left from '../static/left.png'
-import right from '../static/right.png'
 import main from '../static/main.css';
 
 var publicIP = require('public-ip')
@@ -78,7 +64,7 @@ class MoviePage extends React.Component {
             video.push(entry.key);
             })
         // this.setState({videoKeys : video[0]});
-        this.setState({movieURL: "https://www.youtube.com/watch?v="+video[0]})
+        this.setState({movieURL: "https://www.youtube.com/embed/" +video[0] + "/?controls=1"})
 
     }
         // to fetch from our database
