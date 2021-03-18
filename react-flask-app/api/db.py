@@ -451,23 +451,12 @@ class Database:
 
 
 
-
-        self.cur.execute("CREATE TABLE IF NOT EXISTS tickets (id INTEGER PRIMARY KEY, \
-                                                              booking_id INTEGER REFERENCES bookings(id) NOT NULL,\
-                                                              movie_id INTEGER REFERENCES movies(id) NOT NULL,\
-                                                              price FLOAT NOT NULL,\
-                                                              forename TEXT NOT NULL, \
-                                                              surname TEXT NOT NULL, \
-                                                              email TEXT NOT NULL,\
-                                                              qr BLOB NOT NULL, \
-                                                              num_VIPs INTEGER NOT NULL,\
-                                                              num_children INTEGER NOT NULL,\
-                                                              num_elders INTEGER NOT NULL)")
 #=-=-=-=-=-=-=-=-=-=TICKETS-=-=-=-=-=-=-=-=-=-=
 
     def add_ticket(self, booking_id, movie_id, price, forename, surname, email, qr, num_VIPs = 0, num_children = 0, num_elders = 0):
 
-        self.cur.execute("INSERT INTO tickets VALUES (NULL, ?,?,?,?,?,?,?,?,?,?)",(booking_id, movie_id, price, forename, surname, email, qr, num_VIPs, num_children, num_elders))
+        self.cur.execute("INSERT INTO tickets VALUES (NULL, ?,?,?,?,?,?,?,?,?,?,?)",(booking_id, movie_id, screen_id, price, forename,\
+                                                                                     surname, email, qr, num_VIPs, num_children, num_elders))
         self.conn.commit()
 
     #Removes a ticket when the booking is removed
@@ -476,19 +465,18 @@ class Database:
         self.conn.commit()
 
     #Generates the QR code of the ticket which will be sent over email
-    def qr_code_generator(self, booking_id, forename, surname):
+    def qr_code_generator(self, ticket_id):
         
         qr = qrcode.QRCode(
             version = 1,
-            box_size = 10,
+            box_size = 5,
             border = 5
         )
 
-        #self.cur.execute("SELECT * FROM bookings WHERE id=?",(booking_id,))
-        #data = self.cur.fetchall()
-        data = [booking_id,forename,surname,'A1,A2,A3']
+        #self.cur.execute("SELECT * FROM tickets WHERE id=?",(ticket_id,))
+        #data = self.cur.fetchone()
+        data = (1,2,3,4,7,'Kostas','Biris','kostas_biris@outlook.com',0,2,0)
         qr.add_data(data)
-        #qr.add_data(data)
         qr_code  = qr.make(fit=True)
         
         img = qr.make_image(fill = 'black', back_color = 'white')
@@ -502,30 +490,54 @@ class Database:
     def im_from_byes(self, bytes):
         return PIL.Image.frombytes(mode='1', size = bytes.shape[::-1], data=np.packbits(bytes, axis=1))
 
-    def ticket_to_pdf(self, booking_id, forename, surname):
+    def ticket_to_pdf(self, ticket_id):
 
-        #self.cur.execute("SELECT id FROM bookings WHERE id=?",(id,))
+        #self.cur.execute("SELECT id FROM tickets WHERE id=?",(ticket_id,))
         #booking_info = self.cur.fetchone()
+        
+        #                     0           1         2          3        4       5         6       7    8      9           10           11
+        #database_info = (ticket_id, booking_id, movie_id, screen_id, price, forename, surname, email, qr, num_VIPs, num_children, num_elders)
+        database_info = (1,2,3,4,7.50,'Kostas','Biris','kostas_biris@outlook.com',0,2,0)
 
-        booking_info = (1,1,1,['A1','A2','A3'])
-        screening_id = booking_info[1]
-        customer_id = booking_info[2]
-        seats = booking_info[3]
+        #self.cur.execute("SELECT seats FROM bookings Where id=?",(database_info[1]))
+        #seats = self.cur.fetchone()
+        seats = ['A1','A2','A3']
+
+        #self.cur.execute("SELECT name FROM movies WHERE id=?",(database_info[2]))     
+        #movie_name = self.cur.fetchone()
+        movie_name = 'Captain America: The Winter Soldier'
+
+
+        #                    0         1           2         3
+        #ticket_info = (ticket_id, booking_id, movie_id, screen_id, 
+        #                 4        5       6       7   
+        #               price, forename, surname, email,
+        #                  8           9          10
+        #               num_VIPs, num_children, num_elders,
+        #                 11       12
+        #               seats, movie_name)
+        ticket_info = database_info + (seats, movie_name,)
 
         #---------Contents-------------------------
         fileName = 'yourCinemaTickets.pdf'
         documentTitle = 'Cinema Tickets'
         title = 'The Big Picture Cinema'
-        subTitle = 'Your cinema Tickets'
+        subTitle = 'Your Cinema Tickets'
 
         textLines = [
-        f'Booking ID: {booking_id}',
-        f'Screening ID: {screening_id}',
-        f'Customer ID: {customer_id}',
-        f'Seats: {seats}',
+        f'Booking ID: {ticket_info[1]}',
+        f'Movie Name: {ticket_info[12]}',
+        f'Screen No: {ticket_info[3]}',
         '',
-        f'Forename: {forename}',
-        f'Surname: {surname}'
+        f'Seats: {ticket_info[11]}',
+        f'Num VIP\'s: {ticket_info[8]}',
+        f'Num Children: {ticket_info[9]}',
+        f'Num Elders: {ticket_info[10]}',
+        '',
+        f'Forename: {ticket_info[5]}',
+        f'Surname: {ticket_info[6]}',
+        '',
+        f'Price: £{ticket_info[4]}',
         ]
 
         image = 'QR_Code.png'
@@ -603,6 +615,7 @@ class Database:
         smtp.login(cinema_email,cinema_password)
         smtp.send_message(message)
         print('Email Sent')
+
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=
 
@@ -814,7 +827,7 @@ seatmap = dat[0][5]
 #print(seatmap)
 """
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-#db = Database('cinema.db')
-#db.qr_code_generator(1,'yourForename','yourSurname')
-#db.ticket_to_pdf(1, 'yourForename', 'yourSurname')
+db = Database('cinema.db')
+db.qr_code_generator(1)
+db.ticket_to_pdf(1)
 #db.email_ticket('yourForename', 'yourSurname', 'yourEmail', 5)
