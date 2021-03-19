@@ -53,7 +53,7 @@ def serialize_all_movies(res):
         dic[i] =serialize_movie(res[i])
     return dic
 
-"""
+
 @app.route('/movie/<name>', methods = ['POST'])
 def view_movie(name):
     name = name.replace("_", " ")
@@ -71,7 +71,7 @@ def _view_movie(name):
     print(movie)
     if not movie: pass
     return serialize_movie(movie)
-"""
+
 @app.route('/caws')
 def moviepage():
     return render_template('movie_template.html')
@@ -106,6 +106,11 @@ def _managerlogin():
 @app.route('/checkout')
 def checkout():
     return render_template('checkout.html')
+
+@app.route('/analytics')
+def manager_analytics():
+    return render_template('manager_analytics.html')
+
 
 @app.route('/register')
 def customer_register():
@@ -200,35 +205,6 @@ def create_payment():
         })
     except Exception as e:
         return jsonify(error=str(e)), 403    
-
-
-@app.route('/add', methods=['POST'])
-def add():
-    db = Database('cinema.db')
-    data = request.json['data']
-    title = data['title']
-    blurb = data['blurb']
-    certificate = data['certificate']
-    director = data['directors']
-    writers = data['writers']
-    leadactors = data['actors']
-    release = data['release_date']
-    omdbid = data['omdbid']
-    print(title, blurb, certificate, director, writers, leadactors, release, omdbid)
-
-    db.add_movie(title, blurb, certificate, ' '.join(director), ' '.join(writers), ' '.join(leadactors[:len(leadactors)//10]), release, omdbid)
-    return jsonify({'response': 'OK'})
-
-
-@app.route('/omdb/<id>', methods=['POST'])
-def omdb(id):
-
-    if Database('cinema.db').omdbid(id):
-        print(Database('cinema.db').omdbid(id))
-        return jsonify({'response': 'IN'})
-    
-    return jsonify({'response': 'NOT'})
-
 
 
 def spinner():
