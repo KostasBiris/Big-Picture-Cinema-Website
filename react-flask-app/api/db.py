@@ -822,8 +822,17 @@ class Database:
         self.cur.execute("INSERT INTO analytics VALUES (NULL, ?,?,?)",(movie_id, date))
         self.conn.commit()
 
-    def update_movie_daily_revenue(self, id, data):
+    def update_movie_daily_revenue(self, movie_name, date, price):
+        #self.cur.execute("SELECT id FROM movies name=?",(movie_name,))
+        #movie_id = self.cur.fetchone()
 
+        #self.cur.execute("SELECT revenue FROM analytics WHERE movie_name=? AND date=?",(movie_name,date,))
+        #revenue = self.cur.fetchone()
+
+        revenue += price
+
+        self.cur.execute("UPDATE analytics SET revenue=? WHERE movie_name=? AND date=?",(revenue, movie_name, date,))
+        
         self.conn.commit()
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=
