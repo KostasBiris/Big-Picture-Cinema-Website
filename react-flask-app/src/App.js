@@ -18,7 +18,6 @@ import ScreenIMAX from "./Seatmap/ScreenIMAX"
 import BookTickets from "./Pages/BookTicketsPage";
 
 
-
 const App = () => (
     // Set up routing for our web application.
     // Redirce '/' to '/home' by default.
@@ -32,7 +31,7 @@ const App = () => (
         <Route exact path="/register" component={CustomerRegister}/>
         <Route exact path ="/account" component={CustomerAccountPage}/>
         <Route exact path="/payment" render={Payment}/>
-        <Route exact path="/screen1" render={Screen1}/>
+        <Route exact path="/screen1" component={Screen1}/>
         <Route exact path="/screen2" render={Screen2}/>
         <Route exact path="/screen3" render={Screen3}/>
         <Route exact path="/screenVIP" render={ScreenVIP}/>
