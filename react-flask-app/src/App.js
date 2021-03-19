@@ -30,7 +30,7 @@ const App = () => (
         <Route exact path="/movie/:title/:movieID" component={MoviePage}/>
         <Route exact path="/register" component={CustomerRegister}/>
         <Route exact path ="/account" component={CustomerAccountPage}/>
-        <Route exact path="/payment" render={Payment}/>
+        <Route exact path="/payment" component={Payment}/>
         <Route exact path="/screen1" component={Screen1}/>
         <Route exact path="/screen2" render={Screen2}/>
         <Route exact path="/screen3" render={Screen3}/>
