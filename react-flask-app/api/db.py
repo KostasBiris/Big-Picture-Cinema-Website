@@ -121,6 +121,11 @@ class Database:
                                                                customer_id INTEGER REFERENCES customers(id), \
                                                                employee_id INTEGER REFERENCES employees(id), \
                                                                manager_id INTEGER REFERENCES employees(id))")
+        
+        self.cur.execute("CREATE TABLE IF NOT EXISTS analytics (id INTEGER PRIMARY KEY, \
+                                                               movie_id INTEGER REFERENCES movies(id) NOT NULL,\
+                                                               date DATE REFERENCES screenings(date) NOT NULL, \
+                                                               revenue FLOAT NOT NULL)")
 
         #commit the changes we have made to the database
         self.conn.commit()
@@ -786,6 +791,14 @@ class Database:
         #self.conn.commit()
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
+
+
+
+
+
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 """
 db = Database('cinema.db')
 db.add_movie('Captain America: The First Avenger', 'Steve Rogers, a rejected military soldier, transforms into Captain America after taking a dose of a "Super-Soldier serum". But being Captain America comes at a price as he attempts to take down a war monger and a terrorist organization. '
@@ -827,7 +840,7 @@ seatmap = dat[0][5]
 #print(seatmap)
 """
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-db = Database('cinema.db')
-db.qr_code_generator(1)
-db.ticket_to_pdf(1)
+#db = Database('cinema.db')
+#db.qr_code_generator(1)
+#db.ticket_to_pdf(1)
 #db.email_ticket('yourForename', 'yourSurname', 'yourEmail', 5)
