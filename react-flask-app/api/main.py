@@ -113,6 +113,9 @@ def checkout():
 def manager_analytics():
     return render_template('manager_analytics.html')
 
+@app.route('/screens_description')
+def screens_description():
+    return render_template('screens_description.html')
 
 @app.route('/register')
 def customer_register():
