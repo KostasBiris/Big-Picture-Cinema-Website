@@ -17,7 +17,8 @@ class SearchResult extends React.Component{
         this.href = '/movie/' + this.name + '/' + this.id;
         this.date = this.prop.release_date;
         this.date = this.date.split("-")[0];
-        this.state = {title: '', blurb: '', certificate:'', directors:[], writers:[], actors:[], release_date:'', omdbid: -1, set: false, forscreening:false , poster_path : this.prop.poster_path}
+        this.state = {title: '', blurb: '', certificate:'', directors:[], writers:[], actors:[], release_date:'', omdbid: -1, set: false, forscreening:false , 
+        poster_path : this.prop.poster_path, runtime:'', genres: this.prop.genre_ids, youtube_key:''}
         this.addMovie = this.addMovie.bind(this);
         this.stepUp = this.stepUp.bind(this);
         this.addScreening = this.addScreening.bind(this);
@@ -32,6 +33,7 @@ class SearchResult extends React.Component{
     }
 
     addMovie = () => {
+        console.log(this.state);
         fetch('/add', {
             method: 'POST',
             headers: {
@@ -63,7 +65,22 @@ class SearchResult extends React.Component{
                 }
             })
         }
-        this.setState({title: this.prop.original_title, blurb: this.prop.overview, certificate: '', release_date: this.prop.release_date, directors: _directors, actors: _actors, writers:_writers, omdbid: data.id});
+
+        let youtube_key;
+        if (data.videos){
+            data.videos.results.forEach(function(entry){
+                if (entry.type === "Trailer") {
+                    youtube_key = entry.key;
+                }
+            })
+        }
+
+        this.setState({title: this.prop.original_title, blurb: this.prop.overview, certificate: '', 
+            release_date: this.prop.release_date, directors: _directors, actors: _actors, 
+            writers:_writers, omdbid: data.id, 
+            runtime : data.runtime,
+            youtube_key: youtube_key});
+
         var go = '/omdb/' + this.state.omdbid;
         var result;
         fetch (go, {
@@ -73,6 +90,7 @@ class SearchResult extends React.Component{
             },
         }).then(response => response.json()).then(data =>
             data.response === "IN" ? this.setState({set: true}) : this.setState({set:false}))
+         
     }
 
     addScreening = () => {
@@ -82,6 +100,7 @@ class SearchResult extends React.Component{
 
     
     render () {
+        console.log(this.state);
         return (
             
             <div>

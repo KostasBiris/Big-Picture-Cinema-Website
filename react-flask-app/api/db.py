@@ -14,6 +14,7 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.lib import colors
 import time
 import PIL
+from datetime import datetime, timedelta
 """
     TODO:
         comments and documentation.
@@ -79,11 +80,7 @@ class Database:
                                                                 time TIME NOT NULL, \
                                                                 screen_id INTEGER REFERENCES screens(id) NOT NULL,\
                                                                 movie_id INTEGER REFERENCES movies(id) NOT NULL,\
-                                                                seatmap BLOB NOT NULL, \
-                                                                supervisor INTEGER REFERENCES employees(id),\
-                                                                upper_section INTEGER REFERENCES employees(id), \
-                                                                middle_section INTEGER REFERENCES employees(id), \
-                                                                lower_section INTEGER REFERENCES employees(id))")
+                                                                seatmap BLOB NOT NULL)")
 
         self.cur.execute("CREATE TABLE IF NOT EXISTS bookings (id INTEGER PRIMARY KEY, \
                                                               screening_id INTEGER REFERENCES screenings(id) NOT NULL, \
@@ -193,7 +190,6 @@ class Database:
         return self.cur.fetchone()
 
 
-
     def update_movie(self, id, data):
         self.cur.execute("UPDATE movies SET name=?, blurb=?, certificate=?, director=?, leadactors=?, release_date=?, omdbid=?, runtime=?, youtube_key=?, genres=?, WHERE id=?",(*data, id))
 
@@ -295,10 +291,10 @@ class Database:
 #=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 #=-=-=-=-=-=-=-=-=SCREENINGS-=-=-=-=-=-=-=-=-=
-    def add_screening(self, date, time, screen_id, movie_id,supervisor,upper_section,middle_section,lower_section):
+    def add_screening(self, date, time, screen_id, movie_id):
         self.cur.execute("SELECT seatmap FROM screens WHERE id=?",(screen_id,))
         seatmap = self.cur.fetchone()[0]
-        self.cur.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?,?,?,?,?,?)",(date,time,screen_id,movie_id,seatmap,supervisor,upper_section,middle_section,lower_section))
+        self.cur.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?,?)",(date,time,screen_id,movie_id,seatmap))
 
         self.conn.commit()
 
@@ -333,7 +329,7 @@ class Database:
 
     def update_screening(self, id, data):
 
-        self.cur.execute("UPDATE screenings SET date=?, time=?, screen_id=?, movie_id=?, seatmap=?, supervisor=?, upper_section=?, middle_section=?, lower_section=? WHERE id=?",(*data, id))
+        self.cur.execute("UPDATE screenings SET date=?, time=?, screen_id=?, movie_id=?, seatmap=? WHERE id=?",(*data, id))
 
         self.conn.commit()
 
@@ -341,6 +337,43 @@ class Database:
 
         self.cur.execute("SELECT seatmap FROM screenings WHERE id=?",(id,))
         return self.cur.fetchone()[0]
+
+
+    def get_upcoming(self):
+        #we want to find all of the screenings within the past 2 weeks, and send their information, along with all of the movies that are showing.
+        screenings = set()
+        movies = set()
+        for row in self.fetch()[2]:
+            date = row[1]
+            a = datetime.strptime(date, "%d-%m-%Y")
+            today = datetime.today()
+            inc = timedelta(days=14)
+            twoweeks = today + inc
+            if a >= today and a<=twoweeks:
+                screenings.add(row[0])
+                movies.add(row[4])
+        moviedata = []
+        for movie in movies:        
+            moviedata.append(self.quick_get_movie(movie))
+        
+        screeningdata = []
+        for screening in screenings:
+            screeningdata.append(self.quick_get_screening(screening))
+
+        return moviedata, screeningdata
+
+
+    def quick_get_screening(self, id):
+        data = self.fetch()[2]
+        for d in data:
+            if d[0] == id:
+                return d
+    
+    def quick_get_movie(self, id):
+        data = self.fetch()[0]
+        for d in data:
+            if d[0] == id:
+                return d
 
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=
@@ -890,3 +923,7 @@ seatmap = dat[0][5]
 #db.qr_code_generator(1)
 #db.ticket_to_pdf(1)
 #db.email_ticket('yourForename', 'yourSurname', 'yourEmail', 5)
+
+
+#Database('cinema.db').add_screen(25,5,5)
+#print(Database('cinema.db').get_upcoming())

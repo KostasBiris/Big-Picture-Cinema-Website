@@ -93,7 +93,6 @@ class AddScreening extends React.Component {
             label: v,
             value: v
           }));     
-          //console.log(options);
 
 
         return(

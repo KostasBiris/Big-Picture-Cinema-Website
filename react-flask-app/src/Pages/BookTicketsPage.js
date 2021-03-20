@@ -16,6 +16,8 @@ class BookTickets extends React.Component{
                       movieScreens: [],
                       timeChosen: '',
                       screenChosen: '',
+                      screenings: [],
+                      movies: []
                     };
         this.handleDate = this.handleDate.bind(this);
         this.handleTime = this.handleTime.bind(this);
@@ -25,8 +27,28 @@ class BookTickets extends React.Component{
         this.getMovieTimes = this.getMovieTimes.bind(this);
         this.getMovieScreens = this.getMovieScreens.bind(this);
         this.goNextPage = this.goNextPage.bind(this);
+        this.seekData = this.seekData.bind(this);
         
     }
+
+    seekData = () => {
+        fetch('/upcoming', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+
+        }).then(response => response.json()).then(data=> this.setState({screenings: data.screenings, movies: data.movies}))
+    }
+
+    componentDidMount() {
+        window.addEventListener('load', this.seekData);
+    }
+    componentWillUnmount() {
+        window.removeEventListener('load', this.seekData)
+    }
+
+
 
     handleDate = (e) => {
         e.preventDefault();
@@ -119,6 +141,7 @@ class BookTickets extends React.Component{
   
   
     render () {
+        console.log(this.state.screenings, this.state.movies);
       return (
         <React.Fragment>
             <head>

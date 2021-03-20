@@ -32,7 +32,10 @@ def serialize_movie(res):
         'release_date':res[7],
         'writers':res[5],
         'id' : res[8],
-        'poster_path' : res[9]
+        'poster_path' : res[9],
+        'runtime' : res[10],
+        'youtube_key': res[11],
+        'genres': res[12]
     }
 
 def serialize_user(res):
@@ -55,6 +58,25 @@ def serialize_all_movies(res):
     for i in range(len(res)):
         dic[i] =serialize_movie(res[i])
     return dic
+
+def serialize_screening(res):
+
+    return {
+        'id':res[0],
+        'date':res[1],
+        'time':res[2],
+        'screenid': res[3],
+        'movieid': res[4],
+        'seatmap':res[5].tolist()
+    }
+
+def serialize_all_screenings(res):
+    dic = {}
+
+    for i in range(len(res)):
+        dic[i] = serialize_screening(res[i])
+    return dic
+
 
 
 @app.route('/allmovies', methods=['POST'])
@@ -235,9 +257,13 @@ def add():
     release = data['release_date']
     omdbid = data['omdbid']
     poster_path = data['poster_path']
-    print(title, blurb, certificate, director, writers, leadactors, release, omdbid)
+    runtime = data['runtime']
+    youtube_key = data['youtube_key']
+    genres = data['genres']
+    print(title, blurb, certificate, director, writers, leadactors, release, omdbid, poster_path, runtime, youtube_key, genres)
 
-    db.add_movie(title, blurb, certificate, ' '.join(director), ' '.join(writers), ' '.join(leadactors[:len(leadactors)//10]), release, omdbid, poster_path)
+    db.add_movie(title, blurb, certificate, ' '.join(director), ' '.join(writers), ' '.join(leadactors[:len(leadactors)//10]), release, omdbid, poster_path,
+    runtime, youtube_key, ' '.join(str(genres)))
     return jsonify({'response': 'OK'})
 
 
@@ -262,12 +288,15 @@ def a_s():
     movie_id = data['movie_id']
 
     print(date, time, screen_id, movie_id)
-
+    db.add_screening(date,time,screen_id, movie_id)
     return jsonify({'response': 'OK'})
 
-   # date, time, screen_id, movie_id, supervisor, upper_section, middle_section, lower_section)
 
-   # db.add_screening()
+@app.route('/upcoming',methods=['POST'])
+def upcoming():
+    db = Database('cinema.db')
+    movies, screenings = db.get_upcoming()
+    return jsonify({'movies': serialize_all_movies(movies), 'screenings': serialize_all_screenings(screenings)})
 
 
 def spinner():
