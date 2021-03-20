@@ -83,14 +83,12 @@ class Banner extends React.Component {
 
         try {
             go = '/search/' + this.state.query.split(' ').join('_');
-            this.props.history.push(go);
+            console.log(this.props)
+            this.props.history.push(go, this.state);
         }
         catch (error) // TypeError is catched if this.props.history is undefined == Very likely that it is a redirection attempt
         {
             console.log('catched the error!')
-            this.props.props.history.go(2);     // Moves the pointer in the history stack by n entries
-            go = '/search/' + this.state.query.split(' ').join('_');
-            this.props.props.history.push(go);
         }
 
     }

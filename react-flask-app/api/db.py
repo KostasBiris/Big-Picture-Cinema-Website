@@ -63,7 +63,10 @@ class Database:
                                                             leadactors TEXT NOT NULL, \
                                                             release_date DATE NOT NULL, \
                                                             omdbid INTEGER NOT NULL, \
-                                                            poster_path TEXT NOT NULL)")
+                                                            poster_path TEXT NOT NULL, \
+                                                            runtime TEXT NOT NULL, \
+                                                            youtube_key TEXT NOT NULL, \
+                                                            genres TEXT NOT NULL)")
 
         #Screens table is created (if it does not exist) with the following fields: id (PK), capacity, seatmap, rows, columns
         self.cur.execute("CREATE TABLE IF NOT EXISTS screens (id INTEGER PRIMARY KEY, \
@@ -177,10 +180,10 @@ class Database:
     """
         Inserts a new entry into the movies table
     """
-    def add_movie(self, name,blurb,certificate,director, writers,leadactors, release_date, omdbid,poster_path):
+    def add_movie(self, name,blurb,certificate,director, writers,leadactors, release_date, omdbid, poster_path, runtime, youtube_key, genres):
         #Execute an SQL query to insert a new record into the movies database.
         #We use '?' to prevent against SQL injection attacks.
-        self.cur.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?,?,?,?)", (name, blurb, certificate, director, writers, leadactors, release_date, omdbid, poster_path))
+        self.cur.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?,?,?,?,?,?,?)", (name, blurb, certificate, director, writers, leadactors, release_date, omdbid, poster_path, runtime, youtube_key, genres))
 
         #Commit the changes we have made to the database.
         self.conn.commit()
@@ -192,7 +195,7 @@ class Database:
 
 
     def update_movie(self, id, data):
-        self.cur.execute("UPDATE movies SET name=?, blurb=?, certificate=?, director=?, leadactors=?, release_date=?, omdbid=? WHERE id=?",(*data, id))
+        self.cur.execute("UPDATE movies SET name=?, blurb=?, certificate=?, director=?, leadactors=?, release_date=?, omdbid=?, runtime=?, youtube_key=?, genres=?, WHERE id=?",(*data, id))
 
         self.conn.commit()
 
@@ -818,7 +821,7 @@ class Database:
                                                                revenue FLOAT NOT NULL)")
 #=-=-=-=-=-=-=-=-=-=ANALYTICS-=-=-=-=-=-=-=-=-=-=-=-=
 
-   def add_analytics(self, movie_id, date, revenue = 0.0):
+    def add_analytics(self, movie_id, date, revenue = 0.0):
         _hash = generate_password_hash(password)
         self.cur.execute("INSERT INTO analytics VALUES (NULL, ?,?,?)",(movie_id, date))
         self.conn.commit()
