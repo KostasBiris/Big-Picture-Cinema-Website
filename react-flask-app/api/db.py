@@ -818,7 +818,7 @@ class Database:
                                                                revenue FLOAT NOT NULL)")
 #=-=-=-=-=-=-=-=-=-=ANALYTICS-=-=-=-=-=-=-=-=-=-=-=-=
 
-   def add_analytics(self, movie_id, date, revenue = 0.0):
+    def add_analytics(self, movie_id, date, revenue = 0.0):
         _hash = generate_password_hash(password)
         self.cur.execute("INSERT INTO analytics VALUES (NULL, ?,?,?)",(movie_id, date))
         self.conn.commit()

@@ -251,6 +251,25 @@ def omdb(id):
     return jsonify({'response': 'NOT'})
 
 
+@app.route('/addascreening', methods=['POST'])
+def a_s():
+
+    db = Database('cinema.db')
+    data = request.json['data']
+    date = data['date']
+    time = data['time']
+    screen_id = data['screen']
+    movie_id = data['movie_id']
+
+    print(date, time, screen_id, movie_id)
+
+    return jsonify({'response': 'OK'})
+
+   # date, time, screen_id, movie_id, supervisor, upper_section, middle_section, lower_section)
+
+   # db.add_screening()
+
+
 def spinner():
     db = Database('cinema.db')
     print('hi!')
