@@ -310,13 +310,10 @@ def spinner():
         db.clear_sessions()
         #pass
 if __name__ == '__main__':
-<<<<<<< HEAD
     #thread = Thread(target=spinner, args=())
     #thread.daemon = True
     #thread.start()
-=======
     thread = Thread(target=spinner, args=())
     thread.daemon = True
     thread.start()
->>>>>>> df3b766cbb3801f68317836945ecf45d29ec0973
     app.run(debug=False, host='localhost', port='5000', threaded=True)
