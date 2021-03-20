@@ -15,8 +15,9 @@ import Screen2 from "./Seatmap/Screen2"
 import Screen3 from "./Seatmap/Screen3"
 import ScreenVIP from "./Seatmap/ScreenVIP"
 import ScreenIMAX from "./Seatmap/ScreenIMAX"
-
-
+import BookTickets from "./Pages/BookTicketsPage";
+import AddScreenings from "./Pages/AddScreenings";
+import AddScreening from './Pages/AddScreening';
 
 const App = () => (
     // Set up routing for our web application.
@@ -30,12 +31,14 @@ const App = () => (
         <Route exact path="/movie/:title/:movieID" component={MoviePage}/>
         <Route exact path="/register" component={CustomerRegister}/>
         <Route exact path ="/account" component={CustomerAccountPage}/>
-        <Route exact path="/payment" render={Payment}/>
-        <Route exact path="/screen1" render={Screen1}/>
+        <Route exact path="/payment" component={Payment}/>
+        <Route exact path="/screen1" component={Screen1}/>
         <Route exact path="/screen2" render={Screen2}/>
         <Route exact path="/screen3" render={Screen3}/>
         <Route exact path="/screenVIP" render={ScreenVIP}/>
         <Route exact path="/screenIMAX" render={ScreenIMAX}/>
+        <Route exact path="/book" component={BookTickets}/>
+        <Route exact path="/addscreening" component={AddScreening} />
       </Switch>
     </BrowserRouter>
   

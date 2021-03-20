@@ -23,13 +23,19 @@ def managepage():
 def serialize_movie(res):
 
     return {
-        'id': res[0],
-        'name':res[1],
+        'internalid': res[0],
+        'original_title':res[1],
         'blurb':res[2],
         'certificate':res[3],
         'director':res[4],
-        'leadactors':res[5],
-        'releasedate':res[6]
+        'leadactors':res[6],
+        'release_date':res[7],
+        'writers':res[5],
+        'id' : res[8],
+        'poster_path' : res[9],
+        'runtime' : res[10],
+        'youtube_key': res[11],
+        'genres': res[12]
     }
 
 def serialize_user(res):
@@ -53,7 +59,34 @@ def serialize_all_movies(res):
         dic[i] =serialize_movie(res[i])
     return dic
 
+def serialize_screening(res):
 
+    return {
+        'id':res[0],
+        'date':res[1],
+        'time':res[2],
+        'screenid': res[3],
+        'movieid': res[4],
+        'seatmap':res[5].tolist()
+    }
+
+def serialize_all_screenings(res):
+    dic = {}
+
+    for i in range(len(res)):
+        dic[i] = serialize_screening(res[i])
+    return dic
+
+
+
+@app.route('/allmovies', methods=['POST'])
+def allmovies():
+    db = Database('cinema.db')
+    data = db.fetch()[0]
+    return {'response': serialize_all_movies(data)}
+
+
+"""
 @app.route('/movie/<name>', methods = ['POST'])
 def view_movie(name):
     name = name.replace("_", " ")
@@ -61,6 +94,8 @@ def view_movie(name):
     movie = db.search_movies(name)
     if not movie: pass
     return serialize_all_movies(movie)
+"""
+
 @app.route('/movie/<name>/page', methods= ['POST'])
 def _view_movie(name):
     name = name.replace("_", " ")
@@ -110,6 +145,14 @@ def checkout():
 @app.route('/search')
 def search():
     return render_template('search.html')
+    
+@app.route('/analytics')
+def manager_analytics():
+    return render_template('manager_analytics.html')
+
+@app.route('/screens_description')
+def screens_description():
+    return render_template('screens_description.html')
 
 @app.route('/register')
 def customer_register():
@@ -205,6 +248,60 @@ def create_payment():
     except Exception as e:
         return jsonify(error=str(e)), 403    
 
+@app.route('/add', methods=['POST'])
+def add():
+    db = Database('cinema.db')
+    data = request.json['data']
+    title = data['title']
+    blurb = data['blurb']
+    certificate = data['certificate']
+    director = data['directors']
+    writers = data['writers']
+    leadactors = data['actors']
+    release = data['release_date']
+    omdbid = data['omdbid']
+    poster_path = data['poster_path']
+    runtime = data['runtime']
+    youtube_key = data['youtube_key']
+    genres = data['genres']
+    print(title, blurb, certificate, director, writers, leadactors, release, omdbid, poster_path, runtime, youtube_key, genres)
+
+    db.add_movie(title, blurb, certificate, ' '.join(director), ' '.join(writers), ' '.join(leadactors[:len(leadactors)//10]), release, omdbid, poster_path,
+    runtime, youtube_key, ' '.join(str(genres)))
+    return jsonify({'response': 'OK'})
+
+
+@app.route('/omdb/<id>', methods=['POST'])
+def omdb(id):
+
+    if Database('cinema.db').omdbid(id):
+        print(Database('cinema.db').omdbid(id))
+        return jsonify({'response': 'IN'})
+    
+    return jsonify({'response': 'NOT'})
+
+
+@app.route('/addascreening', methods=['POST'])
+def a_s():
+
+    db = Database('cinema.db')
+    data = request.json['data']
+    date = data['date']
+    time = data['time']
+    screen_id = data['screen']
+    movie_id = data['movie_id']
+
+    print(date, time, screen_id, movie_id)
+    db.add_screening(date,time,screen_id, movie_id)
+    return jsonify({'response': 'OK'})
+
+
+@app.route('/upcoming',methods=['POST'])
+def upcoming():
+    db = Database('cinema.db')
+    movies, screenings = db.get_upcoming()
+    return jsonify({'movies': serialize_all_movies(movies), 'screenings': serialize_all_screenings(screenings)})
+
 
 def spinner():
     db = Database('cinema.db')
@@ -213,7 +310,13 @@ def spinner():
         db.clear_sessions()
         #pass
 if __name__ == '__main__':
+<<<<<<< HEAD
     #thread = Thread(target=spinner, args=())
     #thread.daemon = True
     #thread.start()
+=======
+    thread = Thread(target=spinner, args=())
+    thread.daemon = True
+    thread.start()
+>>>>>>> df3b766cbb3801f68317836945ecf45d29ec0973
     app.run(debug=False, host='localhost', port='5000', threaded=True)

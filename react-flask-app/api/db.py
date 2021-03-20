@@ -14,6 +14,7 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.lib import colors
 import time
 import PIL
+from datetime import datetime, timedelta
 """
     TODO:
         comments and documentation.
@@ -61,28 +62,29 @@ class Database:
                                                             director TEXT NOT NULL, \
                                                             writers TEXT NOT NULL, \
                                                             leadactors TEXT NOT NULL, \
-                                                            release_date DATE NOT NULL)")
+                                                            release_date DATE NOT NULL, \
+                                                            omdbid INTEGER NOT NULL, \
+                                                            poster_path TEXT NOT NULL, \
+                                                            runtime TEXT NOT NULL, \
+                                                            youtube_key TEXT NOT NULL, \
+                                                            genres TEXT NOT NULL)")
 
         #Screens table is created (if it does not exist) with the following fields: id (PK), capacity, seatmap, rows, columns
         self.cur.execute("CREATE TABLE IF NOT EXISTS screens (id INTEGER PRIMARY KEY, \
                                                              capacity INTEGER NOT NULL,\
                                                              seatmap BLOB NOT NULL)")
 
-        #Screenings table is created (if it does not exist) with the following fields: id (PK), date, time, screenid (FK), movieid (FK), seatmap
+        #Screenings table is created (if it does not exist) with the following fields: id (PK), date, time, screen_id (FK), movie_id (FK), seatmap
         self.cur.execute("CREATE TABLE IF NOT EXISTS screenings (id INTEGER PRIMARY KEY, \
                                                                 date DATE NOT NULL,\
                                                                 time TIME NOT NULL, \
-                                                                screenid INTEGER REFERENCES screens(id) NOT NULL,\
-                                                                movieid INTEGER REFERENCES movies(id) NOT NULL,\
-                                                                seatmap BLOB NOT NULL, \
-                                                                supervisor INTEGER REFERENCES employees(id),\
-                                                                upper_section INTEGER REFERENCES employees(id), \
-                                                                middle_section INTEGER REFERENCES employees(id), \
-                                                                lower_section INTEGER REFERENCES employees(id))")
+                                                                screen_id INTEGER REFERENCES screens(id) NOT NULL,\
+                                                                movie_id INTEGER REFERENCES movies(id) NOT NULL,\
+                                                                seatmap BLOB NOT NULL)")
 
         self.cur.execute("CREATE TABLE IF NOT EXISTS bookings (id INTEGER PRIMARY KEY, \
-                                                              screeningid INTEGER REFERENCES screenings(id) NOT NULL, \
-                                                              customerid INTEGER REFERENCES customers(id), \
+                                                              screening_id INTEGER REFERENCES screenings(id) NOT NULL, \
+                                                              customer_id INTEGER REFERENCES customers(id), \
                                                               seats TEXT NOT NULL)")
 
         self.cur.execute("CREATE TABLE IF NOT EXISTS tickets (id INTEGER PRIMARY KEY, \
@@ -120,6 +122,19 @@ class Database:
                                                                customer_id INTEGER REFERENCES customers(id), \
                                                                employee_id INTEGER REFERENCES employees(id), \
                                                                manager_id INTEGER REFERENCES employees(id))")
+        
+        self.cur.execute("CREATE TABLE IF NOT EXISTS daily_analytics (id INTEGER PRIMARY KEY, \
+                                                                      movie_id INTEGER REFERENCES movies(id) NOT NULL,\
+                                                                      movie_name TEXT REFERENCES movies(name) NOT NULL,\
+                                                                      date DATE REFERENCES screenings(date) NOT NULL, \
+                                                                      revenue FLOAT NOT NULL,\
+                                                                      num_tickets INTEGER NOT NULL)")
+
+        self.cur.execute("CREATE TABLE IF NOT EXISTS overall_analytics (id INTEGER PRIMARY KEY, \
+                                                                        movie_id INTEGER REFERENCES movies(id) NOT NULL,\
+                                                                        movie_name TEXT REFERENCES movies(name) NOT NULL,\
+                                                                        revenue FLOAT NOT NULL,\
+                                                                        num_tickets INTEGER NOT NULL)")
 
         #commit the changes we have made to the database
         self.conn.commit()
@@ -170,16 +185,21 @@ class Database:
     """
         Inserts a new entry into the movies table
     """
-    def add_movie(self, name,blurb,certificate,director, writers,leadactors, release_date):
+    def add_movie(self, name,blurb,certificate,director, writers,leadactors, release_date, omdbid, poster_path, runtime, youtube_key, genres):
         #Execute an SQL query to insert a new record into the movies database.
         #We use '?' to prevent against SQL injection attacks.
-        self.cur.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?,?)", (name, blurb, certificate, director, writers, leadactors, release_date))
+        self.cur.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?,?,?,?,?,?,?)", (name, blurb, certificate, director, writers, leadactors, release_date, omdbid, poster_path, runtime, youtube_key, genres))
 
         #Commit the changes we have made to the database.
         self.conn.commit()
 
+    def omdbid(self, id):
+        self.cur.execute("SELECT * FROM movies WHERE omdbid=?",(id,))
+        return self.cur.fetchone()
+
+
     def update_movie(self, id, data):
-        self.cur.execute("UPDATE movies SET name=?, blurb=?, certificate=?, director=?, leadactors=?, release_date=? WHERE id=?",(*data, id))
+        self.cur.execute("UPDATE movies SET name=?, blurb=?, certificate=?, director=?, leadactors=?, release_date=?, omdbid=?, runtime=?, youtube_key=?, genres=?, WHERE id=?",(*data, id))
 
         self.conn.commit()
 
@@ -279,14 +299,14 @@ class Database:
 #=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 #=-=-=-=-=-=-=-=-=SCREENINGS-=-=-=-=-=-=-=-=-=
-    def add_screening(self, date, time, screenid, movieid,supervisor,upper_section,middle_section,lower_section):
-        self.cur.execute("SELECT seatmap FROM screens WHERE id=?",(screenid,))
+    def add_screening(self, date, time, screen_id, movie_id):
+        self.cur.execute("SELECT seatmap FROM screens WHERE id=?",(screen_id,))
         seatmap = self.cur.fetchone()[0]
-        self.cur.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?,?,?,?,?,?)",(date,time,screenid,movieid,seatmap,supervisor,upper_section,middle_section,lower_section))
+        self.cur.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?,?)",(date,time,screen_id,movie_id,seatmap))
 
         self.conn.commit()
 
-    def remove_screening(self, id=-1, date="00-00-00", time="00:01", screenid=-1, movieid=-1, movie_name="No name"):
+    def remove_screening(self, id=-1, date="00-00-00", time="00:01", screen_id=-1, movie_id=-1, movie_name="No name"):
 
         if(id==-1):
             
@@ -299,16 +319,16 @@ class Database:
                 self.cur.execute("DELETE FROM screenings WHERE time=?",(time,))
 
             #Remove all screenings in a certain screen room
-            elif(screenid!=-1):
-                self.cur.execute("DELETE FROM screenings WHERE screenid=?",(screenid,))
+            elif(screen_id!=-1):
+                self.cur.execute("DELETE FROM screenings WHERE screen_id=?",(screen_id,))
             
             #Remove all scrennings of a certain movie using its ID
-            elif(movieid!=-1):
-                self.cur.execute("DELETE FROM screenings WHERE movieid=?",(movieid,))
+            elif(movie_id!=-1):
+                self.cur.execute("DELETE FROM screenings WHERE movie_id=?",(movie_id,))
 
             #Remove all screenings of a certain movie usings its name
             elif(movie_name!="No name"):
-                self.cur.execute("DELETE FROM screenings INNER JOIN movies ON screenings.movieid = movies.id WHERE movies.name=?",(movie_name,))
+                self.cur.execute("DELETE FROM screenings INNER JOIN movies ON screenings.movie_id = movies.id WHERE movies.name=?",(movie_name,))
 
         else:
             self.cur.execute("DELETE FROM screenings WHERE id=?",(id,))
@@ -317,7 +337,7 @@ class Database:
 
     def update_screening(self, id, data):
 
-        self.cur.execute("UPDATE screenings SET date=?, time=?, screenid=?, movieid=?, seatmap=?, supervisor=?, upper_section=?, middle_section=?, lower_section=? WHERE id=?",(*data, id))
+        self.cur.execute("UPDATE screenings SET date=?, time=?, screen_id=?, movie_id=?, seatmap=? WHERE id=?",(*data, id))
 
         self.conn.commit()
 
@@ -327,36 +347,73 @@ class Database:
         return self.cur.fetchone()[0]
 
 
+    def get_upcoming(self):
+        #we want to find all of the screenings within the past 2 weeks, and send their information, along with all of the movies that are showing.
+        screenings = set()
+        movies = set()
+        for row in self.fetch()[2]:
+            date = row[1]
+            a = datetime.strptime(date, "%d-%m-%Y")
+            today = datetime.today()
+            inc = timedelta(days=14)
+            twoweeks = today + inc
+            if a >= today and a<=twoweeks:
+                screenings.add(row[0])
+                movies.add(row[4])
+        moviedata = []
+        for movie in movies:        
+            moviedata.append(self.quick_get_movie(movie))
+        
+        screeningdata = []
+        for screening in screenings:
+            screeningdata.append(self.quick_get_screening(screening))
+
+        return moviedata, screeningdata
+
+
+    def quick_get_screening(self, id):
+        data = self.fetch()[2]
+        for d in data:
+            if d[0] == id:
+                return d
+    
+    def quick_get_movie(self, id):
+        data = self.fetch()[0]
+        for d in data:
+            if d[0] == id:
+                return d
+
+
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=
 
 #=-=-=-=-=-=-=-=-=-=BOOKINGS-=-=-=-=-=-=-=-=-=-=
 
-    def add_booking(self, screeningid, customerid, seats):
-        seatmap = self.get_seatmap(screeningid)
-        seatmap = self.update_seatmap(self.get_seatmap_from_blob(seatmap), seats.split(","), screeningid,'+')
+    def add_booking(self, screening_id, customer_id, seats):
+        seatmap = self.get_seatmap(screening_id)
+        seatmap = self.update_seatmap(self.get_seatmap_from_blob(seatmap), seats.split(","), screening_id,'+')
         if not seatmap: return False
-        self.cur.execute("INSERT INTO bookings VALUES (NULL, ?,?,?)", (screeningid, customerid, seats))
+        self.cur.execute("INSERT INTO bookings VALUES (NULL, ?,?,?)", (screening_id, customer_id, seats))
         self.conn.commit()
-        self.cur.execute("SELECT id FROM bookings WHERE screeningid=? AND customerid=? AND seats=?",(screeningid, customerid, seats))
+        self.cur.execute("SELECT id FROM bookings WHERE screening_id=? AND customer_id=? AND seats=?",(screening_id, customer_id, seats))
         bookingid = self.cur.fetchone()[0]
-        self.cur.execute("SELECT forename, surname, email FROM customers WHERE id=?",(customerid,))
+        self.cur.execute("SELECT forename, surname, email FROM customers WHERE id=?",(customer_id,))
         forename, surname, email = self.cur.fetchone()
         qr = self.qr_code_generator(bookingid, forename, surname)
         db.add_ticket(bookingid, forename, surname, self.qr_to_blob(qr),email)
 
-    def remove_booking(self, id=-1, screenid=-1, customerid=-1, customer_forename="No forename", customer_surname="No surname",\
+    def remove_booking(self, id=-1, screen_id=-1, customer_id=-1, customer_forename="No forename", customer_surname="No surname",\
                         customer_email="No email", customer_phone=-1):
   
         if(id==-1):
             
             #Remove all bookings for a certain screen
-            if(screenid!=-1):
-                #self.cur.execute("SELECT id FROM bookings WHERE screenid=?",(screenid,))
+            if(screen_id!=-1):
+                #self.cur.execute("SELECT id FROM bookings WHERE screen_id=?",(screen_id,))
                 #id = self.cur.fetchall()
                 i = 0
             #Remove all bookings made by a certain customer using their ID
-            elif(customerid!=1):
-                self.cur.execute("SELECT id FROM bookings WHERE customerid=?",(customerid,))
+            elif(customer_id!=1):
+                self.cur.execute("SELECT id FROM bookings WHERE customer_id=?",(customer_id,))
                 id = self.cur.fetchall()
 
             #Remove all bookings made by a certain customer using their Full Name and their Email or Phone number
@@ -364,27 +421,27 @@ class Database:
     
                 if(email!="No email"):
                     
-                    self.cur.execute("SELECT customerid FROM customers WHERE forename=? AND surname=? AND email=?",(forename,surname,email,))
-                    customerid = self.cur.fetchall()
+                    self.cur.execute("SELECT customer_id FROM customers WHERE forename=? AND surname=? AND email=?",(forename,surname,email,))
+                    customer_id = self.cur.fetchall()
 
-                    self.cur.execute("SELECT id FROM bookings WHERE customerid=?",(customerid,))
+                    self.cur.execute("SELECT id FROM bookings WHERE customer_id=?",(customer_id,))
                     id = self.cur.fetchall()
 
                 else:
-                    self.cur.execute("SELECT customerid FROM customers WHERE forename=? AND surname=? AND phonenumber=?",(forename,surname,phonenumber,))
-                    customerid = self.cur.fetchall()
+                    self.cur.execute("SELECT customer_id FROM customers WHERE forename=? AND surname=? AND phonenumber=?",(forename,surname,phonenumber,))
+                    customer_id = self.cur.fetchall()
 
-                    self.cur.execute("SELECT id FROM bookings WHERE customerid=?",(customerid,))
+                    self.cur.execute("SELECT id FROM bookings WHERE customer_id=?",(customer_id,))
                     id = self.cur.fetchall()
 
                 
 
-        self.cur.execute("SELECT screeningid FROM bookings WHERE id=?",(id,))
-        screeningid = self.cur.fetchone()[0]
-        seatmap = self.get_seatmap(screeningid)
+        self.cur.execute("SELECT screening_id FROM bookings WHERE id=?",(id,))
+        screening_id = self.cur.fetchone()[0]
+        seatmap = self.get_seatmap(screening_id)
         self.cur.execute("SELECT seats FROM bookings WHERE id=?",(id,))
         seats = self.cur.fetchone()[0]
-        seatmap = self.update_seatmap(self.get_seatmap_from_blob(seatmap), seats.split(","), screeningid,'-')
+        seatmap = self.update_seatmap(self.get_seatmap_from_blob(seatmap), seats.split(","), screening_id,'-')
         self.cur.execute("DELETE FROM bookings WHERE id=?",(id,))
         remove_ticket(self, id)
 
@@ -392,17 +449,17 @@ class Database:
 
     def update_booking(self, id, data):
 
-        self.cur.execute("SELECT screeningid FROM bookings WHERE id=?",(id,))
-        screeningid = self.cur.fetchone()[0]
-        seatmap = self.get_seatmap(screeningid)
+        self.cur.execute("SELECT screening_id FROM bookings WHERE id=?",(id,))
+        screening_id = self.cur.fetchone()[0]
+        seatmap = self.get_seatmap(screening_id)
         self.cur.execute("SELECT seats FROM bookings WHERE id=?",(id,))
         seats = self.cur.fetchone()[0]
 
         if seats !=data[-1]:
-            self.update_seatmap(self.get_seatmap_from_blob(seatmap), seats.split(","), screeningid, '-')
-            self.update_seatmap(self.get_seatmap_from_blob(seatmap), data[-1].split(","), screeningid, '+')
+            self.update_seatmap(self.get_seatmap_from_blob(seatmap), seats.split(","), screening_id, '-')
+            self.update_seatmap(self.get_seatmap_from_blob(seatmap), data[-1].split(","), screening_id, '+')
 
-        self.cur.execute("UPDATE bookings SET screeningid=?, customerid=?, seats=? WHERE id=?",(*data, id))
+        self.cur.execute("UPDATE bookings SET screening_id=?, customer_id=?, seats=? WHERE id=?",(*data, id))
 
         self.conn.commit()
 
@@ -444,24 +501,15 @@ class Database:
 
 
 
-
-        self.cur.execute("CREATE TABLE IF NOT EXISTS tickets (id INTEGER PRIMARY KEY, \
-                                                              booking_id INTEGER REFERENCES bookings(id) NOT NULL,\
-                                                              movie_id INTEGER REFERENCES movies(id) NOT NULL,\
-                                                              price FLOAT NOT NULL,\
-                                                              forename TEXT NOT NULL, \
-                                                              surname TEXT NOT NULL, \
-                                                              email TEXT NOT NULL,\
-                                                              qr BLOB NOT NULL, \
-                                                              num_VIPs INTEGER NOT NULL,\
-                                                              num_children INTEGER NOT NULL,\
-                                                              num_elders INTEGER NOT NULL)")
 #=-=-=-=-=-=-=-=-=-=TICKETS-=-=-=-=-=-=-=-=-=-=
 
     def add_ticket(self, booking_id, movie_id, price, forename, surname, email, qr, num_VIPs = 0, num_children = 0, num_elders = 0):
 
-        self.cur.execute("INSERT INTO tickets VALUES (NULL, ?,?,?,?,?,?,?,?,?,?)",(booking_id, movie_id, price, forename, surname, email, qr, num_VIPs, num_children, num_elders))
+        self.cur.execute("INSERT INTO tickets VALUES (NULL, ?,?,?,?,?,?,?,?,?,?,?)",(booking_id, movie_id, screen_id, price, forename,\
+                                                                                     surname, email, qr, num_VIPs, num_children, num_elders))
+        
         self.conn.commit()
+
 
     #Removes a ticket when the booking is removed
     def remove_ticket(self, booking_id):
@@ -469,19 +517,18 @@ class Database:
         self.conn.commit()
 
     #Generates the QR code of the ticket which will be sent over email
-    def qr_code_generator(self, booking_id, forename, surname):
+    def qr_code_generator(self, ticket_id, screening_id):
         
         qr = qrcode.QRCode(
             version = 1,
-            box_size = 10,
+            box_size = 5,
             border = 5
         )
 
-        #self.cur.execute("SELECT * FROM bookings WHERE id=?",(booking_id,))
-        #data = self.cur.fetchall()
-        data = [booking_id,forename,surname,'A1,A2,A3']
+        #self.cur.execute("SELECT * FROM tickets WHERE id=?",(ticket_id,))
+        #data = self.cur.fetchone()
+        data = (1,2,3,4,7,'Kostas','Biris','kostas_biris@outlook.com',0,2,0)
         qr.add_data(data)
-        #qr.add_data(data)
         qr_code  = qr.make(fit=True)
         
         img = qr.make_image(fill = 'black', back_color = 'white')
@@ -495,30 +542,70 @@ class Database:
     def im_from_byes(self, bytes):
         return PIL.Image.frombytes(mode='1', size = bytes.shape[::-1], data=np.packbits(bytes, axis=1))
 
-    def ticket_to_pdf(self, booking_id, forename, surname):
+    def ticket_to_pdf(self, ticket_id):
 
-        #self.cur.execute("SELECT id FROM bookings WHERE id=?",(id,))
-        #booking_info = self.cur.fetchone()
+        #self.cur.execute("SELECT id FROM tickets WHERE id=?",(ticket_id,))
+        #database_info = self.cur.fetchone()
+        
+        #                     0           1         2          3        4       5         6       7    8      9           10           11
+        #database_info = (ticket_id, booking_id, movie_id, screen_id, price, forename, surname, email, qr, num_VIPs, num_children, num_elders)
+        database_info = (1,2,3,4,7.50,'Kostas','Biris','kostas_biris@outlook.com',0,2,0)
 
-        booking_info = (1,1,1,['A1','A2','A3'])
-        screening_id = booking_info[1]
-        customer_id = booking_info[2]
-        seats = booking_info[3]
+        #self.cur.execute("SELECT seats FROM bookings Where id=?",(database_info[1]))
+        #seats = self.cur.fetchone()
+        seats = ['A1','A2','A3']
+
+        #self.cur.execute("SELECT seats FROM bookings Where id=?",(database_info[1]))
+        #seats = self.cur.fetchone()
+
+        #self.cur.execute("SELECT name FROM movies WHERE id=?",(database_info[2]))     
+        #movie_name = self.cur.fetchone()
+        movie_name = 'Captain America: The Winter Soldier'
+
+
+        #self.cur.execute("SELECT screening_id FROM bookings WHERE id=?",(booking_id,))
+        #screening_id = self.cur.fetchone()
+
+        #self.cur.execute("SELECT date FROM screenings WHERE id=?",(screening_id,))
+        #date = self.cur.fetchone()
+        date = '19-05-2021'
+
+        #self.cur.execute("SELECT time FROM screenings WHERE id=?",(screening_id,))
+        #time = self.cur.fetchone()
+        time = '21:00'
+
+
+        #                    0         1           2         3
+        #ticket_info = (ticket_id, booking_id, movie_id, screen_id, 
+        #                 4        5       6       7   
+        #               price, forename, surname, email,
+        #                  8           9          10
+        #               num_VIPs, num_children, num_elders,
+        #                 11       12       13    14
+        #               seats, movie_name, date, time)
+        ticket_info = database_info + (seats, movie_name, date, time)
 
         #---------Contents-------------------------
         fileName = 'yourCinemaTickets.pdf'
         documentTitle = 'Cinema Tickets'
         title = 'The Big Picture Cinema'
-        subTitle = 'Your cinema Tickets'
+        subTitle = 'Your Cinema Tickets'
 
         textLines = [
-        f'Booking ID: {booking_id}',
-        f'Screening ID: {screening_id}',
-        f'Customer ID: {customer_id}',
-        f'Seats: {seats}',
+        f'Booking ID: {ticket_info[1]}',
+        f'Movie Name: {ticket_info[12]}',
+        f'Screen No: {ticket_info[3]}',
+        f'Date & time: {ticket_info[13]},{ticket_info[14]}',
         '',
-        f'Forename: {forename}',
-        f'Surname: {surname}'
+        f'Seats: {ticket_info[11]}',
+        f'Num VIP\'s: {ticket_info[8]}',
+        f'Num Children: {ticket_info[9]}',
+        f'Num Elders: {ticket_info[10]}',
+        '',
+        f'Forename: {ticket_info[5]}',
+        f'Surname: {ticket_info[6]}',
+        '',
+        f'Price: £{ticket_info[4]}',
         ]
 
         image = 'QR_Code.png'
@@ -596,6 +683,7 @@ class Database:
         smtp.login(cinema_email,cinema_password)
         smtp.send_message(message)
         print('Email Sent')
+
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=
 
@@ -703,7 +791,7 @@ class Database:
             
             #VIP seats
             else:
-                new_seatmap[n][i]=2
+                new_seatmap[n][i]=2 
         
         return new_seatmap
 
@@ -766,6 +854,95 @@ class Database:
         #self.conn.commit()
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
+
+
+        self.cur.execute("CREATE TABLE IF NOT EXISTS analytics (id INTEGER PRIMARY KEY, \
+                                                               movie_id INTEGER REFERENCES movies(id) NOT NULL,\
+                                                               date DATE REFERENCES screenings(date) NOT NULL, \
+                                                               revenue FLOAT NOT NULL)")
+#=-=-=-=-=-=-=-=-=-=ANALYTICS-=-=-=-=-=-=-=-=-=-=-=-=
+
+
+    def add_daily_analytics(self, movie_id, movie_name, date, revenue = 0.0, num_tickets = 0):
+        self.cur.execute("INSERT INTO daily_analytics VALUES (NULL, ?,?,?,?,?)",(movie_id, movie_name, date, revenue, num_tickets))
+        self.conn.commit()
+
+    def add_overall_analytics(self, movie_id, movie_name, revenue = 0.0, num_tickets = 0):
+        self.cur.execute("INSERT INTO overall_analytics VALUES (NULL, ?,?,?,?)",(movie_id, movie_name, revenue, num_tickets))
+        self.conn.commit()
+
+
+    def update_movie_daily_revenue(self, movie_name, date, price):
+        self.cur.execute("SELECT id FROM movies name=?",(movie_name,))
+        movie_id = self.cur.fetchone()
+
+        self.cur.execute("SELECT revenue FROM daily_analytics WHERE movie_name=? AND date=?",(movie_name,date,))
+        revenue = self.cur.fetchone()
+
+        revenue += price
+
+        self.cur.execute("UPDATE daily_analytics SET revenue=? WHERE movie_name=? AND date=?",(revenue, movie_name, date,))
+        
+        self.conn.commit()
+
+    def update_movie_overall_revenue(self, movie_name, price):
+        self.cur.execute("SELECT id FROM movies name=?",(movie_name,))
+        movie_id = self.cur.fetchone()
+
+        self.cur.execute("SELECT revenue FROM overall_analytics WHERE movie_name=?",(movie_name,))
+        revenue = self.cur.fetchone()
+
+        revenue += price
+
+        self.cur.execute("UPDATE daily_analytics SET revenue=? WHERE movie_name=? AND date=?",(revenue, movie_name, date,))
+        
+        self.conn.commit()
+
+    def cinema_weekly_income(self, week_start, week_end):
+        #self.cur.execute("SELECT revenue FROM daily_analytics WHERE date >=? AND date <=?",(week_start,week_end,))
+        #rev_tuple = self.cur.fetchall()
+        rev_tuple = (10,20,50,20)
+        weekly_income = sum(list(rev_tuple))    
+
+        #print(weekly_income)
+        return weekly_income
+
+    def cinema_overall_income(self):
+        #self.cur.execute("SELECT revenue FROM overall_analytics")
+        #rev_tuple = self.cur.fetchall()
+        rev_tuple = (10,20,50,20,60,10,20,10,50)
+        overall_income = sum(list(rev_tuple))
+
+        print(overall_income)
+        #return overall_income
+
+
+    def movie_weekly_revenue(self, movie_id, week_start, week_end):
+        #self.cur.execute("SELECT revenue FROM daily_analytics WHERE movie_id=? AND date >=? AND date <=?",(movie_id,week_start,week_end,))
+        #rev_tuple = self.cur.fetchall()
+        rev_tuple = (10,20,50,20)
+        weekly_income = sum(list(rev_tuple))    
+
+        #print(weekly_income)
+        return weekly_income
+
+    def movie_overall_income(self, movie_id):
+        self.cur.execute("SELECT date,revenue FROM overall_analytics WHERE movie_id=?",(movie_id,))
+        rev_tuple = self.cur.fetchone()
+        #rev_tuple = (10,20,50,20,60,10,20,10,50)
+        print(rev_tuple)
+        #overall_income = sum(list(rev_tuple))
+
+       # print(overall_income)
+        #return overall_income
+
+
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=
+
+
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 """
 db = Database('cinema.db')
 db.add_movie('Captain America: The First Avenger', 'Steve Rogers, a rejected military soldier, transforms into Captain America after taking a dose of a "Super-Soldier serum". But being Captain America comes at a price as he attempts to take down a war monger and a terrorist organization. '
@@ -808,6 +985,10 @@ seatmap = dat[0][5]
 """
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 #db = Database('cinema.db')
-#db.qr_code_generator(1,'yourForename','yourSurname')
-#db.ticket_to_pdf(1, 'yourForename', 'yourSurname')
+#db.qr_code_generator(1)
+#db.ticket_to_pdf(1)
 #db.email_ticket('yourForename', 'yourSurname', 'yourEmail', 5)
+
+
+#Database('cinema.db').add_screen(25,5,5)
+#print(Database('cinema.db').get_upcoming())

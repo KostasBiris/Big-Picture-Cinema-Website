@@ -113,8 +113,9 @@ export default function CheckoutForm() {
     display: 'flex',
     justifyContent:'center',
     alignContent:'center',
-    height:'100vh',
-    width:'100vw'
+    height:'21.5vh',
+    width:'30vw',
+    marginLeft:'500px'
 
   }
   const input ={
