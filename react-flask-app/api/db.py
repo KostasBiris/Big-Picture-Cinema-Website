@@ -62,7 +62,8 @@ class Database:
                                                             writers TEXT NOT NULL, \
                                                             leadactors TEXT NOT NULL, \
                                                             release_date DATE NOT NULL, \
-                                                            omdbid INTEGER NOT NULL)")
+                                                            omdbid INTEGER NOT NULL, \
+                                                            poster_path TEXT NOT NULL)")
 
         #Screens table is created (if it does not exist) with the following fields: id (PK), capacity, seatmap, rows, columns
         self.cur.execute("CREATE TABLE IF NOT EXISTS screens (id INTEGER PRIMARY KEY, \
@@ -176,10 +177,10 @@ class Database:
     """
         Inserts a new entry into the movies table
     """
-    def add_movie(self, name,blurb,certificate,director, writers,leadactors, release_date, omdbid):
+    def add_movie(self, name,blurb,certificate,director, writers,leadactors, release_date, omdbid,poster_path):
         #Execute an SQL query to insert a new record into the movies database.
         #We use '?' to prevent against SQL injection attacks.
-        self.cur.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?,?,?)", (name, blurb, certificate, director, writers, leadactors, release_date, omdbid))
+        self.cur.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?,?,?,?)", (name, blurb, certificate, director, writers, leadactors, release_date, omdbid, poster_path))
 
         #Commit the changes we have made to the database.
         self.conn.commit()
@@ -746,7 +747,7 @@ class Database:
             
             #VIP seats
             else:
-                new_seatmap[n][i]=2
+                new_seatmap[n][i]=2 
         
         return new_seatmap
 

@@ -23,13 +23,16 @@ def managepage():
 def serialize_movie(res):
 
     return {
-        'id': res[0],
-        'name':res[1],
+        'internalid': res[0],
+        'original_title':res[1],
         'blurb':res[2],
         'certificate':res[3],
         'director':res[4],
-        'leadactors':res[5],
-        'releasedate':res[6]
+        'leadactors':res[6],
+        'release_date':res[7],
+        'writers':res[5],
+        'id' : res[8],
+        'poster_path' : res[9]
     }
 
 def serialize_user(res):
@@ -52,6 +55,14 @@ def serialize_all_movies(res):
     for i in range(len(res)):
         dic[i] =serialize_movie(res[i])
     return dic
+
+
+@app.route('/allmovies', methods=['POST'])
+def allmovies():
+    db = Database('cinema.db')
+    data = db.fetch()[0]
+    return {'response': serialize_all_movies(data)}
+
 
 """
 @app.route('/movie/<name>', methods = ['POST'])
@@ -223,9 +234,10 @@ def add():
     leadactors = data['actors']
     release = data['release_date']
     omdbid = data['omdbid']
+    poster_path = data['poster_path']
     print(title, blurb, certificate, director, writers, leadactors, release, omdbid)
 
-    db.add_movie(title, blurb, certificate, ' '.join(director), ' '.join(writers), ' '.join(leadactors[:len(leadactors)//10]), release, omdbid)
+    db.add_movie(title, blurb, certificate, ' '.join(director), ' '.join(writers), ' '.join(leadactors[:len(leadactors)//10]), release, omdbid, poster_path)
     return jsonify({'response': 'OK'})
 
 
@@ -249,4 +261,4 @@ if __name__ == '__main__':
     thread = Thread(target=spinner, args=())
     thread.daemon = True
     thread.start()
-    app.run(debug=False, host='localhost', port='4000', threaded=True)
+    app.run(debug=False, host='localhost', port='5000', threaded=True)

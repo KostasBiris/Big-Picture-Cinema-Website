@@ -17,10 +17,19 @@ class SearchResult extends React.Component{
         this.href = '/movie/' + this.name + '/' + this.id;
         this.date = this.prop.release_date;
         this.date = this.date.split("-")[0];
-        this.state = {title: '', blurb: '', certificate:'', directors:[], writers:[], actors:[], release_date:'', omdbid: -1, set: false }
+        this.state = {title: '', blurb: '', certificate:'', directors:[], writers:[], actors:[], release_date:'', omdbid: -1, set: false, forscreening:false , poster_path : this.prop.poster_path}
+        this.addMovie = this.addMovie.bind(this);
+        this.stepUp = this.stepUp.bind(this);
+        this.addScreening = this.addScreening.bind(this);
     }
 
-
+    componentDidMount =() => {
+        if (this.props.forscreening !== undefined) {
+            if (this.props.forscreening) {
+                this.setState({forscreening: true});
+            }
+        }
+    }
 
     addMovie = () => {
         fetch('/add', {
@@ -66,6 +75,11 @@ class SearchResult extends React.Component{
             data.response === "IN" ? this.setState({set: true}) : this.setState({set:false}))
     }
 
+    addScreening = () => {
+        console.log(this.props);
+        this.props.history_.push('/addscreening', {state: this.state})
+    }
+
     
     render () {
         return (
@@ -77,7 +91,8 @@ class SearchResult extends React.Component{
                 <span >{this.date}</span>
                 </a>
                 <SearchIMDB onGetMovie={this.stepUp} movieID = {this.prop.id} />
-                {this.state.set ? <p>Already stored.</p> : <button onClick={this.addMovie}>ADD TO DATABASE</button>}
+                {this.state.forscreening ? <button onClick={this.addScreening}>ADD SCREENING</button> : 
+                this.state.set ? <p>Already stored.</p> : <button onClick={this.addMovie}>ADD TO DATABASE</button>}
                 {}
             </div>
         )
