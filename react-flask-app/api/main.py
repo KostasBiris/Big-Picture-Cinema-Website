@@ -107,6 +107,10 @@ def _managerlogin():
 def checkout():
     return render_template('checkout.html')
 
+@app.route('/search')
+def search():
+    return render_template('search.html')
+
 @app.route('/register')
 def customer_register():
     return render_template('customer_register.html')
@@ -209,7 +213,7 @@ def spinner():
         db.clear_sessions()
         #pass
 if __name__ == '__main__':
-    thread = Thread(target=spinner, args=())
-    thread.daemon = True
-    thread.start()
-    app.run(debug=False, host='localhost', port='4000', threaded=True)
+    #thread = Thread(target=spinner, args=())
+    #thread.daemon = True
+    #thread.start()
+    app.run(debug=False, host='localhost', port='5000', threaded=True)
