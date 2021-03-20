@@ -123,10 +123,18 @@ class Database:
                                                                employee_id INTEGER REFERENCES employees(id), \
                                                                manager_id INTEGER REFERENCES employees(id))")
         
-        self.cur.execute("CREATE TABLE IF NOT EXISTS analytics (id INTEGER PRIMARY KEY, \
-                                                               movie_id INTEGER REFERENCES movies(id) NOT NULL,\
-                                                               date DATE REFERENCES screenings(date) NOT NULL, \
-                                                               revenue FLOAT NOT NULL)")
+        self.cur.execute("CREATE TABLE IF NOT EXISTS daily_analytics (id INTEGER PRIMARY KEY, \
+                                                                      movie_id INTEGER REFERENCES movies(id) NOT NULL,\
+                                                                      movie_name TEXT REFERENCES movies(name) NOT NULL,\
+                                                                      date DATE REFERENCES screenings(date) NOT NULL, \
+                                                                      revenue FLOAT NOT NULL,\
+                                                                      num_tickets INTEGER NOT NULL)")
+
+        self.cur.execute("CREATE TABLE IF NOT EXISTS overall_analytics (id INTEGER PRIMARY KEY, \
+                                                                        movie_id INTEGER REFERENCES movies(id) NOT NULL,\
+                                                                        movie_name TEXT REFERENCES movies(name) NOT NULL,\
+                                                                        revenue FLOAT NOT NULL,\
+                                                                        num_tickets INTEGER NOT NULL)")
 
         #commit the changes we have made to the database
         self.conn.commit()
@@ -854,23 +862,80 @@ class Database:
                                                                revenue FLOAT NOT NULL)")
 #=-=-=-=-=-=-=-=-=-=ANALYTICS-=-=-=-=-=-=-=-=-=-=-=-=
 
-    def add_analytics(self, movie_id, date, revenue = 0.0):
-        _hash = generate_password_hash(password)
-        self.cur.execute("INSERT INTO analytics VALUES (NULL, ?,?,?)",(movie_id, date))
+
+    def add_daily_analytics(self, movie_id, movie_name, date, revenue = 0.0, num_tickets = 0):
+        self.cur.execute("INSERT INTO daily_analytics VALUES (NULL, ?,?,?,?,?)",(movie_id, movie_name, date, revenue, num_tickets))
         self.conn.commit()
 
-    def update_movie_daily_revenue(self, movie_name, date, price):
-        #self.cur.execute("SELECT id FROM movies name=?",(movie_name,))
-        #movie_id = self.cur.fetchone()
+    def add_overall_analytics(self, movie_id, movie_name, revenue = 0.0, num_tickets = 0):
+        self.cur.execute("INSERT INTO overall_analytics VALUES (NULL, ?,?,?,?)",(movie_id, movie_name, revenue, num_tickets))
+        self.conn.commit()
 
-        #self.cur.execute("SELECT revenue FROM analytics WHERE movie_name=? AND date=?",(movie_name,date,))
-        #revenue = self.cur.fetchone()
+
+    def update_movie_daily_revenue(self, movie_name, date, price):
+        self.cur.execute("SELECT id FROM movies name=?",(movie_name,))
+        movie_id = self.cur.fetchone()
+
+        self.cur.execute("SELECT revenue FROM daily_analytics WHERE movie_name=? AND date=?",(movie_name,date,))
+        revenue = self.cur.fetchone()
 
         revenue += price
 
-        self.cur.execute("UPDATE analytics SET revenue=? WHERE movie_name=? AND date=?",(revenue, movie_name, date,))
+        self.cur.execute("UPDATE daily_analytics SET revenue=? WHERE movie_name=? AND date=?",(revenue, movie_name, date,))
         
         self.conn.commit()
+
+    def update_movie_overall_revenue(self, movie_name, price):
+        self.cur.execute("SELECT id FROM movies name=?",(movie_name,))
+        movie_id = self.cur.fetchone()
+
+        self.cur.execute("SELECT revenue FROM overall_analytics WHERE movie_name=?",(movie_name,))
+        revenue = self.cur.fetchone()
+
+        revenue += price
+
+        self.cur.execute("UPDATE daily_analytics SET revenue=? WHERE movie_name=? AND date=?",(revenue, movie_name, date,))
+        
+        self.conn.commit()
+
+    def cinema_weekly_income(self, week_start, week_end):
+        #self.cur.execute("SELECT revenue FROM daily_analytics WHERE date >=? AND date <=?",(week_start,week_end,))
+        #rev_tuple = self.cur.fetchall()
+        rev_tuple = (10,20,50,20)
+        weekly_income = sum(list(rev_tuple))    
+
+        #print(weekly_income)
+        return weekly_income
+
+    def cinema_overall_income(self):
+        #self.cur.execute("SELECT revenue FROM overall_analytics")
+        #rev_tuple = self.cur.fetchall()
+        rev_tuple = (10,20,50,20,60,10,20,10,50)
+        overall_income = sum(list(rev_tuple))
+
+        print(overall_income)
+        #return overall_income
+
+
+    def movie_weekly_revenue(self, movie_id, week_start, week_end):
+        #self.cur.execute("SELECT revenue FROM daily_analytics WHERE movie_id=? AND date >=? AND date <=?",(movie_id,week_start,week_end,))
+        #rev_tuple = self.cur.fetchall()
+        rev_tuple = (10,20,50,20)
+        weekly_income = sum(list(rev_tuple))    
+
+        #print(weekly_income)
+        return weekly_income
+
+    def movie_overall_income(self, movie_id):
+        self.cur.execute("SELECT date,revenue FROM overall_analytics WHERE movie_id=?",(movie_id,))
+        rev_tuple = self.cur.fetchone()
+        #rev_tuple = (10,20,50,20,60,10,20,10,50)
+        print(rev_tuple)
+        #overall_income = sum(list(rev_tuple))
+
+       # print(overall_income)
+        #return overall_income
+
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=
 
