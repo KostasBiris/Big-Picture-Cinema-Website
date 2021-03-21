@@ -3,6 +3,7 @@ import main from '../static/main.css';
 import poster8 from '../static/poster8.jpg'
 import SeachIMDB from '../components/SearchIMDB';
 import Banner from '../components/Banner';
+import Select from 'react-select';
 
 let interval;
 class BookTickets extends React.Component{
@@ -53,15 +54,17 @@ class BookTickets extends React.Component{
 
 
     handleDate = (e) => {
-        e.preventDefault();
+        // e.preventDefault();
+        // console.log(e.target.value)
         if (e.target.value)
             this.setState({dateChosen : e.target.value});
     }
 
     handleTime = (e) => {
-        e.preventDefault();
-        if (e.target.timeValue)
-            this.setState({timeChosen: e.target.timeValue});
+        // e.preventDefault();
+        console.log("The time value is ")
+        if (e.target.value)
+            this.setState({timeChosen: e.target.value});
     }
 
     handleMovie = (e) => {
@@ -73,7 +76,7 @@ class BookTickets extends React.Component{
     handleScreen = (e) => {
         e.preventDefault();
         if (e.target.screenValue)
-            this.setState({timeChosen: e.target.screenValue});
+            this.setState({screenChosen: e.target.screenValue});
     }
 
     // fetch movies from db that are currently playing and render them.
@@ -95,29 +98,37 @@ class BookTickets extends React.Component{
 
     // filters out the times of the movieChosen and these are used to be rendered.
     getMovieTimes = () => {
-        // get the movie times
+        // getting the data before going into if statement or 'this' wont be recognised
+        let m = parseInt(this.state.movieChosen)
+        let date_chosen_day = this.state.dateChosen.split("-")[2]
         let times = [];
-        if(this.state.screening){
-        this.state.screenings.forEach(function(entry){
-            console.log('screening');
-            console.log(entry);
-            if(entry.movieid == this.state.movieChosen)
-                times.push(entry.screening_times)
-        })
+        if(this.state.screenings.length > 0){
+            this.state.screenings.forEach(function(entry){
+                // get the day for each of the entries
+                let movie_date_day = entry.date.split("-")[0]
+
+                if(parseInt(movie_date_day) == parseInt(date_chosen_day)){
+                    if(entry.id == m){
+                        times.push(entry.time)
+                    }
+                }
+            })
         }
-        
+        console.log(times)
         
         // render movie times
         { times.map( ( time, index ) => {
             return (
+                // <Select value = {times}  onChange={this.handleTime} options={times}  placeholder="time" name="times" />
                 <div onClick={this.handleTime} className="col-md-2 col-4 my-1 px-2 time-input">
-                <label for={index} timeValue={time} > {time}AM/PM </label>
-                <input type="radio" id ={index} className="cell py-1"></input>
+                    <label for={index} value={time} > {time}AM/PM </label>
+                    <input type="radio" id ={index} className="cell py-1"></input>
                 </div>
                 )
             })
         }
     }
+    
 
     // filers out the screens where the movie is played.
     getMovieScreens = (movieID) => {
@@ -175,7 +186,6 @@ class BookTickets extends React.Component{
 
             </head>
             <Banner props={this.props}/>
-            {/* <SeachIMDB onGetMovie={this.displayMovies} getTranding={'True'}/> */}
             <div className="header_text">
             <h1 style={{position:'absolute', left:'25px', color: '#4e5b60'}}>CHOOSE A MOVIE: </h1>
             </div>
@@ -214,7 +224,7 @@ class BookTickets extends React.Component{
                                     <>
                                     <input type="radio" name="gender" className="sr-only" id={index} />
                                     <label for={index}>
-                                        <figure><img id={index} onClick={this.handleMovie} className="image_box" 
+                                        <figure><img id={(index+1)} onClick={this.handleMovie} className="image_box" 
                                                 src={'https://image.tmdb.org/t/p/w500/' + movie.poster_path} className="new_movies" 
                                                 style={{position: 'relative'}} />
                                         </figure>
@@ -244,7 +254,7 @@ class BookTickets extends React.Component{
                         <div className="card border-0">
                                 <div className="card-header bg-dark">
                                     <div className="mx-0 mb-0 row justify-content-sm-center justify-content-start px-1"> 
-                                        <input type="date" onChange={this.handleTime} value={this.state.dateChosen}/>
+                                        <input type="date" onChange={this.handleDate} value={this.state.dateChosen}/>
                                             <span className="fa fa-calendar"></span>
                                         </div>
                                 </div>
