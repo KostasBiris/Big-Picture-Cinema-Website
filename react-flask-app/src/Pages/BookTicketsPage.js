@@ -9,8 +9,8 @@ class BookTickets extends React.Component{
     constructor(props) {
         super(props);
         this.state = {dateChosen: '',
-                      moviesPlaying: [], // stores array of movies currently playing
-                      moviesPosters: [], // stores array of posters of movies currently playing
+                    //   moviesPlaying: [], // stores array of movies currently playing
+                    //   moviesPosters: [], // stores array of posters of movies currently playing
                       movieChosen: [],   // stores the movie chosen by the user
                       movieTimes: [],
                       movieScreens: [],
@@ -23,7 +23,7 @@ class BookTickets extends React.Component{
         this.handleTime = this.handleTime.bind(this);
         this.handleMovie = this.handleMovie.bind(this);
         this.handleScreen = this.handleScreen.bind(this);
-        this.displayMovies = this.displayMovies.bind(this);
+        // this.displayMovies = this.displayMovies.bind(this);
         this.getMovieTimes = this.getMovieTimes.bind(this);
         this.getMovieScreens = this.getMovieScreens.bind(this);
         this.goNextPage = this.goNextPage.bind(this);
@@ -38,7 +38,9 @@ class BookTickets extends React.Component{
                 'Content-Type': 'application/json'
             },
 
-        }).then(response => response.json()).then(data=> this.setState({screenings: data.screenings, movies: data.movies}))
+        }).then(response => response.json()).then( data => {
+            this.setState({screenings: Object.values(data.screenings), movies: Object.values(data.movies)})
+            console.log(data)})
     }
 
     componentDidMount() {
@@ -74,33 +76,42 @@ class BookTickets extends React.Component{
             this.setState({timeChosen: e.target.screenValue});
     }
 
-    // fetch movies from db that are currently playing and render them. This function will work when we fetch our db
-    displayMovies = (data) => {
-        this.setState({moviesPlaying : data})
-        let moviesPosters = [];
+    // fetch movies from db that are currently playing and render them.
+    // displayMovies = (data) => {
+    //     console.log(data);
+    //     this.setState({moviesPlaying : data})
+    //     let moviesPosters = [];
 
-        if (this.state.moviesPlaying.results){
-            this.state.moviesPlaying.results.forEach(function(entry){
-                moviesPosters.push(entry.poster_path);
-            })
+    //     if (this.state.moviesPlaying.results){
+    //         this.state.moviesPlaying.results.forEach(function(entry){
+    //             moviesPosters.push(entry.poster_path);
+    //         })
+            
 
-            this.setState({moviesPosters : moviesPosters});
-            // console.log(this.state.moviesPosters);
-        }
-    }
+    //         this.setState({moviesPosters : moviesPosters});
+    //         // console.log(this.state.moviesPosters);
+    //     }
+    // }
 
-    // filters out the times of the movieChosen and these are used to be rendered. This function will work when we fetch our db
-    getMovieTimes = (movie) => {
+    // filters out the times of the movieChosen and these are used to be rendered.
+    getMovieTimes = () => {
+        // get the movie times
         let times = [];
-        this.state.moviesPlaying.results.forEach(function(entry){
-            times.push(entry.screening_times)
+        if(this.state.screening){
+        this.state.screenings.forEach(function(entry){
+            console.log('screening');
+            console.log(entry);
+            if(entry.movieid == this.state.movieChosen)
+                times.push(entry.screening_times)
         })
-        this.setState({movieTimes : times})
+        }
         
-        { this.state.movieTimes.map( ( time, index ) => {
+        
+        // render movie times
+        { times.map( ( time, index ) => {
             return (
                 <div onClick={this.handleTime} className="col-md-2 col-4 my-1 px-2 time-input">
-                <label for={index} timeValue={time} > {time}AM </label>
+                <label for={index} timeValue={time} > {time}AM/PM </label>
                 <input type="radio" id ={index} className="cell py-1"></input>
                 </div>
                 )
@@ -108,18 +119,22 @@ class BookTickets extends React.Component{
         }
     }
 
-    // filers out the screens where the movie is played. This function will work when we fetch our db
-    getMovieScreens = (movie) => {
+    // filers out the screens where the movie is played.
+    getMovieScreens = (movieID) => {
         let screens = [];
-        this.state.moviesPlaying.results.forEach(function(entry){
-            screens.push(entry.screen)
+        this.state.screenings.forEach(function(entry){
+            if(entry == movieID)
+                screens.push(entry.screenid)
         })
-        this.setState({movieScreens : screens})
+        // this.setState({movieScreens : screens})
         
-        { this.state.movieScreens.map( ( screen, index ) => {
+        { screens.map( ( screen, index ) => {
             return (
                 <div onClick={this.handleScreen} screenValue={screen} className="col-md-2 col-4 my-1 px-2 time-input">
-                    <label for={index}> {screen} </label>
+                    {screen == 4 ? <label for={index}> VMAX SCREEN</label> : 
+                                    screen == 5 ? <label for={index}> GOLDEN SCREEN </label> : 
+                                                    <label for={index}> SILVER SCREEN {screen}</label>
+                    }
                     <input type="radio" id ={index} className="cell py-1"></input>
                 </div>
                 )
@@ -128,20 +143,31 @@ class BookTickets extends React.Component{
     }
 
     goNextPage = () => {
+        console.log(this.state)
         let go = ''
-        if (this.state.screenChosen && this.state.dateChosen && this.state.movieChosen && this.state.timeChosen){   // quick validation before next page
-            go = this.props.history.location.pathname + this.screenChosen; // get the current url and add the next direction
-            console.log(go);
-            this.props.history.push(go, this.state);
-        }
-        else
-            alert('one of the fields in your booking is empty! Please fill every field to continue to the next page.')
+    //     if (this.state.screenChosen && this.state.dateChosen && this.state.movieChosen && this.state.timeChosen){   // quick validation before next page
+    //         go = this.props.history.location.pathname + this.screenChosen; // get the current url and add the next direction
+    //         console.log(go);
+    //         this.props.history.push(go, this.state);
+    //     }
+    //     else
+    //         alert('one of the fields in your booking is empty! Please fill every field to continue to the next page.')
     }
 
   
   
     render () {
-        console.log(this.state.screenings, this.state.movies);
+        console.log(this.state);
+
+        // let movieT;
+        // if (this.state.dateChosen != ''){
+        //     movieT = this.getMovieTimes();
+        // }
+        // else{
+        //     movieT = <p> Choose a movie to see the screening times </p>;
+        // }
+
+
       return (
         <React.Fragment>
             <head>
@@ -149,7 +175,7 @@ class BookTickets extends React.Component{
 
             </head>
             <Banner props={this.props}/>
-            <SeachIMDB onGetMovie={this.displayMovies} getTranding={'True'}/>
+            {/* <SeachIMDB onGetMovie={this.displayMovies} getTranding={'True'}/> */}
             <div className="header_text">
             <h1 style={{position:'absolute', left:'25px', color: '#4e5b60'}}>CHOOSE A MOVIE: </h1>
             </div>
@@ -160,15 +186,40 @@ class BookTickets extends React.Component{
                 <div className="container_new">
                     <div className="hover01 column">
                         {
-                        this.state.moviesPosters.length > 0 ?
-                            this.state.moviesPosters.map( ( poster, index ) => {
+                        this.state.movies.length > 0 ?
+                            this.state.movies.map( ( movie, index ) => { 
                                 return (
-                                <>
+                                    // this.props.history.location.state.fromMoviePage ? 
+                                    //     index == (this.state.moviesPosters.length - 1) ?
+
+                                    //         <input type="radio" name="gender" className="sr-only" id={index} checked={true}/>
+                                    //         <label for={index}>
+                                    //             <figure><img id={index} onClick={this.handleMovie} className="image_box" 
+                                    //                     src={'https://image.tmdb.org/t/p/w500/' + poster} className="new_movies" 
+                                    //                     style={{position: 'relative'}} />
+                                    //             </figure>
+                                    //         </label>
+                                            
+                                    //         : 
+                                            
+                                    //         <input type="radio" name="gender" className="sr-only" id={index} checked={true}/>
+                                    //         <label for={index}>
+                                    //             <figure><img id={index} onClick={this.handleMovie} className="image_box" 
+                                    //                     src={'https://image.tmdb.org/t/p/w500/' + poster} className="new_movies" 
+                                    //                     style={{position: 'relative'}} />
+                                    //             </figure>
+                                    //         </label>
+                                            
+                                    // :
+                                    <>
                                     <input type="radio" name="gender" className="sr-only" id={index} />
                                     <label for={index}>
-                                        <figure><img id={index} onClick={this.handleMovie} className="image_box" src={'https://image.tmdb.org/t/p/w500/' + poster} className="new_movies" style={{position: 'relative'}} /></figure>
+                                        <figure><img id={index} onClick={this.handleMovie} className="image_box" 
+                                                src={'https://image.tmdb.org/t/p/w500/' + movie.poster_path} className="new_movies" 
+                                                style={{position: 'relative'}} />
+                                        </figure>
                                     </label>
-                                </>
+                                    </>
                                 )
                               })
                             : <p>No results found.</p>
@@ -193,17 +244,17 @@ class BookTickets extends React.Component{
                         <div className="card border-0">
                                 <div className="card-header bg-dark">
                                     <div className="mx-0 mb-0 row justify-content-sm-center justify-content-start px-1"> 
-                                        <input type="date" onChange={this.handleDate} value={this.state.dateChosen}/>
+                                        <input type="date" onChange={this.handleTime} value={this.state.dateChosen}/>
                                             <span className="fa fa-calendar"></span>
                                         </div>
                                 </div>
                                 <div className="card-body p-3 p-sm-5">
                                     <div className="row text-center mx-0">
-                                        {/* {   WE WILL REPLACE THE CODE BELOW THIS COMMENTS BY THIS DYNAMIC CODE
-                                            this.state.movieChosen ? this.state.getMovieTimes(this.state.movieChosen) : 
+                                        {
+                                            this.state.dateChosen ? this.getMovieTimes() : 
                                                                      <p> Choose a movie to see the screening times </p>
-                                        } */}
-                                        <div className="col-md-2 col-4 my-1 px-2 time-input">
+                                        }
+                                        {/* <div className="col-md-2 col-4 my-1 px-2 time-input">
                                             <label for="1">11:00AM</label>
                                             <input type="radio" id ="1" className="cell py-1"></input>
                                         </div>
@@ -225,8 +276,8 @@ class BookTickets extends React.Component{
                                         </div>
                                         <div className="col-md-2 col-4 my-1 px-2 time-input">
                                             <input type="radio" id ="6" className="cell py-1"></input>
-                                            <label for="6">23:45PM</label>
-                                        </div>
+                                            <label for="6">23:45PM</label> 
+                                        </div> */} 
                                     </div>
                                 </div>
                         </div>
@@ -266,11 +317,11 @@ class BookTickets extends React.Component{
                                 </div>
                                 <div className="card-body p-3 p-sm-5">
                                     <div className="row text-center mx-0">
-                                        {/* {   WE WILL REPLACE THE CODE BELOW THIS COMMENTS BY THIS DYNAMIC CODE
-                                            this.state.movieScreens ? this.state.getMovieScreens(this.state.movieScreens) : 
+                                        {
+                                            this.state.movieScreens ? this.getMovieScreens(this.state.movieScreens) : 
                                                                      <p> Choose a movie to see the screening times </p>
-                                        } */}
-                                        <div className="col-md-2 col-4 my-1 px-2 time-input">
+                                        }
+                                        {/* <div className="col-md-2 col-4 my-1 px-2 time-input">
                                             <label for="1">SILVER SCREEN 1</label>
                                             <input type="radio" id ="1" className="cell py-1"></input>
                                         </div>
@@ -289,7 +340,7 @@ class BookTickets extends React.Component{
                                         <div className="col-md-2 col-4 my-1 px-2 time-input">
                                             <label for="5">GOLDEN SCREEN</label>
                                             <input type="radio" id ="5" className="cell py-1"></input>
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </div>
                         </div>
