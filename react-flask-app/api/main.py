@@ -142,6 +142,10 @@ def _managerlogin():
 def checkout():
     return render_template('checkout.html')
 
+@app.route('/search')
+def search():
+    return render_template('search.html')
+    
 @app.route('/analytics')
 def manager_analytics():
     return render_template('manager_analytics.html')
@@ -306,6 +310,9 @@ def spinner():
         db.clear_sessions()
         #pass
 if __name__ == '__main__':
+    #thread = Thread(target=spinner, args=())
+    #thread.daemon = True
+    #thread.start()
     thread = Thread(target=spinner, args=())
     thread.daemon = True
     thread.start()
