@@ -4,6 +4,8 @@ import poster8 from '../static/poster8.jpg'
 import SeachIMDB from '../components/SearchIMDB';
 import Banner from '../components/Banner';
 import Select from 'react-select';
+import moment from 'react-moment';
+
 
 let interval;
 class BookTickets extends React.Component {
@@ -30,6 +32,7 @@ class BookTickets extends React.Component {
         this.getMovieScreens = this.getMovieScreens.bind(this);
         this.goNextPage = this.goNextPage.bind(this);
         this.seekData = this.seekData.bind(this);
+        this.reformatd = this.reformatd.bind(this);
 
     }
 
@@ -55,17 +58,80 @@ class BookTickets extends React.Component {
 
 
 
+    reformatd = (inp) => {
+        let dArr = inp.split("-");
+        return dArr[2] + "-" + dArr[1] + "-" + dArr[0];
+
+    }
+
+
     handleDate = (e) => {
         // e.preventDefault();
         // console.log(e.target.value)
+
+        function formatd(inp) {
+
+
+            let dArr = inp.split("-");  // ex input "2010-01-18"
+            return dArr[2] + "-" + dArr[1] + "-" + dArr[0]; //ex out: "18/01/10"
+
+        }
+
+
         if (e.target.value)
-            this.setState({ dateChosen: e.target.value });
+            this.setState({ dateChosen: formatd(e.target.value) });
     }
 
     handleTime = (data) => {
         // e.preventDefault();
         console.log("The time value is ")
-        this.setState({ timeChosen: data })
+        this.setState({ timeChosen: data });
+        let date = this.state.dateChosen;
+        let movieid = parseInt(this.state.movieChosen);
+        let screenid = parseInt(this.state.screenChosen);
+        let time = data;
+        let screening;
+        if (this.state.screenings.length > 0) {
+            this.state.screenings.forEach(function (entry) {
+                if (entry.date === date) {
+                    if (entry.movieid === movieid) {
+                        
+                        if (entry.screenid === screenid) {
+                            console.log(entry.time, time);
+                            if (entry.time === data.value ) {
+                                screening = entry;
+                            }
+                        }
+                    }
+                }
+
+            })
+        }
+        this.setState({screening : screening});
+
+
+
+
+        /* let screenid = parseInt(This.state.screenChosen);
+         let timechosen = this.state.timeChosen;
+         let date_chosen_day = this.state.dateChosen.split("-")[2]
+         let screeningid=[];
+         this.state.screenings.forEach(function(entry) {
+             let movie_date_day = entry.date.split("-")[0];
+             if (parseInt(movie_date_day) == parseInt(date_chosen_day)) {
+                 if (entry.id == m) {
+                     if (entry.screenid == screenid) {
+                         if (entry.time ===timechosen) {
+                             screeningid.push(entry.id);
+                         }
+                     }
+ 
+                 }
+             }                         
+ 
+         })
+         this.setState({screeningid : screeningid[0]});*/
+
     }
     handleMovie = (e) => {
         // e.preventDefault();
@@ -101,7 +167,7 @@ class BookTickets extends React.Component {
     getMovieTimes = () => {
         // getting the data before going into if statement or 'this' wont be recognised
         let m = parseInt(this.state.movieChosen)
-        let date_chosen_day = this.state.dateChosen.split("-")[2]
+        let date_chosen_day = this.state.dateChosen.split("-")[0]
         let times = [];
         let screenid = parseInt(this.state.screenChosen);
         if (this.state.screenings.length > 0) {
@@ -171,8 +237,9 @@ class BookTickets extends React.Component {
     }
 
     goNextPage = () => {
-        console.log(this.state)
-        let go = ''
+        this.props.history.push('/as', this.state);
+        //console.log(this.state)
+        //let go = ''
         //     if (this.state.screenChosen && this.state.dateChosen && this.state.movieChosen && this.state.timeChosen){   // quick validation before next page
         //         go = this.props.history.location.pathname + this.screenChosen; // get the current url and add the next direction
         //         console.log(go);
@@ -271,7 +338,7 @@ class BookTickets extends React.Component {
                                 <div className="card border-0">
                                     <div className="card-header bg-dark">
                                         <div className="mx-0 mb-0 row justify-content-sm-center justify-content-start px-1">
-                                            <input type="date" onChange={this.handleDate} value={this.state.dateChosen} disabled={this.state.movieChosen.length === 0 ? "disabled" : ""} />
+                                            <input type="date" onChange={this.handleDate} value={this.reformatd(this.state.dateChosen)} disabled={this.state.movieChosen.length === 0 ? "disabled" : ""} />
                                             <span className="fa fa-calendar"></span>
                                         </div>
                                     </div>

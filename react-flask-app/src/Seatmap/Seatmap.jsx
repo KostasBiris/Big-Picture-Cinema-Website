@@ -9,7 +9,6 @@ import { PropTypes as T } from 'prop-types';
 
 
 export default class Seatmap extends React.Component {
-
     static propTypes = {
         addSeatCallback: T.func,
         alpha: T.bool,
@@ -99,6 +98,7 @@ export default class Seatmap extends React.Component {
     };
 
     renderSeats(seats, rowNumber, isRowSelected) {
+        console.log(this.state);
         const { selectedSeats, size } = this.state;
         const { maxReservableSeats } = this.props;
         return seats.map((seat, index) => {
