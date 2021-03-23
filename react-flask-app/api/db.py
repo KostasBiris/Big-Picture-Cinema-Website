@@ -15,6 +15,8 @@ from reportlab.lib import colors
 import time
 import PIL
 from datetime import datetime, timedelta
+import matplotlib.pyplot as plt
+
 """
     TODO:
         comments and documentation.
@@ -175,8 +177,20 @@ class Database:
         self.cur.execute("SELECT * FROM bookings")
         bookings = self.cur.fetchall()
 
+        self.cur.execute("SELECT * FROM tickets")
+        tickets = self.cur.fetchall()
+
         self.cur.execute("SELECT * FROM employees")
         employees = self.cur.fetchall()
+
+        self.cur.execute("SELECT * FROM sessions")
+        sessions = self.cur.fetchall()
+
+        self.cur.execute("SELECT * FROM daily_analytics")
+        daily_analytics = self.cur.fetchall()
+
+        self.cur.execute("SELECT * FROM overall_analytics")
+        overall_analytics = self.cur.fetchall()
 
         return movies, screens, screenings, customers, bookings, employees
 
@@ -843,8 +857,6 @@ class Database:
                 self.remove_session(d[0])
                 self.conn.commit()
         
-
-
     def remove_session(self,id):
         self.cur.execute("DELETE FROM sessions WHERE id=?",(id,))
         self.conn.commit()
@@ -855,11 +867,6 @@ class Database:
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 
-
-        self.cur.execute("CREATE TABLE IF NOT EXISTS analytics (id INTEGER PRIMARY KEY, \
-                                                               movie_id INTEGER REFERENCES movies(id) NOT NULL,\
-                                                               date DATE REFERENCES screenings(date) NOT NULL, \
-                                                               revenue FLOAT NOT NULL)")
 #=-=-=-=-=-=-=-=-=-=ANALYTICS-=-=-=-=-=-=-=-=-=-=-=-=
 
 
@@ -936,6 +943,18 @@ class Database:
        # print(overall_income)
         #return overall_income
 
+    def graph_analytics(self):
+        movies = ['Captain America','Thor','Hulk','Spiderman','Iron man']
+        revenues = [45000,42000,52000,49000,47000]
+
+        New_Colors = ['green','blue','purple','brown','teal']
+        plt.bar(movies, revenues, color=New_Colors)
+        plt.title('Overall Revenue', fontsize=14)
+        plt.xlabel('Movie Title', fontsize=14)
+        plt.ylabel('Revenue', fontsize=14)
+        plt.grid(True)
+        #plt.show()
+        plt.savefig('overall_movie_income.png')
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=
 
@@ -984,7 +1003,7 @@ seatmap = dat[0][5]
 #print(seatmap)
 """
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-#db = Database('cinema.db')
+db = Database('cinema.db')
 #db.qr_code_generator(1)
 #db.ticket_to_pdf(1)
 #db.email_ticket('yourForename', 'yourSurname', 'yourEmail', 5)
@@ -992,3 +1011,4 @@ seatmap = dat[0][5]
 
 #Database('cinema.db').add_screen(25,5,5)
 #print(Database('cinema.db').get_upcoming())
+db.graph_analytics()

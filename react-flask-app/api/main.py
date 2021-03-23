@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, jsonify
+from flask import Flask, render_template, request, redirect, jsonify,Markup
 from db import Database
 import socket
 import time
@@ -78,6 +78,44 @@ def serialize_all_screenings(res):
     return dic
 
 
+def serialize_daily_analytics(res):
+
+    return {
+        'id':res[0],
+        'movie_id':res[1],
+        'movie_name':res[2],
+        'date': res[3],
+        'revenue': res[4],
+        'num_tickets':res[5]
+    }
+
+def serialize_all_daily_analytics(res):
+    dic = {}
+
+    for i in range(len(res)):
+        dic[i] = serialize_daily_analytics(res[i])
+    return dic
+
+
+def serialize_overall_analytics(res):
+
+    return {
+        'id':res[0],
+        'movie_id':res[1],
+        'movie_name':res[2],
+        'revenue': res[3],
+        'num_tickets':res[4]
+    }
+
+def serialize_all_overall_analytics(res):
+    dic = {}
+
+    for i in range(len(res)):
+        dic[i] = serialize_daily_analytics(res[i])
+    return dic
+
+
+
 
 @app.route('/allmovies', methods=['POST'])
 def allmovies():
@@ -145,10 +183,44 @@ def checkout():
 @app.route('/search')
 def search():
     return render_template('search.html')
-    
-@app.route('/analytics')
-def manager_analytics():
-    return render_template('manager_analytics.html')
+
+
+#===============================================================================================================================
+
+
+labels = [
+    'Captain America', 'Spiderman', 'Thor', 'Black Widow',
+    'Iron Man', 'Hulk', 'Ant Man', 'Loki',
+    'Hawkeye', 'Falcon', 'Wasp', 'Winter Soldier'
+]
+
+values = [
+    967.67, 1190.89, 1079.75, 1349.19,
+    2328.91, 2504.28, 2873.83, 4764.87,
+    4349.29, 6458.30, 9907, 8000
+]
+
+colors = [
+    "#F7464A", "#46BFBD", "#FDB45C", "#FEDCBA",
+    "#ABCDEF", "#DDDDDD", "#ABCABC", "#4169E1",
+    "#C71585", "#FF4500", "#FEDCBA", "#46BFBD"]
+
+@app.route('/overall_analytics')
+def overall_analytics():
+    bar_labels=labels
+    bar_values=values
+    return render_template('overall_analytics.html', title='Best Performing Movies (Overall No Tickets sold)', max=17000, labels=bar_labels, values=bar_values)
+
+
+
+
+
+'''   
+@app.route('/overall_analytics')
+def overall_analytics():
+    return render_template('overall_analytics.html')
+'''
+#================================================================================================================================
 
 @app.route('/screens_description')
 def screens_description():
