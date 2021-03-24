@@ -55,102 +55,169 @@
     <br>
     <br>
     <br>
-        <form class="modal-content-payment">
-            <br>
-            <div class="header_text">
-                <h2 style="position:absolute; left:25px; color: #4e5b60; font-weight: bold;">CHECKOUT DETAILS</h2>
-              </div>
-              <br>
-              <br>
-            <div class="container p-3 my-3 border">
-                <div class="md-form mb-2">
-                    <input class="register_details form-control" type="text" name="first_name" id="first_name"
-                        placeholder="First name" style="color:black;" required />
-                </div>
-                <div class="md-form mb-2">
-                    <input class="register_details form-control" type="text" name="last_name" id="last_name"
-                        placeholder="Last name" style="color:black;" required />
-                </div>
-                <div class="md-form mb-2">
-                    <input class="register_details form-control" type="text" name="email" id="email"
-                        placeholder="E-mail address" style="color:black;" required />
-                </div>
-                <div class="md-form mb-2">
-                    <input class="register_details form-control" type="text" name="address" id="address"
-                        placeholder="Address Line 1" style="color:black;" required />
-                </div>
-                <div class="md-form mb-2">
-                    <input class="register_details form-control" type="text" name="address" id="address-2"
-                        placeholder="Address Line 2 (Optional)" style="color:black;" />
-                </div>
-                <div class="row">
-                    <div class="col-lg-4 col-md-12 mb-4">
-                        <select class="register-details custom-select d-block w-100" id="country" required>
-                            <option value="">Country</option>
-                            <option>United Kingdom</option>
-                        </select>
-                        <div class="invalid-feedback">
-                            Please select a valid country.
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6 mb-4">
-                        <input type="text" class="register-details form-control" id="zip" placeholder="Postcode" required>
-                        <div class="invalid-feedback">
-                            Postcode required.
-                        </div>
+    <form class="modal-content-payment">
+        <br>
+        <div class="header_text">
+            <h2 style="position:absolute; left:25px; color: #4e5b60; font-weight: bold;">CHECKOUT DETAILS</h2>
+        </div>
+        <br>
+        <br>
+        <div class="container p-3 my-3 border">
+            <div class="md-form mb-2">
+                <input class="register_details form-control" type="text" name="first_name" id="first_name"
+                    placeholder="First name" style="color:black;" required />
+            </div>
+            <div class="md-form mb-2">
+                <input class="register_details form-control" type="text" name="last_name" id="last_name"
+                    placeholder="Last name" style="color:black;" required />
+            </div>
+            <div class="md-form mb-2">
+                <input class="register_details form-control" type="text" name="email" id="email"
+                    placeholder="E-mail address" style="color:black;" required />
+            </div>
+            <div class="md-form mb-2">
+                <input class="register_details form-control" type="text" name="address" id="address"
+                    placeholder="Address Line 1" style="color:black;" required />
+            </div>
+            <div class="md-form mb-2">
+                <input class="register_details form-control" type="text" name="address" id="address-2"
+                    placeholder="Address Line 2 (Optional)" style="color:black;" />
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-12 mb-4">
+                    <select class="register-details custom-select d-block w-100" id="country" required>
+                        <option value="">Country</option>
+                        <option>United Kingdom</option>
+                    </select>
+                    <div class="invalid-feedback">
+                        Please select a valid country.
                     </div>
                 </div>
-                <hr class="mb-4">
-                <button class="btn btn-primary btn-lg btn-block" type="submit">PAY NOW</button>
-        </form>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <input type="text" class="register-details form-control" id="zip" placeholder="Postcode" required>
+                    <div class="invalid-feedback">
+                        Postcode required.
+                    </div>
+                </div>
+            </div>
+            <hr class="mb-4">
+            <button class="btn btn-primary btn-lg btn-block" type="submit">PAY NOW</button>
+    </form>
     </div>
     </div>
 
     <div class="container-fluid p-3 my-3 border modal-content-card">
-            <div class="header_text">
-                <h3 style="position:absolute; left:25px; color: #4e5b60; font-weight: bold;">ORDER SUMMARY</h3>
-              </div>
-              <br>
-              <br>
-              <br>
-              <br>
-              <div class="mb-4">
-          <ul class="list-group mb-3 z-depth-1">
-            <li class="d-flex justify-content-between">
-              <div>
-                <h4 class="my-0">2x Adult Tickets</h4>
-                <h5 class="text-muted">The Avengers, 03/07/2021, 21:00</h5>
-              </div>
-              <span class="text-muted">$15</span>
-            </li>
-            <li class="d-flex justify-content-between ">
-              <div>
-                <h4 class="my-0">1x Vip Tickets</h4>
-                <h5 class="text-muted">Casablanca, 06/08/2021, 19:00</h5>
-              </div>
-              <span class="text-muted">$13.50</span>
-            </li>
-            <li class=" d-flex justify-content-between ">
-              <div>
-                <h4 class="my-0">3x Kids Tickets</h4>
-                <h5 class="text-muted">Toy Story 4, 17/05/2021, 21:00</h5>
-              </div>
-              <span class="text-muted">$16.50</span>
-            </li>
-            <li>
-                <hr class="mb-4">
-            </li>
-            <li class="d-flex justify-content-between">
-              <h4>Total (USD)</h4>
-              <h4>$45</h4>
-            </li>
-          </ul>
+        <div class="header_text">
+            <h3 style="position:absolute; left:25px; color: #4e5b60; font-weight: bold;">ORDER SUMMARY</h3>
         </div>
-      </div>
+        <br>
+        <br>
+        <br>
+        <h5 class="my-0" style="position:absolute; left:25px;">Select Ticket Type: </h5>
+        <br>
+        <br>
+        <br>
+        <div class="mb-4">
+            <ul class="list-group mb-3 z-depth-1">
+                <li class="d-flex justify-content-center">
+                    <div>
+                        <div class="row">
+                            <div class="col-lg-10 col-md-12 mb-4">
+                                <select class="register-details custom-select d-block w-100" id="ticket-type" required>
+                                    <option value="">Ticket Type..</option>
+                                    <option>Adults Ticket 7.50£</option>
+                                    <option>Kids Ticket(0-12) 5.50£</option>
+                                    <option>Seniors Ticket 6.50£</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please select a valid ticket.
+                                </div>
+                            </div>
+                        </div>
+                        <h5 class="text-muted">The Avengers, 03/07/2021, 21:00</h5>
+                        <h5 class="text-muted">H10, Silver Screen 1</h5>
+                    </div>
+                    <span>
+                        <buton class="buttons_remove">Remove Item</buton>
+                    </span>
+                </li>
+                <li class="d-flex justify-content-center">
+                    <div>
+                        <div class="row">
+                            <div class="col-lg-10 col-md-12 mb-4">
+                                <select class="register-details custom-select d-block w-100" id="ticket-type" required>
+                                    <option value="">Ticket Type..</option>
+                                    <option>Adults Ticket 7.50£</option>
+                                    <option>Kids Ticket(0-12) 5.50£</option>
+                                    <option>Seniors Ticket 6.50£</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please select a valid ticket.
+                                </div>
+                            </div>
+                        </div>
+                        <h5 class="text-muted">The Avengers, 03/07/2021, 21:00</h5>
+                        <h5 class="text-muted">H12, Silver Screen 1</h5>
+                    </div>
+                    <span>
+                        <buton class="buttons_remove">Remove Item</buton>
+                    </span>
+                </li>
+                <li class="d-flex justify-content-center">
+                    <div>
+                        <div class="row">
+                            <div class="col-lg-10 col-md-12 mb-4">
+                                <select class="register-details custom-select d-block w-100" id="ticket-type" required>
+                                    <option value="">Ticket Type..</option>
+                                    <option>Adults Ticket 7.50£</option>
+                                    <option>Kids Ticket(0-12) 5.50£</option>
+                                    <option>Seniors Ticket 6.50£</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please select a valid ticket.
+                                </div>
+                            </div>
+                        </div>
+                        <h5 class="text-muted">The Avengers, 03/07/2021, 21:00</h5>
+                        <h5 class="text-muted">H11, Silver Screen 1</h5>
+                    </div>
+                    <span>
+                        <buton class="buttons_remove">Remove Item</buton>
+                    </span>
+                </li>
+                <li class="d-flex justify-content-center">
+                    <div>
+                        <div class="row">
+                            <div class="col-lg-10 col-md-12 mb-4">
+                                <select class="register-details custom-select d-block w-100" id="ticket-type" required>
+                                    <option value="" disabled="true">Ticket Type..</option>
+                                    <option>VIP Ticket 10.50£</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please select a valid ticket.
+                                </div>
+                            </div>
+                        </div>
+                        <h5 class="text-muted">The Avengers, 03/07/2021, 21:00</h5>
+                        <h5 class="text-muted">F14, Silver Screen 1</h5>
+                    </div>
+                    <span>
+                        <buton class="buttons_remove">Remove Item</buton>
+                    </span>
+                </li>
+
+                <li>
+                    <hr class="mb-4">
+                </li>
+                <li class="d-flex justify-content-between">
+                    <h4>Total (USD)</h4>
+                    <h4>$45</h4>
+                </li>
+            </ul>
+        </div>
     </div>
-  </main>
-
-
+    </div>
+    </main>
     <!--PAYMENT SYSTEM
  <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember the payment details-->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"

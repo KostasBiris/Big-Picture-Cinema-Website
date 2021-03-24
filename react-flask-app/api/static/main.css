@@ -78,6 +78,20 @@
   color:#ffffff;
 }
 
+.buttons_remove{
+  background-color: rgba(114, 54, 54, 0.87);
+  text-align: center;
+  text-decoration: none;
+  font-size:medium;
+  margin:auto;
+  padding:10px;
+  cursor: pointer;
+  border-radius: 25px;
+  border: none;
+  display: inline-block;
+  color:#ffffff;
+}
+
 .buttons_next{
   background-color: #4e5b60;
   text-align: center;
@@ -112,6 +126,10 @@
 
 .buttons_prev:hover{
   background: #3D5AFE;
+}
+
+.buttons_remove:hover{
+  background: #4e5b60;
 }
 .background {
   background: url("../../static/loginback.jpg");
@@ -592,4 +610,6 @@ footer {
   margin-bottom: 0px;
 }
 
-
+ul {
+  list-style-type: none;
+}
