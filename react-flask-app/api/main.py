@@ -184,17 +184,43 @@ def checkout():
 def search():
     return render_template('search.html')
 
+
+
+
 #===============================================================================================================================
 @app.route('/analytics')
 def analytics():
     return render_template('manager_analytics.html')
 
 
+
+cinemaLabels = [
+    'Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5',
+    'Week 6', 'Week 7', 'Week 8', 'Week 9', 'Week 10',
+    'Week 11', 'Week 12', 'Week 13', 'Week 14', 'Week 15',
+]
+
+cinemaValues = [
+    1967.67, 1290.89, 879.75, 1349.19,
+    2328.91, 2504.28, 2873.83, 4764.87,
+    4349.29, 1258.30, 707, 1800, 1500,
+    1577.5, 1247
+]
+
+
+# Adding the same values as overall movies for now to just have mock graphs for now. 
 @app.route('/weekly_movie_analytics')
 def weekly_movie_analytics():
     bar_labels=labels
     bar_values=values
-    return render_template('weekly_movie_analytics.html', title='Best Performing Movies (Overall No Tickets sold)', max=17000, labels=bar_labels, values=bar_values)
+    return render_template('weekly_movie_analytics.html', title='Best Performing Movies this week', max=17000, labels=bar_labels, values=bar_values)
+
+@app.route('/weekly_cinema_analytics')
+def weekly_cinema_analytics():
+    bar_labels=cinemaLabels
+    bar_values=cinemaValues
+    return render_template('weekly_cinema_analytics.html', title='Weekly sales in the cinema', max=17000, labels=bar_labels, values=bar_values)
+
 
 
 #===============================================================================================================================
