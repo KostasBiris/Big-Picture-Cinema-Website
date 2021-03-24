@@ -185,6 +185,10 @@ def search():
     return render_template('search.html')
 
 
+@app.route('/analytics')
+def analytics():
+    return render_template('manager_analytics.html')
+
 #===============================================================================================================================
 
 
