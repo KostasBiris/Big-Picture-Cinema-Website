@@ -1,12 +1,14 @@
-<!-- choosing between cinema and movies weekly options: -->
-
 <html lang="en">
 <head>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">   
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='main.css')}}" />
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">   
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='main.css')}}" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta charset="utf-8" />
+  <title>{{ title }}</title>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js'></script>
 </head>
 
 <body id="grad1">
@@ -48,53 +50,67 @@
 </nav>
 <br>
 <br>
-<!-- <form class="modal-content-payment"> -->
-  <form>
-    <br>
-    <div class="header_text">
-        <h2 style="position:absolute; left:25px; color: #4e5b60; font-weight: bold;">ANALYTICS DETAILS</h2>
-    </div>
-    <br>
-    <br>
-    <div class="text">
-        <h5 style="position:absolute; left:25px; color: #4e5b60; font-weight: bold;">Please choose one of the options for weekly analytics:</h5>
-    </div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <div class="container p-3 my-3 border">
-    <!-- <div class="container p-3 my-3"> -->
-        <div class="row">
-            <div class="col-lg-4 p-3 my-3 ">
-                <select class="register-details custom-select d-block w-100" required>
-                    <option value="">-</option>
-                    <option>Movie</option>
-                    <option>Cinema</option>
-                </select>
-                <br>
-                <br>
-                <br>
-                <div class = "bottom-right">
-                  <button class="a1 next btn btn-primary btn-large">Next &raquo;</button>
-                </div>
-            </div>
-            <!-- <div class="col-lg-4 col-md-12 mb-4">
-                <select class="register-details custom-select d-block w-100" id="country" required>
-                    <option value="">Weekly</option>
-                    <option>Monthly</option>
-                </select>
-            </div>
-            <div class="card-header">
-                <div class="mx-0 mb-0 row justify-content-sm-center justify-content-start px-1"> <input type="date"><span class="fa fa-calendar"></span></div>
-            </div> -->
-        </div>
-        <hr class="mb-4">
-        <br>
-        <br>
-        <br>
-    </div>
-</form>
+<div class="header_text">
+    <h1 style="position:absolute; left:25px; color: #4e5b60;">OVERALL ANALYTICS</h1>
+</div>
+<br>
+<br>
+<br>
+<br>
+
+<!--Column Graph of Overall Best Performing Movies-->
+<div>       
+  <center>
+    <h1>{{ title }}</h1>
+  </center>
+  <center>
+    <canvas id="chart" width="600" height="400"></canvas>
+    <script>
+      // bar chart data
+      var barData = {
+        labels : [
+          {% for item in labels %}
+           "{{ item }}",
+          {% endfor %}
+	],
+
+        datasets : [{
+          fillColor: " rgba(0, 128, 0,0.6)",
+          strokeColor: "rgba(151,187,205,1)",
+          pointColor: "rgba(151,187,205,1)",
+          data : [
+            {% for item in values %}
+               "{{ item }}",
+              {% endfor %}
+	    ]
+          }
+        ]
+      }
+
+     // get bar chart canvas
+     var mychart = document.getElementById("chart").getContext("2d");
+
+       steps = 10
+       max = {{max}}
+
+     // draw bar chart
+     new Chart(mychart).Bar(barData, {
+       scaleOverride: true,
+       scaleSteps: steps,
+       scaleStepWidth: Math.ceil(max / steps),
+       scaleStartValue: 0,
+       scaleShowVerticalLines: true,
+       scaleShowGridLines : true,
+       barShowStroke : true,
+       scaleShowLabels: true
+       }
+     );
+
+    </script>
+  </center>
+
+</div>
+
 <br>
 <br>
 <footer class="bg-light text-center">
