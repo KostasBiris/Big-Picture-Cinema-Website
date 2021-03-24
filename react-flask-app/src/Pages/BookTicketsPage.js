@@ -45,7 +45,7 @@ class BookTickets extends React.Component {
 
         }).then(response => response.json()).then(data => {
             this.setState({ screenings: Object.values(data.screenings), movies: Object.values(data.movies) })
-            console.log(data)
+            // console.log(data)
         })
     }
 
@@ -84,7 +84,6 @@ class BookTickets extends React.Component {
 
     handleTime = (data) => {
         // e.preventDefault();
-        console.log("The time value is ")
         this.setState({ timeChosen: data });
         let date = this.state.dateChosen;
         let movieid = parseInt(this.state.movieChosen);
@@ -97,7 +96,7 @@ class BookTickets extends React.Component {
                     if (entry.movieid === movieid) {
                         
                         if (entry.screenid === screenid) {
-                            console.log(entry.time, time);
+                            // console.log(entry.time, time);
                             if (entry.time === data.value ) {
                                 screening = entry;
                             }
@@ -108,6 +107,7 @@ class BookTickets extends React.Component {
             })
         }
         this.setState({screening : screening});
+        console.log(this.state.screening)
 
 
 
@@ -146,27 +146,12 @@ class BookTickets extends React.Component {
         //console.log(this.state);
     }
 
-    // fetch movies from db that are currently playing and render them.
-    // displayMovies = (data) => {
-    //     console.log(data);
-    //     this.setState({moviesPlaying : data})
-    //     let moviesPosters = [];
-
-    //     if (this.state.moviesPlaying.results){
-    //         this.state.moviesPlaying.results.forEach(function(entry){
-    //             moviesPosters.push(entry.poster_path);
-    //         })
-
-
-    //         this.setState({moviesPosters : moviesPosters});
-    //         // console.log(this.state.moviesPosters);
-    //     }
-    // }
-
     // filters out the times of the movieChosen and these are used to be rendered.
     getMovieTimes = () => {
+        console.log(this.state)
         // getting the data before going into if statement or 'this' wont be recognised
-        let m = parseInt(this.state.movieChosen)
+        let movieChosen = parseInt(this.state.movieChosen)
+        console.log(movieChosen);
         let date_chosen_day = this.state.dateChosen.split("-")[0]
         let times = [];
         let screenid = parseInt(this.state.screenChosen);
@@ -176,7 +161,7 @@ class BookTickets extends React.Component {
                 let movie_date_day = entry.date.split("-")[0]
 
                 if (parseInt(movie_date_day) == parseInt(date_chosen_day)) {
-                    if (entry.id == m) {
+                    if (entry.id == movieChosen) {
                         if (entry.screenid == screenid) {
                             times.push(entry.time)
                         }
@@ -184,8 +169,8 @@ class BookTickets extends React.Component {
                     }
                 }
             })
+            console.log(times)
         }
-        console.log(times)
 
 
         const options = times.map(v => ({
@@ -238,7 +223,7 @@ class BookTickets extends React.Component {
 
     goNextPage = () => {
         this.props.history.push('/as', this.state);
-        //console.log(this.state)
+        console.log(this.state)
         //let go = ''
         //     if (this.state.screenChosen && this.state.dateChosen && this.state.movieChosen && this.state.timeChosen){   // quick validation before next page
         //         go = this.props.history.location.pathname + this.screenChosen; // get the current url and add the next direction
@@ -252,15 +237,7 @@ class BookTickets extends React.Component {
 
 
     render() {
-        console.log(this.state);
-
-        // let movieT;
-        // if (this.state.dateChosen != ''){
-        //     movieT = this.getMovieTimes();
-        // }
-        // else{
-        //     movieT = <p> Choose a movie to see the screening times </p>;
-        // }
+        // console.log(this.state);
 
 
         return (
@@ -308,7 +285,7 @@ class BookTickets extends React.Component {
                                             <>
                                                 <input type="radio" name="gender" className="sr-only" id={index} />
                                                 <label for={index}>
-                                                    <figure><img id={(index + 1)} onClick={this.handleMovie} className="image_box"
+                                                    <figure><img id={movie.internalid} onClick={this.handleMovie} className="image_box"
                                                         src={'https://image.tmdb.org/t/p/w500/' + movie.poster_path} className="new_movies"
                                                         style={{ position: 'relative' }} />
                                                     </figure>
@@ -437,29 +414,29 @@ class BookTickets extends React.Component {
                                                             <p> Choose a screen to see the screening times </p>
                                                     }
                                                     {/* <div className="col-md-2 col-4 my-1 px-2 time-input">
-   <label for="1">11:00AM</label>
-   <input type="radio" id ="1" className="cell py-1"></input>
-</div>
-<div className="col-md-2 col-4 my-1 px-2 time-input">
-   <input type="radio" id ="2" className="cell py-1"></input>
-   <label for="2">13:30PM</label>
-</div>
-<div className="col-md-2 col-4 my-1 px-2 time-input">
-   <input type="radio" id ="3"className="cell py-1"></input>
-   <label for="3">16:00PM</label>
-</div>
-<div className="col-md-2 col-4 my-1 px-2 time-input">
-   <input type="radio" id ="4" className="cell py-1"></input>
-   <label for="4">19:00PM</label>
-</div>
-<div className="col-md-2 col-4 my-1 px-2 time-input">
-   <input type="radio" id ="5" className="cell py-1"></input>
-   <label for="5">21:30AM</label>
-</div>
-<div className="col-md-2 col-4 my-1 px-2 time-input">
-   <input type="radio" id ="6" className="cell py-1"></input>
-   <label for="6">23:45PM</label> 
-</div> */}
+                                                        <label for="1">11:00AM</label>
+                                                        <input type="radio" id ="1" className="cell py-1"></input>
+                                                        </div>
+                                                        <div className="col-md-2 col-4 my-1 px-2 time-input">
+                                                        <input type="radio" id ="2" className="cell py-1"></input>
+                                                        <label for="2">13:30PM</label>
+                                                        </div>
+                                                        <div className="col-md-2 col-4 my-1 px-2 time-input">
+                                                        <input type="radio" id ="3"className="cell py-1"></input>
+                                                        <label for="3">16:00PM</label>
+                                                        </div>
+                                                        <div className="col-md-2 col-4 my-1 px-2 time-input">
+                                                        <input type="radio" id ="4" className="cell py-1"></input>
+                                                        <label for="4">19:00PM</label>
+                                                        </div>
+                                                        <div className="col-md-2 col-4 my-1 px-2 time-input">
+                                                        <input type="radio" id ="5" className="cell py-1"></input>
+                                                        <label for="5">21:30AM</label>
+                                                        </div>
+                                                        <div className="col-md-2 col-4 my-1 px-2 time-input">
+                                                        <input type="radio" id ="6" className="cell py-1"></input>
+                                                        <label for="6">23:45PM</label> 
+                                                        </div> */}
                                                 </div>
                                             </div>
                                         </div>
