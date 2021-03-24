@@ -184,10 +184,18 @@ def checkout():
 def search():
     return render_template('search.html')
 
-
+#===============================================================================================================================
 @app.route('/analytics')
 def analytics():
     return render_template('manager_analytics.html')
+
+
+@app.route('/weekly_movie_analytics')
+def weekly_movie_analytics():
+    bar_labels=labels
+    bar_values=values
+    return render_template('weekly_movie_analytics.html', title='Best Performing Movies (Overall No Tickets sold)', max=17000, labels=bar_labels, values=bar_values)
+
 
 #===============================================================================================================================
 
