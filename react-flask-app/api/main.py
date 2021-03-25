@@ -85,7 +85,7 @@ def serialize_daily_analytics(res):
         'movie_id':res[1],
         'movie_name':res[2],
         'date': res[3],
-        'revenue': res[4],
+        'income': res[4],
         'num_tickets':res[5]
     }
 
@@ -103,7 +103,7 @@ def serialize_overall_analytics(res):
         'id':res[0],
         'movie_id':res[1],
         'movie_name':res[2],
-        'revenue': res[3],
+        'income': res[3],
         'num_tickets':res[4]
     }
 
@@ -245,12 +245,9 @@ colors = [
 
 @app.route('/overall_analytics')
 def overall_analytics():
-    bar_labels=labels
-    bar_values=values
-    return render_template('overall_analytics.html', title='Best Performing Movies (Overall No Tickets sold)', max=17000, labels=bar_labels, values=bar_values)
-
-
-
+    db = Database('cinema.db')
+    data = db.fetch()[0]
+    return {'overall_analytics': serialize_all_overall_analytics(data)}
 
 
 '''   
