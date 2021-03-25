@@ -904,45 +904,45 @@ class Database:
         self.cur.execute("UPDATE daily_analytics SET income=? WHERE movie_name=? AND date=?",(income, movie_name, date,))
         
         self.conn.commit()
-"""
-    def cinema_weekly_income(self, week_start, week_end):
-        #self.cur.execute("SELECT income FROM daily_analytics WHERE date >=? AND date <=?",(week_start,week_end,))
-        #rev_tuple = self.cur.fetchall()
-        rev_tuple = (10,20,50,20)
-        weekly_income = sum(list(rev_tuple))    
 
-        #print(weekly_income)
-        return weekly_income
+    # def cinema_weekly_income(self, week_start, week_end):
+    #     #self.cur.execute("SELECT income FROM daily_analytics WHERE date >=? AND date <=?",(week_start,week_end,))
+    #     #rev_tuple = self.cur.fetchall()
+    #     rev_tuple = (10,20,50,20)
+    #     weekly_income = sum(list(rev_tuple))    
 
-    def cinema_overall_income(self):
-        #self.cur.execute("SELECT income FROM overall_analytics")
-        #rev_tuple = self.cur.fetchall()
-        rev_tuple = (10,20,50,20,60,10,20,10,50)
-        overall_income = sum(list(rev_tuple))
+    #     #print(weekly_income)
+    #     return weekly_income
 
-        print(overall_income)
-        #return overall_income
+    # def cinema_overall_income(self):
+    #     #self.cur.execute("SELECT income FROM overall_analytics")
+    #     #rev_tuple = self.cur.fetchall()
+    #     rev_tuple = (10,20,50,20,60,10,20,10,50)
+    #     overall_income = sum(list(rev_tuple))
+
+    #     print(overall_income)
+    #     #return overall_income
 
 
-    def movie_weekly_income(self, movie_id, week_start, week_end):
-        #self.cur.execute("SELECT income FROM daily_analytics WHERE movie_id=? AND date >=? AND date <=?",(movie_id,week_start,week_end,))
-        #rev_tuple = self.cur.fetchall()
-        rev_tuple = (10,20,50,20)
-        weekly_income = sum(list(rev_tuple))    
+    # def movie_weekly_income(self, movie_id, week_start, week_end):
+    #     #self.cur.execute("SELECT income FROM daily_analytics WHERE movie_id=? AND date >=? AND date <=?",(movie_id,week_start,week_end,))
+    #     #rev_tuple = self.cur.fetchall()
+    #     rev_tuple = (10,20,50,20)
+    #     weekly_income = sum(list(rev_tuple))    
 
-        #print(weekly_income)
-        return weekly_income
+    #     #print(weekly_income)
+    #     return weekly_income
 
-    def movie_overall_income(self, movie_id):
-        self.cur.execute("SELECT date,income FROM overall_analytics WHERE movie_id=?",(movie_id,))
-        rev_tuple = self.cur.fetchone()
-        #rev_tuple = (10,20,50,20,60,10,20,10,50)
-        print(rev_tuple)
-        #overall_income = sum(list(rev_tuple))
+    # def movie_overall_income(self, movie_id):
+    #     self.cur.execute("SELECT date,income FROM overall_analytics WHERE movie_id=?",(movie_id,))
+    #     rev_tuple = self.cur.fetchone()
+    #     #rev_tuple = (10,20,50,20,60,10,20,10,50)
+    #     print(rev_tuple)
+    #     #overall_income = sum(list(rev_tuple))
 
-       # print(overall_income)
-        #return overall_income
-"""    
+    #    # print(overall_income)
+    #     #return overall_income
+    
     def quick_get_overall_incomes(self, id):
         data = self.fetch()[9]
         for d in data:
