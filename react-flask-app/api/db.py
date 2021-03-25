@@ -904,7 +904,7 @@ class Database:
         self.cur.execute("UPDATE daily_analytics SET income=? WHERE movie_name=? AND date=?",(income, movie_name, date,))
         
         self.conn.commit()
-'''
+"""
     def cinema_weekly_income(self, week_start, week_end):
         #self.cur.execute("SELECT income FROM daily_analytics WHERE date >=? AND date <=?",(week_start,week_end,))
         #rev_tuple = self.cur.fetchall()
@@ -942,7 +942,7 @@ class Database:
 
        # print(overall_income)
         #return overall_income
-'''    
+"""    
     def quick_get_overall_incomes(self, id):
         data = self.fetch()[9]
         for d in data:
