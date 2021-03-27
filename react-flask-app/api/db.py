@@ -138,6 +138,13 @@ class Database:
                                                                         income FLOAT NOT NULL,\
                                                                         num_tickets INTEGER NOT NULL)")
 
+        self.cur.execute("CREATE TABLE IF NOT EXISTS payments (id INTEGER PRIMARY KEY, \
+                                                               customer_id INTEGER REFERENCES customers(id),\
+                                                               holder_name TEXT NOT NULL, \
+                                                               postcode TEXT NOT NULL,\
+                                                               card_number INT NOT NULL, \
+                                                               expiration_date DATE NOT NULL)")
+
         #commit the changes we have made to the database
         self.conn.commit()
 
@@ -950,6 +957,33 @@ class Database:
                 return d
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=
+
+#=-=-=-=-=-=-=-=-=-=PAYMENTS-=-=-=-=-=-=-=-=-=-=
+    
+    def add_payment(self, payment_date, customer_id, holder_name, postcode, card_number, expiration_date):
+        _card_number = generate_password_hash(card_number)
+        self.cur.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?)",(customer_id, holder_name, postcode, _card_number, expiration_date))
+        self.conn.commit()
+
+
+    def remove_payment(self, payment_date, id=-1, customer_id=-1, holder_name="No name",):
+
+        if(id == -1):
+
+            #Remove a specific using the customer's id and the payment date
+            if(customer_id != -1):
+                self.cur.execute("DELETE FROM payments WHERE customer_id=? AND payment_date=?",(customer_id, payment_date,))
+            
+            #Remove a specific using the card holders name and the payment date
+            elif(customer_id == -1 and holder_name!="No name"):
+                self.cur.execute("DELETE FROM payments WHERE forename=? holder_name=? AND payment_date=?",(holder_name,payment_date,))
+        
+        else:
+            self.cur.execute("DELETE FROM payments WHERE id=?",(id,))
+
+        self.conn.commit()
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 
 
 
