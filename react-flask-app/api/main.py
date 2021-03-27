@@ -51,7 +51,8 @@ def serialize_movie(res):
         'poster_path' : res[9],
         'runtime' : res[10],
         'youtube_key': res[11],
-        'genres': res[12]
+        'genres': res[12],
+        'isupcoming' : isupcoming(res[0])
     }
 
 def serialize_user(res):
@@ -425,11 +426,22 @@ def upcoming():
     movies, screenings = db.get_upcoming()
     return jsonify({'movies': serialize_all_movies(movies), 'screenings': serialize_all_screenings(screenings)})
 
+def isupcoming(movieid):
+    db = Database('cinema.db')
+    movies = db.get_upcoming()[0]
+    movie = db.quick_get_movie(movieid)
+    print(movies, movie)
+    return movie in movies
+
+
+
 @app.route('/get_screens', methods=['POST'])
 def get_the_screens():
 
     db = Database('cinema.db')
     return jsonift({'screens' : serialize_all_screens(db.fetch()[1])})
+
+
 
 
 

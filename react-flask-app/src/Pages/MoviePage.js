@@ -13,7 +13,9 @@ class MoviePage extends React.Component {
         this.state = {IP: null, auth: false, 
                       returnedData: [], 
                       movieURL: '',
-                      fromMoviePage: true};
+                      fromMoviePage: true,
+                      isUpcoming: false
+                    };
         //Bind our method.
         this.getMovieData = this.getMovieData.bind(this);
         this.getClientIP = this.getClientIP.bind(this);
@@ -56,6 +58,20 @@ class MoviePage extends React.Component {
                 
             });
 
+
+
+        
+        // fetch('/isupcoming', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify({data: this.state.returnedData.internalid})
+        // })
+        // .then(response => response.json()).then(data =>{
+        //     this.setState({isUpcoming: data})
+        // })
+
     }
         
 
@@ -66,6 +82,7 @@ class MoviePage extends React.Component {
 
 
     render() {
+        console.log(this.state.isUpcoming);
         return (
             <React.Fragment>
                 <head>
@@ -114,9 +131,17 @@ class MoviePage extends React.Component {
                             <iframe width="600px" height="335px" src = {"https://www.youtube.com/embed/" + this.state.returnedData.youtube_key + "/?controls=1"}>
                             </iframe>
                     </div>
-                    <div class="text">
+                    {
+                        this.state.returnedData.isupcoming ?  <div class="text">
                         <button onClick={this.goBookTickets} className="tab_background" style={{position:'absolute',top:'80%',left:'1300px',width:'180px',height:'60px'}}>BOOK TICKETS</button>
                     </div>
+                    :
+                    <></>
+
+
+
+                    }
+                   
                 </div>
             </React.Fragment>
         )
