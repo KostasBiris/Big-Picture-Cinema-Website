@@ -20,6 +20,22 @@ def mainpage():
 def managepage():
     return render_template('business_main_interface.html')
 
+def serialize_screen(res):
+    return {
+        'id': res[0],
+        'capacity': res[1],
+        'seatmap' : res[2]
+    }
+
+
+def serialize_all_screens(res):
+    dic = {}
+    for i in range(len(res)):
+        dic[i] = serialize_screen(res[i])
+    return dic
+
+
+
 def serialize_movie(res):
 
     return {
@@ -408,6 +424,14 @@ def upcoming():
     db = Database('cinema.db')
     movies, screenings = db.get_upcoming()
     return jsonify({'movies': serialize_all_movies(movies), 'screenings': serialize_all_screenings(screenings)})
+
+@app.route('/get_screens', methods=['POST'])
+def get_the_screens():
+
+    db = Database('cinema.db')
+    return jsonift({'screens' : serialize_all_screens(db.fetch()[1])})
+
+
 
 
 def spinner():
