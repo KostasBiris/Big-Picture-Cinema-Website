@@ -46,6 +46,7 @@ export default class Seatmap extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
+        return true;
         return nextState.selectedSeats !== this.state.selectedSeats;
     }
 
