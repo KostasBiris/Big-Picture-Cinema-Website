@@ -111,7 +111,7 @@ def serialize_all_overall_analytics(res):
     dic = {}
 
     for i in range(len(res)):
-        dic[i] = serialize_daily_analytics(res[i])
+        dic[i] = serialize_overall_analytics(res[i])
     return dic
 
 

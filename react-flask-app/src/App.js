@@ -19,6 +19,7 @@ import BookTickets from "./Pages/BookTicketsPage";
 import AddScreenings from "./Pages/AddScreenings";
 import AddScreening from './Pages/AddScreening';
 import ArbitraryScreen from "./Seatmap/ArbitraryScreen";
+import OverallAnalytics from "./Pages/OverallAnalytics";
 
 const App = () => (
     // Set up routing for our web application.
@@ -41,6 +42,7 @@ const App = () => (
         <Route exact path="/book" component={BookTickets}/>
         <Route exact path="/addscreening" component={AddScreening} />
         <Route exact path="/as" component={ArbitraryScreen}/>
+        <Route exact path="/overall_analytics" component={OverallAnalytics}/>
       </Switch>
     </BrowserRouter>
   
