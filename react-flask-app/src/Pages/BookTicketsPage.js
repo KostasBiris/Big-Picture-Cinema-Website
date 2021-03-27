@@ -5,6 +5,7 @@ import SeachIMDB from '../components/SearchIMDB';
 import Banner from '../components/Banner';
 import Select from 'react-select';
 import moment from 'react-moment';
+import { relativeTimeThreshold } from 'moment';
 
 
 let interval;
@@ -24,7 +25,8 @@ class BookTickets extends React.Component {
             timeChosen: '',
             screenChosen: '',
             screenings: [],
-            movies: []
+            movies: [],
+            stepped : false
         };
         this.handleDate = this.handleDate.bind(this);
         this.handleTime = this.handleTime.bind(this);
@@ -50,13 +52,14 @@ class BookTickets extends React.Component {
             this.setState({ screenings: Object.values(data.screenings), movies: Object.values(data.movies) })
             // console.log(data)
         })
+
         if (this.props.location) {
             if (this.props.location.state) {
-                if (this.props.location.state.internalid) {
-
-                }
+                this.setState({movieChosen : this.props.location.state.returnedData.internalid});
             }
         }
+
+
 
     }
 
@@ -302,18 +305,8 @@ class BookTickets extends React.Component {
                                         this.state.movies.map((movie, index) => {
                                             return (
                                                 <>
-                                                    {
-                                                        this.props.location ? 
-                                                            this.props.location.state ? 
-                                                    <input type="radio" name="gender" className="sr-only" id={index} checked = {
-                                                        
-                                                            this.props.location.state.returnedData.internalid === movie.internalid ? true : false}/>
-                                                        :
-                                                        <input type="radio" name="gender" className="sr-only" id={index}/>
-
-                                                        :
-                                                        <input type="radio" name="gender" className="sr-only" id={index}/>
-                                                    }
+                                                    
+                                                    <input type="radio" name="gender" className="sr-only" id={index} checked = {parseInt(this.state.movieChosen) === parseInt(movie.internalid)} />
                                                     <label for={index}>
                                                         <figure><img id={movie.internalid} onClick={this.handleMovie} className="image_box"
                                                             src={'https://image.tmdb.org/t/p/w500/' + movie.poster_path} className="new_movies"
