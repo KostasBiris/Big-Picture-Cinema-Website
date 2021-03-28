@@ -13,7 +13,7 @@ const table = {
 }
 
 
-const td, th = {
+const td = {
     border: '1px solid #cccccc',
     padding: '8px'
 }
