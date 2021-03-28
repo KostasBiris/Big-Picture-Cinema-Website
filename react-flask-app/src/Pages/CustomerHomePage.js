@@ -24,7 +24,7 @@ class CustomerHomePage extends React.Component {
     constructor(props) {
         super(props);
         //By default the state is a blank query.
-        this.state = { query: '', IP: null, auth: false, response: undefined };
+        this.state = { query: '', IP: null, auth: false, response: undefined , movies: null};
         //Bind our methods.
         this.handleSearchChange = this.handleSearchChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -35,6 +35,9 @@ class CustomerHomePage extends React.Component {
         this.getClientIP = this.getClientIP.bind(this);
         this.assertAuth = this.assertAuth.bind(this);
         this.stepUp = this.stepUp.bind(this);
+        this.getSomeMovies = this.getSomeMovies.bind(this);
+        this.getRandomPosters = this.getRandomPosters.bind(this);
+        this.handleClick = this.handleClick.bind(this);
 
     }
 
@@ -94,6 +97,11 @@ class CustomerHomePage extends React.Component {
         _bootstrap.integrity ="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl";
         _bootstrap.crossOrigin ="anonymous";
         document.body.appendChild(_bootstrap);
+
+        this.getSomeMovies();
+
+        console.log(this.state);
+
 
         interval = setInterval(() => {
             if (this.IP !== null) {
@@ -180,7 +188,71 @@ class CustomerHomePage extends React.Component {
 
     }
 
+
+    async getSomeMovies () { 
+        await fetch('/upcoming', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+
+        }).then(response => response.json()).then(data => {
+            this.setState({movies: Object.values(data.movies) })
+        })
+        console.log(this.state.movies);
+    }
+
+
+    handleClick = (e, movie) => {
+        e.preventDefault();
+        var go = '/movie/' + movie.original_title.split(' ').join('_') + '/' + movie.id;
+        this.props.history.push(go, this.state);
+    } 
+
+    getRandomPosters = () => {
+        
+        let indexes = [];
+        console.log(this.state);
+        function getRandomInt(max) {
+            return Math.floor(Math.random() * Math.floor(max));
+        }
+
+        let i;
+        let movies = [];
+        this.state.movies.forEach(function (entry) {
+            movies.push(entry);
+        })
+        for (i = 0; i <movies.length; i++) {
+            let a = getRandomInt(movies.length);
+            indexes.push(i);
+        }
+        console.log(indexes);
+        return (
+            <div className="container">
+            <div className="row">
+                {indexes.map(i => {
+                    return (
+                    <div className="col-lg-3 col-md-4 hover01">
+                        <div className="col-md-2 col-md-offset-1">
+                            <figure><img onClick={(e) => {
+                                this.handleClick(e, movies[i])}
+                                } className="img-fluid new_movies" src={'https://image.tmdb.org/t/p/w500/' + movies[i].poster_path} alt=""/></figure>
+                        </div>
+                        
+
+                    </div>
+                    );
+                
+            })}
+            </div>
+            </div>
+            );
+    }
+
+
+
     render() {
+        console.log(this.state);
         if (this.isAuth()) {
             return (
                 <body>
@@ -384,30 +456,8 @@ class CustomerHomePage extends React.Component {
                     <br/>
                     <br/>
                     <br/>
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-lg-3 col-md-4 hover01">
-                                <div className="col-md-2 col-md-offset-1">
-                                    <figure><img className="img-fluid new_movies" src={poster8} alt=""/></figure>
-                                </div>
-                            </div>
-                            <div className="col-lg-3 col-md-4 hover01">
-                                <div className="col-md-2 col-md-offset-1">
-                                    <figure><img className="img-fluid new_movies" src={poster9}  alt=""/></figure>
-                                </div>
-                            </div>
-                            <div className="col-lg-3 col-md-4 hover01">
-                                <div className="col-md-2 col-md-offset-1">
-                                    <figure><img className="img-fluid new_movies" src={poster14} alt=""/></figure>
-                                </div>
-                            </div>
-                            <div className="col-lg-3 col-md-4 hover01">
-                                <div className="col-md-2 col-md-offset-1">
-                                    <figure><img className="img-fluid new_movies" src={poster13} alt=""/></figure>
-                                </div>
-                            </div>
-                    </div>
-                    </div>
+                    {/*this.getRandomPosters()*/}
+                    {this.state.movies !== null ? this.getRandomPosters() : <></>}
                     <br/>
                     <br/>
                     <div className="header_text">
