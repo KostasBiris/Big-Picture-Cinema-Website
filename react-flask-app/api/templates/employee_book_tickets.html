@@ -11,42 +11,30 @@
 
 <body id="grad1">
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#"><img src="{{url_for('static',filename='finlogo.png')}}"
-        style="top:1px;width:rem;height:8rem;"></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <a class="navbar-brand" href="#"><img src="{{url_for('static',filename='finlogo.png')}}" style="top:1px;width:rem;height:8rem;"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item dropdown">
-          <button class="tab_background dropdown-toggle text mr-3" data-toggle="dropdown" aria-haspopup="true"
-            aria-expanded="false">BOOK TICKETS</button>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <button class="dropdown-item" style="color:#f9bc50;">SILVER Screens</button>
-            <button class="dropdown-item" style="color:#f9bc50;">VMAX Screens</button>
-              <button class="dropdown-item" style="color:#f9bc50;">GOLDEN Screens</button>
-          </div>
-        </li>
-        <li class="nav-item">
-          <button class="tab_background text mr-3">VIEW MOVIES</button>
-        </li>
-        <li class="nav-item">
-          <button class="tab_background text mr-3">REGISTER CUSTOMER</button>
-        </li>
-        <li class="nav-item">
-          <button class="tab_background text mr-3">HELP</button>
-        </li>
-      </ul>
       <form class="form-inline my-2 my-lg-0">
         <button class="tab_background mr-3">LOG OUT</button>
-        <input class="mr-3" type="image" style="width:2rem;height:2rem;"
-          src="{{url_for('static',filename='usericon.png')}}" />
+        <input class="mr-3" type="image" style="width:2rem;height:2rem;" src="{{url_for('static',filename='usericon.png')}}"/>
         <input class="form-control mr-sm-2 search_bar" type="search" placeholder="Search here.." aria-label="Search">
         <button class="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>
       </form>
     </div>
   </nav>
+  <br>
+  <br>
+  <div class="container text-center">
+          <button class="tab_background text mr-3 btn-lg">BOOK TICKETS</button>
+          <button class="tab_background text mr-3 btn-lg">VIEW MOVIES</button>
+          <button class="tab_background text mr-3 btn-lg" >REGISTER CUSTOMER</button>
+          <button class="tab_background text mr-9 btn-lg">HELP</button>
+  </div>
+  <br>
+  <br>
+  <br>
   <!--NAV TABS-->
   <br>
   <div class="header_text">
