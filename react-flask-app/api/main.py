@@ -244,9 +244,6 @@ def employee_book_tickets():
 def booktickets():
     return render_template('book_tickets.html')
 
-@app.route('/book-tickets')
-def booktickets():
-    return render_template('book_tickets.html')
 
 @app.route('/primelogin', methods =['POST'])
 def _managerlogin():
