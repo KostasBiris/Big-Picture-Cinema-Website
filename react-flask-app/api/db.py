@@ -99,7 +99,9 @@ class Database:
                                                               qr BLOB NOT NULL, \
                                                               num_VIPs INTEGER NOT NULL,\
                                                               num_children INTEGER NOT NULL,\
-                                                              num_elders INTEGER NOT NULL)")
+                                                              num_elders INTEGER NOT NULL, \
+                                                              num_normal INTEGER NOT NULL, \
+                                                              date DATE NOT NULL)")
 
         self.cur.execute("CREATE TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY, \
                                                                forename TEXT NOT NULL, \
@@ -186,6 +188,10 @@ class Database:
 
         self.cur.execute("SELECT * FROM tickets")
         tickets = self.cur.fetchall()
+        # for i in range(len(tickets)):
+        #     tickets[i] = list(tickets[i])
+        #     tickets[i][7] = self.im_from_bytes((tickets[i][7])
+        #     tickets[i] = tuple(tickets[i])
 
         self.cur.execute("SELECT * FROM employees")
         employees = self.cur.fetchall()
@@ -199,7 +205,7 @@ class Database:
         self.cur.execute("SELECT * FROM overall_analytics")
         overall_analytics = self.cur.fetchall()
 
-        return movies, screens, screenings, customers, bookings, employees
+        return movies, screens, screenings, customers, bookings, tickets, employees, sessions, daily_analytics, overall_analytics
 
 
 #=-=-=-=-=-=-=-=-=-=-=-=MOVIES-=-=--=-=-=-=-=-=-=-=-=-=-=
@@ -419,8 +425,12 @@ class Database:
         bookingid = self.cur.fetchone()[0]
         self.cur.execute("SELECT forename, surname, email FROM customers WHERE id=?",(customer_id,))
         forename, surname, email = self.cur.fetchone()
-        qr = self.qr_code_generator(bookingid, forename, surname)
-        db.add_ticket(bookingid, forename, surname, self.qr_to_blob(qr),email)
+        self.cur.execute("SELECT movie_id FROM screenings WHERE id=?",(screening_id,))
+        movie_id = self.cur.fetchone()[0]
+        qr = self.qr_code_generator(bookingid, screening_id)
+        #db.add_ticket(bookingid, forename, surname, self.qr_to_blob(qr),email)
+        db.add_ticket(bookingid, movie_id, 10, forename, surname, email, self.qr_to_blob( qr))
+
 
     def remove_booking(self, id=-1, screen_id=-1, customer_id=-1, customer_forename="No forename", customer_surname="No surname",\
                         customer_email="No email", customer_phone=-1):
@@ -524,10 +534,10 @@ class Database:
 
 #=-=-=-=-=-=-=-=-=-=TICKETS-=-=-=-=-=-=-=-=-=-=
 
-    def add_ticket(self, booking_id, movie_id, price, forename, surname, email, qr, num_VIPs = 0, num_children = 0, num_elders = 0):
+    def add_ticket(self, booking_id, movie_id, price, forename, surname, email, qr,num_VIPs = 0, num_children = 0, num_elders = 0, num_normal=0):
 
-        self.cur.execute("INSERT INTO tickets VALUES (NULL, ?,?,?,?,?,?,?,?,?,?,?)",(booking_id, movie_id, screen_id, price, forename,\
-                                                                                     surname, email, qr, num_VIPs, num_children, num_elders))
+        self.cur.execute("INSERT INTO tickets VALUES (NULL, ?,?,?,?,?,?,?,?,?,?,?,?)",(booking_id, movie_id, price, forename,\
+                                                                                     surname, email, qr, num_VIPs, num_children, num_elders, num_normal, str(datetime.today().strftime("%d-%m-%Y"))))
         
         self.conn.commit()
 
@@ -538,7 +548,7 @@ class Database:
         self.conn.commit()
 
     #Generates the QR code of the ticket which will be sent over email
-    def qr_code_generator(self, ticket_id, screening_id):
+    def qr_code_generator(self, booking_id, screening_id):
         
         qr = qrcode.QRCode(
             version = 1,
@@ -560,7 +570,7 @@ class Database:
     def qr_to_blob(self, qr):
         return np.asarray(qr).dumps()
 
-    def im_from_byes(self, bytes):
+    def im_from_bytes(self, bytes):
         return PIL.Image.frombytes(mode='1', size = bytes.shape[::-1], data=np.packbits(bytes, axis=1))
 
     def ticket_to_pdf(self, ticket_id):
@@ -1039,3 +1049,9 @@ seatmap = dat[0][5]
 #Database('cinema.db').add_screen(25,5,5)
 #print(Database('cinema.db').get_upcoming())
 #db.graph_analytics()
+
+
+db = Database('cinema.db')
+db.add_customer('seatmapCustomerFName','seatmapCustomerSName', 'seatmapCustomerEmail', 'seatmapCustomerPhone','seatmapCustomerPassword','01-01-01')
+db.add_booking(1, 1, 'A1,A2,A3')
+#db.add_overall_analytics(1, 'spider-man', 10, 1)

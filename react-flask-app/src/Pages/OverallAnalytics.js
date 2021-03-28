@@ -1,199 +1,366 @@
 import React from 'react'
-import SearchIMDB from '../components/SearchIMDB';
-import main from '../static/main.css';
-
+//import SearchIMDB from '../components/SearchIMDB';
+//import main from '../static/main.css';
+import ManagerBanner from '../components/ManagerBanner';
+import moment from 'moment';
+import Select from 'react-select';
+import DatePicker from 'react-datepicker';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 var publicIP = require('public-ip')
 //Generic component for individual Movie Pages.
+
+
 
 class OverallAnalytics extends React.Component {
     constructor(props) {
         super(props);
-        this.title = props.match.params.title;
-        this.movieID = props.match.params.movieID;
-        this.state = {IP: null, auth: false, 
-                      returnedData: [], 
-                      movieURL: '',
-                      fromMoviePage: true};
-        //Bind our method.
-        this.getOverallAnalyticsData = this.getOverallAnalyticsData.bind(this);
-        this.getClientIP = this.getClientIP.bind(this);
-        //Call our method.
-        this.getOverallAnalyticsData();
-        this.getClientIP();
+        this.state = { comparisonData: [], tickets: [], screenings: [], movies: [], totalrev: 0, data: [], dataPastWeek: [], weeklyrev: 0, MovieA: '', MovieB: '', DateA:'', DateB: '', comparisonDrawn: false };
+        this.fetchChartData = this.fetchChartData.bind(this);
+        this.buildChartData = this.buildChartData.bind(this);
+        this.getMoviesA = this.getMoviesA.bind(this);
+        this.getMoviesB = this.getMoviesB.bind(this);
+        this.handleMovieA = this.handleMovieA.bind(this);
+        this.handleMovieB = this.handleMovieB.bind(this);
+        this.handleCompare = this.handleCompare.bind(this);
+        this.handleDateChangeA = this.handleDateChangeA.bind(this);
+        this.handleDateChangeB = this.handleDateChangeB.bind(this);
+        this.getid = this.getid.bind(this);
+        this.reformatd = this.reformatd.bind(this);
     }
-    getClientIP = () => {
-        (async () => {
-            this.setState({IP: await publicIP.v4()})
-        })();
+    async fetchChartData() {
+        const settings = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            }
+        };
+        const responseA = await fetch('/tickets', settings);
+        const tickets = await responseA.json();
+        this.setState({ tickets: Object.values(tickets.response) });
+
+        const responseB = await fetch('/allscreenings', settings);
+        const screenings = await responseB.json();
+        this.setState({ screenings: Object.values(screenings.response) });
+        const responseC = await fetch('/allmovies', settings);
+        const movies = await responseC.json();
+        this.setState({ movies: Object.values(movies.response) });
+        //console.log(this.state);
+
 
     }
-    
-    componentDidMount = () => {
-        window.addEventListener('load', this.getMovieData);
+
+    buildChartData = () => {
+        var i;
+        var j;
+        let data = [];
+        let totalrev = 0;
+        let movs = [];
+        let ticks = [];
+        let obj = {}
+        let title;
+
+        this.state.movies.forEach(function (entry) {
+            movs.push(entry);
+        })
+        this.state.tickets.forEach(function (entry) {
+            ticks.push(entry);
+        })
+        //console.log(this.state.movies);
+        for (i = 0; i < ticks.length; i++) {
+            //console.log(ticks[i]);
+            totalrev = totalrev + ticks[i].price;
+        }
+        this.setState({ totalrev: totalrev });
+        let rev = 0;
+
+
+        movs.forEach(function (mov) {
+            ticks.forEach(function (tik) {
+                if (mov.internalid === tik.movie_id) {
+                    rev = rev + tik.price;
+                }
+            })
+            obj = { "name": mov.original_title, "revenue (£)": rev }
+            data = [...data, obj];
+            rev = 0;
+        })
+        this.setState({ data: data });
+        // console.log(this.state);
+        rev = 0;
+        let weeklyrev = 0;
+        let newdata = [];
+        let inpastweek = false;
+        movs.forEach(function (mov) {
+            ticks.forEach(function (tik) {
+                if (mov.internalid === tik.movie_id) {
+                    let sevenAgo = moment().subtract(7, 'd');
+                    let curr = moment(tik.date, 'DD-MM-YYYY');
+                    if (curr.isSameOrBefore() && curr.isSameOrAfter(sevenAgo)) {
+                        inpastweek = true;
+                        rev += tik.price;
+                        weeklyrev += tik.price;
+                    }
+                }
+
+            })
+            if (inpastweek) {
+                obj = { "name": mov.original_title, "revenue (£)": rev }
+                newdata = [...newdata, obj];
+                rev = 0;
+                inpastweek = false;
+            }
+        })
+        this.setState({ dataPastWeek: newdata });
+        this.setState({ weeklyrev: weeklyrev });
     }
 
-    componentDidMount = () => {
-        window.removeEventListener('load', this.getMovieData);
+
+    async componentDidMount() {
+        await this.fetchChartData();
+        this.buildChartData();
     }
 
-    //Method for getting the data of the specific requested movie.
-    getOverallAnalyticsData = () => {
-        // // to fetch from our database
-        // // Invoke a request to our rest API to get the data of the overall analytics.
-        // var route = this.title + '/page';
-        // fetch(route, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify({ movie: this.title })
-        // })
-        //     .then(response => response.json()).then(data => {
+    getMoviesA = () => {
+        const options = this.state.movies.map(v => ({
+            label: v.original_title,
+            value: v.original_title
+        }));
+        return (
+            <div>
+                <Select onChange={this.handleMovieA} value={this.state.MovieA} options={options} placeholder="Movie" name="movieA" />
+            </div>
+        )
+    }
 
-        //         this.setState({ returnedData: data });
-        //         console.log(this.state.returnedData);
-                
-        //     });
-            // to fetch from our database
-        
-        this.setState({ returnedData : Object.values(data)})
 
-    } 
+    handleDateChangeA = (e) => {
+        // e.preventDefault();
+        // console.log(e.target.value)
+
+        function formatd(inp) {
+
+
+            let dArr = inp.split("-");  // ex input "2010-01-18"
+            return dArr[2] + "-" + dArr[1] + "-" + dArr[0]; //ex out: "18/01/10"
+
+        }
+
+
+        if (e.target.value)
+            this.setState({ DateA: formatd(e.target.value) });
+    }
+    handleDateChangeB = (e) => {
+        // e.preventDefault();
+        // console.log(e.target.value)
+
+        function formatd(inp) {
+
+
+            let dArr = inp.split("-");  // ex input "2010-01-18"
+            return dArr[2] + "-" + dArr[1] + "-" + dArr[0]; //ex out: "18/01/10"
+
+        }
+
+
+        if (e.target.value)
+            this.setState({ DateB: formatd(e.target.value) });
+    }
+
+    reformatd = (inp) => {
+        let dArr = inp.split("-");
+        return dArr[2] + "-" + dArr[1] + "-" + dArr[0];
+
+    }
+    handleMovieA = (data) => {
+        console.log(data);
+        this.setState({ MovieA: data });
+    }
+
+    handleMovieB = (data) => {
+        this.setState({ MovieB: data });
+    }
+
+    handleCompare = (e) => {
+        e.preventDefault();
+        this.setState({ comparisonDrawn: true });
+        this.makeComparison();
+    }
+
+    getMoviesB = () => {
+        const options = this.state.movies.map(v => ({
+            label: v.original_title,
+            value: v.original_title
+        }));
+        //console.log(options);
+        return (
+            <div>
+                <Select onChange={this.handleMovieB} value={this.state.MovieB} options={options} placeholder="Movie" name="movieB" />
+            </div>
+        )
+    }
+
+    getid = (mov) => {
+        let movid;
+        this.state.movies.forEach(function (entry) {
+            if (entry.original_title === mov) {
+                movid = entry.internalid;
+
+            }
+        })
+        return movid;
+    }
+
+
+    makeComparison = () => {
+        let ticks = []
+        this.state.tickets.forEach(function (entry) {
+            ticks.push(entry);
+        })
+        let a = this.state.MovieA.value;
+        let aid = this.getid(a);
+        let b = this.state.MovieB.value;
+        let baid = this.getid(b);
+        let a_rev = 0;
+        let a_ticks = 0;
+        let b_rev= 0;
+        let b_ticks = 0;
+        let da = this.state.DateA;
+        let ba = this.state.DateB;
+        let data = [];
+        ticks.forEach(function (tik) {
+            if (aid === tik.movie_id) {
+                let curr = moment(tik.date, 'DD-MM-YYYY');
+                if (curr.isSameOrBefore(moment(ba, 'DD-MM-YYYY')) && curr.isSameOrAfter(moment(da,'DD-MM-YYYY'))) {
+                    a_rev += tik.price;
+                    a_ticks+= tik.numVIP+tik.numChild+tik.numElder+tik.numDefault;
+                }
+            }
+            else if (baid === tik.movie_id) {
+                let curr = moment(tik.date, 'DD-MM-YYYY');
+                if (curr.isSameOrBefore(moment(ba)) && curr.isSameOrAfter(moment(da))) {
+                    b_rev += tik.price;
+                    b_ticks+= tik.numVIP+tik.numChild+tik.numElder+tik.numDefault;
+                }
+            }
+        })
+        data = [...data, {"name": a, "revenue (£)": a_rev, "tickets":a_ticks}];
+        data = [...data, {"name": b, "revenue (£)": b_rev, "tickets":b_ticks}];
+        this.setState({comparisonData : data});
+    }
+
 
 
     render() {
         return (
-            <React.Fragment>
-                <head>
-                    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"/>   
-                    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-                    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='main.css')}}" />
-                    <meta charset="utf-8"/>
-                    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-                    
-                    <meta charset="utf-8" />
-                    <title>{{ title }}</title>
-                    <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js'></script>
-                </head>
+            <body>
+                <ManagerBanner />
+                <br />
+                <br />
+                <div className="header_text" >
+                    <h1 style={{ position: 'absolute', left: '25px', color: '#4e5b60' }}>OVERALL ANALYTICS</h1>
+                </div>
+                <br />
+                <br />
+                <br />
+                <br />
+                <span><p>This shows all income ever made from every movie ever screened.</p></span>
 
-                <body id="grad1">
-                    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                    <a class="navbar-brand" href="#"><img src="{{url_for('static',filename='finlogo.png')}}" style="top:1px;width:rem;height:8rem;"/></a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav mr-auto">
-                            <li class="nav-item dropdown">
-                                <button class="tab_background dropdown-toggle text mr-3"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">MOVIES</button>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <button class="dropdown-item" style="color:#f9bc50;" >ADD MOVIES</button>
-                                    <button class="dropdown-item" style="color:#f9bc50;">REMOVE MOVIES</buttom>
-                                    <button class="dropdown-item" style="color:#f9bc50;" >VIEW MOVIES</button>
-                                </div>
-                            </li>
-                            <li class="nav-item active">
-                                <button class="tab_background text mr-3">EMPLOYEES</button>
-                            </li>
-                            <li class="nav-item">
-                                <button class="tab_background text mr-3">TICKETS</button>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <button class="tab_background dropdown-toggle text mr-3"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ANALYTICS</button>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <button class="dropdown-item" style="color:#f9bc50;" >WEEKLY</button>
-                                    <button class="dropdown-item" style="color:#f9bc50;">OVERALL</buttom>
-                                </div>
-                            </li>
-                        </ul>
-                        <form class="form-inline my-2 my-lg-0">
-                            <button class="tab_background mr-5">LOG OUT</button>
-                            <input class="mr-3" type="image" style="width:2rem;height:2rem;" src="{{url_for('static',filename='usericon.png')}}"/>
-                            <input class="form-control mr-sm-2 search_bar" type="search" placeholder="Search here.." aria-label="Search"/>
-                            <button class="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>
-                        </form>
+                <BarChart width={500} height={300} data={this.state.data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" stroke="#000000" />
+                    <YAxis stroke="#000000" />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="revenue (£)" fill="#8884d8" />
+                </BarChart>
+                <div className="header_text" >
+                    <h2 style={{ position: 'absolute', left: '25px', color: '#4e5b60' }}>OVERALL INCOME: £{this.state.totalrev}</h2>
+                </div>
+
+
+                <br />
+                <br />
+                <br />
+                <div className="header_text" >
+                    <h1 style={{ position: 'absolute', left: '25px', color: '#4e5b60' }}>WEEKLY ANALYTICS</h1>
+                </div>
+                <br />
+                <br />
+                <br />
+                <br />
+
+                <br />
+                <br />
+                <span><p>This shows all income from the past week.</p></span>
+                <BarChart width={500} height={300} data={this.state.dataPastWeek} marg={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" stroke="#000000" />
+                    <YAxis stroke="#000000" />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="revenue (£)" fill="#8884d8" />
+                </BarChart>
+                <div className="header_text" >
+                    <h2 style={{ position: 'absolute', left: '25px', color: '#4e5b60' }}>WEEKLY INCOME: £{this.state.weeklyrev}</h2>
+                </div>
+                <br />
+                <br />
+                <br />
+                <br />
+                <div className="header_text" >
+                    <h1 style={{ position: 'absolute', left: '25px', color: '#4e5b60' }}>COMPARE MOVIES IN RANGE</h1>
+                </div>
+                <br />
+                <br />
+                <br />
+
+
+                <label for="date" id="date">Choose a date:</label>
+                <input type = "date" name="date" onChange={this.handleDateChangeA} value={this.reformatd(this.state.DateA)}  dateFormat="dd/MM/yyyy" /><br></br>
+                <br />
+                <br />
+                <br />
+                <label for="date" id="date">Choose a date:</label>
+                <input type = "date" name="date" onChange={this.handleDateChangeB} value={this.reformatd(this.state.DateB)}  dateFormat="dd/MM/yyyy" /><br></br>
+                <br />
+                <br />
+                <br />
+                <div>
+                    <label for="movieA" id="movieA">Choose a movie:</label>
+                    {this.getMoviesA()}
+                </div>
+                <br />
+                <br />
+                <br />
+                <div>
+                    <label for="movieB" id="movieB">Choose a movie:</label>
+                    {this.getMoviesB()}
+                </div>
+                <br />
+                <br />
+                <br />
+                <button type="submit" onClick={this.handleCompare}>COMPARE MOVIES</button>
+                {this.state.comparisonDrawn === true?
+                    <div>
+                        <span><p>Comparison between {this.state.MovieA.value} and {this.state.MovieB.value} from {this.state.DateA} to {this.state.DateB}</p></span>
+                        <BarChart width={500} height={300} data={this.state.comparisonData} marg={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="name" stroke="#000000" />
+                            <YAxis stroke="#000000" />
+                            <Tooltip />
+                            <Legend />
+                            <Bar dataKey="revenue (£)" fill="#8884d8" />
+                            <Bar dataKey="tickets" fill="#2284d8"/>
+                        </BarChart>
                     </div>
-                    </nav>
-                <br/>
-                <br/>
-                <div class="header_text">
-                    <h1 style="position:absolute; left:25px; color: #4e5b60;">OVERALL ANALYTICS</h1>
-                </div>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-
-                {/* <!--Column Graph of Overall Best Performing Movies--> */}
-                <div>       
-                <center>
-                    <h1>{{ title }}</h1>
-                </center>
-                <center>
-                    <canvas id="chart" width="600" height="400"></canvas>
-                    <script>
-                    {/* bar chart data */}
-                    var barData = {
-                        labels : [
-                        {% for item in labels %}
-                        "{{ item }}",
-                        {% endfor %}
-                    ],
-
-                        datasets : [{
-                        fillColor: " rgba(0, 128, 0,0.6)",
-                        strokeColor: "rgba(151,187,205,1)",
-                        pointColor: "rgba(151,187,205,1)",
-                        data : [
-                            {% for item in values %}
-                            "{{ item }}",
-                            {% endfor %}
-                        ]
-                        }
-                        ]
-                    }
-
-                    {/* get bar chart canvas */}
-                    var mychart = document.getElementById("chart").getContext("2d");
-
-                    steps = 10
-                    max = {{max}}
-
-                        {/* draw bar chart */}
-                        new Chart(mychart).Bar(barData, {
-                            scaleOverride: true,
-                            scaleSteps: steps,
-                            scaleStepWidth: Math.ceil(max / steps),
-                            scaleStartValue: 0,
-                            scaleShowVerticalLines: true,
-                            scaleShowGridLines : true,
-                            barShowStroke : true,
-                            scaleShowLabels: true
-                        }
-                    );
-
-                    </script>
-                </center>
-
-                </div>
-
-                <br/>
-                <br/>
-                <footer class="bg-light text-center">
-                <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-                All rights reserved. © 2021 Copyright:
-                    <a class="text-dark" >The Big Picture</a>
-                </div>
-                </footer>
-                <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-                <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-                </body>
-           </React.Fragment>
+                    :
+                    <></>}
+            </body>
         )
     }
 }
 
 
 
-export default MoviePage;
+export default OverallAnalytics;

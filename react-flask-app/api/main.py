@@ -131,7 +131,28 @@ def serialize_all_overall_analytics(res):
         dic[i] = serialize_overall_analytics(res[i])
     return dic
 
+def serialize_ticket(res):
+    return {
+        'id' : res[0],
+        'bookingid' : res[1],
+        'movie_id' : res[2],
+        'price' : res[3],
+        'forename': res[4],
+        'surname': res[5],
+        'email':res[6],
+        'numVIP':res[8],
+        'numChild':res[9],
+        'numElder':res[10],
+        'numDefault':res[11],
+        'date' : res[12]
+    }
 
+def serialize_all_tickets(res):
+    dic ={}
+    for i in range(len(res)):
+        dic[i] = serialize_ticket(res[i])
+        print(dic[i])
+    return dic
 
 
 @app.route('/allmovies', methods=['POST'])
@@ -139,6 +160,13 @@ def allmovies():
     db = Database('cinema.db')
     data = db.fetch()[0]
     return {'response': serialize_all_movies(data)}
+
+@app.route('/tickets', methods=['POST'])
+def tk():
+    db = Database('cinema.db')
+    data = db.fetch()[5]
+    return {'response': serialize_all_tickets(data)}
+
 
 
 """
@@ -279,7 +307,7 @@ colors = [
 @app.route('/overall_analytics')
 def overall_analytics():
     db = Database('cinema.db')
-    data = db.fetch()[0]
+    data = db.fetch()[8]
     return {'overall_analytics': serialize_all_overall_analytics(data)}
 
 
@@ -435,6 +463,9 @@ def a_s():
     db.add_screening(date,time,screen_id, movie_id)
     return jsonify({'response': 'OK'})
 
+@app.route('/allscreenings', methods=['POST'])
+def all_screenings():
+    return jsonify({'response' : serialize_all_screenings(Database('cinema.db').fetch()[2])})
 
 @app.route('/upcoming',methods=['POST'])
 def upcoming():
@@ -456,7 +487,6 @@ def get_the_screens():
 
     db = Database('cinema.db')
     return jsonift({'screens' : serialize_all_screens(db.fetch()[1])})
-
 
 
 

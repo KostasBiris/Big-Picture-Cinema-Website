@@ -32,6 +32,7 @@ const App = () => (
         <Route exact path="/search/:query" component={SearchResults}/>
         <Route exact path="/movie/:title/:movieID" component={MoviePage}/>
         <Route exact path="/register" component={CustomerRegister}/>
+        <Route exact path="/movie/:title" component={MoviePage}/>
         <Route exact path ="/account" component={CustomerAccountPage}/>
         <Route exact path="/payment" component={Payment}/>
         <Route exact path="/screen1" component={Screen1}/>
