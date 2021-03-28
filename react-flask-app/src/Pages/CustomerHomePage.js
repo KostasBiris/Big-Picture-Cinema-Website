@@ -15,6 +15,8 @@ import poster13 from '../static/poster13.png';
 import poster14 from '../static/poster14.jpg';
 import poster8 from '../static/poster8.jpg';
 import poster9 from '../static/poster9.jpg';
+import moment from 'moment'
+import DatePicker from 'react-datepicker';
 
 var publicIP = require('public-ip')
 
@@ -24,7 +26,7 @@ class CustomerHomePage extends React.Component {
     constructor(props) {
         super(props);
         //By default the state is a blank query.
-        this.state = { query: '', IP: null, auth: false, response: undefined , movies: null};
+        this.state = {query: '', IP: null, auth: false, response: undefined , movies: null, date:''};
         //Bind our methods.
         this.handleSearchChange = this.handleSearchChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -40,6 +42,13 @@ class CustomerHomePage extends React.Component {
         this.handleClick = this.handleClick.bind(this);
 
     }
+
+    reformatd = (inp) => {
+        let dArr = inp.split("-");
+        return dArr[2] + "-" + dArr[1] + "-" + dArr[0];
+
+    }
+
 
 
     getClientIP = () => {
@@ -132,7 +141,7 @@ class CustomerHomePage extends React.Component {
 
     //Method for handling a change in the search query field.
     handleSearchChange = (e) => {
-        // e.preventDefault();
+       // e.preventDefault();
         //Update the state to represent the changes to the field.
         this.setState({ query: e.target.value });
     }
@@ -140,15 +149,15 @@ class CustomerHomePage extends React.Component {
     //Method for handling submitting a search query.
     //Called when the submit button is pressed.
     handleSubmit = (e) => {
+        //e.preventDefault();
         //Redirect the route to execute the search query.
         var go = ''
 
         try {
             go = '/search/' + this.state.query.split(' ').join('_');
-            console.log(this.props)
             this.props.history.push(go, this.state);
         }
-        catch (error) // TypeError is catched if this.props.history is undefined == Very likely that it is a redirection attempt
+        catch (error) // TypeError is catched story is undefined == Very likely that it is a redirection attempt
         {
             console.log('catched the error!')
             // console.log(this.props.props)
@@ -157,6 +166,28 @@ class CustomerHomePage extends React.Component {
             // this.props.props.history.push(go);
         }
 
+    }
+
+    handleSubmitDate = (e) => {
+        e.preventDefault();
+        if (this.state.date!== '') {
+            this.props.history.push('/searchscreenings/' + this.state.date);
+        }
+        
+    }
+
+
+    handleDate = (e) => {
+        // e.preventDefault();
+        // console.log(e.target.value)
+
+        function formatd(inp) {
+            let dArr = inp.split("-");  // ex input "2010-01-18"
+            return dArr[2] + "-" + dArr[1] + "-" + dArr[0]; //ex out: "18/01/10"
+
+        }
+        if (e.target.value)
+            this.setState({ date: formatd(e.target.value) });
     }
 
     //Method for handling the login button.
@@ -419,6 +450,10 @@ class CustomerHomePage extends React.Component {
                             <form className="form-inline my-2 my-lg-0">
                                 <input onChange={this.handleSearchChange} value={this.state.query} className="form-control mr-sm-2 search_bar" type="search" placeholder="Search here.." aria-label="Search"/>
                                 <button onClick={this.handleSubmit} className="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>
+                            </form>
+                            <form className="form-inline my-2 my-lg-0">
+                            <input type="date" onChange={this.handleDate} value={this.reformatd(this.state.date)}/>
+                            <button onClick={this.handleSubmitDate} className="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>
                             </form>
                         </div>
                         </nav>

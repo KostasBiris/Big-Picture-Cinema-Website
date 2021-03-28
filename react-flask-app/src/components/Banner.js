@@ -17,7 +17,7 @@ class Banner extends React.Component {
     constructor(props) {
         super(props);
         //By default the state is a blank query.
-        this.state = { query: '', IP: null, auth: false, response: undefined };
+        this.state = { query: '', IP: null, auth: false, response: undefined , date: ''};
         //Bind our methods.
         this.handleSearchChange = this.handleSearchChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -123,6 +123,37 @@ class Banner extends React.Component {
     }
 
 
+    handleSubmitDate = (e) => {
+        e.preventDefault();
+        if (this.state.date!== '') {
+            this.props.history.push('/searchscreenings/' + this.state.date);
+        }
+        
+    }
+
+
+    handleDate = (e) => {
+        // e.preventDefault();
+        // console.log(e.target.value)
+
+        function formatd(inp) {
+            let dArr = inp.split("-");  // ex input "2010-01-18"
+            return dArr[2] + "-" + dArr[1] + "-" + dArr[0]; //ex out: "18/01/10"
+
+        }
+        if (e.target.value)
+            this.setState({ date: formatd(e.target.value) });
+    }
+
+    reformatd = (inp) => {
+        let dArr = inp.split("-");
+        return dArr[2] + "-" + dArr[1] + "-" + dArr[0];
+
+    }
+
+
+
+
     render () {
         if (this.isAuth()) {
             return (
@@ -218,6 +249,10 @@ class Banner extends React.Component {
                             <input onChange={this.handleSearchChange} value={this.state.query} className="form-control mr-sm-2 search_bar" type="search" placeholder="Search here.." aria-label="Search"/>
                             <button onClick={this.handleSubmit} className="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>
                         </form>
+                        <form className="form-inline my-2 my-lg-0">
+                            <input type="date" onChange={this.handleDate} value={this.reformatd(this.state.date)}/>
+                            <button onClick={this.handleSubmitDate} className="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>
+                         </form>
                     </div>
                     </nav>
                     </body>

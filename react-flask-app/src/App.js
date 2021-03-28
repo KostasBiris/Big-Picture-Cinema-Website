@@ -20,7 +20,7 @@ import AddScreenings from "./Pages/AddScreenings";
 import AddScreening from './Pages/AddScreening';
 import ArbitraryScreen from "./Seatmap/ArbitraryScreen";
 import OverallAnalytics from "./Pages/OverallAnalytics";
-
+import ScreeningResults from "./components/ScreeningResults";
 const App = () => (
     // Set up routing for our web application.
     // Redirce '/' to '/home' by default.
@@ -44,6 +44,7 @@ const App = () => (
         <Route exact path="/addscreening" component={AddScreening} />
         <Route exact path="/as" component={ArbitraryScreen}/>
         <Route exact path="/overall_analytics" component={OverallAnalytics}/>
+        <Route exact path="/searchscreenings/:query" component={ScreeningResults}/>
       </Switch>
     </BrowserRouter>
   

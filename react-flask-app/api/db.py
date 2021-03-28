@@ -351,6 +351,27 @@ class Database:
         return self.cur.fetchone()[0]
 
 
+    def searchdates(self, date):
+        screenings = set()
+        movies = set()
+
+        for row in self.fetch()[2]:
+            date_ = row[1]
+            if date == date_:
+                screenings.add(row[0])
+                movies.add(row[4])
+
+        moviedata = []
+        for movie in movies:
+            moviedata.append(self.quick_get_movie(movie))
+        
+        screeningdata = []
+        for screening in screenings:
+            screeningdata.append(self.quick_get_screening(screening))
+        
+        return moviedata, screeningdata
+
+
     def get_upcoming(self):
         #we want to find all of the screenings within the past 2 weeks, and send their information, along with all of the movies that are showing.
         screenings = set()
@@ -1028,7 +1049,7 @@ seatmap = dat[0][5]
 #db.graph_analytics()
 
 
-db = Database('cinema.db')
-db.add_customer('seatmapCustomerFName','seatmapCustomerSName', 'seatmapCustomerEmail', 'seatmapCustomerPhone','seatmapCustomerPassword','01-01-01')
-db.add_booking(1, 1, 'A1,A2,A3')
+#db = Database('cinema.db')
+#db.add_customer('seatmapCustomerFName','seatmapCustomerSName', 'seatmapCustomerEmail', 'seatmapCustomerPhone','seatmapCustomerPassword','01-01-01')
+#db.add_booking(1, 1, 'A1,A2,A3')
 #db.add_overall_analytics(1, 'spider-man', 10, 1)

@@ -155,6 +155,15 @@ def serialize_all_tickets(res):
     return dic
 
 
+
+@app.route('/searchdates', methods = ['POST'])
+def searchdates():
+    date = request.json['data']
+    db = Database('cinema.db') 
+    movies, screenings = db.searchdates(date)
+    print(movies)
+    return jsonify({'screenings' : serialize_all_screenings(screenings), 'movies': serialize_all_movies(movies)})
+
 @app.route('/allmovies', methods=['POST'])
 def allmovies():
     db = Database('cinema.db')
