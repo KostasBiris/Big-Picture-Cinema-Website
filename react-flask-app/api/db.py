@@ -18,13 +18,6 @@ from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
 
 """
-    TODO:
-        comments and documentation.
-        Data structure for seatings
-        More efficient/accurate methods of searching (not high priority)
-"""
-
-"""
     Database class
         Creates or opens an existing Cinema database based on the db argument
         Initialisation params:
@@ -44,8 +37,6 @@ import matplotlib.pyplot as plt
             db.fetch()
                 >>> []
 """
-
-
 
 class Database:
     def __init__(self, db):
@@ -260,7 +251,6 @@ class Database:
             #Remove all movies released on a certain date
             elif(release_date != "00-00-00"):
                 self.cur.execute("DELETE FROM movies WHERE release_date=?",(release_date,))
-        
         else:
             #Execute an SQL query to remove the row corresponding to the specified ID
             self.cur.execute("DELETE FROM movies WHERE id=?",(id,))
@@ -269,13 +259,6 @@ class Database:
         self.conn.commit()
 
 
-    """
-        Elementary search function, quite inefficient in its current state.
-        Iterates over the rows of the movies table, and returns a list of all of the rows (tuples) containing the search query within any of its fields.
-        Safe from SQL injections, as no queries are currently used.
-
-        TODO: More efficient, and stop the search checking the 'certificate' and 'id' fields.
-    """
     def search_movies(self, query):
         return [row for row in self.fetch()[0] if query.lower() in str(row).lower()]
 
@@ -287,10 +270,6 @@ class Database:
             if tup[1].lower() == query.lower():
                 self.cur.execute("SELECT * FROM movies WHERE id=?",(tup[0],))
                 return self.cur.fetchone()
-        #return [row for row in self.fetch()[0] if query.lower() == str(row)[1].lower()]
-        
-        #self.cur.execute("SELECT * FROM movies WHERE name=?",(name,))
-        #return self.cur.fetchone()[0]
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -300,7 +279,6 @@ class Database:
         #Executre an SQL query to insert a new record into the movies database.
         #WE use '?' to prevent against SQL injection attacks.
         self.cur.execute("INSERT INTO screens VALUES (NULL, ?,?)", (capacity,self.init_seatmap(n,m).dumps()))
-
         #Commit the changes to the database.
         self.conn.commit()
 
@@ -319,7 +297,6 @@ class Database:
     def update_screen(self, id, data):
 
         capacity, n,m = data
-
         self.cur.execute("UPDATE screens SET capacity=?, seatmap=? WHERE id=?",(capacity, self.init_seatmap(n,m).dumps(), id))
 
         self.conn.commit()
