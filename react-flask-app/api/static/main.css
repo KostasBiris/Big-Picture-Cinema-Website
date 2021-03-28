@@ -257,23 +257,13 @@
   background-color: #f5f0f0ec;
   border-radius:10px;
   border: 1px solid #888;
-  width:max-content; 
-  position: absolute;
-  top:36rem;
-  left:33%;
+  width:60%;
+  top:40rem;
+  left:50%;
+  align-items: center;4
   transform: translate(-50%, -50%);
 }
-.modal-content-card{
-  background-color: #f5f0f0ec;
-  border-radius:10px;
-  border: 1px solid #888;
-  width:max-content; 
-  height:max-content;
-  position: absolute;
-  top: 22rem;
-  right:10%;
-  transform: translate(-50%, -50%);
-}
+
 .container_movies {
     display: flex;
     justify-content: space-around;
@@ -613,3 +603,4 @@ footer {
 ul {
   list-style-type: none;
 }
+
