@@ -510,7 +510,11 @@ def get_the_screens():
     return jsonift({'screens' : serialize_all_screens(db.fetch()[1])})
 
 
-
+@app.route('/gettickets/<id>')
+def get_tickets(customer_id):
+    db = Database('cinema.db')
+    tickets = db.get_customer_tickets(customer_id)
+    return jsonify({'response': serialize_all_tickets(tickets)})
 
 
 def spinner():
