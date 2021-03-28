@@ -9,10 +9,12 @@ import Banner from '../components/Banner.js';
 class ArbitraryScreen extends React.Component {
     constructor(props) {
         super(props);
+        // console.log(this.props)
+        // console.log(this.props.location.state.screening.seatmap)
         this.state = {seatmap: this.props.location.state.screening.seatmap};
         this.mountSeatmap = this.mountSeatmap.bind(this);
-
-
+        this.updateSeatmap = this.updateSeatmap.bind(this);
+        this.goToCheckOut = this.goToCheckOut.bind(this);
 
     }
 
@@ -40,7 +42,7 @@ class ArbitraryScreen extends React.Component {
                     }
                 }
             }
-            
+        // window.addEventListener('load', this.updateSeatmap);
         this.setState({seatmap: seatmap});
         //window.addEventListener('load', this.mountSeatmap);
     }
@@ -52,6 +54,7 @@ class ArbitraryScreen extends React.Component {
 
     mountSeatmap = async () => {
         var i,j;
+        // console.log(this.state.seatmap);
         let seatmap = this.state.seatmap;
         await (async() => {
             for (i = 0; i < seatmap.length; i++)  {
@@ -77,16 +80,36 @@ class ArbitraryScreen extends React.Component {
             }
             
         })();
-        this.setState({seatmap: seatmap});
+        // this.setState({seatmap: seatmap});
 
     }    
 
 
+    goToCheckOut = () => {
+        console.log(this.state)
+        this.props.history.push('/payment', this.state);
+    }
 
+    updateSeatmap = (data) => { 
+        // var i,j=0;
+        var seatmap = this.state.seatmap;
+        // console.log(seatmap)
+
+        if (this.state.seatmap[data.row][data.col] != -1){
+            if (data.remove == true)
+                seatmap[data.row][data.col].isReserved = false;
+            else
+                seatmap[data.row][data.col].isReserved = true;
+        }
+
+        
+        // this.setState({seatmap: seatmap})
+        console.log(this.state.seatmap)
+    }
 
 
     render() {
-        //console.log(this.state.seatmap);
+        
         return (
             <React.Fragment>
                 <body>
@@ -100,9 +123,23 @@ class ArbitraryScreen extends React.Component {
                         <h1 style={{ marginLeft: '600px', left: '3rem', color: '#4e5b60' }}>SCREEN</h1>
                     </div>
                     <div className="Seatmap" style={{ marginLeft: '350px', marginTop: '50px' }}>
-                        <Seatmap rows={this.state.seatmap} maxReservableSeats={10} alpha />
+                        <Seatmap rows={this.state.seatmap} maxReservableSeats={10} onChange={this.updateSeatmap} alpha />
+                        {/* <Seatmap rows={this.state.seatmap} maxReservableSeats={10} onChange={this.updateSeatmap} alpha /> */}
                     </div>
 
+                    <nav>
+                        <ul className="pagination justify-content-center">
+                            <li className="page-item disabled">
+                                <a className="button_prev" style={{ color: "white" }} tabIndex="-1" aria-disabled="true">
+
+                                </a>
+                            </li>
+                            <li className="page-item"><a className="buttons_background" style={{ color: "white" }}>MOVIE</a></li>
+                            <li className="page-item"><a className="buttons_background" style={{ color: "white" }}>SEATS</a></li>
+                            <li className="page-item"><a className="buttons_background" style={{ color: "white" }} onClick={this.goToCheckOut}>CHECKOUT</a></li>
+
+                        </ul>
+                    </nav>
                 </body>
             </React.Fragment>
         );

@@ -27,9 +27,14 @@ export default class Seatmap extends React.Component {
 
     static defaultProps = {
         addSeatCallback: (row, number) => {
+            
+  
             console.log(`Added seat ${number}, row ${row}`);
+
         },
         removeSeatCallback: (row, number) => {
+            
+
             console.log(`Removed seat ${number}, row ${row}`);
         },
         seatWidth: 35
@@ -43,6 +48,19 @@ export default class Seatmap extends React.Component {
             size: 0,
             width: seatWidth * (1 + Math.max.apply(null, rows.map(row => row.length)))
         };
+    }
+
+    updateSeatmap = (data) => { 
+        var seatmap = this.props.rows;
+
+        if (this.state.seatmap[data.row][data.col] != -1){
+            if (data.remove == true)
+                seatmap[data.row][data.col].isReserved = false;
+            else
+                seatmap[data.row][data.col].isReserved = true;
+        }
+
+        console.log(this.state.seatmap)
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -59,12 +77,27 @@ export default class Seatmap extends React.Component {
             this.setState({
                 selectedSeats: selectedSeats.mergeDeep({[row]: Set([number])}),
                 size: size + 1
-            }, () => addSeatCallback(row, number));
+            }, () => {
+                var r = parseInt(row)-1;
+                var col = parseInt(number)-1;
+                this.props.onChange({row:r, col:col, remove: false});
+                addSeatCallback(row, number)
+                
+                // console.log({row:r, col:col, remove: false})
+            });
         } else if (selectedSeats.has(row) && seatAlreadySelected) {
             this.setState({
                 selectedSeats: selectedSeats.update(row, seats => seats.delete(number)),
                 size: size - 1
-            }, () => removeSeatCallback(row, number))
+            }, () => {
+                var r = parseInt(row)-1;
+                var col = parseInt(number)-1;
+                this.props.onChange({row:r, col:col, remove: true});
+                removeSeatCallback(row, number)
+                
+                // console.log({row:r, col:col, remove: true})
+                
+            })
         }
     }
 
@@ -77,9 +110,10 @@ export default class Seatmap extends React.Component {
         const { selectedSeats: seats } = this.state;
         const { alpha } = this.props;
         return this.props.rows.map((row, index) => {
-            const rowNumber = alpha ?
-                String.fromCharCode('A'.charCodeAt(0) + index) :
-                (index + 1).toString();
+            // const rowNumber = alpha ?
+            //     String.fromCharCode('A'.charCodeAt(0) + index) :
+            //     (index + 1).toString();
+            const rowNumber = (index + 1).toString();
             const isSelected = !seats.get(rowNumber, Set()).isEmpty();
             const props = {
                 rowNumber,
@@ -99,7 +133,7 @@ export default class Seatmap extends React.Component {
     };
 
     renderSeats(seats, rowNumber, isRowSelected) {
-        console.log(this.state);
+        console.log(this.state)
         const { selectedSeats, size } = this.state;
         const { maxReservableSeats } = this.props;
         return seats.map((seat, index) => {
