@@ -353,7 +353,7 @@ def _login():
 @app.route('/account')
 
 def account():
-    return "<h1> STUB ACCOUNT PAGE</h1>"
+    return render_template('account.html')
 
 def calculate_order_amount(items):
     return 100
