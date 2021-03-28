@@ -156,11 +156,27 @@ def _view_movie(name):
     name = name.replace("_", " ")
     name = name.lower()
     db = Database('cinema.db')
-    print(name)
     movie = db.find_movie(name)
-    print(movie)
     if not movie: pass
     return serialize_movie(movie)
+
+@app.route('/movie/search/', methods = ['POST'])
+def list_movies():
+    movie_name = request.json['data']
+    
+    added_movies = []
+    db = Database('cinema.db')
+    found_movies = []
+    movies = serialize_all_movies(db.fetch()[0])
+    for movie in movies:
+        for word in movie_name.split('_'):
+            if word in movies[movie]['original_title'].lower():
+                if not movies[movie]['original_title'] in added_movies:
+                    found_movies.append(movies[movie])
+                    added_movies.append(movies[movie]['original_title'])
+
+    return {'movies': found_movies}
+
 
 @app.route('/caws')
 def moviepage():
