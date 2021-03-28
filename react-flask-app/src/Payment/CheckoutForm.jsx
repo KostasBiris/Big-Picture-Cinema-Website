@@ -115,7 +115,7 @@ export default function CheckoutForm() {
     alignContent:'center',
     height:'21.5vh',
     width:'30vw',
-    marginLeft:'500px'
+    marginLeft:'150px'
 
   }
   const input ={
