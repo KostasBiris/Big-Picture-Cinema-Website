@@ -232,6 +232,18 @@ def screen():
 def booking():
     return render_template('employee_main_interface.html')
 
+@app.route('/employee_checkout')
+def employee_checkout():
+    return render_template('employee_checkout.html')
+
+@app.route('/employee_book_tickets')
+def employee_book_tickets():
+    return render_template('employee_book_tickets.html')
+
+@app.route('/book-tickets')
+def booktickets():
+    return render_template('book_tickets.html')
+
 @app.route('/book-tickets')
 def booktickets():
     return render_template('book_tickets.html')

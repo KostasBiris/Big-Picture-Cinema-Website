@@ -47,12 +47,9 @@ render() {
     <body>
 
 <head>
+<link rel="stylesheet" type="text/css" href={main} />
 <link rel="icon" href="data:;base64,iVBORw0KGgo" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href={main} ></link>
-    <meta charset="utf-8"></meta>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"></meta>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 </head>
 
 <body id="grad1"/>
@@ -224,11 +221,30 @@ render() {
                         </li>
                     </ul>
              </div>   
-          
-    </div>
-
-    
-    
+    </div> 
+    <br/>
+    <br/>
+    <nav>
+        <ul class="pagination justify-content-center ">
+            <li class="page-item disabled">
+                <a class="buttons_prev" style={{color: 'white', tabIndex:'-1', ariaDisabled:'true'}}>
+                    </a>
+            </li>
+            <li class="page-item"><a class="buttons_background" style={{color: 'white'}}>MOVIE</a></li>
+            <li class="page-item"><a class="buttons_background" style={{color: 'white'}}>SEATS</a></li>
+            <li class="page-item"><a class="buttons_background" style={{color: 'white'}}>CHECKOUT</a></li>
+            <li class="page-item">
+                <a class="buttons_next" style={{color: 'white'}}></a>
+            </li>
+        </ul>
+    </nav>
+    <br/>
+    <footer class="bg-light text-center">
+        <div class="text-center p-3" style={{backgroundColor: 'rgba(0, 0, 0, 0.2)'}}>
+            All rights reserved. © 2021 Copyright:
+            <a class="text-dark">The Big Picture</a>
+        </div>
+    </footer> 
 </fieldset> 
 </body>     
   );
