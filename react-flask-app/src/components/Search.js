@@ -2,6 +2,7 @@ import SearchIMDB from './SearchIMDB';
 import React, { useState } from 'react';
 import CustomerHomePage from '../Pages/CustomerHomePage';
 import SearchResult from './SearchResult';
+import SearchResultManager from './SearchResultManager';
 import main from '../static/main.css';
 import { BrowserRouter, Route } from 'react-router-dom';
 import Banner from './Banner';
@@ -21,8 +22,8 @@ class SearchResults extends React.Component{
   componentDidMount() {
 
     this.getClientIP();
-    window.addEventListener('load', this.getMovies);
-    this.getMovies();
+    // window.addEventListener('load', this.getMovies);
+    // this.getMovies();
     
     const _jquery = document.createElement("script");
     _jquery.src = "https://code.jquery.com/jquery-3.2.1.slim.min.js";
@@ -55,21 +56,26 @@ class SearchResults extends React.Component{
 
   }
   //Invoke a request to our rest API to search the database for movies matching our query.
-  getMovies = async () => {
-    let movie = this.props.match.params.query 
-    console.log(movie)
-    await fetch(`/movie/search/`, {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ data: movie })})
-      .then(response => response.json()).then(data => {
-        this.setState({ returnedData : data.movies})
+  getMovies = async (data) => {
+    // MANAGER ADD MOVIES FUNCTIONALITY 
+    this.setState({ returnedData : Object.values(data)})
 
-        console.log(this.state.returnedData);
-        // console.log(this.state.returnedData.movies.length);
-      });
+
+    // COMMENT THIS OUT FOR CUSTOMER SEARCH FUNCTIONALITY
+    // let movie = this.props.match.params.query 
+    // console.log(movie)
+    // await fetch(`/movie/search/`, {
+    //   method: 'POST',
+    //   headers: {
+    //       'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify({ data: movie })})
+    //   .then(response => response.json()).then(data => {
+    //     this.setState({ returnedData : data.movies})
+
+    //     console.log(this.state.returnedData);
+    //     // console.log(this.state.returnedData.movies.length);
+    //   });
 
   }
 
@@ -84,7 +90,7 @@ class SearchResults extends React.Component{
           <link rel="stylesheet" type="text/css" href={main}/>
         </head> */}
           <body>
-            {/* <SearchIMDB onGetMovie={this.getMovies} movieName={this.props.match.params.query} getAllMovies={"True"} getTranding={"False"} /> */}
+            <SearchIMDB onGetMovie={this.getMovies} movieName={this.props.match.params.query} getAllMovies={"True"} getTranding={"False"} />
             <Banner props={this.props} /> {/* pass props to keep track of props.history.push from CustomerHomePage */}
             {/* <div style={{position: 'relative', paddingLeft: '20%', paddingRight: '80%', paddingTop: '10%%', paddingBottom: '90%', width: '50%'}}> */}
             {/* Render element conditionally  */}
@@ -92,9 +98,16 @@ class SearchResults extends React.Component{
             this.state.returnedData.map(res_=> {
               return (
                 
-                // <ul style={{display: 'inline'}}>
-                  <SearchResult res={res_} history={this.props.history}/>
-                // {/* </ul> */}
+                // MANAGER ADD MOVIES
+                <ul style={{display: 'inline'}}>
+                  <SearchResultManager res={res_} />
+                </ul>
+
+
+                // CUSTOMER SEARCH MOVIES
+                /* <SearchResult res={res_} history={this.props.history}/> */
+
+
               )
             })
             : <p>No results found</p> }
