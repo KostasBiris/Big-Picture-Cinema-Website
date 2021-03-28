@@ -155,6 +155,15 @@ def serialize_all_tickets(res):
     return dic
 
 
+
+@app.route('/searchdates', methods = ['POST'])
+def searchdates():
+    date = request.json['data']
+    db = Database('cinema.db') 
+    movies, screenings = db.searchdates(date)
+    print(movies)
+    return jsonify({'screenings' : serialize_all_screenings(screenings), 'movies': serialize_all_movies(movies)})
+
 @app.route('/allmovies', methods=['POST'])
 def allmovies():
     db = Database('cinema.db')
@@ -235,9 +244,6 @@ def employee_book_tickets():
 def booktickets():
     return render_template('book_tickets.html')
 
-@app.route('/book-tickets')
-def booktickets():
-    return render_template('book_tickets.html')
 
 @app.route('/primelogin', methods =['POST'])
 def _managerlogin():
@@ -501,7 +507,11 @@ def get_the_screens():
     return jsonift({'screens' : serialize_all_screens(db.fetch()[1])})
 
 
-
+@app.route('/gettickets/<id>')
+def get_tickets(customer_id):
+    db = Database('cinema.db')
+    tickets = db.get_customer_tickets(customer_id)
+    return jsonify({'response': serialize_all_tickets(tickets)})
 
 
 def spinner():

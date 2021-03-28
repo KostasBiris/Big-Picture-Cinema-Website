@@ -10,6 +10,9 @@ class SearchResult extends React.Component{
         super(props);
         console.log(this.props);
         this.prop = this.props.res;
+        if (this.props.props) {
+            this.props.history = this.props.props.history;
+        }
         //Replace spaces in the name with '_' so we can use it in the URL.
         this.name = this.prop.original_title.split(' ').join('_');
         // get the ID of the movie
@@ -53,7 +56,6 @@ class SearchResult extends React.Component{
 
     goToMovie = () => {
         let go = '/movie/' + this.name + '/' + this.id;
- 
         this.props.history.push(go, this.state);
     }
 

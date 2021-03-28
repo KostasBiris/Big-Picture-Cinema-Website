@@ -83,6 +83,7 @@ class Database:
         self.cur.execute("CREATE TABLE IF NOT EXISTS tickets (id INTEGER PRIMARY KEY, \
                                                               booking_id INTEGER REFERENCES bookings(id) NOT NULL,\
                                                               movie_id INTEGER REFERENCES movies(id) NOT NULL,\
+                                                              customer_id INTEGER,\
                                                               price FLOAT NOT NULL,\
                                                               forename TEXT NOT NULL, \
                                                               surname TEXT NOT NULL, \
@@ -351,6 +352,27 @@ class Database:
         return self.cur.fetchone()[0]
 
 
+    def searchdates(self, date):
+        screenings = set()
+        movies = set()
+
+        for row in self.fetch()[2]:
+            date_ = row[1]
+            if date == date_:
+                screenings.add(row[0])
+                movies.add(row[4])
+
+        moviedata = []
+        for movie in movies:
+            moviedata.append(self.quick_get_movie(movie))
+        
+        screeningdata = []
+        for screening in screenings:
+            screeningdata.append(self.quick_get_screening(screening))
+        
+        return moviedata, screeningdata
+
+
     def get_upcoming(self):
         #we want to find all of the screenings within the past 2 weeks, and send their information, along with all of the movies that are showing.
         screenings = set()
@@ -513,8 +535,9 @@ class Database:
 
     def add_ticket(self, booking_id, movie_id, price, forename, surname, email, qr,num_VIPs = 0, num_children = 0, num_elders = 0, num_normal=0):
 
-        self.cur.execute("INSERT INTO tickets VALUES (NULL, ?,?,?,?,?,?,?,?,?,?,?,?)",(booking_id, movie_id, price, forename,\
-                                                                                     surname, email, qr, num_VIPs, num_children, num_elders, num_normal, str(datetime.today().strftime("%d-%m-%Y"))))
+        self.cur.execute("INSERT INTO tickets VALUES (NULL, ?,?,?,?,?,?,?,?,?,?,?,?,?)",(booking_id, movie_id, customer_id, price, forename,\
+                                                                                     surname, email, qr, num_VIPs, num_children, num_elders, \
+                                                                                         num_normal, str(datetime.today().strftime("%d-%m-%Y"))))
         
         self.conn.commit()
 
@@ -555,9 +578,9 @@ class Database:
         #self.cur.execute("SELECT id FROM tickets WHERE id=?",(ticket_id,))
         #database_info = self.cur.fetchone()
         
-        #                     0           1         2          3        4       5         6       7    8      9           10           11
-        #database_info = (ticket_id, booking_id, movie_id, screen_id, price, forename, surname, email, qr, num_VIPs, num_children, num_elders)
-        database_info = (1,2,3,4,7.50,'Kostas','Biris','kostas_biris@outlook.com',0,2,0)
+        #                     0           1         2          3           4        6         7       8        9        10            11           12
+        #database_info = (ticket_id, booking_id, movie_id, customer_id, screen_id, price, forename, surname, email, qr, num_VIPs, num_children, num_elders)
+        database_info = (1,2,3,4,5,7.50,'Kostas','Biris','kostas_biris@outlook.com',0,2,0)
 
         #self.cur.execute("SELECT seats FROM bookings Where id=?",(database_info[1]))
         #seats = self.cur.fetchone()
@@ -583,13 +606,13 @@ class Database:
         time = '21:00'
 
 
-        #                    0         1           2         3
-        #ticket_info = (ticket_id, booking_id, movie_id, screen_id, 
-        #                 4        5       6       7   
+        #                    0         1           2          3          4
+        #ticket_info = (ticket_id, booking_id, movie_id, customer_id, screen_id, 
+        #                 5        6       7       8   
         #               price, forename, surname, email,
-        #                  8           9          10
+        #                  9           10          11
         #               num_VIPs, num_children, num_elders,
-        #                 11       12       13    14
+        #                 12       13       14    15
         #               seats, movie_name, date, time)
         ticket_info = database_info + (seats, movie_name, date, time)
 
@@ -601,19 +624,19 @@ class Database:
 
         textLines = [
         f'Booking ID: {ticket_info[1]}',
-        f'Movie Name: {ticket_info[12]}',
-        f'Screen No: {ticket_info[3]}',
-        f'Date & time: {ticket_info[13]},{ticket_info[14]}',
+        f'Movie Name: {ticket_info[13]}',
+        f'Screen No: {ticket_info[4]}',
+        f'Date & time: {ticket_info[14]},{ticket_info[15]}',
         '',
-        f'Seats: {ticket_info[11]}',
-        f'Num VIP\'s: {ticket_info[8]}',
-        f'Num Children: {ticket_info[9]}',
-        f'Num Elders: {ticket_info[10]}',
+        f'Seats: {ticket_info[12]}',
+        f'Num VIP\'s: {ticket_info[9]}',
+        f'Num Children: {ticket_info[10]}',
+        f'Num Elders: {ticket_info[11]}',
         '',
-        f'Forename: {ticket_info[5]}',
-        f'Surname: {ticket_info[6]}',
+        f'Forename: {ticket_info[6]}',
+        f'Surname: {ticket_info[7]}',
         '',
-        f'Price: £{ticket_info[4]}',
+        f'Price: £{ticket_info[5]}',
         ]
 
         image = 'QR_Code.png'
@@ -692,6 +715,9 @@ class Database:
         smtp.send_message(message)
         print('Email Sent')
 
+    def get_customer_tickets(self,customer_id):
+        self.cur.execute("SELECT * FROM tickets WHERE customer_id=?",(customer_id,))
+        return self.cur.fetchall()
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=
 
@@ -1028,7 +1054,7 @@ seatmap = dat[0][5]
 #db.graph_analytics()
 
 
-db = Database('cinema.db')
-db.add_customer('seatmapCustomerFName','seatmapCustomerSName', 'seatmapCustomerEmail', 'seatmapCustomerPhone','seatmapCustomerPassword','01-01-01')
-db.add_booking(1, 1, 'A1,A2,A3')
+#db = Database('cinema.db')
+#db.add_customer('seatmapCustomerFName','seatmapCustomerSName', 'seatmapCustomerEmail', 'seatmapCustomerPhone','seatmapCustomerPassword','01-01-01')
+#db.add_booking(1, 1, 'A1,A2,A3')
 #db.add_overall_analytics(1, 'spider-man', 10, 1)

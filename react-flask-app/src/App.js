@@ -16,10 +16,13 @@ import Screen3 from "./Seatmap/Screen3"
 import ScreenVIP from "./Seatmap/ScreenVIP"
 import ScreenIMAX from "./Seatmap/ScreenIMAX"
 import BookTickets from "./Pages/BookTicketsPage";
-import AddScreenings from "./Pages/AddScreenings";
+//import AddScreenings from "./Pages/AddScreenings";
 import AddScreening from './Pages/AddScreening';
 import ArbitraryScreen from "./Seatmap/ArbitraryScreen";
 import OverallAnalytics from "./Pages/OverallAnalytics";
+import ScreeningResults from "./components/ScreeningResults";
+import EmployeeLogin from "./Pages/EmployeeLogin";
+import ManagerLogin from "./Pages/ManagerLogin";
 
 const App = () => (
     // Set up routing for our web application.
@@ -44,6 +47,9 @@ const App = () => (
         <Route exact path="/addscreening" component={AddScreening} />
         <Route exact path="/as" component={ArbitraryScreen}/>
         <Route exact path="/overall_analytics" component={OverallAnalytics}/>
+        <Route exact path="/searchscreenings/:query" component={ScreeningResults}/>
+        <Route exact path="/elogin" component={EmployeeLogin}/>
+        <Route exact path="/mlogin" component={ManagerLogin}/>
       </Switch>
     </BrowserRouter>
   
