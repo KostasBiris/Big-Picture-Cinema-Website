@@ -35,7 +35,7 @@ class BookTickets extends React.Component {
         // this.displayMovies = this.displayMovies.bind(this);
         this.getMovieTimes = this.getMovieTimes.bind(this);
         this.getMovieScreens = this.getMovieScreens.bind(this);
-        this.goNextPage = this.goNextPage.bind(this);
+        this.goToSeatMap = this.goToSeatMap.bind(this);
         this.seekData = this.seekData.bind(this);
         this.reformatd = this.reformatd.bind(this);
         this.movieOnScreen = this.movieOnScreen.bind(this);
@@ -50,7 +50,7 @@ class BookTickets extends React.Component {
 
         }).then(response => response.json()).then(data => {
             this.setState({ screenings: Object.values(data.screenings), movies: Object.values(data.movies) })
-            // console.log(data)
+            console.log(data)
         })
 
         if (this.props.location) {
@@ -66,6 +66,27 @@ class BookTickets extends React.Component {
     componentDidMount = () =>{
         window.addEventListener('load', this.seekData);
         this.seekData();
+
+        const _jquery = document.createElement("script");
+        _jquery.src = "https://code.jquery.com/jquery-3.2.1.slim.min.js";
+        _jquery.async = true;
+        _jquery.integrity = "sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN";
+        _jquery.crossOrigin = "anonymous";
+        document.body.appendChild(_jquery);
+    
+        const _popper = document.createElement("script");
+        _popper.src = "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js";
+        _popper.async = true;
+        _popper.integrity = "sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q";
+        _popper.crossOrigin = "anonymous";
+        document.body.appendChild(_popper);
+    
+        const _bootstrap = document.createElement("script");
+        _bootstrap.src = "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js";
+        _bootstrap.async = true;
+        _bootstrap.integrity ="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl";
+        _bootstrap.crossOrigin ="anonymous";
+        document.body.appendChild(_bootstrap);
     }
     componentWillUnmount = () => {
         window.removeEventListener('load', this.seekData)
@@ -242,9 +263,9 @@ class BookTickets extends React.Component {
         }
     }
 
-    goNextPage = () => {
-        this.props.history.push('/as', this.state);
+    goToSeatMap = () => {
         console.log(this.state)
+        this.props.history.push('/as', this.state);
         //let go = ''
         //     if (this.state.screenChosen && this.state.dateChosen && this.state.movieChosen && this.state.timeChosen){   // quick validation before next page
         //         go = this.props.history.location.pathname + this.screenChosen; // get the current url and add the next direction
@@ -278,7 +299,7 @@ class BookTickets extends React.Component {
 
 
     render() {
-        // console.log(this.state);
+        console.log(this.state);
 
 
         return (
@@ -377,10 +398,15 @@ class BookTickets extends React.Component {
                                                         <div className="row text-center mx-0">
                                                             {
                                                                 this.movieOnScreen(1) ?
-                                                                    <div className="col-md-2 col-4 my-1 px-2 tab_background rounded-pill" >
-                                                                        <label for="1">SILVER SCREEN 1</label>
-                                                                        <input type="radio" id="1" className="tab_background rounded-pill" name="screen" value="1" onClick={this.handleScreen}/>
-                                                            </div>
+                                                                    // <div className="col-md-2 col-4 my-1 px-2 tab_background rounded-pill" >
+                                                                    //     <label for="1">SILVER SCREEN 1</label>
+                                                                    //     <input type="radio" id="1" className="tab_background rounded-pill" name="screen" value="1" onClick={this.handleScreen}/>
+                                                                    // </div>
+                                                                    <div className=".col-md-2 .col-4 .my-1 .px-2 tab_background rounded-pill" >
+                                                                    <input type="radio" id="1" className="tab_background rounded-pill" name="screen" value="1" onClick={this.handleScreen}/>
+                                                                    <label style={{padding:'5px'}} for="1">SILVER SCREEN 1</label>
+                                                                    
+                                                                    </div>
                                                                     :
                                                                     <></>
 
@@ -388,9 +414,10 @@ class BookTickets extends React.Component {
                                                             {
                                                                 this.movieOnScreen(2) ?
                                                                     
-                                                                    <div className="col-md-2 col-4 my-1 px-2 tab_background rounded-pill">
-                                                                        <label for="2">SILVER SCREEN 2</label>
+                                                                    <div className=".col-md-2 .col-4 .my-1 .px-2 tab_background rounded-pill">
+                                                                        
                                                                         <input type="radio" id="2" className="tab_background rounded-pill" name="screen" value="2" onClick={this.handleScreen}></input>
+                                                                        <label style={{padding:'5px'}} for="2">SILVER SCREEN 2</label>
                                                                     </div> 
 
                                                                     :
@@ -398,28 +425,32 @@ class BookTickets extends React.Component {
                                                             }
                                                             {
                                                                 this.movieOnScreen(3) ?
-                                                                    <div className="col-md-2 col-4 my-1 px-2 tab_background rounded-pill">
-                                                                        <label for="3">SILVER SCREEN 3</label>
+                                                                    <div className=".col-md-2 .col-4 .my-1 .px-2 tab_background rounded-pill">
+                                                                        
                                                                         <input type="radio" id="3" className="tab_background rounded-pill" name="screen" value="3" onClick={this.handleScreen}></input>
+                                                                        <label style={{padding:'5px'}} for="3">SILVER SCREEN 3</label>
                                                                     </div>
                                                                     :
                                                                     <></>
                                                             }
                                                             {
                                                                 this.movieOnScreen(4) ?
-                                                                    <div className="col-md-2 col-4 my-1 px-2 tab_background rounded-pill">
-                                                                        <label for="4">VMAX SCREEN</label>
+                                                                    <div className=".col-md-2 .col-4 .my-1 .px-2 tab_background rounded-pill">
+                                                                        
                                                                         <input type="radio" id="4" className="tab_background rounded-pill" name="screen" value="4" onClick={this.handleScreen}></input>
+                                                                        <label style={{padding:'5px'}} for="4">VMAX SCREEN</label>
                                                                     </div>
+
                                                                     :
                                                                     <></>
                                                             }
                                                             {
                                                                 this.movieOnScreen(5) ?
 
-                                                                    <div className="col-md-2 col-4 my-1 px-2 tab_background rounded-pill">
-                                                                        <label for="5">GOLDEN SCREEN</label>
+                                                                    <div className=".col-md-2 .col-4 .my-1 .px-2 tab_background rounded-pill">
+                                                                        
                                                                         <input type="radio" id="5" className="tab_background rounded-pill" name="screen" value="5" onClick={this.handleScreen}></input>
+                                                                        <label style={{padding:'5px'}} for="5">GOLDEN SCREEN</label>
                                                                     </div>
                                                                     :
                                                                     <></>
@@ -473,14 +504,14 @@ class BookTickets extends React.Component {
                                 </a>
                             </li>
                             <li className="page-item"><a className="buttons_background" style={{ color: "white" }}>MOVIE</a></li>
-                            <li className="page-item"><a className="buttons_background" style={{ color: "white" }}>SEATS</a></li>
+                            <li className="page-item"><a className="buttons_background" style={{ color: "white" }} onClick={this.goToSeatMap}>SEATS</a></li>
                             <li className="page-item"><a className="buttons_background" style={{ color: "white" }}>CHECKOUT</a></li>
 
                         </ul>
                     </nav>
-                    <div onClick={this.goNextPage} className="bottom-right">
+                    {/* <div onClick={this.goToSeatMap} className="bottom-right">
                         <button className="a1 next btn btn-primary btn-large">Next &raquo;</button>
-                    </div>
+                    </div> */}
                     <br />
                     <br />
                     <br />
