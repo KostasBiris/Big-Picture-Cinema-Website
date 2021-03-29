@@ -805,6 +805,28 @@ class Database:
         return check_password_hash(u[5], password), u[0]
 
 
+    def validate_manager(self, email, password, id):
+        self.cur.execute("SELECT * FROM employees WHERE email=?",(email,))
+        m = self.cur.fetchone()
+        print(m)
+        if not m: return False, -1
+        if not check_password_hash(m[5], password):
+            return False, -1
+        if not int(m[6]) ==1:
+            return False, -1
+        if not int(id) == m[0]:
+            return False, -1
+
+        return True, m[0]
+
+    def validate_employee(self, password, id):
+        self.cur.execute("SELECT * FROM employees WHERE id=?",(int(id),))
+        e = self.cur.fetchone()
+
+        return check_password_hash(e[5], password), e[0]
+
+
+
     def search(self, query, table):
         dictionary = {'movies':0,'screens':1, 'screenings': 2,  'customers': 3, 'bookings': 4, 'employees': 5}
         return [row for row in self.fetch()[dictionary[table.lower()]] if query.lower() in str(row).lower()]
@@ -1042,6 +1064,8 @@ dat = db.fetch()[2]
 seatmap = dat[0][5]
 #print(seatmap)
 """
+db = Database('cinema.db')
+db.add_employee("staff4_fn", "staff4_sn", "jaredswift@hotmail.co.uk", 1, "staff4_password", True)
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 #db = Database('cinema.db')
 #db.qr_code_generator(1)

@@ -389,13 +389,12 @@ def _mainpage():
 def insession(ip):
     db = Database('cinema.db')
     rq = db.ip_in_session(ip)
-    if not rq:
+    data = db.fetch_customer(rq[4])
+    if not rq or not data:
         del db
         return jsonify({'response': 'error'})
     data = db.fetch_customer(rq[4])
     return jsonify({'response':serialize_user(data)})
-
-
 @app.route('/logout/<ip>', methods = ['POST'])
 def logout(ip):
     db = Database('cinema.db')
@@ -427,7 +426,6 @@ def _login():
     email = data['email']
     password = data['password']
     ip = data['IP']
-    print(email, password, ip)
     res, id_ = db.validate_customer(email, password)
     if res:
         db.add_session(ip, time.time(), 1, id_, 'NULL', 'NULL')
@@ -436,7 +434,35 @@ def _login():
     del db
     return jsonify({'response' : 'BAD'})
     
-    
+@app.route('/manager_login',methods=['POST'])
+def manager_login():
+    db = Database('cinema.db')
+    data = request.json['data']
+    email = data['email']
+    password = data['password']
+    ip = data['IP']
+    id = data['id']
+    res, id_ = db.validate_manager(email, password,id)
+    if res:
+        db.add_session(ip, time.time(), 3, 'NULL', 'NULL', id_)
+       # del db
+        return jsonify({'response': 'OK'})
+    del db
+    return jsonify({'response' : 'BAD'})
+
+@app.route('/employee_login',methods=['POST'])
+def employee_login():
+    db = Database('cinema.db')
+    data = request.json['data']
+    id = data['id']
+    password = data['password']
+    ip = data['IP']
+    res, id_ = db.validate_employee(password,id)
+    if res:
+        db.add_session(ip, time.time(), 2, 'NULL', id_, 'NULL')
+        return jsonify({'response': 'OK'})
+    del db
+    return jsonify({'response' : 'BAD'})
 
 @app.route('/account')
 
