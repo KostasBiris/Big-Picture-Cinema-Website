@@ -39,9 +39,219 @@ class EPayment extends React.Component{
 }  
 render() {
   return (
-<body>
+<body id="grad1">
+<head>
+<link rel="stylesheet" type="text/css" href={main} />
+<link rel="icon" href="data:;base64,iVBORw0KGgo" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+</head>
+
+
+    <Banner/>
+    
+    
+    <fieldset style={{paddingTop:'50px',paddingRight:'20px'}}>
+    <div class="container text-center">
+              <button class="tab_background text mr-3 btn-lg">BOOK TICKETS</button>
+              <button class="tab_background text mr-3 btn-lg">VIEW MOVIES</button>
+              <button class="tab_background text mr-3 btn-lg" >REGISTER CUSTOMER</button>
+              <button class="tab_background text mr-9 btn-lg">HELP</button>
+      </div>
+      <br/>
+      <br/>
+      <br/>
+        <div className="container modalContentPayment" >
+            <div className="row" >
+                <div className="col-sm-6 col-xs-12 ">
+                    <br/>
+                    <div className="headerText">
+                        <h2 style= {{position: 'absolute', left:'25px', color: '#4e5b60', fontWeight: 'bold'}}>CHECKOUT DETAILS
+                        </h2>
+                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <form>
+                        <div className="md-form mb-2">
+                            <input className="register_details" type="text" name="first_name" id="first_name"
+                                placeholder="First name" style={{color:'black'}} required />
+                        </div>
+                        <div className="md-form mb-2">
+                            <input className="register_details" type="text" name="last_name" id="last_name"
+                                placeholder="Last name" style={{color:'black'}}  required />
+                        </div>
+                        <div className="md-form mb-2">
+                            <input className="register_details" type="text" name="email" id="email"
+                                placeholder="E-mail address" style={{color:'black'}}  required />
+                        </div>
+                        <div className="md-form mb-2">
+                            <input className="register_details" type="text" name="address" id="address"
+                                placeholder="Address Line 1" style={{color:'black'}}  required />
+                        </div>
+                        <div className="md-form mb-2">
+                            <input className="register_details" type="text" name="address" id="address-2"
+                                placeholder="Address Line 2 (Optional)" style={{color:'black'}}  />
+                        </div>
+                        <div className="row">
+                            <div className="col-lg-4 col-md-12 mb-4">
+                                <select className="register_details custom-select d-block w-100" id="country" required>
+                                    <option value="">Country</option>
+                                    <option>United Kingdom</option>
+                                </select>
+                                <div className="invalid-feedback">
+                                    Please select a valid country.
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+                    </form>
+                    <div className="Payment"> 
+                  <Elements stripe={promise}>
+                  <CheckoutForm />
+                  </Elements>   
+                    </div>
+                </div>
+                <div className="col-sm-6 col-xs-13">
+                    <br/>
+                    <div className="headerText">
+                        <h3 style={{position: 'absolute', left:'25px', color: '#4e5b60', fontWeight: 'bold'}}>ORDER SUMMARY</h3>
+                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <h5 className="my-0" style={{position: 'absolute', left:'25px'}}>Select Ticket Type: </h5>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <ul className="list-group mb-3 z-depth-1">
+                        <li className="d-flex justify-content-center">
+                            <div>
+                                <div className="row">
+                                    <div className="col-lg-10 col-md-12 mb-4">
+                                        <select className="register_details custom-select d-block w-100" id="ticket-type"
+                                            required>
+                                            <option value="">Ticket Type..</option>
+                                            <option>Adults Ticket 7.50£</option>
+                                            <option>Kids Ticket(0-12) 5.50£</option>
+                                            <option>Seniors Ticket 6.50£</option>
+                                        </select>
+                                        <div className="invalid-feedback">
+                                            Please select a valid ticket.
+                                        </div>
+                                    </div>
+                                </div>
+                                <h5 className="text-muted">The Avengers, 03/07/2021, 21:00</h5>
+                                <h5 className="text-muted">H10, Silver Screen 1</h5>
+                            </div>
+                            <span>
+                                <buton className="buttons_remove">Remove Item</buton>
+                            </span>
+                        </li>
+                        <li className="d-flex justify-content-center">
+                            <div>
+                                <div className="row">
+                                    <div className="col-lg-10 col-md-12 mb-4">
+                                        <select className="register_details custom-select d-block w-100" id="ticket-type"
+                                            required>
+                                            <option value="">Ticket Type..</option>
+                                            <option>Adults Ticket 7.50£</option>
+                                            <option>Kids Ticket(0-12) 5.50£</option>
+                                            <option>Seniors Ticket 6.50£</option>
+                                        </select>
+                                        <div className="invalid-feedback">
+                                            Please select a valid ticket.
+                                        </div>
+                                    </div>
+                                </div>
+                                <h5 className="text-muted">The Avengers, 03/07/2021, 21:00</h5>
+                                <h5 className="text-muted">H12, Silver Screen 1</h5>
+                            </div>
+                            <span>
+                                <buton className="buttons_remove">Remove Item</buton>
+                            </span>
+                        </li>
+                        <li className="d-flex justify-content-center">
+                            <div>
+                                <div className="row">
+                                    <div className="col-lg-10 col-md-12 mb-4">
+                                        <select className="register_details custom-select d-block w-100" id="ticket-type"
+                                            required>
+                                            <option value="">Ticket Type..</option>
+                                            <option>Adults Ticket 7.50£</option>
+                                            <option>Kids Ticket(0-12) 5.50£</option>
+                                            <option>Seniors Ticket 6.50£</option>
+                                        </select>
+                                        <div className="invalid-feedback">
+                                            Please select a valid ticket.
+                                        </div>
+                                    </div>
+                                </div>
+                                <h5 className="text-muted">The Avengers, 03/07/2021, 21:00</h5>
+                                <h5 className="text-muted">H11, Silver Screen 1</h5>
+                            </div>
+                            <span>
+                                <buton className="buttons_remove">Remove Item</buton>
+                            </span>
+                        </li>
+                        <li className="d-flex justify-content-center">
+                            <div>
+                                <div className="row">
+                                    <div className="col-lg-10 col-md-12 mb-4">
+                                        <select className="register_details custom-select d-block w-100" id="ticket-type"
+                                            required>
+                                            <option value="" disabled="true">Ticket Type..</option>
+                                            <option>VIP Ticket 10.50£</option>
+                                        </select>
+                                        <div className="invalid-feedback">
+                                            Please select a valid ticket.
+                                        </div>
+                                    </div>
+                                </div>
+                                <h5 className="text-muted">The Avengers, 03/07/2021, 21:00</h5>
+                                <h5 className="text-muted">F14, Silver Screen 1</h5>
+                            </div>
+                            <span>
+                                <buton className="buttons_remove">Remove Item</buton>
+                            </span>
+                        </li>
+
+                        <li>
+                            <hr className="mb-4"></hr>
+                        </li>
+                        <li className="d-flex justify-content-between">
+                            <h4>Total (USD)</h4>
+                            <h4>$45</h4>
+                        </li>
+                    </ul>
+             </div>  
+        </div> 
+    </div>
+    </fieldset> 
+
+    <br/>
+    <br/>
+    
+    <nav>
+    <div class="container text-center">
+        <button class="tab_background text mr-3 btn-lg">{'<'}</button>
+        <button class="tab_background text mr-3 btn-lg">MOVIE</button>
+        <button class="tab_background text mr-3 btn-lg">SEATS</button>
+        <button class="tab_background text mr-9 btn-lg">CHECKOUT</button>
+        <button class="tab_background text mr-3 btn-lg" style={{marginLeft:'12px'}}>{'>'}</button>
+    </div>
+    </nav>
+    <br/>
+    <footer className="bg-light text-center">
+        <div className="text-center p-3" style={{backgroundColor: 'rgba(0, 0, 0, 0.2)'}}>
+            All rights reserved. © 2021 Copyright:
+            <a className="text-dark">The Big Picture</a>
+        </div>
+    </footer> 
 
 </body>
+
     );
 }
 
