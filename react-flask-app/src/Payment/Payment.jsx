@@ -45,18 +45,18 @@ class Payment extends React.Component{
 render() {
   return (
    
-<React.Fragment>
+<body id="grad1">
 <head>
 <link rel="stylesheet" type="text/css" href={main} />
 <link rel="icon" href="data:;base64,iVBORw0KGgo" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 </head>
- <body id="grad1">
 
     <Banner/>
-    <fieldset>
-        <div className="container modalContentPayment">
-            <div className="row">
+    
+    <fieldset style={{paddingTop:'50px',paddingRight:'20px'}}>
+        <div className="container modalContentPayment" >
+            <div className="row" >
                 <div className="col-sm-6 col-xs-12 ">
                     <br/>
                     <div className="headerText">
@@ -69,23 +69,23 @@ render() {
                     <br/>
                     <form>
                         <div className="md-form mb-2">
-                            <input className="register_details form-control" type="text" name="first_name" id="first_name"
+                            <input className="register_details" type="text" name="first_name" id="first_name"
                                 placeholder="First name" style={{color:'black'}} required />
                         </div>
                         <div className="md-form mb-2">
-                            <input className="register_details form-control" type="text" name="last_name" id="last_name"
+                            <input className="register_details" type="text" name="last_name" id="last_name"
                                 placeholder="Last name" style={{color:'black'}}  required />
                         </div>
                         <div className="md-form mb-2">
-                            <input className="register_details form-control" type="text" name="email" id="email"
+                            <input className="register_details" type="text" name="email" id="email"
                                 placeholder="E-mail address" style={{color:'black'}}  required />
                         </div>
                         <div className="md-form mb-2">
-                            <input className="register_details form-control" type="text" name="address" id="address"
+                            <input className="register_details" type="text" name="address" id="address"
                                 placeholder="Address Line 1" style={{color:'black'}}  required />
                         </div>
                         <div className="md-form mb-2">
-                            <input className="register_details form-control" type="text" name="address" id="address-2"
+                            <input className="register_details" type="text" name="address" id="address-2"
                                 placeholder="Address Line 2 (Optional)" style={{color:'black'}}  />
                         </div>
                         <div className="row">
@@ -224,6 +224,7 @@ render() {
         </div> 
     </div>
     </fieldset> 
+
     <br/>
     <br/>
     
@@ -250,7 +251,7 @@ render() {
     </footer> 
 
 </body>
-</React.Fragment>
+
     
   );
   

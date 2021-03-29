@@ -80,7 +80,58 @@
   color:#ffffff;
 }
 
+.buttons_remove{
+  background-color: rgba(114, 54, 54, 0.87);
+  text-align: center;
+  text-decoration: none;
+  font-size:medium;
+  margin:auto;
+  padding:10px;
+  cursor: pointer;
+  border-radius: 25px;
+  border: none;
+  display: inline-block;
+  color:#ffffff;
+}
+.buttons_remove:hover{
+  background: #4e5b60;
+}
 
+.buttons_next{
+  background-color: #4e5b60;
+  text-align: center;
+  text-decoration: none;
+  font-size:medium;
+  margin:auto;
+  padding:10px;
+  cursor: pointer;
+  border-radius: 25px;
+  border: none;
+  display: inline-block;
+  color:#ffffff;
+}
+
+.buttons_prev{
+  background-color: #4e5b60;
+  text-align: center;
+  text-decoration: none;
+  font-size:medium;
+  margin:auto;
+  padding:10px;
+  cursor: pointer;
+  border-radius: 25px;
+  border: none;
+  display: inline-block;
+  color:#ffffff;
+}
+
+.buttons_next:hover{
+  background: #4CAF50;
+}
+
+.buttons_prev:hover{
+  background: #3D5AFE;
+}
 
 .background {
   background: url("loginback.jpg");
@@ -167,6 +218,16 @@
     background:#f9bc50;
     border-radius:12px;
   }
+.register_details {
+    width: 100%;
+    padding: 20px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: 5px solid #f9bc50;
+    background: white;
+    border-radius:12px;
+  }
+  
 .register_details:focus{
   background-color: #ddd;
   outline: none;
@@ -181,6 +242,17 @@
   }
 .containerStart {
   padding: 16px;
+}
+
+.modalContentPayment{
+  background-color: #f5f0f0ec;
+  border-radius:10px;
+  border: 1px solid #888;
+  width:60%;
+  top:40rem;
+  left:50%;
+  align-items: center;
+  
 }
 
 .modalContent{
