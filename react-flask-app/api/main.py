@@ -7,6 +7,7 @@ import os
 import json
 import stripe
 from threading import Thread
+import datetime
 app = Flask(__name__)
 CORS(app)
 
@@ -177,6 +178,18 @@ def tk():
     return {'response': serialize_all_tickets(data)}
 
 
+@app.route('/makebooking', methods=['POST'])
+def makebooking():
+    db = Database('cinema.db')
+    data = request.json['data']
+    screeningid = data['screeningid']
+    bookingid = data['bookingid']
+    seats = data['seats']
+    db.add_booking(screeningid, bookingid, seats)
+
+
+
+
 
 """
 @app.route('/movie/<name>', methods = ['POST'])
@@ -264,6 +277,19 @@ def search():
     return render_template('search.html')
 
 
+@app.route('/payment_info')
+def payment_info():
+
+    data = request['data']
+    customerid = data['id']
+    holder_name = data['name']
+    postcode = data['postcode']
+    card_number = data['card_number']
+    expiration_date = data['expiration_date']
+
+    db = Database('cinema.db')
+    db.add_payment(str(datetime.today().strftime("%d-%m-%Y")), customerid, holder_name, postcode, card_number, expiration_date)
+    return jsonify({'response':'OK'})
 
 
 #===============================================================================================================================
@@ -405,7 +431,7 @@ def _login():
     res, id_ = db.validate_customer(email, password)
     if res:
         db.add_session(ip, time.time(), 1, id_, 'NULL', 'NULL')
-        del db
+       # del db
         return jsonify({'response': 'OK'})
     del db
     return jsonify({'response' : 'BAD'})

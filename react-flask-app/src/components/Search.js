@@ -91,7 +91,7 @@ class SearchResults extends React.Component{
         </head> */}
           <body>
             <SearchIMDB onGetMovie={this.getMovies} movieName={this.props.match.params.query} getAllMovies={"True"} getTranding={"False"} />
-            <Banner props={this.props} /> {/* pass props to keep track of props.history.push from CustomerHomePage */}
+            <Banner history ={this.props.history} /> {/* pass props to keep track of props.history.push from CustomerHomePage */}
             {/* <div style={{position: 'relative', paddingLeft: '20%', paddingRight: '80%', paddingTop: '10%%', paddingBottom: '90%', width: '50%'}}> */}
             {/* Render element conditionally  */}
             {this.state.returnedData.length > 0 ?

@@ -57,11 +57,15 @@ class CustomerHomePage extends React.Component {
         })();
     }
 
-    stepUp = async () => {
+    stepUp = async (flag) => {
         await (async () => {
             this.setState({ IP: await publicIP.v4() })
         })();
-        this.assertAuth();
+        if (flag) {
+            this.assertAuth();
+        }
+        
+        
     }
 
     isAuth = () => {
@@ -121,12 +125,13 @@ class CustomerHomePage extends React.Component {
     }
 
     componentWillUnmount = () => {
-        window.removeEventListener('load', this.stepUp)
+        window.removeEventListener('load', this.stepUp(true));
+        clearInterval(interval);
     }
 
 
     assertAuth = () => {
-        if (this.state.IP === null) {this.stepUp()}
+        if (this.state.IP === null) {this.stepUp(false)}
         var go = '/insession/' + this.state.IP;
         fetch(go, {
             method: 'POST',
@@ -173,7 +178,7 @@ class CustomerHomePage extends React.Component {
         if (this.state.date!== '') {
             this.props.history.push('/searchscreenings/' + this.state.date);
         }
-        
+
     }
 
 
@@ -328,6 +333,11 @@ class CustomerHomePage extends React.Component {
                             <input onChange={this.handleSearchChange} value={this.state.query} className="form-control mr-sm-2 search_bar" type="search" placeholder="Search here.." aria-label="Search"/>
                             <button onClick={this.handleSubmit} className="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>
                             </form>
+                            <form className="form-inline my-2 my-lg-0">
+                            <input type="date" onChange={this.handleDate} value={this.reformatd(this.state.date)}/>
+                            <button onClick={this.handleSubmitDate} className="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>
+                            </form>
+
                         </div>
                         </nav>
                         <div id="carouselExampleIndicators" className="carousel slide" data-ride="carousel">
@@ -364,37 +374,13 @@ class CustomerHomePage extends React.Component {
                     <br/>
                     <br/>
                     <br/>
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-lg-3 col-md-4 hover01">
-                                <div className="col-md-2 col-md-offset-1">
-                                    <figure><img className="img-fluid new_movies" src={poster8} alt=""/></figure>
-                                </div>
-                            </div>
-                            <div className="col-lg-3 col-md-4 hover01">
-                                <div className="col-md-2 col-md-offset-1">
-                                    <figure><img className="img-fluid new_movies" src={poster9}  alt=""/></figure>
-                                </div>
-                            </div>
-                            <div className="col-lg-3 col-md-4 hover01">
-                                <div className="col-md-2 col-md-offset-1">
-                                    <figure><img className="img-fluid new_movies" src={poster14} alt=""/></figure>
-                                </div>
-                            </div>
-                            <div className="col-lg-3 col-md-4 hover01">
-                                <div className="col-md-2 col-md-offset-1">
-                                    <figure><img className="img-fluid new_movies" src={poster13} alt=""/></figure>
-                                </div>
-                            </div>
-                    </div>
-                    </div>
+                    {this.state.movies !== null ? this.getRandomPosters() : <></>}
+
                     <br/>
                     <br/>
-                    <div className="header_text">
-                        <h1 style={{position:'absolute', left:'25px', color: '#4e5b60', fontWeight: 'bold'}}>FEAUTURED TRAILERS</h1>
-                    </div>
                     <br/>
                     <br/>
+
                     <br/>
                     <br/>
                     <footer className="bg-light text-center">
@@ -495,9 +481,6 @@ class CustomerHomePage extends React.Component {
                     {this.state.movies !== null ? this.getRandomPosters() : <></>}
                     <br/>
                     <br/>
-                    <div className="header_text">
-                        <h1 style={{position:'absolute', left:'25px', color: '#4e5b60', fontWeight: 'bold'}}>FEAUTURED TRAILERS</h1>
-                    </div>
                     <br/>
                     <br/>
                     <br/>
