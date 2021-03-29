@@ -11,11 +11,12 @@ class ArbitraryScreen extends React.Component {
         super(props);
         // console.log(this.props)
         // console.log(this.props.location.state.screening.seatmap)
-        this.state = {seatmap: this.props.location.state.screening.seatmap};
+        this.state = {seatmap: this.props.location.state.screening.seatmap,
+                      seatmap_copy: JSON.parse(JSON.stringify(this.props.location.state.screening.seatmap))};
         this.mountSeatmap = this.mountSeatmap.bind(this);
         this.updateSeatmap = this.updateSeatmap.bind(this);
         this.goToCheckOut = this.goToCheckOut.bind(this);
-
+        
     }
 
     componentDidMount = () => {
@@ -90,10 +91,8 @@ class ArbitraryScreen extends React.Component {
         this.props.history.push('/payment', this.state);
     }
 
-    updateSeatmap = (data) => { 
-        // var i,j=0;
-        var seatmap = this.state.seatmap;
-        // console.log(seatmap)
+    updateSeatmap = (data) => {
+        let seatmap = this.state.seatmap_copy;
 
         if (this.state.seatmap[data.row][data.col] != -1){
             if (data.remove == true)
@@ -103,8 +102,7 @@ class ArbitraryScreen extends React.Component {
         }
 
         
-        // this.setState({seatmap: seatmap})
-        console.log(this.state.seatmap)
+        this.setState({seatmap_copy: seatmap})
     }
 
 
