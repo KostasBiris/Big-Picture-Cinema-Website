@@ -23,6 +23,7 @@ import OverallAnalytics from "./Pages/OverallAnalytics";
 import ScreeningResults from "./components/ScreeningResults";
 import EmployeeLogin from "./Pages/EmployeeLogin";
 import ManagerLogin from "./Pages/ManagerLogin";
+import EPayment from "./Payment/Employee_Payment";
 
 const App = () => (
     // Set up routing for our web application.
@@ -50,6 +51,8 @@ const App = () => (
         <Route exact path="/searchscreenings/:query" component={ScreeningResults}/>
         <Route exact path="/elogin" component={EmployeeLogin}/>
         <Route exact path="/mlogin" component={ManagerLogin}/>
+        <Route exact path="/epayment" component={EPayment}/>
+
       </Switch>
     </BrowserRouter>
   
