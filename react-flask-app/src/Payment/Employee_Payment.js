@@ -102,6 +102,14 @@ render() {
                                 <div className="invalid-feedback">
                                     Please select a valid country.
                                 </div>
+                                
+                            </div>
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <input type="text" class="register-details form-control" id="zip" placeholder="Postcode"
+                                    required/>
+                                <div class="invalid-feedback">
+                                    Postcode required.
+                                </div>
                             </div>
                             
                         </div>
