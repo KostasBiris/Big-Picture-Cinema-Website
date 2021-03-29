@@ -5,6 +5,8 @@ import CheckoutForm from "./CheckoutForm";
 import main from "../static/main.css"
 import "./Style/Payment.scss"
 import Banner from "../components/Banner";
+import finlogo from "../static/finlogo.png";
+import usericon from "../static/usericon.png";
 
 const promise = loadStripe("pk_test_51ISQ7OC2YcxFx25TvsWtOhWiQkKfYOA0dawMWGSqF7xKTiFz3lnHp1Q34Ike3DUP4JUUg14Bzn3MxUtl1CIcSjpa00SZjsWNg9");
 var publicIP = require('public-ip')
@@ -47,7 +49,20 @@ render() {
 </head>
 
 
-    <Banner/>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#"><img src={finlogo} style={{top:'1px',width:'rem',height:'8rem'}}/></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <form class="form-inline my-2 my-lg-0">
+            <button class="tab_background mr-3">LOG OUT</button>
+            <input class="mr-3" type="image" style={{width:"2rem",height:"2rem"}} src={usericon}/>
+            <input class="form-control mr-sm-2 search_bar" type="search" placeholder="Search here.." aria-label="Search"/>
+            <button class="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>
+          </form>
+        </div>
+      </nav>
     
     
     <fieldset style={{paddingTop:'50px',paddingRight:'20px'}}>
