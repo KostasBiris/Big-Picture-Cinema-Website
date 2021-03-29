@@ -12,7 +12,8 @@ class ArbitraryScreen extends React.Component {
         // console.log(this.props)
         // console.log(this.props.location.state.screening.seatmap)
         this.state = {seatmap: this.props.location.state.screening.seatmap,
-                      seatmap_copy: JSON.parse(JSON.stringify(this.props.location.state.screening.seatmap))};
+                      seatmap_copy: JSON.parse(JSON.stringify(this.props.location.state.screening.seatmap)),
+                      selectedSeats: []};
         this.mountSeatmap = this.mountSeatmap.bind(this);
         this.updateSeatmap = this.updateSeatmap.bind(this);
         this.goToCheckOut = this.goToCheckOut.bind(this);
@@ -95,13 +96,20 @@ class ArbitraryScreen extends React.Component {
         let seatmap = this.state.seatmap_copy;
 
         if (this.state.seatmap[data.row][data.col] != -1){
-            if (data.remove == true)
+            if (data.remove == true){
+                let toRemove = {row: String.fromCharCode('A'.charCodeAt(0) + data.row), col: (data.col+1)};
                 seatmap[data.row][data.col].isReserved = false;
-            else
-                seatmap[data.row][data.col].isReserved = true;
+                let index = this.state.selectedSeats.indexOf(toRemove)
+                this.state.selectedSeats.splice(index, 1)
+            }
+            else{
+                let matrixIndex = {row: String.fromCharCode('A'.charCodeAt(0) + data.row), col: (data.col+1)}
+
+                this.state.selectedSeats.push(matrixIndex)
+            }
         }
 
-        
+        console.log(this.state)
         this.setState({seatmap_copy: seatmap})
     }
 
