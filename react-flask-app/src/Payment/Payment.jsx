@@ -102,10 +102,12 @@ render() {
                         </div>
                         
                     </form>
+                    <hr class="mb-4"/>
                     <div className="Payment"> 
                   <Elements stripe={promise}>
                   <CheckoutForm />
                   </Elements>   
+                  <hr class="mb-4"/>
                     </div>
                 </div>
                 <div className="col-sm-6 col-xs-13">

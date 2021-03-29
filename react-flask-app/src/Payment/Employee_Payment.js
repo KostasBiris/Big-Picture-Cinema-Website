@@ -105,13 +105,13 @@ render() {
                             </div>
                             
                         </div>
-                        
+                        <hr class="mb-4"/>
+                        <button class="btn btn-primary btn-lg btn-block" type="submit">PAY BY CARD</button>
+                        <br/>
+                        <hr class="mb-4"/>
+                        <button class="btn btn-primary btn-lg btn-block" type="submit">PAY BY CASH</button>
+                        <hr class="mb-4"/>
                     </form>
-                    <div className="Payment"> 
-                  <Elements stripe={promise}>
-                  <CheckoutForm />
-                  </Elements>   
-                    </div>
                 </div>
                 <div className="col-sm-6 col-xs-13">
                     <br/>
