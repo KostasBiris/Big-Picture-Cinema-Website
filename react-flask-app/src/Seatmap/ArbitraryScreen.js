@@ -13,7 +13,7 @@ class ArbitraryScreen extends React.Component {
         // console.log(this.props.location.state.screening.seatmap)
         this.state = {seatmap: this.props.location.state.screening.seatmap,
                       seatmap_copy: JSON.parse(JSON.stringify(this.props.location.state.screening.seatmap)),
-                      selectedSeats: []};
+                      selectedSeats: [],  screeningChosen : this.props.location.state.screening};
         this.mountSeatmap = this.mountSeatmap.bind(this);
         this.updateSeatmap = this.updateSeatmap.bind(this);
         this.goToCheckOut = this.goToCheckOut.bind(this);
@@ -104,13 +104,13 @@ class ArbitraryScreen extends React.Component {
             }
             else{
                 let matrixIndex = {row: String.fromCharCode('A'.charCodeAt(0) + data.row), col: (data.col+1)}
-
-                this.state.selectedSeats.push(matrixIndex)
+                this.setState({selectedSeats: [...this.state.selectedSeats, matrixIndex]});
+                //this.state.selectedSeats.push(matrixIndex)
             }
         }
 
-        console.log(this.state)
         this.setState({seatmap_copy: seatmap})
+        console.log(this.state)
     }
 
 

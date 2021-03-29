@@ -6,7 +6,7 @@ import {
 } from "@stripe/react-stripe-js";
 
 
-export default function CheckoutForm() {
+export default function CheckoutForm (state, props)  {
   const [succeeded, setSucceeded] = useState(false);
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState('');
@@ -14,7 +14,8 @@ export default function CheckoutForm() {
   const [clientSecret, setClientSecret] = useState('');
   const stripe = useStripe();
   const elements = useElements();
-
+ // const _props = props;
+  //console.log(props);
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
     window
@@ -75,6 +76,17 @@ export default function CheckoutForm() {
       setError(null);
       setProcessing(false);
       setSucceeded(true);
+     // console.log(_props);
+      console.log(state);
+        var go = '/makebooking'
+        fetch(go, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ data: state })})
+      //props.history.push('/');
+    //  _props.history.push('/');
     }
   };
   const button = {

@@ -54,8 +54,12 @@ const App = () => (
         <Route exact path="/elogin" component={EmployeeLogin}/>
         <Route exact path="/mlogin" component={ManagerLogin}/>
         <Route exact path="/epayment" component={EPayment}/>
+<<<<<<< Updated upstream
         <Route exact path="/emain" component={EmployeeMain}/>
         <Route exact path="/ebook" component={EmployeeBook}/>
+=======
+        <Route render={() => <Redirect to={{pathname: "/"}}/>}/>
+>>>>>>> Stashed changes
       </Switch>
     </BrowserRouter>
   

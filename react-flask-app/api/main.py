@@ -137,10 +137,11 @@ def serialize_ticket(res):
         'id' : res[0],
         'bookingid' : res[1],
         'movie_id' : res[2],
-        'price' : res[3],
-        'forename': res[4],
-        'surname': res[5],
-        'email':res[6],
+        'customer_id' : res[3],
+        'price' : res[4],
+        'forename': res[5],
+        'surname': res[6],
+        'email':res[7],
         'numVIP':res[8],
         'numChild':res[9],
         'numElder':res[10],
@@ -182,13 +183,37 @@ def tk():
 def makebooking():
     db = Database('cinema.db')
     data = request.json['data']
-    screeningid = data['screeningid']
-    bookingid = data['bookingid']
-    seats = data['seats']
-    db.add_booking(screeningid, bookingid, seats)
+    data = data['state']
+    screening = data['screening']
+    screeningid = screening['id']
+    movieid = screening['movieid']
+    seats = data['seatsSelected']
+    #seats = request.json['seats']
+    print(screeningid, movieid, seats)
+
+    seatstostore = ''
 
 
+    for seat in seats:
+        seatstostore += str(seat['row']) + str(seat['col']) + ','
 
+    seatstostore = seatstostore[:-1]
+    print(seatstostore)
+    db.add_booking(screeningid, 'NULL', seatstostore)
+    #screening = data['screening']
+    #screeningid = screening['id']
+    #movieid = screening['movieid']
+    #seatsselected = str(data['seatsSelected'])
+    #print(screeningid, bookingid, seats)
+    #db.add_booking(screeningid, bookingid, seats)
+    return jsonify({'response': 'OK'})
+
+
+@app.route('/getmoviename/<id>', methods=['POST'])
+def getmoviename(id):
+    db = Database('cinema.db')
+    result = db.quick_get_movie(int(id))
+    return jsonify({'response' : result[1]})
 
 
 """
@@ -389,12 +414,21 @@ def _mainpage():
 def insession(ip):
     db = Database('cinema.db')
     rq = db.ip_in_session(ip)
-    data = db.fetch_customer(rq[4])
-    if not rq or not data:
+    #data = db.fetch_customer(rq[4])
+    if not rq:
         del db
         return jsonify({'response': 'error'})
-    data = db.fetch_customer(rq[4])
-    return jsonify({'response':serialize_user(data)})
+    try:
+
+        data = db.fetch_customer(rq[4])
+
+        return jsonify({'response':serialize_user(data)})
+
+    except TypeError:
+        return jsonify({'response': 'error'})
+
+
+
 @app.route('/logout/<ip>', methods = ['POST'])
 def logout(ip):
     db = Database('cinema.db')

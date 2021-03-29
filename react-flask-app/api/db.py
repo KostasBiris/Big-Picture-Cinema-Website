@@ -418,17 +418,21 @@ class Database:
         seatmap = self.get_seatmap(screening_id)
         seatmap = self.update_seatmap(self.get_seatmap_from_blob(seatmap), seats.split(","), screening_id,'+')
         if not seatmap: return False
-        self.cur.execute("INSERT INTO bookings VALUES (NULL, ?,?,?)", (screening_id, customer_id, seats))
-        self.conn.commit()
-        self.cur.execute("SELECT id FROM bookings WHERE screening_id=? AND customer_id=? AND seats=?",(screening_id, customer_id, seats))
-        bookingid = self.cur.fetchone()[0]
-        self.cur.execute("SELECT forename, surname, email FROM customers WHERE id=?",(customer_id,))
-        forename, surname, email = self.cur.fetchone()
-        self.cur.execute("SELECT movie_id FROM screenings WHERE id=?",(screening_id,))
-        movie_id = self.cur.fetchone()[0]
-        qr = self.qr_code_generator(bookingid, screening_id)
-        #db.add_ticket(bookingid, forename, surname, self.qr_to_blob(qr),email)
-        db.add_ticket(bookingid, movie_id, 10, forename, surname, email, self.qr_to_blob( qr))
+        if customer_id == 'NULL':
+            self.cur.execute("INSERT INTO bookings VALUES (NULL, ?,NULL,?)", (screening_id, seats))
+            self.conn.commit()
+        else:
+            self.cur.execute("INSERT INTO bookings VALUES (NULL, ?,?,?)", (screening_id, customer_id, seats))
+            self.conn.commit()
+            self.cur.execute("SELECT id FROM bookings WHERE screening_id=? AND customer_id=? AND seats=?",(screening_id, customer_id, seats))
+            bookingid = self.cur.fetchone()[0]
+            self.cur.execute("SELECT forename, surname, email FROM customers WHERE id=?",(customer_id,))
+            forename, surname, email = self.cur.fetchone()
+            self.cur.execute("SELECT movie_id FROM screenings WHERE id=?",(screening_id,))
+            movie_id = self.cur.fetchone()[0]
+            qr = self.qr_code_generator(bookingid, screening_id)
+            #db.add_ticket(bookingid, forename, surname, self.qr_to_blob(qr),email)
+            db.add_ticket(bookingid, movie_id, 10, forename, surname, email, self.qr_to_blob( qr))
 
 
     def remove_booking(self, id=-1, screen_id=-1, customer_id=-1, customer_forename="No forename", customer_surname="No surname",\
