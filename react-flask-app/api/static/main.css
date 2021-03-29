@@ -344,6 +344,17 @@
     position:absolute;
 }
 
+.poster_movies{
+  width: 18rem;
+  height: 28rem;
+  box-shadow: 0px 0px 2rem 0px #888888;
+  display:block;
+  background-color: white;
+  justify-content: center;
+  align-items: center;
+  position:absolute;
+} 
+
 .search_movies{
   width: 4rem;
   height: 6rem;
@@ -428,6 +439,15 @@ table, th, td {
 
 }
 
+.poster {
+  width: 17rem;
+  height: 27rem;
+  position:relative;
+  margin: 0;
+	padding: 0;
+	overflow: hidden;
+  box-shadow: 0px 0px 2rem 0px #888888;
+}
 table {
   width: 100%;
 }
@@ -573,15 +593,6 @@ thead tr:nth-child(3) th {
 ::placeholder { 
   color:black;
   opacity: 1; 
-}
-
-video {
-  object-fit: cover;
-  width: 100vw;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
 }
 
 #grad1 {
