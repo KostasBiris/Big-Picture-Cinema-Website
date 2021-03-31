@@ -189,6 +189,9 @@ def makebooking():
     screeningid = screening['id']
     movieid = screening['movieid']
     seats = data['seatsSelected']
+    screen = screening['screenid']
+    date = screening['date']
+    time = screening['time']
     #seats = request.json['seats']
     #print(screeningid, movieid, seats)
 
@@ -208,14 +211,11 @@ def makebooking():
     total = 0
     for part in orderPart:
         total+=prices[part]
-    
-
-    qr = 1
-    print(orderPart)
-    db.add_ticket(bookingid, movieid, total, firstname, surname, email, qr, orderPart.count('4'), orderPart.count('2'), orderPart.count('3'), orderPart.count('4'))
-
-
-
+    qr = db.qr_code_generator(bookingid, screeningid)
+    path = 'B' + str(bookingid) + 'M' + str(movieid) + 'S' + str(screeningid) + firstname[0] + lastname[0] + '.pdf'
+    db.add_ticket(bookingid, movieid, total, firstname, lastname, email, qr, orderPart.count('4'), orderPart.count('2'), orderPart.count('3'), orderPart.count('4'))
+    db.ticket_to_pdf(path, bookingid, firstname, lastname, movie, seatstostore, orderPart, screen, screeningid, total, qr, date, time)
+    db.email_ticket(firstname, lastname, email, path)
     return jsonify({'response': 'OK'})
 
 

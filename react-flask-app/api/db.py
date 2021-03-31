@@ -93,7 +93,8 @@ class Database:
                                                               num_children INTEGER NOT NULL,\
                                                               num_elders INTEGER NOT NULL, \
                                                               num_normal INTEGER NOT NULL, \
-                                                              date DATE NOT NULL)")
+                                                              date DATE NOT NULL, \
+                                                              path TEXT NOT NULL)")
 
         self.cur.execute("CREATE TABLE IF NOT EXISTS customers (id INTEGER PRIMARY KEY, \
                                                                forename TEXT NOT NULL, \
@@ -442,7 +443,7 @@ class Database:
             db.add_ticket(bookingid, movie_id, 10, forename, surname, email, self.qr_to_blob( qr))
         """
 
-    def remove_booking(self, id=-1, screen_id=-1, customer_id=-1, customer_forename="No forename", customer_surname="No surname",\
+    def remove_booking(self, id=-1, screen_id=-1, customer_id=-1,customer_forename="No forename", customer_surname="No surname",\
                         customer_email="No email", customer_phone=-1):
   
         if(id==-1):
@@ -544,12 +545,15 @@ class Database:
 
 #=-=-=-=-=-=-=-=-=-=TICKETS-=-=-=-=-=-=-=-=-=-=
 
-    def add_ticket(self, booking_id, movie_id, price, forename, surname, email, qr,num_VIPs = 0, num_children = 0, num_elders = 0, num_normal=0):
+    def add_ticket(self, booking_id, movie_id, price, forename, surname, email,path,qr,num_VIPs = 0, num_children = 0, num_elders = 0, num_normal=0):
 
-        self.cur.execute("INSERT INTO tickets VALUES (NULL, ?,?,?,?,?,?,?,?,?,?,?,?,?)",(booking_id, movie_id, customer_id, price, forename,\
+        self.cur.execute("INSERT INTO tickets VALUES (NULL, ?,?,?,?,?,?,?,?,?,?,?,?,?)",(booking_id, movie_id, price, forename,\
                                                                                      surname, email, qr, num_VIPs, num_children, num_elders, \
-                                                                                         num_normal, str(datetime.today().strftime("%d-%m-%Y"))))
+                                                                                         num_normal, str(datetime.today().strftime("%d-%m-%Y")),path))
         
+
+
+
         self.conn.commit()
 
 
@@ -576,7 +580,7 @@ class Database:
         
         img = qr.make_image(fill = 'black', back_color = 'white')
         #img.save("QR_Code.png")
-        return img
+        return self.qr_to_blob(img)
 
 
     def qr_to_blob(self, qr):
@@ -585,75 +589,39 @@ class Database:
     def im_from_bytes(self, bytes):
         return PIL.Image.frombytes(mode='1', size = bytes.shape[::-1], data=np.packbits(bytes, axis=1))
 
-    def ticket_to_pdf(self, ticket_id):
+    def ticket_to_pdf(self, path, booking_id, forename, surname, movie, seats, parts, screen, screening, total,qr, date, time):
 
-        #self.cur.execute("SELECT id FROM tickets WHERE id=?",(ticket_id,))
-        #database_info = self.cur.fetchone()
-        
-        #                     0           1         2          3           4        6         7       8        9        10            11           12
-        #database_info = (ticket_id, booking_id, movie_id, customer_id, screen_id, price, forename, surname, email, qr, num_VIPs, num_children, num_elders)
-        database_info = (1,2,3,4,5,7.50,'Kostas','Biris','kostas_biris@outlook.com',0,2,0)
-
-        #self.cur.execute("SELECT seats FROM bookings Where id=?",(database_info[1]))
-        #seats = self.cur.fetchone()
-        seats = ['A1','A2','A3']
-
-        #self.cur.execute("SELECT seats FROM bookings Where id=?",(database_info[1]))
-        #seats = self.cur.fetchone()
-
-        #self.cur.execute("SELECT name FROM movies WHERE id=?",(database_info[2]))     
-        #movie_name = self.cur.fetchone()
-        movie_name = 'Captain America: The Winter Soldier'
-
-
-        #self.cur.execute("SELECT screening_id FROM bookings WHERE id=?",(booking_id,))
-        #screening_id = self.cur.fetchone()
-
-        #self.cur.execute("SELECT date FROM screenings WHERE id=?",(screening_id,))
-        #date = self.cur.fetchone()
-        date = '19-05-2021'
-
-        #self.cur.execute("SELECT time FROM screenings WHERE id=?",(screening_id,))
-        #time = self.cur.fetchone()
-        time = '21:00'
-
-
-        #                    0         1           2          3          4
-        #ticket_info = (ticket_id, booking_id, movie_id, customer_id, screen_id, 
-        #                 5        6       7       8   
-        #               price, forename, surname, email,
-        #                  9           10          11
-        #               num_VIPs, num_children, num_elders,
-        #                 12       13       14    15
-        #               seats, movie_name, date, time)
-        ticket_info = database_info + (seats, movie_name, date, time)
-
-        #---------Contents-------------------------
-        fileName = 'yourCinemaTickets.pdf'
+        fileName = path
         documentTitle = 'Cinema Tickets'
         title = 'The Big Picture Cinema'
         subTitle = 'Your Cinema Tickets'
+        vip = parts.count('4')
+        ch = parts.count('2')
+        el = parts.count('3')
+        ad = parts.count('1')
+
+
 
         textLines = [
-        f'Booking ID: {ticket_info[1]}',
-        f'Movie Name: {ticket_info[13]}',
-        f'Screen No: {ticket_info[4]}',
-        f'Date & time: {ticket_info[14]},{ticket_info[15]}',
+        f'Booking ID: {booking_id}',
+        f'Movie Name: {movie}',
+        f'Screen No: {screen}',
+        f'Date & time: {date},{time}',
         '',
-        f'Seats: {ticket_info[12]}',
-        f'Num VIP\'s: {ticket_info[9]}',
-        f'Num Children: {ticket_info[10]}',
-        f'Num Elders: {ticket_info[11]}',
+        f'Seats: {seats}',
+        f'Num VIP\'s: {vip}',
+        f'Num Children: {ch}',
+        f'Num Elders: {el}',
+        f'Num Adults: {ad}',
         '',
-        f'Forename: {ticket_info[6]}',
-        f'Surname: {ticket_info[7]}',
+        f'Forename: {forename}',
+        f'Surname: {surname}',
         '',
-        f'Price: £{ticket_info[5]}',
+        f'Price: £{total}',
         ]
 
-        image = 'QR_Code.png'
+        #image = 'QR_Code.png'
         #--------------------------------------------
-
         #----------PDF Creator-----------------------
         
         pdf = canvas.Canvas(fileName)
@@ -682,13 +650,13 @@ class Database:
         pdf.drawText(text)
 
         #QR Code image
-        pdf.drawInlineImage(image, 130, 100)
+        pdf.drawInlineImage(self.im_from_bytes(pickle.loads(qr)), 130, 100)
         #--------------------------------------------
-        
         pdf.save()
 
+       
 
-    def email_ticket(self, cust_forename, cust_surname, cust_email, qr_code):
+    def email_ticket(self, cust_forename, cust_surname, cust_email, path):
         cinema_email = 'theBigPictureCinema2021@gmail.com'
         cinema_password = 'thebigpicture2021'
 
@@ -712,7 +680,7 @@ class Database:
          
         message.add_alternative(msg,'html')
 
-        files = ['yourCinemaTickets.pdf']
+        files = [path]
 
         for file in files:
             with open(file, 'rb') as f:
