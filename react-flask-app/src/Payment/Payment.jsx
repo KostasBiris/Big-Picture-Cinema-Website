@@ -35,7 +35,8 @@ class Payment extends React.Component {
             screening: this.props.location.state.screeningChosen,
             movie: '',
             orderPart: [],
-            valid: false
+            valid: false,
+            total: 0
         };
 
 
@@ -268,7 +269,6 @@ class Payment extends React.Component {
                 total+=6.50
             }
         })
-
         return total;
     }
 

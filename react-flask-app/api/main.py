@@ -184,28 +184,38 @@ def makebooking():
     db = Database('cinema.db')
     data = request.json['data']
     data = data['state']
+   
     screening = data['screening']
     screeningid = screening['id']
     movieid = screening['movieid']
     seats = data['seatsSelected']
     #seats = request.json['seats']
-    print(screeningid, movieid, seats)
+    #print(screeningid, movieid, seats)
 
     seatstostore = ''
-
-
     for seat in seats:
         seatstostore += str(seat['row']) + str(seat['col']) + ','
-
     seatstostore = seatstostore[:-1]
-    print(seatstostore)
-    db.add_booking(screeningid, 'NULL', seatstostore)
-    #screening = data['screening']
-    #screeningid = screening['id']
-    #movieid = screening['movieid']
-    #seatsselected = str(data['seatsSelected'])
-    #print(screeningid, bookingid, seats)
-    #db.add_booking(screeningid, bookingid, seats)
+    bookingid = db.add_booking(screeningid, 'NULL', seatstostore)
+
+    firstname = data['firstname']
+    lastname = data['lastname']
+    email = data['email']
+    movie = data['movie']
+    orderPart = data['orderPart']
+    #total = data['total']
+    prices = {'1': 7.5, '2': 5.5, '3': 6.5, '4': 0}
+    total = 0
+    for part in orderPart:
+        total+=prices[part]
+    
+
+    qr = 1
+    print(orderPart)
+    db.add_ticket(bookingid, movieid, total, firstname, surname, email, qr, orderPart.count('4'), orderPart.count('2'), orderPart.count('3'), orderPart.count('4'))
+
+
+
     return jsonify({'response': 'OK'})
 
 

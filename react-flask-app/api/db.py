@@ -421,6 +421,13 @@ class Database:
         if customer_id == 'NULL':
             self.cur.execute("INSERT INTO bookings VALUES (NULL, ?,NULL,?)", (screening_id, seats))
             self.conn.commit()
+            self.cur.execute("SELECT id FROM bookings WHERE screening_id=? AND seats=?",(screening_id, seats))
+            return self.cur.fetchone()[0]
+
+
+
+
+        """
         else:
             self.cur.execute("INSERT INTO bookings VALUES (NULL, ?,?,?)", (screening_id, customer_id, seats))
             self.conn.commit()
@@ -433,7 +440,7 @@ class Database:
             qr = self.qr_code_generator(bookingid, screening_id)
             #db.add_ticket(bookingid, forename, surname, self.qr_to_blob(qr),email)
             db.add_ticket(bookingid, movie_id, 10, forename, surname, email, self.qr_to_blob( qr))
-
+        """
 
     def remove_booking(self, id=-1, screen_id=-1, customer_id=-1, customer_forename="No forename", customer_surname="No surname",\
                         customer_email="No email", customer_phone=-1):
@@ -562,12 +569,13 @@ class Database:
 
         #self.cur.execute("SELECT * FROM tickets WHERE id=?",(ticket_id,))
         #data = self.cur.fetchone()
-        data = (1,2,3,4,7,'Kostas','Biris','kostas_biris@outlook.com',0,2,0)
+        #data = (1,2,3,4,7,'Kostas','Biris','kostas_biris@outlook.com',0,2,0)
+        data = (booking_id, screening_id)
         qr.add_data(data)
         qr_code  = qr.make(fit=True)
         
         img = qr.make_image(fill = 'black', back_color = 'white')
-        img.save("QR_Code.png")
+        #img.save("QR_Code.png")
         return img
 
 
