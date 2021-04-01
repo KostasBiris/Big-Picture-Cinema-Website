@@ -93,7 +93,7 @@ class ManagerLogin extends React.Component {
         if (this.state.response === "OK") {
             this.setState({ email: '', password: '' });
             console.log('LOGIN: SUCCESS');
-            this.props.history.push('/overall_analytics', { auth: true, IP: this.state.IP });
+            this.props.history.push('/overall_analytics', { auth: true});
         }
         if (this.state.response === "BAD") {
             alert('LOGIN: FAILED');

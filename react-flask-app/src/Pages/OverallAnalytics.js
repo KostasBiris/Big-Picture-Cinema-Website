@@ -14,15 +14,12 @@ var publicIP = require('public-ip')
 class OverallAnalytics extends React.Component {
     constructor(props) {
         super(props);
-        if (this.props.location.auth === undefined) {
+        if (this.props.location.state.auth === undefined) {
             this.props.history.push('/home', this.state);
         }
-        if (this.props.location.auth === false) {
+        if (this.props.location.state.auth === false) {
             this.props.history.push('/home', this.state);
         }
-
-
-
         this.state = { comparisonData: [], tickets: [], screenings: [], movies: [], totalrev: 0, data: [], dataPastWeek: [], weeklyrev: 0, MovieA: '', MovieB: '', DateA:'', DateB: '', comparisonDrawn: false };
         this.fetchChartData = this.fetchChartData.bind(this);
         this.buildChartData = this.buildChartData.bind(this);
@@ -35,6 +32,7 @@ class OverallAnalytics extends React.Component {
         this.handleDateChangeB = this.handleDateChangeB.bind(this);
         this.getid = this.getid.bind(this);
         this.reformatd = this.reformatd.bind(this);
+
     }
     async fetchChartData() {
         const settings = {

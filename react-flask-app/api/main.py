@@ -142,11 +142,11 @@ def serialize_ticket(res):
         'forename': res[5],
         'surname': res[6],
         'email':res[7],
-        'numVIP':res[8],
-        'numChild':res[9],
-        'numElder':res[10],
-        'numDefault':res[11],
-        'date' : res[12]
+        'numVIP':res[9],
+        'numChild':res[10],
+        'numElder':res[11],
+        'numDefault':res[12],
+        'date' : res[13]
     }
 
 def serialize_all_tickets(res):
