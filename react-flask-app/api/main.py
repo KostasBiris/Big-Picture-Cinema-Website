@@ -207,7 +207,7 @@ def makebooking():
     movie = data['movie']
     orderPart = data['orderPart']
     #total = data['total']
-    prices = {'1': 7.5, '2': 5.5, '3': 6.5, '4': 0}
+    prices = {'1': 7.5, '2': 5.5, '3': 6.5, '4': 10.0}
     total = 0
     for part in orderPart:
         total+=prices[part]
