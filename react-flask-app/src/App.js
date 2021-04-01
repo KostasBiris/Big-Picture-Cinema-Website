@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Switch , Redirect} from "react-router";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Link } from "react-router-dom";
 import  CustomerHomePage from './Pages/CustomerHomePage';
 import LoginPage from './Pages/LoginPage';
 import reactDom from 'react-dom';
@@ -34,7 +34,7 @@ const App = () => (
     <BrowserRouter>
       <Switch>
         <Route exact path="/" render={() => (<Redirect to="/home" />)} />
-        <Route exact path="/home" component={CustomerSite}/>
+        <Link component={CustomerSite}/>
         {/* <Route exact path="/home" component={CustomerHomePage} /> */}
         {/* <Route exact path="/login" component={LoginPage} /> */}
         {/* <Route exact path="/search/:query" component={SearchResults}/> */}

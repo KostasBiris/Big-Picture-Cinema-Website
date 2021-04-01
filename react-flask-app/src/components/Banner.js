@@ -8,7 +8,8 @@ import usericon from '../static/usericon.png';
 import main from '../static/main.css';
 import Search from '../components/Search';
 import { BrowserRouter, Route, Link } from 'react-router-dom';
-import BookTickets from '../Pages/BookTicketsPage'
+import BookTickets from '../Pages/BookTicketsPage';
+import ReactDatePicker from 'react-datepicker';
 
 var publicIP = require('public-ip')
 
@@ -179,6 +180,7 @@ class Banner extends React.Component {
 
     }
 
+    
 
     handleSubmitDate = (e) => {
         e.preventDefault();
@@ -188,24 +190,23 @@ class Banner extends React.Component {
 
     }
 
-
+    
     handleDate = (e) => {
         // e.preventDefault();
         // console.log(e.target.value)
-
         function formatd(inp) {
             let dArr = inp.split("-");  // ex input "2010-01-18"
             return dArr[2] + "-" + dArr[1] + "-" + dArr[0]; //ex out: "18/01/10"
-
+            
         }
         if (e.target.value)
-            this.setState({ date: formatd(e.target.value) });
+            this.setState({ date: formatd(e.target.value) });   
     }
 
     reformatd = (inp) => {
         let dArr = inp.split("-");
         return dArr[2] + "-" + dArr[1] + "-" + dArr[0];
-
+        
     }
 
 
@@ -235,7 +236,7 @@ class Banner extends React.Component {
                                         <Link to={'/book'}>
                                         <button className="tab_background text mr-3">TICKETS</button>
                                         </Link>
-                                        <Route path="/book" component={BookTickets}/>
+                                        {/* <Route path="/book" component={BookTickets}/> */}
                                     </li>
                                     <li className="nav-item dropdown"></li>
                                     <button className="tab_background dropdown-toggle text mr-3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">SCREENS</button>
@@ -260,7 +261,7 @@ class Banner extends React.Component {
                                     <button onClick={this.handleSubmit} className="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>
                                 </form>
                                 <form className="form-inline my-2 my-lg-0">
-                                <input type="date" onChange={this.handleDate} value={this.reformatd(this.state.date)}/>
+                                <input type="date" onChange={this.handleDate} value={this.reformatd(this.state.date)} />
                                 <button onClick={this.handleSubmitDate} className="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>
                                 </form>
                             </div>
@@ -289,7 +290,11 @@ class Banner extends React.Component {
                                         <button className="tab_background text mr-3">WHAT'S NEW</button>
                                     </li>
                                     <li className="nav-item">
-                                        <button className="tab_background text mr-3">TICKETS</button>
+                                        
+                                        <Link to={'/book'}>
+                                            <button className="tab_background text mr3">TICKETS</button>
+                                        </Link>
+                                        {/* <Route path="/book" component={BookTickets}/> */}
                                     </li>
                                     <li className="nav-item dropdown"></li>
                                     <button className="tab_background dropdown-toggle text mr-3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">SCREENS</button>
@@ -317,10 +322,6 @@ class Banner extends React.Component {
                                     <input type="date" onChange={this.handleDate} value={this.reformatd(this.state.date)} />
                                     <button onClick={this.handleSubmitDate} className="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>
                                 </form>
-                                <form className="form-inline my-2 my-lg-0">
-                                <input type="date" onChange={this.handleDate} value={this.reformatd(this.state.date)}/>
-                                <button onClick={this.handleSubmitDate} className="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>
-                                </form>
                             </div>
                         </nav>
                     </body>
@@ -335,5 +336,6 @@ class Banner extends React.Component {
 
 
 }
+
 
 export default Banner;

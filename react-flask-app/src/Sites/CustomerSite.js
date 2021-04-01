@@ -14,11 +14,11 @@ import BookTickets from "../Pages/BookTicketsPage";
 
 class CustomerSite extends React.Component{
 
-    constructor(props){
-        super(props);
+    // constructor(props){
+    //     super(props);
 
         
-    }
+    // }
 
 render () {
     // console.log(this.props.history)
@@ -27,16 +27,18 @@ render () {
 
     <React.Fragment>
         <Banner history={this.props.history}/>
-        <CustomerHomePage />
+        <Link to={'/home'}/>
+        <Route exact path ="/home" component={CustomerHomePage}/>
         <Link to={'/book'} />
         <Route path="/book" component={BookTickets}/>
-            {/* <BrowserRouter>
+             <BrowserRouter>
                     <Switch>
-                        <Route exact path="/book" component={BookTickets}/>
-                        <Route exact path="/as" component={ArbitraryScreen}/>
+                        {/* <Route exact path="/book" component={BookTickets}/>
+                        <Route exact path="/as" component={ArbitraryScreen}/> */}
+
                     </Switch>
-            </BrowserRouter> */}
-    </React.Fragment>
+                    </BrowserRouter>
+           </React.Fragment>
 
     );
 }
