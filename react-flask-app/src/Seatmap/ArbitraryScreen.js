@@ -88,7 +88,7 @@ class ArbitraryScreen extends React.Component {
 
 
     goToCheckOut = () => {
-        console.log(this.state)
+        // console.log(this.state)
         this.props.history.push('/payment', this.state);
     }
 
@@ -110,7 +110,7 @@ class ArbitraryScreen extends React.Component {
         }
 
         this.setState({seatmap_copy: seatmap})
-        console.log(this.state)
+        // console.log(this.state)
     }
 
 
@@ -124,7 +124,7 @@ class ArbitraryScreen extends React.Component {
                         <link rel="stylesheet" type="text/css" href={main} />
                     </head>
                    
-                    <Banner />
+                    {/* <Banner /> */}
                     <div class="header_text">
                         <h1 style={{ marginLeft: '600px', left: '3rem', color: '#4e5b60' }}>SCREEN</h1>
                     </div>

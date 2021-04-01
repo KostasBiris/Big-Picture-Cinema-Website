@@ -8,7 +8,7 @@ import main from '../static/main.css';
 class SearchResult extends React.Component{
     constructor(props) {
         super(props);
-        console.log(this.props);
+        // console.log(this.props);
         this.prop = this.props.res;
         if (this.props.props) {
             this.props.history = this.props.props.history;

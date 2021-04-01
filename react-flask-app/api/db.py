@@ -395,6 +395,7 @@ class Database:
         for screening in screenings:
             screeningdata.append(self.quick_get_screening(screening))
 
+        print(screeningdata)
         return moviedata, screeningdata
 
 
@@ -1044,8 +1045,8 @@ dat = db.fetch()[2]
 seatmap = dat[0][5]
 #print(seatmap)
 """
-db = Database('cinema.db')
-db.add_employee("staff4_fn", "staff4_sn", "jaredswift@hotmail.co.uk", 1, "staff4_password", True)
+# db = Database('cinema.db')
+# db.add_employee("staff4_fn", "staff4_sn", "jaredswift@hotmail.co.uk", 1, "staff4_password", True)
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 #db = Database('cinema.db')
 #db.qr_code_generator(1)
@@ -1053,12 +1054,12 @@ db.add_employee("staff4_fn", "staff4_sn", "jaredswift@hotmail.co.uk", 1, "staff4
 #db.email_ticket('yourForename', 'yourSurname', 'yourEmail', 5)
 
 
-#Database('cinema.db').add_screen(25,5,5)
+Database('cinema.db').add_screen(25,5,5)
 #print(Database('cinema.db').get_upcoming())
 #db.graph_analytics()
 
 
-#db = Database('cinema.db')
-#db.add_customer('seatmapCustomerFName','seatmapCustomerSName', 'seatmapCustomerEmail', 'seatmapCustomerPhone','seatmapCustomerPassword','01-01-01')
-#db.add_booking(1, 1, 'A1,A2,A3')
+# db = Database('cinema.db')
+# db.add_customer('seatmapCustomerFName','seatmapCustomerSName', 'seatmapCustomerEmail', 'seatmapCustomerPhone','seatmapCustomerPassword','01-01-01')
+# db.add_booking(1, 1, 'A1,A2,A3')
 #db.add_overall_analytics(1, 'spider-man', 10, 1)

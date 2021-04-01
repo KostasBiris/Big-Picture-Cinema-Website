@@ -26,6 +26,7 @@ import ManagerLogin from "./Pages/ManagerLogin";
 import EPayment from "./Payment/Employee_Payment";
 import EmployeeMain from "./Pages/EmployeeMain";
 import EmployeeBook from "./Pages/EmployeeBook";
+import CustomerSite from "./Sites/CustomerSite";
 
 const App = () => (
     // Set up routing for our web application.
@@ -33,10 +34,11 @@ const App = () => (
     <BrowserRouter>
       <Switch>
         <Route exact path="/" render={() => (<Redirect to="/home" />)} />
-        <Route exact path="/home" component={CustomerHomePage} />
-        <Route exact path="/login" component={LoginPage} />
-        <Route exact path="/search/:query" component={SearchResults}/>
-        <Route exact path="/movie/:title/:movieID" component={MoviePage}/>
+        <Route exact path="/home" component={CustomerSite}/>
+        {/* <Route exact path="/home" component={CustomerHomePage} /> */}
+        {/* <Route exact path="/login" component={LoginPage} /> */}
+        {/* <Route exact path="/search/:query" component={SearchResults}/> */}
+        {/* <Route exact path="/movie/:title/:movieID" component={MoviePage}/> */}
         <Route exact path="/register" component={CustomerRegister}/>
         <Route exact path="/movie/:title" component={MoviePage}/>
         <Route exact path ="/account" component={CustomerAccountPage}/>
@@ -46,20 +48,19 @@ const App = () => (
         <Route exact path="/screen3" render={Screen3}/>
         <Route exact path="/screenVIP" render={ScreenVIP}/>
         <Route exact path="/screenIMAX" render={ScreenIMAX}/>
-        <Route exact path="/book" component={BookTickets}/>
+        {/* <Route exact path="/book" component={BookTickets}/> */}
         <Route exact path="/addscreening" component={AddScreening} />
-        <Route exact path="/as" component={ArbitraryScreen}/>
+        {/* <Route exact path="/as" component={ArbitraryScreen}/> */}
         <Route exact path="/overall_analytics" component={OverallAnalytics}/>
         <Route exact path="/searchscreenings/:query" component={ScreeningResults}/>
         <Route exact path="/elogin" component={EmployeeLogin}/>
         <Route exact path="/mlogin" component={ManagerLogin}/>
         <Route exact path="/epayment" component={EPayment}/>
-<<<<<<< Updated upstream
         <Route exact path="/emain" component={EmployeeMain}/>
         <Route exact path="/ebook" component={EmployeeBook}/>
-=======
-        <Route render={() => <Redirect to={{pathname: "/"}}/>}/>
->>>>>>> Stashed changes
+
+
+        
       </Switch>
     </BrowserRouter>
   

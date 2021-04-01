@@ -93,6 +93,7 @@ def serialize_all_screenings(res):
 
     for i in range(len(res)):
         dic[i] = serialize_screening(res[i])
+    print(dic)
     return dic
 
 
@@ -467,6 +468,7 @@ def employeelogin():
 def _login():
     db = Database('cinema.db')
     data = request.json['data']
+    print(data)
     email = data['email']
     password = data['password']
     ip = data['IP']
@@ -591,7 +593,7 @@ def isupcoming(movieid):
     db = Database('cinema.db')
     movies = db.get_upcoming()[0]
     movie = db.quick_get_movie(movieid)
-    print(movies, movie)
+    # print(movies, movie)
     return movie in movies
 
 

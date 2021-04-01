@@ -54,7 +54,7 @@ class SearchIMDB extends React.Component {
       method: 'GET',
     })
       .then(response => response.json()).then(data => {
-        // console.log(data)
+        console.log(data)
         this.props.onGetMovie(data); // depends on the function that is passed as a prop
       });
   }
