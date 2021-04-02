@@ -53,7 +53,7 @@ function SiteType() {
   //   return <Route exact path="/search/:query" component={SearchResults}/>
 
 
-  if (location.includes("/emain"))
+  if (location.includes("/emain") || location.includes("/elogin"))
     return < Route component={EmployeeSite} />
   else
     return < Route component={CustomerSite} />
@@ -66,7 +66,6 @@ const App = () => (
     
     
     <React.Fragment>
-      {console.log("hello")}
     <BrowserRouter>
       <Switch>
         <SiteType />

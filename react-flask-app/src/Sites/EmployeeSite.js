@@ -12,6 +12,7 @@ import CustomerRegister from "../Pages/CustomerRegister";
 import ViewMovies from "../Pages/ViewMovies";
 import CustomerAccountPage from "../Pages/CustomerAccountPage";
 import MoviePage from "../Pages/MoviePage";
+import EmployeeLogin from "../Pages/EmployeeLogin";
 
 
 import {createBrowserHistory} from 'history';
@@ -42,7 +43,7 @@ render () {
         {/* <Link to={'emain/search/:query'} /> */}
         <Route path="/emain/search/:query" component={SearchResults}/>
 
-        <Route path="/emain/register" component={CustomerRegister}/>
+        <Route path="/register" component={CustomerRegister}/>
 
         <Route path="/emain/view_movies" component={ViewMovies}/>
 
@@ -50,6 +51,7 @@ render () {
 
         <Route path ="/movie/:title" component={MoviePage}/>
 
+        <Route path ="/elogin" component={EmployeeLogin}/>
     </React.Fragment>
 
     );
