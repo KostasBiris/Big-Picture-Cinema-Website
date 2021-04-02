@@ -15,9 +15,9 @@ render (){
       <br/>
       <br/>    
 <div className="container text-center">
-        <Link to={'/book'}><button className="tab_background text mr-3 btn-lg">BOOK TICKETS</button></Link>
-        <button className="tab_background text mr-3 btn-lg">VIEW MOVIES</button>
-        <button className="tab_background text mr-3 btn-lg" >REGISTER CUSTOMER</button>
+        <Link to={'/emain/book'}><button className="tab_background text mr-3 btn-lg">BOOK TICKETS</button></Link>
+        <Link to={'/emain/view_movies'}><button className="tab_background text mr-3 btn-lg">VIEW MOVIES</button></Link>
+        <Link to={'/emain/register'}><button className="tab_background text mr-3 btn-lg" >REGISTER CUSTOMER</button></Link>
         <button className="tab_background text mr-9 btn-lg">HELP</button>
 </div>
     <br/>

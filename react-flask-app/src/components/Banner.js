@@ -218,7 +218,7 @@ class Banner extends React.Component {
     render() {
         if (this.isAuth()) {
             return (
-                <body>
+                <React.Fragment>
                     <head>
                         <link rel="stylesheet" type="text/css" href={main} />
                         <link rel="icon" href="data:;base64,iVBORw0KGgo" />
@@ -239,7 +239,6 @@ class Banner extends React.Component {
                                         <Link to={'/book'}>
                                         <button className="tab_background text mr-3">TICKETS</button>
                                         </Link>
-                                        {/* <Route path="/book" component={BookTickets}/> */}
                                     </li>
                                     <li className="nav-item dropdown"></li>
                                     <button className="tab_background dropdown-toggle text mr-3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">SCREENS</button>
@@ -270,12 +269,12 @@ class Banner extends React.Component {
                             </div>
                         </nav>
                     </body>
-                </body>
+                </React.Fragment>
             );
         }
         else {
             return (
-                <body>
+                <React.Fragment>
                     <head>
                         <link rel="stylesheet" type="text/css" href={main} />
                         <link rel="icon" href="data:;base64,iVBORw0KGgo" />
@@ -328,7 +327,7 @@ class Banner extends React.Component {
                             </div>
                         </nav>
                     </body>
-                </body>
+                </React.Fragment>
 
             );
         }

@@ -290,7 +290,7 @@ class CustomerHomePage extends React.Component {
         // console.log(this.state);
         if (this.isAuth()) {
             return (
-                <body>
+                <React.Fragment>
                     <head>
                         <link rel="stylesheet" type="text/css" href={main} />
                         <link rel="icon" href="data:;base64,iVBORw0KGgo" />
@@ -325,7 +325,7 @@ class CustomerHomePage extends React.Component {
                         </a>
                     </div>
                     <br/>
-                    <div class="header_text">
+                    <div className="header_text">
                         <h1 style={{position:'absolute', left:'25px', color: '#4e5b60', fontWeight: 'bold'}}>PLAYING NOW</h1>
                     </div>
                     <br/>
@@ -348,12 +348,12 @@ class CustomerHomePage extends React.Component {
                         </div>
                     </footer>
                     </body>
-                </body>
+                    </React.Fragment>
             );
         } else {
 
             return (
-                <body>
+                <React.Fragment>
                     <head>
                         <link rel="stylesheet" type="text/css" href={main} />
                         <link rel="icon" href="data:;base64,iVBORw0KGgo" />
@@ -410,7 +410,7 @@ class CustomerHomePage extends React.Component {
                         </div>
                     </footer>
                     </body>
-                </body>
+                </React.Fragment>
             );
         }
     }

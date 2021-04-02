@@ -30,26 +30,33 @@ import EmployeeSite from "./Sites/EmployeeSite";
 
 import {createBrowserHistory} from 'history';
 const history = createBrowserHistory();
-const customerUrlList = ['/', '/home']
+const customerUrlList = ['/', '/home', '/search/:query']
 const employeeUrlList = ['/emain']
 
 
 
 function SiteType() {
   let location = history.location.pathname
-  // if (history.location.pathname.includes("search"))
+  // if (history.location.pathname.includes("search")){
   //   location = "/search/:query"
+  // }
   console.log(location)
-  if (customerUrlList.includes(location)){
-    console.log("true 1")
-    return <Link component={CustomerSite}/>
-  }
-  else if (employeeUrlList.includes(location)){
-    console.log("true 2")
-    return <Link component={EmployeeSite}/>
-  }
+  // if (customerUrlList.includes(location)){
+  //   console.log("true 1")
+  //   return <Route component={CustomerSite}/>
+  // }
+  // else if (employeeUrlList.includes(location)){
+  //   console.log("true 2")
+  //   return <Route component={EmployeeSite}/>
+  // }
+  // else
+  //   return <Route exact path="/search/:query" component={SearchResults}/>
+
+
+  if (location.includes("/emain"))
+    return < Route component={EmployeeSite} />
   else
-    return <Route exact path="/search/:query" component={SearchResults}/>
+    return < Route component={CustomerSite} />
 }
 
 
@@ -66,29 +73,29 @@ const App = () => (
         
         
         
-        {/* <Route exact path="/home" component={CustomerHomePage} /> */}
-        {/* <Route exact path="/login" component={LoginPage} /> */}
-        {/* <Route exact path="/search/:query" component={SearchResults}/> */}
-        {/* <Route exact path="/movie/:title/:movieID" component={MoviePage}/> */}
+        {/* <Route exact path="/home" component={CustomerHomePage} /> 
+        <Route exact path="/login" component={LoginPage} />
+        <Route exact path="/search/:query" component={SearchResults}/> 
+        <Route exact path="/movie/:title/:movieID" component={MoviePage}/>
         <Route exact path="/register" component={CustomerRegister}/>
-        {/* <Route exact path="/movie/:title" component={MoviePage}/> */}
-        {/* <Route exact path ="/account" component={CustomerAccountPage}/> */}
-        {/* <Route exact path="/payment" component={Payment}/> */}
+        <Route exact path="/movie/:title" component={MoviePage}/>
+        <Route exact path ="/account" component={CustomerAccountPage}/>
+        <Route exact path="/payment" component={Payment}/>
         <Route exact path="/screen1" component={Screen1}/>
         <Route exact path="/screen2" render={Screen2}/>
         <Route exact path="/screen3" render={Screen3}/>
         <Route exact path="/screenVIP" render={ScreenVIP}/>
         <Route exact path="/screenIMAX" render={ScreenIMAX}/>
-        {/* <Route exact path="/book" component={BookTickets}/> */}
+        <Route exact path="/book" component={BookTickets}/>
         <Route exact path="/addscreening" component={AddScreening} />
-        {/* <Route exact path="/as" component={ArbitraryScreen}/> */}
+        <Route exact path="/as" component={ArbitraryScreen}/>
         <Route exact path="/overall_analytics" component={OverallAnalytics}/>
         <Route exact path="/searchscreenings/:query" component={ScreeningResults}/>
         <Route exact path="/elogin" component={EmployeeLogin}/>
         <Route exact path="/mlogin" component={ManagerLogin}/>
         <Route exact path="/epayment" component={EPayment}/>
-        {/* <Route exact path="/emain" component={EmployeeMain}/> */}
-        <Route exact path="/ebook" component={EmployeeBook}/>
+        <Route exact path="/emain" component={EmployeeMain}/>
+        <Route exact path="/ebook" component={EmployeeBook}/> */}
       </Switch>
     </BrowserRouter>
 

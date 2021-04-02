@@ -62,11 +62,14 @@ class SearchResult extends React.Component{
 
     
     render () {
+        console.log("Trying to render inside SearchResult")
+        console.log(this.state)
         return (
-            <body>
+            <React.Fragment>
             <link rel="stylesheet" type="text/css" href={main} />
             <meta charset="utf-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+            
             <body>
                 <div className="container"  style={{textAlign:"center"}}>
                     <div className=".card mb-3" style={{maxWidth: "60rem", maxHeight:"15rem", backgroundColor:"#ece9e388"}}>
@@ -89,7 +92,7 @@ class SearchResult extends React.Component{
                 </div>
                 
             </body>
-            </body>
+            </React.Fragment>
 
         )
     }

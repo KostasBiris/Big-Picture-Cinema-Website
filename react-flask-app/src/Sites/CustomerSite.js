@@ -2,47 +2,54 @@ import React from 'react';
 import Banner from '../components/Banner';
 import CustomerHomePage from '../Pages/CustomerHomePage';
 import SearchResults from '../components/Search';
-import SearchManager from '../components/SearchManager';
-import { Route, Switch , Redirect} from "react-router";
-import { BrowserRouter, Link, useHistory } from "react-router-dom";
+import { Route, Redirect} from "react-router";
 import LoginPage from '../Pages/LoginPage';
 import MoviePage from "../Pages/MoviePage";
 import ArbitraryScreen from "../Seatmap/ArbitraryScreen";
 import BookTickets from "../Pages/BookTicketsPage";
 import Payment from "../Payment/Payment";
 import CustomerAccountPage from "../Pages/CustomerAccountPage";
+import CustomerRegister from "../Pages/CustomerRegister";
+
 import {createBrowserHistory} from 'history';
 
 
 class CustomerSite extends React.Component{
 
     constructor(props){
-        super(props);        
+        super(props);    
+        console.log("heyy")    
     }
 
 render () {
     const history = createBrowserHistory();
-    console.log(this.props)
+    
     return(
 
 
     <React.Fragment>
         <Banner history={history}/>
-        <Link to={'/home'} />
+        {/* <Link to={'/home'} /> */}
         <Route exact path="/" render={() => (<Redirect to="/home" />)} />
         <Route exact path ="/home" component={CustomerHomePage}/>
-        <Link to={'/book'} />
+        
+        {/* <Link to={'/book'} /> */}
         <Route path="/book" component={BookTickets}/>
-        <Link to={'/as'} />
+        {/* <Link to={'/as'} /> */}
         <Route path="/as" component={ArbitraryScreen}/>
-        <Link to={'/payment'} />
+        {/* <Link to={'/payment'} /> */}
         <Route path="/payment" component={Payment}/>
-        <Link to={'/search/:query'} />
+        {/* <Link to={'/search/:query'} /> */}
         <Route path="/search/:query" component={SearchResults}/>
-        <Link to={'account'} />
+        {/* <Link to={'account'} /> */}
         <Route path ="/account" component={CustomerAccountPage}/>
-        <Link to={'/movie/:title'} />
+        {/* <Link to={'/movie/:title'} /> */}
         <Route path ="/movie/:title" component={MoviePage}/>
+
+        <Route path="/register" component={CustomerRegister}/>
+
+        <Route path="/login" component={LoginPage}/>
+
     </React.Fragment>
 
     );
