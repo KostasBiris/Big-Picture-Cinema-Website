@@ -34,11 +34,11 @@ render () {
         {/* <Route exact path="/" render={() => (<Redirect to="/emain" />)} /> */}
         <Route exact path ="/emain" component={EmployeeMain}/>
         {/* <Link to={'/book'} /> */}
-        <Route path="/emain/book" component={BookTickets}/>
+        <Route path="/book" component={BookTickets}/>
         {/* <Link to={'/as'} /> */}
-        <Route path="/emain/as" component={ArbitraryScreen}/>
+        <Route path="/as" component={ArbitraryScreen}/>
         {/* <Link to={'/payment'} /> */}
-        <Route path="/emain/payment" component={Payment}/>
+        {/* <Route path="/payment" component={Payment}/> */}
         {/* <Link to={'emain/search/:query'} /> */}
         <Route path="/emain/search/:query" component={SearchResults}/>
 
