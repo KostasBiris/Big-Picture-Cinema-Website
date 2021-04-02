@@ -317,7 +317,6 @@ class Payment extends React.Component {
                         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
                     </head>
 
-                    <Banner history={this.props.history} />
                     <fieldset style={{ paddingTop: '50px', paddingRight: '20px' }}>
                         <div className="container modalContentPayment" >
                             <div className="row" >
@@ -402,7 +401,7 @@ class Payment extends React.Component {
                     <br />
                     <br />
 
-                    <nav>
+                    {/* <nav>
                         <ul className="pagination justify-content-center ">
                             <li className="page-item disabled">
                                 <a className="buttons_prev" style={{ color: 'white', tabIndex: '-1', ariaDisabled: 'true' }}>{'<'}
@@ -415,13 +414,22 @@ class Payment extends React.Component {
                                 <a className="buttons_next" style={{ color: 'white' }}>{'>'}</a>
                             </li>
                         </ul>
-                    </nav>
-                    <br />
-                    <footer className="bg-light text-center">
-                        <div className="text-center p-3" style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
-                            All rights reserved. © 2021 Copyright:
-                    <a className="text-dark">The Big Picture</a>
+                    </nav> */}
+                    <nav>
+                        <div className="container text-center">
+                            <button className="tab_background text mr-3 btn-lg">{'<'}</button>
+                            <button className="tab_background text mr-3 btn-lg">MOVIE</button>
+                            <button className="tab_background text mr-3 btn-lg" onClick={this.goToSeatMap}>SEATS</button>
+                            <button className="tab_background text mr-9 btn-lg">CHECKOUT</button>
+                            <button className="tab_background text mr-3 btn-lg" style={{marginLeft:'12px'}}>{'>'}</button>
                         </div>
+                    </nav>
+
+                    <footer className="bg-light text-center">
+                    <div class="text-center p-3" style={{ backgroundcolor: 'rgba(0, 0, 0, 0.2)' }}>
+                        All rights reserved. © 2021 Copyright:
+                    <a className="text-dark" >The Big Picture</a>
+                    </div>
                     </footer>
 
                 </body>

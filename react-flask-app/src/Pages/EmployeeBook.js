@@ -3,7 +3,7 @@ import main from '../static/main.css';
 import finlogo from '../static/finlogo.png';
 import usericon from '../static/usericon.png';
 import poster8 from '../static/poster8.jpg';
-
+import BookTicketsPage from './BookTicketsPage';
 
 
 class EmployeeBook extends React.Component{
@@ -39,7 +39,8 @@ render () {
         <button className="tab_background text mr-9 btn-lg">HELP</button>
 </div>
   <br/>
-  <div className="header_text" style={{paddingLeft:'300px'}}>
+  <BookTicketsPage />
+  {/* <div className="header_text" style={{paddingLeft:'300px'}}>
     <h1 style={{position:'center', left:'25px', color: '#4e5b60', fontWeight: 'bolder'}}>CHOOSE A MOVIE: </h1>
   </div>
   <br/>
@@ -211,7 +212,7 @@ render () {
             All rights reserved. © 2021 Copyright:
             <a className="text-dark">The Big Picture</a>
         </div>
-    </footer> 
+    </footer>  */}
 
 </body>
     );

@@ -11,6 +11,7 @@ import { relativeTimeThreshold } from 'moment';
 let interval;
 class BookTickets extends React.Component {
     constructor(props) {
+        console.log("inside book tickets.")
         super(props);
         if (this.props.location) {
             console.log(this.props.location.state);
@@ -147,7 +148,7 @@ class BookTickets extends React.Component {
             })
         }
         this.setState({ screening: screening });
-        console.log(this.state.screening)
+        // console.log(this.state.screening)
 
 
 
@@ -309,7 +310,7 @@ class BookTickets extends React.Component {
 
                 </head>
                 <body id="grad1">
-                    <Banner props={this.props} />
+                    {/* <Banner props={this.props} /> */}
                     <br />
 
                     <div className="header_text">
@@ -496,31 +497,26 @@ class BookTickets extends React.Component {
                     </fieldset>
                     <br />
                     <br />
+
                     <nav>
-                        <ul className="pagination justify-content-center">
-                            <li className="page-item disabled">
-                                <a className="button_prev" style={{ color: "white" }} tabIndex="-1" aria-disabled="true">
-
-                                </a>
-                            </li>
-                            <li className="page-item"><a className="buttons_background" style={{ color: "white" }}>MOVIE</a></li>
-                            <li className="page-item"><a className="buttons_background" style={{ color: "white" }} onClick={this.goToSeatMap}>SEATS</a></li>
-                            <li className="page-item"><a className="buttons_background" style={{ color: "white" }}>CHECKOUT</a></li>
-
-                        </ul>
+                        <div className="container text-center">
+                            <button className="tab_background text mr-3 btn-lg">{'<'}</button>
+                            <button className="tab_background text mr-3 btn-lg">MOVIE</button>
+                            <button className="tab_background text mr-3 btn-lg" onClick={this.goToSeatMap}>SEATS</button>
+                            <button className="tab_background text mr-9 btn-lg">CHECKOUT</button>
+                            <button className="tab_background text mr-3 btn-lg" style={{marginLeft:'12px'}}>{'>'}</button>
+                        </div>
                     </nav>
-                    {/* <div onClick={this.goToSeatMap} className="bottom-right">
-                        <button className="a1 next btn btn-primary btn-large">Next &raquo;</button>
-                    </div> */}
                     <br />
                     <br />
                     <br />
                     <footer className="bg-light text-center">
-                        <div class="text-center p-3" style={{ backgroundcolor: 'rgba(0, 0, 0, 0.2)' }}>
-                            All rights reserved. © 2021 Copyright:
-                <a className="text-dark" >The Big Picture</a>
-                        </div>
-                    </footer>
+    <div class="text-center p-3" style={{ backgroundcolor: 'rgba(0, 0, 0, 0.2)' }}>
+        All rights reserved. © 2021 Copyright:
+    <a className="text-dark" >The Big Picture</a>
+    </div>
+    </footer>
+                    
                 </body>
             </React.Fragment >
         )

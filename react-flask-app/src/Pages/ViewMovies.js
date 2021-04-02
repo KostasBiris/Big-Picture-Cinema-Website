@@ -1,15 +1,11 @@
-import SearchIMDB from './SearchIMDB';
-import React, { useState } from 'react';
-import CustomerHomePage from '../Pages/CustomerHomePage';
-import SearchResult from './SearchResult';
-import SearchResultManager from './SearchResultManager';
-import main from '../static/main.css';
-import { BrowserRouter, Route } from 'react-router-dom';
-import Banner from './Banner';
+import React from 'react';
+import SearchResult from '../components/SearchResult';
+import { Link } from "react-router-dom";
+
 var publicIP = require('public-ip')
 
 //Component for getting and displaying search results.
-class SearchResults extends React.Component{
+class ViewMovies extends React.Component{
   constructor(props) {
     super(props);
     //Bind our method.
@@ -24,7 +20,7 @@ class SearchResults extends React.Component{
     this.getClientIP();
     window.addEventListener('load', this.getMovies);
     this.getMovies();
-    
+
     const _jquery = document.createElement("script");
     _jquery.src = "https://code.jquery.com/jquery-3.2.1.slim.min.js";
     _jquery.async = true;
@@ -45,8 +41,10 @@ class SearchResults extends React.Component{
     _bootstrap.integrity ="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl";
     _bootstrap.crossOrigin ="anonymous";
     document.body.appendChild(_bootstrap);
-
 }
+  
+componentDidCatch(TypeError){
+  }
 
 
   getClientIP = () => {
@@ -61,16 +59,15 @@ class SearchResults extends React.Component{
     if(this.props.match)
       movie = this.props.match.params.query 
     console.log(movie)
-    await fetch(`/movie/search/`, {
+    await fetch(`/allmovies`, {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ data: movie })})
+      },})
       .then(response => response.json()).then(data => {
         console.log(data)
-        this.setState({ returnedData : data.movies})
-
+        this.setState({ returnedData : Object.values(data.response)})
+        console.log(this.state)
 
       });
 
@@ -79,28 +76,22 @@ class SearchResults extends React.Component{
   render() {
     //Results found.
     //Render the results in a list format.
-    console.log(this.props)
-    console.log("This is the search result")
-
       return (
-        <>
-        {/* <head>
-          <link rel="stylesheet" type="text/css" href={main}/>
-        </head> */}
-          <body>
-            {/* <Banner history ={this.props.history} /> */}
+        <React.Fragment>
+            <body>
+            <br />
             {this.state.returnedData.length > 0 ?
             this.state.returnedData.map(res_=> {
-              return (
+              console.log(res_);
+                return (
                 // CUSTOMER SEARCH MOVIES
                 <SearchResult res={res_} history={this.props.history}/>
               )
             })
             : <p>No results found</p> }
 
-          {/* </div> */}
-          </body>
-        </>
+            </body>
+        </React.Fragment>
       )
   
 
@@ -108,4 +99,4 @@ class SearchResults extends React.Component{
 }
 
 
-export default SearchResults;
+export default ViewMovies;

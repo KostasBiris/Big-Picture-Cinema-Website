@@ -88,7 +88,7 @@ class ArbitraryScreen extends React.Component {
 
 
     goToCheckOut = () => {
-        console.log(this.state)
+        // console.log(this.state)
         this.props.history.push('/payment', this.state);
     }
 
@@ -110,7 +110,7 @@ class ArbitraryScreen extends React.Component {
         }
 
         this.setState({seatmap_copy: seatmap})
-        console.log(this.state)
+        // console.log(this.state)
     }
 
 
@@ -124,7 +124,7 @@ class ArbitraryScreen extends React.Component {
                         <link rel="stylesheet" type="text/css" href={main} />
                     </head>
                    
-                    <Banner />
+                    {/* <Banner /> */}
                     <div class="header_text">
                         <h1 style={{ marginLeft: '600px', left: '3rem', color: '#4e5b60' }}>SCREEN</h1>
                     </div>
@@ -133,19 +133,24 @@ class ArbitraryScreen extends React.Component {
                         {/* <Seatmap rows={this.state.seatmap} maxReservableSeats={10} onChange={this.updateSeatmap} alpha /> */}
                     </div>
 
+
                     <nav>
-                        <ul className="pagination justify-content-center">
-                            <li className="page-item disabled">
-                                <a className="button_prev" style={{ color: "white" }} tabIndex="-1" aria-disabled="true">
-
-                                </a>
-                            </li>
-                            <li className="page-item"><a className="buttons_background" style={{ color: "white" }}>MOVIE</a></li>
-                            <li className="page-item"><a className="buttons_background" style={{ color: "white" }}>SEATS</a></li>
-                            <li className="page-item"><a className="buttons_background" style={{ color: "white" }} onClick={this.goToCheckOut}>CHECKOUT</a></li>
-
-                        </ul>
+                        <div className="container text-center">
+                            <button className="tab_background text mr-3 btn-lg">{'<'}</button>
+                            <button className="tab_background text mr-3 btn-lg">MOVIE</button>
+                            <button className="tab_background text mr-3 btn-lg" >SEATS</button>
+                            <button className="tab_background text mr-9 btn-lg" onClick={this.goToCheckOut}>CHECKOUT</button>
+                            <button className="tab_background text mr-3 btn-lg" style={{marginLeft:'12px'}}>{'>'}</button>
+                        </div>
                     </nav>
+                    
+                    <footer className="bg-light text-center">
+                        <div className="text-center p-3" style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
+                            All rights reserved. © 2021 Copyright:
+                    <a className="text-dark">The Big Picture</a>
+                        </div>
+                    </footer>
+
                 </body>
             </React.Fragment>
         );

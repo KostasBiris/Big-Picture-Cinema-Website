@@ -33,7 +33,7 @@ class SearchResult extends React.Component{
     }
 
     addMovie = () => {
-        console.log(this.state);
+        // console.log(this.state);
         fetch('/add', {
             method: 'POST',
             headers: {
@@ -94,13 +94,13 @@ class SearchResult extends React.Component{
     }
 
     addScreening = () => {
-        console.log(this.props);
+        // console.log(this.props);
         this.props.history_.push('/addscreening', {state: this.state})
     }
 
     
     render () {
-        console.log(this.state);
+        // console.log(this.state);
         return (
             
             <div>

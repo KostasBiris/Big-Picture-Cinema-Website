@@ -40,7 +40,6 @@ class CustomerHomePage extends React.Component {
         this.getSomeMovies = this.getSomeMovies.bind(this);
         this.getRandomPosters = this.getRandomPosters.bind(this);
         this.handleClick = this.handleClick.bind(this);
-
     }
 
     reformatd = (inp) => {
@@ -113,7 +112,7 @@ class CustomerHomePage extends React.Component {
 
         this.getSomeMovies();
 
-        console.log(this.state);
+        // console.log(this.state);
 
 
         interval = setInterval(() => {
@@ -235,7 +234,7 @@ class CustomerHomePage extends React.Component {
         }).then(response => response.json()).then(data => {
             this.setState({movies: Object.values(data.movies) })
         })
-        console.log(this.state.movies);
+        // console.log(this.state.movies);
     }
 
 
@@ -248,7 +247,7 @@ class CustomerHomePage extends React.Component {
     getRandomPosters = () => {
         
         let indexes = [];
-        console.log(this.state);
+        // console.log(this.state);
         function getRandomInt(max) {
             return Math.floor(Math.random() * Math.floor(max));
         }
@@ -262,7 +261,7 @@ class CustomerHomePage extends React.Component {
             let a = getRandomInt(movies.length);
             indexes.push(i);
         }
-        console.log(indexes);
+        // console.log(indexes);
         return (
             <div className="container">
             <div className="row">
@@ -288,58 +287,17 @@ class CustomerHomePage extends React.Component {
 
 
     render() {
-        console.log(this.state);
+        // console.log(this.state);
         if (this.isAuth()) {
             return (
-                <body>
+                <React.Fragment>
                     <head>
                         <link rel="stylesheet" type="text/css" href={main} />
                         <link rel="icon" href="data:;base64,iVBORw0KGgo" />
                         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
                     </head>
                     <body id = 'grad1'>
-                        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                        <a className="navbar-brand" href="#"><img src={logo} style={{top:'1px', width:'rem', height:'8rem'}}/></a>
-                        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                            <span className="navbar-toggler-icon"/>
-                        </button>
-                        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                            <ul className="navbar-nav mr-auto">
-                                <li className="nav-item active">
-                                    <button className="tab_background text mr-3">WHAT'S NEW</button>
-                                </li>
-                                <li className="nav-item">
-                                    <button className="tab_background text mr-3">TICKETS</button>
-                                </li>
-                                <li className="nav-item dropdown"></li>
-                                    <button className="tab_background dropdown-toggle text mr-3"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">SCREENS</button>
-                                    <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <button className="dropdown-item" style={{color:'#f9bc50'}} >SILVER Screens</button>
-                                        <button className="dropdown-item" style={{color:'#f9bc50'}}>VMAX Screens</button>
-                                        <button className="dropdown-item" style={{color:'#f9bc50'}} >GOLDEN Screens</button>
-                                    </div>
-                                <li className="nav-item">
-                                    <button className="tab_background text mr-3" >EVENTS</button>
-                                </li>
-                                <li className="nav-item">
-                                    <button className="tab_background text mr-9">INFO</button>
-                                </li>
-                            </ul>
-                            <form className="form-inline my-2 my-lg-0">
-                                <button onClick={this.handleLogout} className="tab_background mr-3">LOG OUT</button>
-                                <input onClick={this.handleAccount} className="mr-3" type="image" style={{width:'2rem',height:'2rem'}} src={usericon}/>
-                            </form>
-                            <form className="form-inline my-2 my-lg-0">
-                            <input onChange={this.handleSearchChange} value={this.state.query} className="form-control mr-sm-2 search_bar" type="search" placeholder="Search here.." aria-label="Search"/>
-                            <button onClick={this.handleSubmit} className="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>
-                            </form>
-                            <form className="form-inline my-2 my-lg-0">
-                            <input type="date" onChange={this.handleDate} value={this.reformatd(this.state.date)}/>
-                            <button onClick={this.handleSubmitDate} className="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>
-                            </form>
-
-                        </div>
-                        </nav>
+                        
                         <div id="carouselExampleIndicators" className="carousel slide" data-ride="carousel">
                             <ol className="carousel-indicators">
                                 <li data-target="#carouselExampleIndicators" data-slide-to="0" className="active"></li>
@@ -367,7 +325,7 @@ class CustomerHomePage extends React.Component {
                         </a>
                     </div>
                     <br/>
-                    <div class="header_text">
+                    <div className="header_text">
                         <h1 style={{position:'absolute', left:'25px', color: '#4e5b60', fontWeight: 'bold'}}>PLAYING NOW</h1>
                     </div>
                     <br/>
@@ -390,59 +348,19 @@ class CustomerHomePage extends React.Component {
                         </div>
                     </footer>
                     </body>
-                </body>
+                    </React.Fragment>
             );
         } else {
 
             return (
-                <body>
+                <React.Fragment>
                     <head>
                         <link rel="stylesheet" type="text/css" href={main} />
                         <link rel="icon" href="data:;base64,iVBORw0KGgo" />
                         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
                     </head>
                     <body id = 'grad1'>
-                        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                        <a className="navbar-brand" href="#"><img src={logo} style={{top:'1px', width:'rem', height:'8rem'}}/></a>
-                        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                            <span className="navbar-toggler-icon"/>
-                        </button>
-                        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                            <ul className="navbar-nav mr-auto">
-                                <li className="nav-item active">
-                                    <button className="tab_background text mr-3">WHAT'S NEW</button>
-                                </li>
-                                <li className="nav-item">
-                                    <button className="tab_background text mr-3">TICKETS</button>
-                                </li>
-                                <li className="nav-item dropdown"></li>
-                                    <button className="tab_background dropdown-toggle text mr-3"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">SCREENS</button>
-                                    <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <button className="dropdown-item" style={{color:'#f9bc50'}} >SILVER Screens</button>
-                                        <button className="dropdown-item" style={{color:'#f9bc50'}}>VMAX Screens</button>
-                                        <button className="dropdown-item" style={{color:'#f9bc50'}} >GOLDEN Screens</button>
-                                    </div>
-                                <li className="nav-item">
-                                    <button className="tab_background text mr-3" >EVENTS</button>
-                                </li>
-                                <li className="nav-item">
-                                    <button className="tab_background text mr-9">INFO</button>
-                                </li>
-                            </ul>
-                            <form className="form-inline my-2 my-lg-0">
-                                <button onClick={this.handleLogin} className="tab_background mr-3">LOG IN</button>
-                                <button onClick={this.handleRegister} className="tab_background mr-5">SIGN UP</button>
-                            </form>
-                            <form className="form-inline my-2 my-lg-0">
-                                <input onChange={this.handleSearchChange} value={this.state.query} className="form-control mr-sm-2 search_bar" type="search" placeholder="Search here.." aria-label="Search"/>
-                                <button onClick={this.handleSubmit} className="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>
-                            </form>
-                            <form className="form-inline my-2 my-lg-0">
-                            <input type="date" onChange={this.handleDate} value={this.reformatd(this.state.date)}/>
-                            <button onClick={this.handleSubmitDate} className="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>
-                            </form>
-                        </div>
-                        </nav>
+
                         <div id="carouselExampleIndicators" className="carousel slide" data-ride="carousel">
                             <ol className="carousel-indicators">
                                 <li data-target="#carouselExampleIndicators" data-slide-to="0" className="active"></li>
@@ -492,7 +410,7 @@ class CustomerHomePage extends React.Component {
                         </div>
                     </footer>
                     </body>
-                </body>
+                </React.Fragment>
             );
         }
     }
