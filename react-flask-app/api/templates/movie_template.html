@@ -1,105 +1,152 @@
 <html lang="en">
+
 <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='main.css')}}" />
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 </head>
 
-<body>
-    <img src="{{url_for('static',filename='finlogo.png')}}" style="top:1px;width:300px;height:190px;">
-    <img src="{{url_for('static',filename='headerbanner.png')}}" style="position:absolute;top:10px;left:340px;width:980px;height:105px;">
-    <img src="{{url_for('static',filename='follow.png')}}" style="position: absolute; top: 10px; left: 1380px; width:100px;height:105px;">
-    <div class="text">
-        <!--Tabs for customer-->
-        <button class="tab_background" style="position:absolute;top:125px;left:340px;width:150px;height:40px;">WHAT'S NEW </button>
-        <button class="tab_background" style="position:absolute;top:125px;left:510px;width:150px;height:40px;">TICKETS</button>
-        <button class="tab_background" style="position:absolute;top:125px;left:680px;width:150px;height:40px;">SCREENS</button>
-        <button class="tab_background" style="position:absolute;top:125px;left:850px;width:150px;height:40px;">INFO</button>
-    </div>
-    <form action="{{ url_for('mainpage') }}" method="post">
-        <!--Search bar...-->
-        <input class="search_bar" name="query" id="query" type="text" placeholder="Search here.." style="position:absolute;top:125px;left:1020px"/>
-        <!--fix sizing in search bar-->
-        <input class="search_icon" type="image" src="{{url_for('static',filename='search.png')}}" style="position:absolute;top:125px;left:1270px;width:50px;height:40px;"/>
-    </form>
-    <div>
-        <input id="account" type="image" src="{{url_for('static',filename='usericon.png')}}" style="position:absolute;top:125px;left:1340px;width:40px;height:40px;" />
-        <script type="text/javascript">
-        document.getElementById("account").onclick = function () {
-            location.href = "{{ url_for('account') }}";
-        };
-        </script>
-        <button type="submit" id="login" class="text_button"
-        style="position:absolute;top:125px;left:1390px;width:60px;height:40px;">LOG IN</button>
-        <script type="text/javascript">
-        document.getElementById("login").onclick = function () {
-            location.href = "{{ url_for('login') }}";
-        };
-        </script>
-        <button id="register" type="submit" class="text_button"style="position:absolute;top:125px;left:1460px;width:60px;height:40px;">SIGN UP</button>
-        <script type="text/javascript">
-        document.getElementById("register").onclick = function () {
-            location.href = "{{ url_for('register') }}";
-        };
-        </script>
-        <input type="image" src="{{url_for('static',filename='usericon.png')}}"
-            style="position:absolute;top:125px;left:1340px;width:40px;height:40px;" />
-        <!--Login and signup button-->
-        <button class="text_button" style="position:absolute;top:125px;left:1390px;width:60px;height:40px;">LOG
-            IN</button>
-        <button class="text_button" style="position:absolute;top:125px;left:1460px;width:60px;height:40px;">SIGN
-            UP</button>
-            <button class="text_button" style="position:absolute;top:125px;left:1530px;width:60px;height:40px;">LOG OUT</button>
-        <!-- HEADER ENDS-->
+<body id="grad1">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#"><img src="{{url_for('static',filename='finlogo.png')}}"
+                style="top:1px;width:rem;height:8rem;"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <button class="tab_background text mr-3">WHAT'S NEW</button>
+                </li>
+                <li class="nav-item">
+                    <button class="tab_background text mr-3">TICKETS</button>
+                </li>
+                <li class="nav-item dropdown">
+                    <button class="tab_background dropdown-toggle text mr-3" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">SCREENS</button>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <button class="dropdown-item" style="color:#f9bc50;">SILVER Screens</button>
+                        <button class="dropdown-item" style="color:#f9bc50;">VMAX Screens</buttom>
+                            <button class="dropdown-item" style="color:#f9bc50;">GOLDEN Screens</button>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <button class="tab_background text mr-3">EVENTS</button>
+                </li>
+                <li class="nav-item">
+                    <button class="tab_background text mr-9">INFO</button>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <button class="tab_background mr-3">LOG IN</button>
+                <button class="tab_background mr-5">SIGN UP</button>
+                <input class="mr-3" type="image" style="width:2rem;height:2rem;"
+                    src="{{url_for('static',filename='usericon.png')}}" />
+                <input class="form-control mr-sm-2 search_bar" type="search" placeholder="Search here.."
+                    aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>
+            </form>
+        </div>
+    </nav>
+    <br>
+    <!-- HEADER ENDS-->
     <div class="header_text">
-        <h1 style="position:absolute; left:5rem; color: #4e5b60;">CAPTAIN AMERICA: THE WINTER SOLDIER</h1>
-        <br><br><br><br><br><br><br><br>
-        <h2 class="text" style="position:absolute;left:35rem; color:#4e5b60">Movie Description</h2>
-        <br><br>
-        <h2 class="text_description" style="position:absolute;"> As Steve Rogers struggles to embrace his role in the modern world, he teams up with a fellow Avenger 
-            <br>
-            and S.H.I.E.L.D agent, Black Widow, to battle a new threat from history: an assassin known as the Winter Soldier.</h2>
-        <img class="movie_page" src="{{url_for('static',filename='poster3.jpg')}}" style="left:5rem;"/>
-        <div class="text"></div>
-        <table class="position_table">
-            <tr>
-              <th>Director/s: </th>
-              <td data-th="Director/s">Anthony Russo, Joe Russo</td>
-            </tr>
-            <tr>
-                <th>Writer/s: </th>
-                <td data-th="Writer/s">Christopher Markus, Stephen McFeely</td>
-            </tr>
-            <tr>
-              <th>Actors: </th>
-              <td data-th="Actors">Chris Evans, Samuel L. Jackson, Scarlett Johansson, Robert Redford, Sebastian Stan, Anthony Mackie</td>
-            </tr>
-            <tr>
-             <th>Runtime: </th>
-             <td data-th="Runtime">136 min</td>
-            </tr>
-            <tr>
-                <th>Release date: </th>
-                <td data-th="Release date">4 April 2014 (USA)</td>
-            </tr>
-            <th>Genre: </th>
-            <td data-th="Genre"> Action, Adventure, Sci-Fi </td>
-        </tr>
-        <tr>
-            <th>Certificate: </th>
-            <td data-th="Certificate">PG-13</td>
-        </tr>
-          </table>
-          <br><br>
-          <div>
-              <br>
-              <div class="video_frame">
-          <iframe width="600px" height="335px" src="https://www.youtube.com/embed/7SlILk2WMTI/?controls=1">
-        </iframe>
+        <h1 style="position:absolute; left:25px; color: #4e5b60; font-weight: bold;">CAPTAIN AMERICA: THE WINTER SOLDIER
+        </h1>
     </div>
+    <br><br><br>
+    <div class="column" style=" position:relative; left: 25px;">
+        <img class="poster poster_movies" src="{{url_for('static',filename='poster3.jpg')}}"
+            style="position: relative;" />
+        <br>
     </div>
-</div>
-<div class="text">
-    <button class="tab_background" style="position:absolute;top:80%;left:1300px;width:180px;height:60px;">GET ALL TIMES & TICKETS</button>
-</div>
-    </body>
-    </html>
+    <div class="container">
+        <div class="row">
+            <div class="card border-dark card-sm-center position_table"
+                style="position: absolute; left:22rem; top:15rem;">
+                <div class="card-header">Movie Description</div>
+                <div class="card-body text-dark">
+                    <p class="card-text">As Steve Rogers
+                        struggles to embrace his
+                        role in
+                        the modern world, he teams up with a fellow Avenger
+                        and S.H.I.E.L.D agent, Black Widow, to battle a new threat from history: an assassin known as
+                        the Winter
+                        Soldier.
+                    </p>
+                    <button class="buttons_background rounded-pill">GET
+                        ALL TIMES & TICKETS</button>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <table class="table table-sm-center table-dark position_table"
+                style="position: absolute; left:22rem; top:27rem;">
+                <tr>
+                    <th scope=" col">Director/s: </th>
+                    <td data-th="Director/s">Anthony Russo, Joe Russo</td>
+                </tr>
+                <tr>
+                    <th scope="row">Writer/s: </th>
+                    <td data-th="Writer/s">Christopher Markus, Stephen McFeely</td>
+                </tr>
+                <tr>
+                    <th scope="row">Actors: </th>
+                    <td data-th="Actors">Chris Evans, Samuel L. Jackson, Scarlett Johansson, Robert Redford,
+                        Sebastian
+                        Stan, Anthony Mackie</td>
+                </tr>
+                <tr>
+                    <th scope="row">Runtime: </th>
+                    <td data-th="Runtime">136 min</td>
+                </tr>
+                <tr>
+                    <th scope="row">Release date: </th>
+                    <td data-th="Release date">4 April 2014 (USA)</td>
+                </tr>
+                <th scope="row">Genre: </th>
+                <td data-th="Genre"> Action, Adventure, Sci-Fi </td>
+                </tr>
+                <tr>
+                    <th scope="row">Certificate: </th>
+                    <td data-th="Certificate">PG-13</td>
+                </tr>
+            </table>
+            <br><br>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="embed-responsive embed-responsive-21by9 ">
+        <iframe class="position_table" src="https://www.youtube.com/embed/7SlILk2WMTI/?controls=1" allowfullscreen></iframe>
+      </div>
+      <br>
+      <br>
+    <footer class="bg-light text-center">
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            All rights reserved. © 2021 Copyright:
+            <a class="text-dark">The Big Picture</a>
+        </div>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
+</body>
+
+</html>

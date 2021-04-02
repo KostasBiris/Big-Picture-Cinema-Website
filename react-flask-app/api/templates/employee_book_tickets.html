@@ -1,0 +1,219 @@
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='main.css')}}" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+
+<body id="grad1">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#"><img src="{{url_for('static',filename='finlogo.png')}}" style="top:1px;width:rem;height:8rem;"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <form class="form-inline my-2 my-lg-0">
+        <button class="tab_background mr-3">LOG OUT</button>
+        <input class="mr-3" type="image" style="width:2rem;height:2rem;" src="{{url_for('static',filename='usericon.png')}}"/>
+        <input class="form-control mr-sm-2 search_bar" type="search" placeholder="Search here.." aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>
+      </form>
+    </div>
+  </nav>
+  <br>
+  <br>
+  <div class="container text-center">
+          <button class="tab_background text mr-3 btn-lg">BOOK TICKETS</button>
+          <button class="tab_background text mr-3 btn-lg">VIEW MOVIES</button>
+          <button class="tab_background text mr-3 btn-lg" >REGISTER CUSTOMER</button>
+          <button class="tab_background text mr-9 btn-lg">HELP</button>
+  </div>
+  <br>
+  <br>
+  <br>
+  <!--NAV TABS-->
+  <br>
+  <div class="header_text">
+    <h1 style="position:absolute; left:25px; color: #4e5b60; font-weight: bolder;">CHOOSE A MOVIE: </h1>
+  </div>
+  <br>
+  <br>
+  <br>
+  <fieldset>
+    <div class="container_new">
+      <div class="hover01 column">
+        <input type="radio" name="movies" class="sr-only" id="1">
+        <label for="1">
+          <figure><img class="image_box" src="{{url_for('static',filename='poster8.jpg')}}" class="new_movies"
+              style="position: relative;" /></figure>
+        </label>
+        <input type="radio" name="movies" class="sr-only" id="2">
+        <label for="2">
+          <figure><img class="image_box" src="{{url_for('static',filename='poster8.jpg')}}" class="new_movies"
+              style="position: relative;" /></figure>
+        </label>
+        <input type="radio" name="movies" class="sr-only" id="3">
+        <label for="3">
+          <figure><img class="image_box" src="{{url_for('static',filename='poster8.jpg')}}" class="new_movies"
+              style="position: relative;" /></figure>
+        </label>
+        <input type="radio" name="movies" class="sr-only" id="4">
+        <label for="4">
+          <figure><img class="image_box" src="{{url_for('static',filename='poster8.jpg')}}" class="new_movies"
+              style="position: relative;" /></figure>
+        </label>
+        <input type="radio" name="movies" class="sr-only" id="5">
+        <label for="5">
+          <figure><img class="image_box" src="{{url_for('static',filename='poster8.jpg')}}" class="new_movies"
+              style="position: relative;" /></figure>
+        </label>
+        <input type="radio" name="movies" class="sr-only" id="6">
+        <label for="6">
+          <figure><img class="image_box" src="{{url_for('static',filename='poster8.jpg')}}" class="new_movies"
+              style="position: relative;" /></figure>
+        </label>
+        <input type="radio" name="movies" class="sr-only" id="7">
+        <label for="7">
+          <figure><img class="image_box" src="{{url_for('static',filename='poster8.jpg')}}" class="new_movies"
+              style="position: relative;" /></figure>
+        </label>
+      </div>
+    </div>
+  </fieldset>
+  <br>
+  <br>
+  <br>
+  <br>
+  <fieldset>
+    <div class="container-fluid px-0 px-sm-4 mx-auto">
+      <div class="row justify-content-center mx-0">
+        <div class="col-lg-10">
+          <div class="card border-0">
+            <div class="card-header" style="background-color:#4e5b60;">
+              <div class="mx-0 mb-0 row justify-content-sm-center justify-content-start px-1">
+                <h1 class="header_text" style="color:antiquewhite;">CHOOSE A DATE: </h1>
+              </div>
+            </div>
+            <div class="card-body p-3 p-sm-5">
+              <div class="row text-center mx-0">
+                <div class="col-md-2 col-4 my-1 px-2">
+                  <div class="mx-0 mb-0 row justify-content-sm-center justify-content-sm-center px-1"> <input
+                      type="date"><span class="fa fa-calendar"></span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+  <br>
+  <br>
+  <fieldset>
+    <div class="container-fluid px-0 px-sm-4 mx-auto">
+      <div class="row justify-content-center mx-0">
+        <div class="col-lg-10">
+          <div class="card border-0">
+            <div class="card-header" style="background-color:#4e5b60;">
+              <div class="mx-0 mb-0 row justify-content-sm-center justify-content-start px-1">
+                <h1 class="header_text" style="color:antiquewhite;">CHOOSE A TIME: </h1>
+              </div>
+            </div>
+            <div class="card-body p-3 p-sm-5">
+              <div class="row text-center mx-0">
+                <div class="col-md-2 col-4 my-1 px-2 tab_background rounded-pill">
+                  <input type="radio" id="1" class="tab_background rounded-pill"><label for="1">11:00AM</label></input>
+                </div>
+                <div class="col-md-2 col-4 my-1 px-2 tab_background rounded-pill">
+                  <input type="radio" id="2" class="tab_background rounded-pill"><label for="2">13:30PM</label></input>
+                </div>
+                <div class="col-md-2 col-4 my-1 px-2 tab_background rounded-pill">
+                  <input type="radio" id="3" class="tab_background rounded-pill"><label for="3">16:00PM</label></input>
+                </div>
+                <div class="col-md-2 col-4 my-1 px-2 tab_background rounded-pill">
+                  <input type="radio" id="4" class="tab_background rounded-pill"><label for="4">19:00PM</label></input>
+                </div>
+                <div class="col-md-2 col-4 my-1 px-2 tab_background rounded-pill">
+                  <input type="radio" id="5" class="tab_background rounded-pill"><label for="5">21:30PM</label></input>
+                </div>
+                <div class="col-md-2 col-4 my-1 px-2 tab_background rounded-pill">
+                  <input type="radio" id="6" class="tab_background rounded-pill"><label for="6">23:45PM</label></input>
+                </div>
+              </div>
+            </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+  <br>
+  <br>
+  <fieldset>
+    <div class="container-fluid px-0 px-sm-4 mx-auto">
+      <div class="row justify-content-center mx-0">
+        <div class="col-lg-10">
+          <div class="card border-0">
+            <div class="card-header" style="background-color:#4e5b60;">
+              <div class="mx-0 mb-0 row justify-content-sm-center justify-content-start px-1">
+                <h1 class="header_text" style="color:antiquewhite;">CHOOSE A SCREEN: </h1>
+              </div>
+            </div>
+            <div class="card-body p-3 p-sm-5">
+              <div class="row text-center mx-0">
+                <div class="col-md-2 col-4 my-1 px-2 tab_background rounded-pill">
+                  <input type="radio" id="1" name="radioscreen" class="tab_background rounded-pill"><label for="1">
+                    SILVER SCREEN 1</label></input>
+                </div>
+                <div class="col-md-2 col-4 my-1 px-2 tab_background rounded-pill">
+                  <input type="radio" id="2" name="radioscreen" class="tab_background rounded-pill"><label for="2">
+                    SILVER SCREEN 2</label></input>
+                </div>
+                <div class="col-md-2 col-4 my-1 px-2 tab_background rounded-pill">
+                  <input type="radio" id="3" name="radioscreen" class="tab_background rounded pill"><label for="3">
+                    SILVER SCREEN 3</label></input>
+                </div>
+                <div class="col-md-2 col-4 my-1 px-2 tab_background rounded-pill">
+                  <input type="radio" id="4" name="radioscreen" class="tab_background rounded-pill"><label for="4"> VMAX
+                    SCREEN</label></input>
+                </div>
+                <div class="col-md-2 col-4 my-1 px-2 tab_background rounded-pill">
+                  <input type="radio" id="5" name="radioscreen" class="tab_background rounded-pill"><label for="5">
+                    GOLDEN SCREEN</label></input>
+                </div>
+              </div>
+            </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+  <br>
+  <br>
+  <div class="container text-center">
+    <button class="tab_background text mr-3 btn-lg">&nbsp&nbsp&nbsp&nbsp&nbsp<&nbsp&nbsp&nbsp&nbsp&nbsp</button>
+    <button class="tab_background text mr-3 btn-lg">MOVIE</button>
+    <button class="tab_background text mr-3 btn-lg" >SEATS</button>
+    <button class="tab_background text mr-9 btn-lg">CHECKOUT</button>
+    <button class="tab_background text mr-9 btn-lg">&nbsp&nbsp&nbsp&nbsp&nbsp>&nbsp&nbsp&nbsp&nbsp&nbsp</button>
+</div>
+  <br>
+  <br>
+  <br>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
