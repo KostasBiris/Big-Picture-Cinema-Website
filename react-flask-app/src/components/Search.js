@@ -80,6 +80,7 @@ class SearchResults extends React.Component{
     //Results found.
     //Render the results in a list format.
     console.log(this.props)
+    console.log("This is the search result")
 
       return (
         <>
@@ -87,7 +88,7 @@ class SearchResults extends React.Component{
           <link rel="stylesheet" type="text/css" href={main}/>
         </head> */}
           <body>
-            <Banner history ={this.props.history} />
+            {/* <Banner history ={this.props.history} /> */}
             {this.state.returnedData.length > 0 ?
             this.state.returnedData.map(res_=> {
               return (

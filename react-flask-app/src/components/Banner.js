@@ -136,11 +136,14 @@ class Banner extends React.Component {
     //Called when the submit button is pressed.
     handleSubmit = (e) => {
         //Redirect the route to execute the search query.
+        // e.preventDefault();
         var go = ''
         go = '/search/' + this.state.query.split(' ').join('_');
-        // console.log(this.props)
+        console.log(go)
+        console.log(this.props.history)
 
         if (this.props.history){
+            console.log("going")
             this.props.history.push(go, this.state);
         }
         else{

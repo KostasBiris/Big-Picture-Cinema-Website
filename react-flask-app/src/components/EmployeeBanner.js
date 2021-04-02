@@ -5,8 +5,50 @@ import React from 'react';
 
 class EmployeeBanner extends React.Component {
 
+  constructor(props) {
+    super(props);
+    //this.props.history = this.props.history
+
+
+    //By default the state is a blank query.
+    this.state = { query: '' };
+    //Bind our methods.
+    this.handleSearchChange = this.handleSearchChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+}
+
+
+  handleSearchChange = (e) => {
+    // e.preventDefault();
+    //Update the state to represent the changes to the field.
+    this.setState({ query: e.target.value });
+  }
+
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    //Redirect the route to execute the search query.
+    // e.preventDefault();
+    console.log(this.props.history)
+    var go = ''
+    go = '/search/' + this.state.query.split(' ').join('_');
+
+    console.log(go)
+    
+
+    if (this.props.history){
+        this.props.history.push(go, this.state);
+    }
+    else{
+        this.props.props.history.push(go, this.state);
+    }
+
+
+}
+
 
     render() {
+
         return (
             <body>
             <head>
@@ -23,8 +65,10 @@ class EmployeeBanner extends React.Component {
           <form className="form-inline my-2 my-lg-0">
             <button className="tab_background mr-3">LOG OUT</button>
             <input className="mr-3" type="image" style={{width:"2rem",height:"2rem"}} src={usericon}/>
-            <input className="form-control mr-sm-2 search_bar" type="search" placeholder="Search here.." aria-label="Search"/>
-            <button className="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>
+            {/* <input onChange={this.handleSearchChange} className="form-control mr-sm-2 search_bar" type="search" placeholder="Search here.." aria-label="Search"/> */}
+            <input onChange={this.handleSearchChange} value={this.state.query} className="form-control mr-sm-2 search_bar" type="search" placeholder="Search here.." aria-label="Search" />
+            {/* <button onClick={this.handleSubmit} className="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>           */}
+            <button onClick={this.handleSubmit} className="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>
           </form>
         </div>
       </nav>

@@ -3,8 +3,7 @@ import { Route, Switch , Redirect} from "react-router";
 import { BrowserRouter, Link } from "react-router-dom";
 import  CustomerHomePage from './Pages/CustomerHomePage';
 import LoginPage from './Pages/LoginPage';
-import reactDom from 'react-dom';
-import Search from './components/Search'
+import ReactDom from 'react-dom';
 import SearchResults from "./components/Search";
 import MoviePage from "./Pages/MoviePage";
 import CustomerRegister from "./Pages/CustomerRegister";
@@ -24,25 +23,57 @@ import ScreeningResults from "./components/ScreeningResults";
 import EmployeeLogin from "./Pages/EmployeeLogin";
 import ManagerLogin from "./Pages/ManagerLogin";
 import EPayment from "./Payment/Employee_Payment";
-import EmployeeMain from "./Pages/EmployeeMain";
+// import EmployeeMain from "./Pages/EmployeeMain";
 import EmployeeBook from "./Pages/EmployeeBook";
 import CustomerSite from "./Sites/CustomerSite";
+import EmployeeSite from "./Sites/EmployeeSite";
+
+import {createBrowserHistory} from 'history';
+const history = createBrowserHistory();
+const customerUrlList = ['/', '/home']
+const employeeUrlList = ['/emain']
+
+
+
+function SiteType() {
+  let location = history.location.pathname
+  // if (history.location.pathname.includes("search"))
+  //   location = "/search/:query"
+  console.log(location)
+  if (customerUrlList.includes(location)){
+    console.log("true 1")
+    return <Link component={CustomerSite}/>
+  }
+  else if (employeeUrlList.includes(location)){
+    console.log("true 2")
+    return <Link component={EmployeeSite}/>
+  }
+  else
+    return <Route exact path="/search/:query" component={SearchResults}/>
+}
+
 
 const App = () => (
     // Set up routing for our web application.
     // Redirce '/' to '/home' by default.
+    
+    
+    <React.Fragment>
+      {console.log("hello")}
     <BrowserRouter>
       <Switch>
-        <Route exact path="/" render={() => (<Redirect to="/home" />)} />
-        <Link component={CustomerSite}/>
+        <SiteType />
+        
+        
+        
         {/* <Route exact path="/home" component={CustomerHomePage} /> */}
         {/* <Route exact path="/login" component={LoginPage} /> */}
         {/* <Route exact path="/search/:query" component={SearchResults}/> */}
         {/* <Route exact path="/movie/:title/:movieID" component={MoviePage}/> */}
         <Route exact path="/register" component={CustomerRegister}/>
-        <Route exact path="/movie/:title" component={MoviePage}/>
-        <Route exact path ="/account" component={CustomerAccountPage}/>
-        <Route exact path="/payment" component={Payment}/>
+        {/* <Route exact path="/movie/:title" component={MoviePage}/> */}
+        {/* <Route exact path ="/account" component={CustomerAccountPage}/> */}
+        {/* <Route exact path="/payment" component={Payment}/> */}
         <Route exact path="/screen1" component={Screen1}/>
         <Route exact path="/screen2" render={Screen2}/>
         <Route exact path="/screen3" render={Screen3}/>
@@ -56,13 +87,14 @@ const App = () => (
         <Route exact path="/elogin" component={EmployeeLogin}/>
         <Route exact path="/mlogin" component={ManagerLogin}/>
         <Route exact path="/epayment" component={EPayment}/>
-        <Route exact path="/emain" component={EmployeeMain}/>
+        {/* <Route exact path="/emain" component={EmployeeMain}/> */}
         <Route exact path="/ebook" component={EmployeeBook}/>
-
-
-        
       </Switch>
     </BrowserRouter>
+
+    
+    
+    </React.Fragment>
   
 );
 export default App;
