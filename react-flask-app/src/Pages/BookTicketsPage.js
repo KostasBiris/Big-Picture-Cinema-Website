@@ -42,6 +42,8 @@ class BookTickets extends React.Component {
         this.movieOnScreen = this.movieOnScreen.bind(this);
     }
 
+    componentDidCatch(TypeError){}
+
     seekData = async () => {
         await fetch('/upcoming', {
             method: 'POST',

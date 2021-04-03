@@ -33,7 +33,7 @@ import {createBrowserHistory} from 'history';
 const history = createBrowserHistory();
 const customerRoutes = ['/', '/home', '/search/', '/book', '/payment', '/account', '/register', '/login']
 const employeeRoutes = ['/emain', '/ebook', '/eas', '/emain/search/', '/emain/view_movies', '/movie/:title']
-const managerRoutes = ['/addmovies/search', '/overall_analytics', '/addscreening']
+const managerRoutes = ['/addmovies/search/', '/overall_analytics', '/addscreening']
 
 
 function SiteType() {
