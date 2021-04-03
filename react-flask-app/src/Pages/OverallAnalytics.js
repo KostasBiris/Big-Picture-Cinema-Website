@@ -14,12 +14,12 @@ var publicIP = require('public-ip')
 class OverallAnalytics extends React.Component {
     constructor(props) {
         super(props);
-        if (this.props.location.auth === undefined) {
-            this.props.history.push('/home', this.state);
-        }
-        if (this.props.location.auth === false) {
-            this.props.history.push('/home', this.state);
-        }
+        // if (this.props.location.auth === undefined) {
+        //     this.props.history.push('/home', this.state);
+        // }
+        // if (this.props.location.auth === false) {
+        //     this.props.history.push('/home', this.state);
+        // }
 
 
 
@@ -263,7 +263,7 @@ class OverallAnalytics extends React.Component {
     render() {
         return (
             <body>
-                <ManagerBanner />
+                {/* <ManagerBanner /> */}
                 <br />
                 <br />
                 <div className="header_text" >

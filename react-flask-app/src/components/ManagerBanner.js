@@ -6,6 +6,13 @@ import logo from '../static/finlogo.png';
 class ManagerBanner extends React.Component {
     constructor(props) {
         super(props);
+
+        this.state = { query: '' };
+
+        this.handleSearchChange = this.handleSearchChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleLogout = this.handleLogout.bind(this);
+        this.handleAccount = this.handleAccount.bind(this);
     }
 
 
@@ -35,6 +42,46 @@ class ManagerBanner extends React.Component {
 
 
     }
+
+    handleSearchChange = (e) => {
+        // e.preventDefault();
+        //Update the state to represent the changes to the field.
+        this.setState({ query: e.target.value });
+      }
+
+    handleSubmit = (e) => {
+        var go = ''
+        go = '/addmovies/search/' + this.state.query.split(' ').join('_');
+    
+        console.log(go)
+        console.log("hellooooooo")
+        
+    
+        if (this.props.history){
+            this.props.history.push(go, this.state);
+            console.log("going");
+        }
+        else{
+            this.props.props.history.push(go, this.state);
+        }
+    }
+
+    handleLogout = (e) => {
+
+        var go = '/logout/' + this.state.IP;
+      
+        fetch(go, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => response.json()).then(() => this.setState({ response: undefined }))
+      
+      }
+      
+      handleAccount = (e) => {
+        this.props.history.push('/emain/account');
+      }
 
     render () {
         return (
@@ -71,8 +118,8 @@ class ManagerBanner extends React.Component {
                         </ul>
                         <form className="form-inline my-2 my-lg-0">
                             <button className="tab_background mr-5">LOG OUT</button>
-                            <input className="form-control mr-sm-2 search_bar" type="search" placeholder="Search here.." aria-label="Search"/>
-                            <button className="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>
+                            <input onChange={this.handleSearchChange} value={this.state.query} className="form-control mr-sm-2 search_bar" type="search" placeholder="Search here.." aria-label="Search"/>
+                            <button onClick={this.handleSubmit} className="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>
                         </form>
                     </div>
                     </nav>

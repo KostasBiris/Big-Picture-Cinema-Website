@@ -1,10 +1,7 @@
 import SearchIMDB from './SearchIMDB';
-import React, { useState } from 'react';
-import CustomerHomePage from '../Pages/CustomerHomePage';
+import React from 'react';
 import SearchResult from './SearchResultManager';
 import main from '../static/main.css';
-import { BrowserRouter, Route } from 'react-router-dom';
-import Banner from './Banner';
 var publicIP = require('public-ip')
 
 //Component for getting and displaying search results.
@@ -14,7 +11,7 @@ class SearchManager extends React.Component{
     //Bind our method.
     this.getMovies = this.getMovies.bind(this);
     this.getClientIP = this.getClientIP.bind(this);
-    this.handleQuery = this.handleQuery.bind(this);
+    // this.handleQuery = this.handleQuery.bind(this);
     //By default the state is an empty array.
     this.state ={ returnedData: [], IP: null, auth: false, manager: true, query: ''};
     
@@ -23,8 +20,8 @@ class SearchManager extends React.Component{
   componentDidMount() {
 
     this.getClientIP();
-    window.addEventListener('load', this.handleQuery);
-    this.handleQuery();
+    // window.addEventListener('load', this.handleQuery);
+    // this.handleQuery();
     
     const _jquery = document.createElement("script");
     _jquery.src = "https://code.jquery.com/jquery-3.2.1.slim.min.js";
@@ -62,16 +59,16 @@ class SearchManager extends React.Component{
     this.setState({ returnedData : Object.values(data)})
   }
 
-  handleQuery = () => {
-    if(this.props.match){
-        this.setState({query : this.props.match.params.query});
-    }
+  // handleQuery = () => {
+  //   if(this.props.match){
+  //       this.setState({query : this.props.match.params.query});
+  //   }
 
-    return(
-        <SearchIMDB onGetMovie={this.getMovies} movieName={this.state.query} getAllMovies={"True"} getTranding={"False"} />
-    );
+  //   return(
+  //       <SearchIMDB onGetMovie={this.getMovies} movieName={this.state.query} getAllMovies={"True"} getTranding={"False"} />
+  //   );
 
-  }
+  // }
 
   render() {
     //Results found.
@@ -84,8 +81,7 @@ class SearchManager extends React.Component{
           <link rel="stylesheet" type="text/css" href={main}/>
         </head> */}
           <body>
-            {/* <SearchIMDB onGetMovie={this.getMovies} movieName={this.state.query} getAllMovies={"True"} getTranding={"False"} /> */}
-            <Banner history ={this.props.history} /> {/* pass props to keep track of props.history.push from CustomerHomePage */}
+            <SearchIMDB onGetMovie={this.getMovies} movieName={this.props.match.params.query} getAllMovies={"True"} getTranding={"False"} />
 
             <br />
             <br />

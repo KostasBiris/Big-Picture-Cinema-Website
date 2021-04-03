@@ -37,7 +37,7 @@ class EmployeeBanner extends React.Component {
     go = '/emain/search/' + this.state.query.split(' ').join('_');
 
     console.log(go)
-    
+    console.log(this.props.history)
 
     if (this.props.history){
         this.props.history.push(go, this.state);

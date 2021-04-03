@@ -7,7 +7,7 @@ class SearchIMDB extends React.Component {
     super(props);
     this.getAllMoviesData = this.getAllMoviesData.bind(this);
     this.getMovieData = this.getMovieData.bind(this);
-    this.getTrandingtMoviesData = this.getTrandingMoviesData.bind(this);
+    this.getTrandingMoviesData = this.getTrandingMoviesData.bind(this);
 
 
   }

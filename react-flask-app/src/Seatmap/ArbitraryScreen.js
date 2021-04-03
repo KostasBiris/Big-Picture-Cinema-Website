@@ -9,8 +9,6 @@ import Banner from '../components/Banner.js';
 class ArbitraryScreen extends React.Component {
     constructor(props) {
         super(props);
-        // console.log(this.props)
-        // console.log(this.props.location.state.screening.seatmap)
         this.state = {seatmap: this.props.location.state.screening.seatmap,
                       seatmap_copy: JSON.parse(JSON.stringify(this.props.location.state.screening.seatmap)),
                       selectedSeats: [],  screeningChosen : this.props.location.state.screening};
@@ -115,7 +113,7 @@ class ArbitraryScreen extends React.Component {
 
 
     render() {
-        
+        console.log(this.props)
         return (
             <React.Fragment>
                 <body>
@@ -124,7 +122,7 @@ class ArbitraryScreen extends React.Component {
                         <link rel="stylesheet" type="text/css" href={main} />
                     </head>
                    
-                    {/* <Banner /> */}
+                    
                     <div class="header_text">
                         <h1 style={{ marginLeft: '600px', left: '3rem', color: '#4e5b60' }}>SCREEN</h1>
                     </div>
@@ -143,7 +141,41 @@ class ArbitraryScreen extends React.Component {
                             <button className="tab_background text mr-3 btn-lg" style={{marginLeft:'12px'}}>{'>'}</button>
                         </div>
                     </nav>
-                    
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
                     <footer className="bg-light text-center">
                         <div className="text-center p-3" style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
                             All rights reserved. © 2021 Copyright:

@@ -26,7 +26,6 @@ class CustomerSite extends React.Component{
 
 render () {
     const history = createBrowserHistory();
-    console.log("INSIDE THE EMPLOYEE SITE !")
     return(
     <React.Fragment>
 
@@ -35,9 +34,11 @@ render () {
         {/* <Route exact path="/" render={() => (<Redirect to="/emain" />)} /> */}
         <Route exact path ="/emain" component={EmployeeMain}/>
         {/* <Link to={'/book'} /> */}
-        <Route path="/book" component={BookTickets}/>
+        <Route path="/ebook" render={(props) => <BookTickets {...props} isEmployee={true}/> } />
+        {/* <Route path="/ebook" component={BookTickets}/> */}
         {/* <Link to={'/as'} /> */}
-        <Route path="/as" component={ArbitraryScreen}/>
+        {/* <Route path="/eas" render={(props) => <ArbitraryScreen {...props} isEmployee={true}/> } /> */}
+        <Route path="/eas" component={ArbitraryScreen}/>
         {/* <Link to={'/payment'} /> */}
         {/* <Route path="/payment" component={Payment}/> */}
         {/* <Link to={'emain/search/:query'} /> */}
