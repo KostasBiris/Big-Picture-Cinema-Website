@@ -240,13 +240,14 @@ class Banner extends React.Component {
                                         <button className="tab_background text mr-3">TICKETS</button>
                                         </Link>
                                     </li>
-                                    <li className="nav-item dropdown"></li>
+                                    <li className="nav-item dropdown">
                                     <button className="tab_background dropdown-toggle text mr-3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">SCREENS</button>
-                                    <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <button className="dropdown-item" style={{ color: '#f9bc50' }} >SILVER Screens</button>
-                                        <button className="dropdown-item" style={{ color: '#f9bc50' }}>VMAX Screens</button>
-                                        <button className="dropdown-item" style={{ color: '#f9bc50' }} >GOLDEN Screens</button>
-                                    </div>
+                                        <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                                            <button className="dropdown-item" style={{ color: '#f9bc50' }} >SILVER Screens</button>
+                                            <button className="dropdown-item" style={{ color: '#f9bc50' }}>VMAX Screens</button>
+                                            <button className="dropdown-item" style={{ color: '#f9bc50' }} >GOLDEN Screens</button>
+                                        </div>
+                                    </li>
                                     <li className="nav-item">
                                         <button className="tab_background text mr-3" >EVENTS</button>
                                     </li>

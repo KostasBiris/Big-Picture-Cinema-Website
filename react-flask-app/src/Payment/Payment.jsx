@@ -84,7 +84,12 @@ class Payment extends React.Component {
 
         let k = [];
         for (var i = 0; i < this.props.location.state.selectedSeats.length; i++) {
-           k = [...k, "1"];
+            if (this.props.location.state.seatmap[this.props.location.state.selectedSeats[i].row.charCodeAt(0)-65][this.props.location.state.selectedSeats[i].col-1].isVip === true) {
+                k = [...k, "4"]
+            }
+            else {
+                k = [...k, "1"];
+            }
         }
         this.setState({orderPart:k});
     }
@@ -168,62 +173,12 @@ class Payment extends React.Component {
         && validateSurname(this.state.lastname) && validateAdd(this.state.addressOne) && ok;
     }
 
-
-
-
-
-
     handleSelectedQuantity = (e) => {
         this.setState({ quantity: this.state.selectedQuantity + parseInt(e.target.value) });
         // this.state.quantity.push(parseInt(e.target.value));
         // this.setState({quantity: parseInt(e.target.value)})
         console.log(this.state)
     }
-
-    /*renderSelector = () => {
-        return (
-            <body>
-                <div>
-                    <div className="row">
-                        <div className="col-lg-10 col-md-12 mb-4">
-                            <select onChange={this.handleTicketTypes} className="register_details custom-select d-block w-100" id="ticket-type"
-                                required>
-                                <option value="">Ticket Type..</option>
-                                <option value={0}>Adults Ticket 7.50£</option>
-                                <option value={1}>Kids Ticket(0-12) 5.50£</option>
-                                <option value={2}>Seniors Ticket 6.50£</option>
-                                <option value={3}>VIP Ticket 10.50£</option>
-                            </select>
-
-                            <div className="invalid-feedback">
-                                Please select a valid ticket.
-                        </div>
-                        </div>
-                    </div>
-                    <h5 className="text-muted">The Avengers, 03/07/2021, 21:00</h5>
-                    <h5 className="text-muted">H10, Silver Screen 1</h5>
-                </div>
-
-
-                <span>
-                    <select onChange={this.handleSelectedQuantity} className="register_details custom-select d-block w-100"
-                        required>
-                        <option value="">0</option>
-                        <option value={1}>1</option>
-                        <option value={2}>2</option>
-                        <option value={3}>3</option>
-                        <option value={4}>4</option>
-                        <option value={5}>5</option>
-                        <option value={6}>6</option>
-                        <option value={7}>7</option>
-                        <option value={8}>8</option>
-                        <option value={9}>9</option>
-                        <option value={10}>10</option>
-                    </select>
-                </span>
-                </body>
-            );
-    }*/
 
 
     async getMovieName (id)  {
@@ -268,6 +223,9 @@ class Payment extends React.Component {
             else if(entry == "3") {
                 total+=6.50
             }
+            else if (entry == "4") {
+                total+=10.00
+            }
         })
         return total;
     }
@@ -276,30 +234,60 @@ class Payment extends React.Component {
 
 
     orderSummary = () => {
+        let map_ = this.props.location.state.seatmap_copy;
+        console.log(map_);
         return (
             <ul className="list-group mb-3 z-depth-1">
                     {this.state.seatsSelected.map((entry,index)=> {
+                        
+                        let row = entry.row.charCodeAt(0) -65;
+                        let col = entry.col-1;
+
+                        if (map_[row][col] === 2) {
                         return (
                             <li className="d-flex justify-content-center">
+                            <div>
+                                <div className="row">
+                                    <div className="col-lg-10 col-md-12 mb-4">
+                                        <select value={this.state.orderPart[index]} onChange={(e) => this.handleChangeSelect(e, index)} className="register_details custom-select d-block w-100" id="ticket-type" placeholder="Ticket Type" required>     
+                                            <option value="4">VIP (£10.0)</option>
+                                        </select>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <h5 className="text-muted">{this.state.movie}, <br/>{this.state.screening.date}, <br/>{this.state.screening.time}</h5>
+                            <h5 className="text-muted">     SCREEN {this.state.screening.screenid} 
+                            <br/><br/> SEAT {entry.row}, {entry.col}</h5>
+                        </li>
+                        )
+                        }
+                        else {
+                            return (
+                                <li className="d-flex justify-content-center">
                                 <div>
                                     <div className="row">
                                         <div className="col-lg-10 col-md-12 mb-4">
-                                            <select value={this.state.orderPart[index]} onChange={(e) => this.handleChangeSelect(e, index)} className="register_details custom-select d-block w-100" id="ticket-type" placeholder="Ticket Type" required>
-                                                <option value="1"> Adult (£7.50)</option>
-                                                <option value="2"> Kids (£5.50)</option>
+                                            <select value={this.state.orderPart[index]} onChange={(e) => this.handleChangeSelect(e, index)} className="register_details custom-select d-block w-100" id="ticket-type" placeholder="Ticket Type" required>     
+                                                <option value="1">Adult (£7.50)</option>
+                                                <option value="2">Kids (£5.50)</option>
                                                 <option value="3">Senior (£6.50)</option>
                                             </select>
                                         </div>
-
-
+    
+    
                                     </div>
                                 </div>
                                 <h5 className="text-muted">{this.state.movie}, <br/>{this.state.screening.date}, <br/>{this.state.screening.time}</h5>
                                 <h5 className="text-muted">     SCREEN {this.state.screening.screenid} 
                                 <br/><br/> SEAT {entry.row}, {entry.col}</h5>
                             </li>
-                        )
-                    })}
+                            )
+                        }
+                        
+                    
+                })}
             </ul>
         )
     }
@@ -316,8 +304,7 @@ class Payment extends React.Component {
                         <link rel="icon" href="data:;base64,iVBORw0KGgo" />
                         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
                     </head>
-
-                    <fieldset style={{ paddingTop: '50px', paddingRight: '20px' }}>
+                        <fieldset style={{ paddingTop: '50px', paddingRight: '20px' }}>
                         <div className="container modalContentPayment" >
                             <div className="row" >
                                 <div className="col-sm-6 col-xs-12 ">

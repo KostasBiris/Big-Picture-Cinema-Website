@@ -96,7 +96,7 @@ def serialize_all_screenings(res):
     print(dic)
     return dic
 
-
+"""
 def serialize_daily_analytics(res):
 
     return {
@@ -132,7 +132,7 @@ def serialize_all_overall_analytics(res):
     for i in range(len(res)):
         dic[i] = serialize_overall_analytics(res[i])
     return dic
-
+"""
 def serialize_ticket(res):
     return {
         'id' : res[0],
@@ -214,7 +214,8 @@ def makebooking():
         total+=prices[part]
     qr = db.qr_code_generator(bookingid, screeningid)
     path = 'B' + str(bookingid) + 'M' + str(movieid) + 'S' + str(screeningid) + firstname[0] + lastname[0] + '.pdf'
-    db.add_ticket(bookingid, movieid, total, firstname, lastname, email, qr, orderPart.count('4'), orderPart.count('2'), orderPart.count('3'), orderPart.count('4'))
+    #db.add_ticket(bookingid, movieid, total, firstname, lastname, email, qr, num_VIPs=orderPart.count('4'), num_children=orderPart.count('2'), num_elders=orderPart.count('3'), num_normal=orderPart.count('1'))
+    db.add_ticket(bookingid, movieid, total, firstname, lastname, email, path, qr, orderPart.count('4'), orderPart.count('2'), orderPart.count('3'), orderPart.count('1'))
     db.ticket_to_pdf(path, bookingid, firstname, lastname, movie, seatstostore, orderPart, screen, screeningid, total, qr, date, time)
     db.email_ticket(firstname, lastname, email, path)
     return jsonify({'response': 'OK'})
@@ -602,7 +603,7 @@ def isupcoming(movieid):
 def get_the_screens():
 
     db = Database('cinema.db')
-    return jsonift({'screens' : serialize_all_screens(db.fetch()[1])})
+    return jsonify({'screens' : serialize_all_screens(db.fetch()[1])})
 
 
 @app.route('/gettickets/<id>')
@@ -625,4 +626,4 @@ if __name__ == '__main__':
     thread = Thread(target=spinner, args=())
     thread.daemon = True
     thread.start()
-    app.run(debug=False, host='localhost', port='5000', threaded=True)
+    app.run(debug=False, host='localhost', port='4000', threaded=True)

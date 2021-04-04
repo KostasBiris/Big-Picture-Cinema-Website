@@ -119,7 +119,7 @@ class Database:
                                                                customer_id INTEGER REFERENCES customers(id), \
                                                                employee_id INTEGER REFERENCES employees(id), \
                                                                manager_id INTEGER REFERENCES employees(id))")
-        
+        """
         self.cur.execute("CREATE TABLE IF NOT EXISTS daily_analytics (id INTEGER PRIMARY KEY, \
                                                                       movie_id INTEGER REFERENCES movies(id) NOT NULL,\
                                                                       movie_name TEXT REFERENCES movies(name) NOT NULL,\
@@ -132,7 +132,7 @@ class Database:
                                                                         movie_name TEXT REFERENCES movies(name) NOT NULL,\
                                                                         income FLOAT NOT NULL,\
                                                                         num_tickets INTEGER NOT NULL)")
-
+        """
         self.cur.execute("CREATE TABLE IF NOT EXISTS payments (id INTEGER PRIMARY KEY, \
                                                                customer_id INTEGER REFERENCES customers(id),\
                                                                holder_name TEXT NOT NULL, \
@@ -191,15 +191,16 @@ class Database:
 
         self.cur.execute("SELECT * FROM sessions")
         sessions = self.cur.fetchall()
-
+        """
         self.cur.execute("SELECT * FROM daily_analytics")
         daily_analytics = self.cur.fetchall()
 
         self.cur.execute("SELECT * FROM overall_analytics")
         overall_analytics = self.cur.fetchall()
-
+        
         return movies, screens, screenings, customers, bookings, tickets, employees, sessions, daily_analytics, overall_analytics
-
+        """
+        return movies, screens, screenings, customers, bookings, tickets, employees, sessions
 
 #=-=-=-=-=-=-=-=-=-=-=-=MOVIES-=-=--=-=-=-=-=-=-=-=-=-=-=
     """
@@ -546,15 +547,12 @@ class Database:
 
 #=-=-=-=-=-=-=-=-=-=TICKETS-=-=-=-=-=-=-=-=-=-=
 
-    def add_ticket(self, booking_id, movie_id, price, forename, surname, email,path,qr,num_VIPs = 0, num_children = 0, num_elders = 0, num_normal=0):
+    def add_ticket(self, booking_id, movie_id, price, forename, surname, email,path,qr,num_VIPs = 0, num_children = 0, num_elders = 0, num_normal=0, customer_id=-1):
 
-        self.cur.execute("INSERT INTO tickets VALUES (NULL, ?,?,?,?,?,?,?,?,?,?,?,?,?)",(booking_id, movie_id, price, forename,\
+        self.cur.execute("INSERT INTO tickets VALUES (NULL, ?,?,?,?,?,?,?,?,?,?,?,?,?,?)",(booking_id, movie_id ,customer_id, price, forename,\
                                                                                      surname, email, qr, num_VIPs, num_children, num_elders, \
                                                                                          num_normal, str(datetime.today().strftime("%d-%m-%Y")),path))
         
-
-
-
         self.conn.commit()
 
 
@@ -889,7 +887,7 @@ class Database:
         #self.conn.commit()
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-
+"""
 #=-=-=-=-=-=-=-=-=-=ANALYTICS-=-=-=-=-=-=-=-=-=-=-=-=
 
 
@@ -973,31 +971,32 @@ class Database:
                 return d
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=
+"""
 
 #=-=-=-=-=-=-=-=-=-=PAYMENTS-=-=-=-=-=-=-=-=-=-=
     
-    def add_payment(self, payment_date, customer_id, holder_name, postcode, card_number, expiration_date):
-        _card_number = generate_password_hash(card_number)
-        self.cur.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?)",(customer_id, holder_name, postcode, _card_number, expiration_date))
-        self.conn.commit()
+def add_payment(self, payment_date, customer_id, holder_name, postcode, card_number, expiration_date):
+    _card_number = generate_password_hash(card_number)
+    self.cur.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?)",
+                        (customer_id, holder_name, postcode, _card_number, expiration_date))
+    self.conn.commit()
 
+def remove_payment(self, payment_date, id=-1, customer_id=-1, holder_name="No name",):
 
-    def remove_payment(self, payment_date, id=-1, customer_id=-1, holder_name="No name",):
+    if(id == -1):
 
-        if(id == -1):
+        #Remove a specific using the customer's id and the payment date
+        if(customer_id != -1):
+            self.cur.execute("DELETE FROM payments WHERE customer_id=? AND payment_date=?", (customer_id, payment_date,))
 
-            #Remove a specific using the customer's id and the payment date
-            if(customer_id != -1):
-                self.cur.execute("DELETE FROM payments WHERE customer_id=? AND payment_date=?",(customer_id, payment_date,))
-            
-            #Remove a specific using the card holders name and the payment date
-            elif(customer_id == -1 and holder_name!="No name"):
-                self.cur.execute("DELETE FROM payments WHERE forename=? holder_name=? AND payment_date=?",(holder_name,payment_date,))
-        
-        else:
-            self.cur.execute("DELETE FROM payments WHERE id=?",(id,))
+        #Remove a specific using the card holders name and the payment date
+        elif(customer_id == -1 and holder_name !="No name"):
+            self.cur.execute("DELETE FROM payments WHERE forename=? holder_name=? AND payment_date=?", (holder_name,payment_date,))
 
-        self.conn.commit()
+    else:
+        self.cur.execute("DELETE FROM payments WHERE id=?", (id,))
+
+    self.conn.commit()
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 
@@ -1054,7 +1053,19 @@ seatmap = dat[0][5]
 #db.email_ticket('yourForename', 'yourSurname', 'yourEmail', 5)
 
 
-Database('cinema.db').add_screen(25,5,5)
+# Database('cinema.db').add_screen(50,10,5)
+# Database('cinema.db').add_screening('04-04-2021', '16:00', 1, 1)
+# Database('cinema.db').add_screening('04-04-2021', '18:00', 1, 1)
+# Database('cinema.db').add_screening('04-04-2021', '20:00', 1, 1)
+# Database('cinema.db').add_screening('05-04-2021', '16:00', 1, 2)
+# Database('cinema.db').add_screening('08-04-2021', '13:45', 1, 3)
+# Database('cinema.db').add_screening('09-04-2021', '13:45', 1, 3)
+# Database('cinema.db').add_screening('10-04-2021', '13:45', 1, 3)
+Database('cinema.db').add_screening('15-04-2021', '13:45', 1, 3)
+Database('cinema.db').add_screening('15-04-2021', '13:46', 1, 3)
+Database('cinema.db').add_screening('15-04-2021', '13:47', 1, 3)
+
+
 #print(Database('cinema.db').get_upcoming())
 #db.graph_analytics()
 
