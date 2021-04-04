@@ -97,7 +97,11 @@ class ArbitraryScreen extends React.Component {
 
     goToCheckOut = () => {
         // console.log(this.state)
-        this.props.history.push('/payment', this.state);
+        // this.props.history.push('/payment', this.state);
+        if (this.props.isEmployee)
+            this.props.history.push('/epayment', this.state);
+        else
+            this.props.history.push('/payment', this.state);
     }
 
     updateSeatmap = (data) => {

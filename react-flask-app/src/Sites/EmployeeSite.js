@@ -13,6 +13,7 @@ import ViewMovies from "../Pages/ViewMovies";
 import CustomerAccountPage from "../Pages/CustomerAccountPage";
 import MoviePage from "../Pages/MoviePage";
 import EmployeeLogin from "../Pages/EmployeeLogin";
+import EPayment from "../Payment/Employee_Payment";
 
 
 import {createBrowserHistory} from 'history';
@@ -38,7 +39,7 @@ render () {
         {/* <Route path="/ebook" component={BookTickets}/> */}
         {/* <Link to={'/as'} /> */}
         {/* <Route path="/eas" render={(props) => <ArbitraryScreen {...props} isEmployee={true}/> } /> */}
-        <Route path="/eas" component={ArbitraryScreen}/>
+        <Route path="/eas" render={(props) => <ArbitraryScreen {...props} isEmployee={true}/> }/>
         {/* <Link to={'/payment'} /> */}
         {/* <Route path="/payment" component={Payment}/> */}
         {/* <Link to={'emain/search/:query'} /> */}
@@ -53,6 +54,8 @@ render () {
         <Route path ="/movie/:title" component={MoviePage}/>
 
         <Route path ="/elogin" component={EmployeeLogin}/>
+
+        <Route path="/epayment" component={EPayment}/>
     </React.Fragment>
 
     );
