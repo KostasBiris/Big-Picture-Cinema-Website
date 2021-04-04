@@ -154,11 +154,6 @@ class ArbitraryScreen extends React.Component {
                     <br />
                     <br />
                     <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
                     
                     <nav>
                         <div className="container text-center">

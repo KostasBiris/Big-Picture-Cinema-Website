@@ -1,6 +1,6 @@
 import React from 'react';
 import SearchIMDB from './SearchIMDB';
-
+import '../static/main.css';
 
  
 //Component for displaying a search result.
@@ -100,20 +100,53 @@ class SearchResult extends React.Component{
 
     
     render () {
-        console.log(this.state);
+        console.log("HERE IS THE PROP");
+        console.log(this.prop);
         return (
+
+
+            <React.Fragment>
+                <body>
+                <div className="container"  style={{textAlign:"center"}}>
+                    <div className=".card mb-3" style={{maxWidth: "60rem", maxHeight:"15rem", backgroundColor:"#ece9e388"}}>
+                        <div className="row .no-gutters">
+                            <div className="col-md-4">
+                                <img className=".img-responsive .img-rounded" src={this.image} alt={this.prop.original_title}
+                                style={{maxHeight: "13rem", maxWidth: "10rem"}} ></img>
+                            </div>
+                            <div className="col-md-8">
+                                <div className=".card-body">
+                                    <h4 className=".card-title">{this.prop.original_title}</h4>
+                                    <p>{this.prop.overview}</p>
+                                    {/* <p> Director: {this.prop.director}</p> */}
+                                    {/* <button onClick={this.goToMovie} className="rounded-pill text buttons_background">ADD TO DATABASE</button> */}
+
+                                    {this.state.forscreening ? <button onClick={this.addScreening}>ADD SCREENING</button> : 
+                                    this.state.set ? <p>Already stored.</p> : <button onClick={this.addMovie}>ADD TO DATABASE</button>}
+                                
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <br />
+                </div>
+                
+                </body>
+
+            </React.Fragment>
+
             
-            <div>
-                <a  href={this.href}>
-                <img src={this.image} alt={this.prop.original_title} width="200" height="200"></img><br />
-                <span >{this.prop.original_title}</span><br/>
-                <span >{this.date}</span>
-                </a>
-                <SearchIMDB onGetMovie={this.stepUp} movieID = {this.prop.id} />
-                {this.state.forscreening ? <button onClick={this.addScreening}>ADD SCREENING</button> : 
-                this.state.set ? <p>Already stored.</p> : <button onClick={this.addMovie}>ADD TO DATABASE</button>}
-                {}
-            </div>
+            // <div>
+            //     <a  href={this.href}>
+            //     <img src={this.image} alt={this.prop.original_title} width="200" height="200"></img><br />
+            //     <span >{this.prop.original_title}</span><br/>
+            //     <span >{this.date}</span>
+            //     </a>
+            //     <SearchIMDB onGetMovie={this.stepUp} movieID = {this.prop.id} />
+            //     {this.state.forscreening ? <button onClick={this.addScreening}>ADD SCREENING</button> : 
+            //     this.state.set ? <p>Already stored.</p> : <button onClick={this.addMovie}>ADD TO DATABASE</button>}
+            //     {}
+            // </div>
         )
     }
 
