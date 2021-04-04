@@ -14,7 +14,7 @@ import CustomerAccountPage from "../Pages/CustomerAccountPage";
 import MoviePage from "../Pages/MoviePage";
 import EmployeeLogin from "../Pages/EmployeeLogin";
 import EPayment from "../Payment/Employee_Payment";
-
+import EMenu from "../components/EmployeeMenu";
 
 import {createBrowserHistory} from 'history';
 
@@ -31,6 +31,9 @@ render () {
     <React.Fragment>
 
         <EmployeeBanner history={history}/>
+
+        <EMenu />
+        
         {/* <Link to={'/emain'} /> */}
         {/* <Route exact path="/" render={() => (<Redirect to="/emain" />)} /> */}
         <Route exact path ="/emain" component={EmployeeMain}/>

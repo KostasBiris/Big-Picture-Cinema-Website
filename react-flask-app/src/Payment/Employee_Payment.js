@@ -50,12 +50,6 @@ render() {
     
     
     <fieldset style={{paddingTop:'50px',paddingRight:'20px'}}>
-    <div class="container text-center">
-              <button class="tab_background text mr-3 btn-lg">BOOK TICKETS</button>
-              <button class="tab_background text mr-3 btn-lg">VIEW MOVIES</button>
-              <button class="tab_background text mr-3 btn-lg" >REGISTER CUSTOMER</button>
-              <button class="tab_background text mr-9 btn-lg">HELP</button>
-      </div>
       <br/>
       <br/>
       <br/>

@@ -132,7 +132,7 @@ class ArbitraryScreen extends React.Component {
         console.log(this.props)
         return (
             <React.Fragment>
-                <body>
+                <body id="grad1">
 
                     <head>
                         <link rel="stylesheet" type="text/css" href={main} />
@@ -140,7 +140,7 @@ class ArbitraryScreen extends React.Component {
                    
                     
                     <div class="header_text">
-                        <h1 style={{ marginLeft: '670px', left: '3rem', color: '#4e5b60' }}>SCREEN</h1>
+                        <h1 className="container text-center" style={{ color: '#4e5b60' }}>SCREEN</h1>
                     </div>
                     <div className="Seatmap" style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '50vh'}}>
                         <Seatmap rows={this.state.seatmap} maxReservableSeats={10} onChange={this.updateSeatmap} alpha />
