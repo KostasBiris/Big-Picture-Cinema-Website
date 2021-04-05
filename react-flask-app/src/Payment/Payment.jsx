@@ -20,8 +20,7 @@ class Payment extends React.Component {
 
     constructor(props) {
         super(props);
-        // console.log(this.props)
-        // console.log(this.props.location.state.screening.seatmap)
+
         this.state = {
             firstname: '',
             lastname: '',
@@ -48,7 +47,6 @@ class Payment extends React.Component {
         this.handleAddressOne = this.handleAddressOne.bind(this);
         this.handleAddressTwo = this.handleAddressTwo.bind(this);
         this.handleTicketTypes = this.handleTicketTypes.bind(this);
-        this.handleSelectedQuantity = this.handleSelectedQuantity.bind(this);
         this.orderSummary = this.orderSummary.bind(this);
         this.getMovieName = this.getMovieName.bind(this);
         this.handleChangeSelect= this.handleChangeSelect.bind(this);
@@ -169,63 +167,6 @@ class Payment extends React.Component {
     }
 
 
-
-
-
-
-    handleSelectedQuantity = (e) => {
-        this.setState({ quantity: this.state.selectedQuantity + parseInt(e.target.value) });
-        // this.state.quantity.push(parseInt(e.target.value));
-        // this.setState({quantity: parseInt(e.target.value)})
-        console.log(this.state)
-    }
-
-    /*renderSelector = () => {
-        return (
-            <body>
-                <div>
-                    <div className="row">
-                        <div className="col-lg-10 col-md-12 mb-4">
-                            <select onChange={this.handleTicketTypes} className="register_details custom-select d-block w-100" id="ticket-type"
-                                required>
-                                <option value="">Ticket Type..</option>
-                                <option value={0}>Adults Ticket 7.50£</option>
-                                <option value={1}>Kids Ticket(0-12) 5.50£</option>
-                                <option value={2}>Seniors Ticket 6.50£</option>
-                                <option value={3}>VIP Ticket 10.50£</option>
-                            </select>
-
-                            <div className="invalid-feedback">
-                                Please select a valid ticket.
-                        </div>
-                        </div>
-                    </div>
-                    <h5 className="text-muted">The Avengers, 03/07/2021, 21:00</h5>
-                    <h5 className="text-muted">H10, Silver Screen 1</h5>
-                </div>
-
-
-                <span>
-                    <select onChange={this.handleSelectedQuantity} className="register_details custom-select d-block w-100"
-                        required>
-                        <option value="">0</option>
-                        <option value={1}>1</option>
-                        <option value={2}>2</option>
-                        <option value={3}>3</option>
-                        <option value={4}>4</option>
-                        <option value={5}>5</option>
-                        <option value={6}>6</option>
-                        <option value={7}>7</option>
-                        <option value={8}>8</option>
-                        <option value={9}>9</option>
-                        <option value={10}>10</option>
-                    </select>
-                </span>
-                </body>
-            );
-    }*/
-
-
     async getMovieName (id)  {
         var go = '/getmoviename/' + id;
 
@@ -237,9 +178,6 @@ class Payment extends React.Component {
         }).then(response => response.json()).then(data => {
             this.setState({movie: data.response})
         })
-        // const res = await response.json();
-        // const movie = res['response'];
-        // this.setState({movie: movie});
 
     }
 
@@ -270,7 +208,7 @@ class Payment extends React.Component {
             }
         })
         return total;
-    }
+    }   
 
 
 
@@ -401,20 +339,6 @@ class Payment extends React.Component {
                     <br />
                     <br />
 
-                    {/* <nav>
-                        <ul className="pagination justify-content-center ">
-                            <li className="page-item disabled">
-                                <a className="buttons_prev" style={{ color: 'white', tabIndex: '-1', ariaDisabled: 'true' }}>{'<'}
-                                </a>
-                            </li>
-                            <li className="page-item"><a className="buttons_background" style={{ color: 'white' }}>MOVIE</a></li>
-                            <li className="page-item"><a className="buttons_background" style={{ color: 'white' }}>SEATS</a></li>
-                            <li className="page-item"><a className="buttons_background" style={{ color: 'white' }}>CHECKOUT</a></li>
-                            <li className="page-item">
-                                <a className="buttons_next" style={{ color: 'white' }}>{'>'}</a>
-                            </li>
-                        </ul>
-                    </nav> */}
                     <nav>
                         <div className="container text-center">
                             <button className="tab_background text mr-3 btn-lg">{'<'}</button>

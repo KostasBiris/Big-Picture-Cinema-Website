@@ -4,10 +4,11 @@ import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "./CheckoutForm";
 import main from "../static/main.css"
 import "./Style/Payment.scss"
-import Banner from "../components/Banner";
-import Select from 'react-select'
-import { relativeTimeThreshold } from "moment";
-
+import KeyPad from "../components/CashCalculator";
+import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 // Make sure to call loadStripe outside of a component’s render to avoid
 // recreating the Stripe object on every render.
@@ -35,7 +36,9 @@ class Payment extends React.Component {
             movie: '',
             orderPart: [],
             valid: false,
-            total: 0
+            total: 0,
+            result: "",
+            payment_type: ""
         };
 
 
@@ -54,7 +57,11 @@ class Payment extends React.Component {
         this.validate = this.validate.bind(this);
         this.payByCard = this.payByCard.bind(this);
         this.payByCash = this.payByCash.bind(this);
-    }
+        this.calculateReturn = this.calculateReturn.bind(this);
+        this.reset = this.reset.bind(this);
+        this.onClick = this.onClick.bind(this);
+        this.paymentType = this.paymentType.bind(this);
+    }   
 
     componentDidMount() {
         window.addEventListener('load', this.stepUp);
@@ -204,16 +211,47 @@ class Payment extends React.Component {
             }
         })
         return total;
-    }   
+    }
+    
+    calculateReturn = () => {
+        let total = this.calculateTotal();
+        let difference = this.state.result-total;
+        // this.setState({result : difference})
+        this.reset();
+        alert("Amount to return is £" + difference)
+    }
+
+    reset = () => {
+        this.setState({
+            result: ""
+        })
+    };
+
+    onClick = button => {
+
+        if(button === "Enter"){
+            this.calculateReturn()
+        }
+
+        else if(button === "Delete"){
+            this.reset()
+        }
+        else {
+            this.setState({
+                result: this.state.result + button
+            })
+        }
+    };
 
     payByCard = () => {
+        console.log(this.props)
         if (this.validate())
         {
-        this.return( <div classNameName="Payment">
-                     <Elements stripe={promise}>
-                     <CheckoutForm props={this.props} state={this.state}/>
-                     </Elements>
-                     </div>)
+            return( <div classNameName="Payment">
+                <Elements stripe={promise}>
+                <CheckoutForm props={this.props} state={this.state}/>
+                </Elements>
+                </div>)
         }
         else
         {
@@ -223,8 +261,23 @@ class Payment extends React.Component {
 
     payByCash = () => {
         if (this.validate()){
-            
+            return (
+                <React.Fragment>
+                    <div className="result"><p>{this.state.result}</p></div>
+                    <KeyPad onClick={this.onClick} />
+                </ React.Fragment>
+            )
         }
+        else
+        {
+            return(<></>)
+        }
+    }
+
+    paymentType = (e) => {
+        e.preventDefault();
+        this.setState({payment_type: e.target.value})
+        console.log(this.state.payment_type)
     }
 
 
@@ -318,13 +371,18 @@ class Payment extends React.Component {
                                         </div>
 
                                         <hr class="mb-4"/>
-                                        <button class="btn btn-primary btn-lg btn-block" type="submit">PAY BY CARD</button>
+                                        <button onClick={this.paymentType} value="card" class="btn btn-primary btn-lg btn-block" type="submit">PAY BY CARD</button>
                                         <br/>
                                         <hr class="mb-4"/>
-                                        <button class="btn btn-primary btn-lg btn-block" type="submit">PAY BY CASH</button>
+                                        <button onClick={this.paymentType} value="cash" class="btn btn-primary btn-lg btn-block" type="submit">PAY BY CASH</button>
                                         <hr class="mb-4"/>
 
+                                        
                                     </form>
+
+                                    {this.state.payment_type === "card" ? this.payByCard() : 
+                                    this.state.payment_type === "cash" ? this.payByCash() : <></>}
+
                                     
                                     
                                 </div>
@@ -351,7 +409,7 @@ class Payment extends React.Component {
                                 </div>
                             </div>
                         </div>
-
+                        
                     </fieldset>
 
                     <br />

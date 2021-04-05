@@ -83,11 +83,11 @@ class SearchResults extends React.Component{
     console.log("This is the search result")
 
       return (
-        <>
-        {/* <head>
+        <React.Fragment>
+        <head>
           <link rel="stylesheet" type="text/css" href={main}/>
-        </head> */}
-          <body>
+        </head>
+          <body id="grad1">
             {/* <Banner history ={this.props.history} /> */}
             {this.state.returnedData.length > 0 ?
             this.state.returnedData.map(res_=> {
@@ -100,7 +100,7 @@ class SearchResults extends React.Component{
 
           {/* </div> */}
           </body>
-        </>
+        </React.Fragment>
       )
   
 

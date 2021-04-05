@@ -76,8 +76,11 @@ class MoviePage extends React.Component {
         
 
     goBookTickets = (e) => {
-        let go = '/book';
-        this.props.history.push(go, this.state);
+        if (this.props.isEmployee)
+            this.props.history.push('/ebook', this.state);
+        else
+            this.props.history.push('/book', this.state);
+        
     }
 
 

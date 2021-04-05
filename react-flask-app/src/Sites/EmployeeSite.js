@@ -54,7 +54,8 @@ render () {
 
         <Route path ="/emain/account" component={CustomerAccountPage}/>
 
-        <Route path ="/movie/:title" component={MoviePage}/>
+        {/* <Route path ="/movie/:title" component={MoviePage}/> */}
+        <Route path="/movie/:title" render={(props) => <MoviePage {...props} isEmployee={true}/> }/>
 
         <Route path ="/elogin" component={EmployeeLogin}/>
 
