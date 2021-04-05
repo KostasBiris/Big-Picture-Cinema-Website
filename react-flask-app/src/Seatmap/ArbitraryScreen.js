@@ -30,13 +30,11 @@ class ArbitraryScreen extends React.Component {
             seatmap = this.state.seatmap;
             for (i = 0; i < seatmap.length; i++)  {
                 for (j = 0; j < seatmap[i].length; j++) {
-                    var isres = 0;
-                    var isvip = 0;
                     if (seatmap[i][j] == -1) {
                         seatmap[i][j] = null;
                     }
                     else if (seatmap[i][j] == 0) {
-                        seatmap[i][j] = {number: j+1, isReserved: false};
+                        seatmap[i][j] = {number: j+1, isReserved: false, isVip: false};
                     }
                     else if (seatmap[i][j] == 2) {
                         seatmap[i][j] = {number: j+1, isReserved: false, isVip: true };
@@ -45,7 +43,7 @@ class ArbitraryScreen extends React.Component {
                         seatmap[i][j] = {number: j+1, isReserved: true, isVip: false};
                     }
                     else if (seatmap[i][j] == 3) {
-                        seatmap[i][j] = {number: j+1, isReserved: true, isVip: false};
+                        seatmap[i][j] = {number: j+1, isReserved: true, isVip: true};
                     }
                 }
             }
@@ -75,7 +73,7 @@ class ArbitraryScreen extends React.Component {
                         seatmap[i][j] = null;
                     }
                     else if (seatmap[i][j] == 0) {
-                        seatmap[i][j] = {number: j+1, isReserved: false};
+                        seatmap[i][j] = {number: j+1, isReserved: false, isVip: false};
                     }
                     else if (seatmap[i][j] == 2) {
                         seatmap[i][j] = {number: j+1, isReserved: false, isVip: true };
@@ -84,7 +82,7 @@ class ArbitraryScreen extends React.Component {
                         seatmap[i][j] = {number: j+1, isReserved: true, isVip: false};
                     }
                     else if (seatmap[i][j] == 3) {
-                        seatmap[i][j] = {number: j+1, isReserved: true, isVip: false};
+                        seatmap[i][j] = {number: j+1, isReserved: true, isVip: true};
                     }
                 }
             }

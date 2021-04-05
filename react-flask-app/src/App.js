@@ -106,6 +106,8 @@ const App = () => (
         <Route exact path="/epayment" component={EPayment}/>
         <Route exact path="/emain" component={EmployeeMain}/>
         <Route exact path="/ebook" component={EmployeeBook}/> */}
+        <Route exact path="/ebook" component={EmployeeBook}/>
+        <Route render={() => <Redirect to={{pathname: "/"}}/>}/>
       </Switch>
     </BrowserRouter>
 
