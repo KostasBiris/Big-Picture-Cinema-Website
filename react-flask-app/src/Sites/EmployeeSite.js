@@ -13,7 +13,8 @@ import ViewMovies from "../Pages/ViewMovies";
 import CustomerAccountPage from "../Pages/CustomerAccountPage";
 import MoviePage from "../Pages/MoviePage";
 import EmployeeLogin from "../Pages/EmployeeLogin";
-
+import EPayment from "../Payment/Employee_Payment";
+import EMenu from "../components/EmployeeMenu";
 
 import {createBrowserHistory} from 'history';
 
@@ -26,18 +27,22 @@ class CustomerSite extends React.Component{
 
 render () {
     const history = createBrowserHistory();
-    console.log("INSIDE THE EMPLOYEE SITE !")
     return(
     <React.Fragment>
 
         <EmployeeBanner history={history}/>
+
+        <EMenu />
+        
         {/* <Link to={'/emain'} /> */}
         {/* <Route exact path="/" render={() => (<Redirect to="/emain" />)} /> */}
         <Route exact path ="/emain" component={EmployeeMain}/>
         {/* <Link to={'/book'} /> */}
-        <Route path="/book" component={BookTickets}/>
+        <Route path="/ebook" render={(props) => <BookTickets {...props} isEmployee={true}/> } />
+        {/* <Route path="/ebook" component={BookTickets}/> */}
         {/* <Link to={'/as'} /> */}
-        <Route path="/as" component={ArbitraryScreen}/>
+        {/* <Route path="/eas" render={(props) => <ArbitraryScreen {...props} isEmployee={true}/> } /> */}
+        <Route path="/eas" render={(props) => <ArbitraryScreen {...props} isEmployee={true}/> }/>
         {/* <Link to={'/payment'} /> */}
         {/* <Route path="/payment" component={Payment}/> */}
         {/* <Link to={'emain/search/:query'} /> */}
@@ -49,9 +54,12 @@ render () {
 
         <Route path ="/emain/account" component={CustomerAccountPage}/>
 
-        <Route path ="/movie/:title" component={MoviePage}/>
+        {/* <Route path ="/movie/:title" component={MoviePage}/> */}
+        <Route path="/movie/:title" render={(props) => <MoviePage {...props} isEmployee={true}/> }/>
 
         <Route path ="/elogin" component={EmployeeLogin}/>
+
+        <Route path="/epayment" component={EPayment}/>
     </React.Fragment>
 
     );

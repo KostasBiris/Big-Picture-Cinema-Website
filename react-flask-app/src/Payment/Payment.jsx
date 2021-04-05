@@ -20,8 +20,7 @@ class Payment extends React.Component {
 
     constructor(props) {
         super(props);
-        // console.log(this.props)
-        // console.log(this.props.location.state.screening.seatmap)
+
         this.state = {
             firstname: '',
             lastname: '',
@@ -48,7 +47,6 @@ class Payment extends React.Component {
         this.handleAddressOne = this.handleAddressOne.bind(this);
         this.handleAddressTwo = this.handleAddressTwo.bind(this);
         this.handleTicketTypes = this.handleTicketTypes.bind(this);
-        this.handleSelectedQuantity = this.handleSelectedQuantity.bind(this);
         this.orderSummary = this.orderSummary.bind(this);
         this.getMovieName = this.getMovieName.bind(this);
         this.handleChangeSelect= this.handleChangeSelect.bind(this);
@@ -173,13 +171,6 @@ class Payment extends React.Component {
         && validateSurname(this.state.lastname) && validateAdd(this.state.addressOne) && ok;
     }
 
-    handleSelectedQuantity = (e) => {
-        this.setState({ quantity: this.state.selectedQuantity + parseInt(e.target.value) });
-        // this.state.quantity.push(parseInt(e.target.value));
-        // this.setState({quantity: parseInt(e.target.value)})
-        console.log(this.state)
-    }
-
 
     async getMovieName (id)  {
         var go = '/getmoviename/' + id;
@@ -192,9 +183,6 @@ class Payment extends React.Component {
         }).then(response => response.json()).then(data => {
             this.setState({movie: data.response})
         })
-        // const res = await response.json();
-        // const movie = res['response'];
-        // this.setState({movie: movie});
 
     }
 
@@ -228,7 +216,7 @@ class Payment extends React.Component {
             }
         })
         return total;
-    }
+    }   
 
 
 
@@ -388,20 +376,6 @@ class Payment extends React.Component {
                     <br />
                     <br />
 
-                    {/* <nav>
-                        <ul className="pagination justify-content-center ">
-                            <li className="page-item disabled">
-                                <a className="buttons_prev" style={{ color: 'white', tabIndex: '-1', ariaDisabled: 'true' }}>{'<'}
-                                </a>
-                            </li>
-                            <li className="page-item"><a className="buttons_background" style={{ color: 'white' }}>MOVIE</a></li>
-                            <li className="page-item"><a className="buttons_background" style={{ color: 'white' }}>SEATS</a></li>
-                            <li className="page-item"><a className="buttons_background" style={{ color: 'white' }}>CHECKOUT</a></li>
-                            <li className="page-item">
-                                <a className="buttons_next" style={{ color: 'white' }}>{'>'}</a>
-                            </li>
-                        </ul>
-                    </nav> */}
                     <nav>
                         <div className="container text-center">
                             <button className="tab_background text mr-3 btn-lg">{'<'}</button>

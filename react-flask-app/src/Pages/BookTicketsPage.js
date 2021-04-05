@@ -42,6 +42,8 @@ class BookTickets extends React.Component {
         this.movieOnScreen = this.movieOnScreen.bind(this);
     }
 
+    componentDidCatch(TypeError){}
+
     seekData = async () => {
         await fetch('/upcoming', {
             method: 'POST',
@@ -265,8 +267,11 @@ class BookTickets extends React.Component {
     }
 
     goToSeatMap = () => {
-        console.log(this.state)
-        this.props.history.push('/as', this.state);
+        console.log(this.props)
+        if (this.props.isEmployee)
+            this.props.history.push('/eas', this.state);
+        else
+            this.props.history.push('/as', this.state);
         //let go = ''
         //     if (this.state.screenChosen && this.state.dateChosen && this.state.movieChosen && this.state.timeChosen){   // quick validation before next page
         //         go = this.props.history.location.pathname + this.screenChosen; // get the current url and add the next direction

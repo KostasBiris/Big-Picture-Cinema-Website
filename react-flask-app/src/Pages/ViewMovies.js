@@ -43,8 +43,7 @@ class ViewMovies extends React.Component{
     document.body.appendChild(_bootstrap);
 }
   
-componentDidCatch(TypeError){
-  }
+  componentDidCatch(TypeError){}
 
 
   getClientIP = () => {

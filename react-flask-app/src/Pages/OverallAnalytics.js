@@ -261,7 +261,7 @@ class OverallAnalytics extends React.Component {
     render() {
         return (
             <body>
-                <ManagerBanner />
+                {/* <ManagerBanner /> */}
                 <br />
                 <br />
                 <div className="header_text" >

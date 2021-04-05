@@ -27,36 +27,47 @@ import EPayment from "./Payment/Employee_Payment";
 import EmployeeBook from "./Pages/EmployeeBook";
 import CustomerSite from "./Sites/CustomerSite";
 import EmployeeSite from "./Sites/EmployeeSite";
+import ManagerSite from "./Sites/ManagerSite";
 
 import {createBrowserHistory} from 'history';
 const history = createBrowserHistory();
-const customerUrlList = ['/', '/home', '/search/:query']
-const employeeUrlList = ['/emain']
-
+const customerRoutes = ['/', '/home', '/search/', '/book', '/payment', '/account', '/register', '/login']
+const employeeRoutes = ['/emain', '/ebook', '/eas', '/emain/search/', '/emain/view_movies', '/movie/:title', '/epayment']
+const managerRoutes = ['/addmovies/search/', '/overall_analytics', '/addscreening']
 
 
 function SiteType() {
-  let location = history.location.pathname
-  // if (history.location.pathname.includes("search")){
-  //   location = "/search/:query"
-  // }
-  console.log(location)
-  // if (customerUrlList.includes(location)){
-  //   console.log("true 1")
-  //   return <Route component={CustomerSite}/>
-  // }
-  // else if (employeeUrlList.includes(location)){
-  //   console.log("true 2")
-  //   return <Route component={EmployeeSite}/>
-  // }
-  // else
-  //   return <Route exact path="/search/:query" component={SearchResults}/>
+  let location = history.location.pathname;
+
+  // This if else statement block is only a quick fix for now
+  if (location.includes("search"))
+  {
+    location = location.split("/");
+    
+    if (location.length == 4)
+      location = "/" + location[1] + "/" + location[2] + "/"
+    else
+      location = "/" + location[1] + "/"
+    console.log(location)
+  }
 
 
-  if (location.includes("/emain") || location.includes("/elogin"))
-    return < Route component={EmployeeSite} />
-  else
+  if (customerRoutes.includes(location)){
+    console.log("customer")
     return < Route component={CustomerSite} />
+  }
+  else if (employeeRoutes.includes(location))
+  {
+    console.log("employee")
+    return < Route component={EmployeeSite} />
+  }
+  else if (managerRoutes.includes(location))
+  {
+    console.log("manager")
+    return < Route component={ManagerSite} />
+  }
+  else
+    console.log("THROW ERROR!")
 }
 
 

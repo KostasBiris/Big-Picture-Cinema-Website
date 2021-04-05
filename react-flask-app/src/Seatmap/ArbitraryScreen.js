@@ -9,20 +9,25 @@ import Banner from '../components/Banner.js';
 class ArbitraryScreen extends React.Component {
     constructor(props) {
         super(props);
-        // console.log(this.props)
-        // console.log(this.props.location.state.screening.seatmap)
         this.state = {seatmap: this.props.location.state.screening.seatmap,
-                      seatmap_copy: JSON.parse(JSON.stringify(this.props.location.state.screening.seatmap)),
-                      selectedSeats: [],  screeningChosen : this.props.location.state.screening};
+                      seatmap_copy: [],
+                      selectedSeats: [],  
+                      screeningChosen : this.props.location.state.screening};
         this.mountSeatmap = this.mountSeatmap.bind(this);
         this.updateSeatmap = this.updateSeatmap.bind(this);
         this.goToCheckOut = this.goToCheckOut.bind(this);
         
     }
+    
+    componentDidCatch(TypeError){}
 
-    componentDidMount = () => {
+    componentDidMount = async () => {
+        // window.addEventListener('load', this.updateSeatmap);
+
         var i,j;
-        let seatmap = this.state.seatmap;
+        let seatmap = [];
+        await (async() => {
+            seatmap = this.state.seatmap;
             for (i = 0; i < seatmap.length; i++)  {
                 for (j = 0; j < seatmap[i].length; j++) {
                     if (seatmap[i][j] == -1) {
@@ -42,9 +47,12 @@ class ArbitraryScreen extends React.Component {
                     }
                 }
             }
+            this.setState({seatmap: seatmap});
+            this.setState({seatmap_copy: JSON.parse(JSON.stringify(this.props.location.state.screening.seatmap))})
+        })();
         // window.addEventListener('load', this.updateSeatmap);
-        this.setState({seatmap: seatmap});
-        //window.addEventListener('load', this.mountSeatmap);
+        
+        // window.addEventListener('load', this.mountSeatmap);
     }
 
     componentWillUnmount = () => {
@@ -80,22 +88,28 @@ class ArbitraryScreen extends React.Component {
             }
             
         })();
-        // this.setState({seatmap: seatmap});
+        this.setState({seatmap: seatmap});
 
     }    
 
 
     goToCheckOut = () => {
         // console.log(this.state)
-        this.props.history.push('/payment', this.state);
+        // this.props.history.push('/payment', this.state);
+        if (this.props.isEmployee)
+            this.props.history.push('/epayment', this.state);
+        else
+            this.props.history.push('/payment', this.state);
     }
 
     updateSeatmap = (data) => {
         let seatmap = this.state.seatmap_copy;
-
+        console.log(this.state.seatmap_copy)
+        console.log(seatmap);
         if (this.state.seatmap[data.row][data.col] != -1){
             if (data.remove == true){
                 let toRemove = {row: String.fromCharCode('A'.charCodeAt(0) + data.row), col: (data.col+1)};
+                console.log([data.row][data.col]);
                 seatmap[data.row][data.col].isReserved = false;
                 let index = this.state.selectedSeats.indexOf(toRemove)
                 this.state.selectedSeats.splice(index, 1)
@@ -113,25 +127,36 @@ class ArbitraryScreen extends React.Component {
 
 
     render() {
-        
+        console.log(this.props)
         return (
             <React.Fragment>
-                <body>
+                <body id="grad1">
 
                     <head>
                         <link rel="stylesheet" type="text/css" href={main} />
                     </head>
                    
-                    {/* <Banner /> */}
+                    
                     <div class="header_text">
-                        <h1 style={{ marginLeft: '600px', left: '3rem', color: '#4e5b60' }}>SCREEN</h1>
+                        <h1 className="container text-center" style={{ color: '#4e5b60' }}>SCREEN</h1>
                     </div>
-                    <div className="Seatmap" style={{ marginLeft: '350px', marginTop: '50px' }}>
+                    <div className="Seatmap" style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '50vh'}}>
                         <Seatmap rows={this.state.seatmap} maxReservableSeats={10} onChange={this.updateSeatmap} alpha />
                         {/* <Seatmap rows={this.state.seatmap} maxReservableSeats={10} onChange={this.updateSeatmap} alpha /> */}
                     </div>
 
 
+                    
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    
                     <nav>
                         <div className="container text-center">
                             <button className="tab_background text mr-3 btn-lg">{'<'}</button>
@@ -141,7 +166,10 @@ class ArbitraryScreen extends React.Component {
                             <button className="tab_background text mr-3 btn-lg" style={{marginLeft:'12px'}}>{'>'}</button>
                         </div>
                     </nav>
-                    
+                    <br />
+                    <br />
+                    <br />
+                    <br />
                     <footer className="bg-light text-center">
                         <div className="text-center p-3" style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
                             All rights reserved. © 2021 Copyright:
