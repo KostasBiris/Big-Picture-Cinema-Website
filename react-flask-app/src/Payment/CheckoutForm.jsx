@@ -84,10 +84,16 @@ export default function CheckoutForm (state, props)  {
           headers: {
               'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ data: state })})
+          body: JSON.stringify({ data: state })}
+        )
+        .then(response => response.blob()).then(data => window.open(URL.createObjectURL(data)))
+      
+      
+      }
+
       //props.history.push('/');
     //  _props.history.push('/');
-    }
+    
   };
   const button = {
     background: '#5469d4',

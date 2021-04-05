@@ -35,7 +35,8 @@ class Payment extends React.Component {
             movie: '',
             orderPart: [],
             valid: false,
-            total: 0
+            total: 0,
+            isEmployee: false
         };
 
 
@@ -231,7 +232,7 @@ class Payment extends React.Component {
                         let row = entry.row.charCodeAt(0) -65;
                         let col = entry.col-1;
 
-                        if (map_[row][col] === 2) {
+                        if (map_[row][col].isVip) {
                         return (
                             <li className="d-flex justify-content-center">
                             <div>

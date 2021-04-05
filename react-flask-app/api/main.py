@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, jsonify,Markup
+from flask import Flask, render_template, request, redirect, jsonify,Markup, send_file
 from db import Database
 import socket
 import time
@@ -8,6 +8,7 @@ import json
 import stripe
 from threading import Thread
 import datetime
+import base64
 app = Flask(__name__)
 CORS(app)
 
@@ -185,7 +186,8 @@ def makebooking():
     db = Database('cinema.db')
     data = request.json['data']
     data = data['state']
-   
+    print(data)
+    should_send_ticket = data['isEmployee']
     screening = data['screening']
     screeningid = screening['id']
     movieid = screening['movieid']
@@ -193,32 +195,32 @@ def makebooking():
     screen = screening['screenid']
     date = screening['date']
     time = screening['time']
-    #seats = request.json['seats']
-    #print(screeningid, movieid, seats)
 
     seatstostore = ''
     for seat in seats:
         seatstostore += str(seat['row']) + str(seat['col']) + ','
     seatstostore = seatstostore[:-1]
     bookingid = db.add_booking(screeningid, 'NULL', seatstostore)
-
     firstname = data['firstname']
     lastname = data['lastname']
     email = data['email']
     movie = data['movie']
     orderPart = data['orderPart']
-    #total = data['total']
     prices = {'1': 7.5, '2': 5.5, '3': 6.5, '4': 10.0}
     total = 0
     for part in orderPart:
         total+=prices[part]
     qr = db.qr_code_generator(bookingid, screeningid)
     path = 'B' + str(bookingid) + 'M' + str(movieid) + 'S' + str(screeningid) + firstname[0] + lastname[0] + '.pdf'
-    #db.add_ticket(bookingid, movieid, total, firstname, lastname, email, qr, num_VIPs=orderPart.count('4'), num_children=orderPart.count('2'), num_elders=orderPart.count('3'), num_normal=orderPart.count('1'))
     db.add_ticket(bookingid, movieid, total, firstname, lastname, email, path, qr, orderPart.count('4'), orderPart.count('2'), orderPart.count('3'), orderPart.count('1'))
     db.ticket_to_pdf(path, bookingid, firstname, lastname, movie, seatstostore, orderPart, screen, screeningid, total, qr, date, time)
     db.email_ticket(firstname, lastname, email, path)
-    return jsonify({'response': 'OK'})
+
+    if should_send_ticket:
+        return send_file('../'+path, 'application/pdf', as_attachment=True, attachment_filename=path)
+        #return jsonify({'response': 'OK'})
+    else:
+        return jsonify({'response': 'OK'})
 
 
 @app.route('/getmoviename/<id>', methods=['POST'])
