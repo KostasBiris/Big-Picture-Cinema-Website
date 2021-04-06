@@ -211,10 +211,18 @@ def makebooking():
     for part in orderPart:
         total+=prices[part]
     qr = db.qr_code_generator(bookingid, screeningid)
-    path = 'B' + str(bookingid) + 'M' + str(movieid) + 'S' + str(screeningid) + firstname[0] + lastname[0] + '.pdf'
-    db.add_ticket(bookingid, movieid, total, firstname, lastname, email, path, qr, orderPart.count('4'), orderPart.count('2'), orderPart.count('3'), orderPart.count('1'))
-    db.ticket_to_pdf(path, bookingid, firstname, lastname, movie, seatstostore, orderPart, screen, screeningid, total, qr, date, time)
-    db.email_ticket(firstname, lastname, email, path)
+    path = ""
+    if not should_send_ticket:
+        path = 'B' + str(bookingid) + 'M' + str(movieid) + 'S' + str(screeningid) + firstname[0] + lastname[0] + '.pdf'
+        db.ticket_to_pdf(path, bookingid, firstname, lastname, movie, seatstostore, orderPart, screen, screeningid, total, qr, date, time)
+        db.add_ticket(bookingid, movieid, total, firstname, lastname, email, path, qr, orderPart.count('4'), orderPart.count('2'), orderPart.count('3'), orderPart.count('1'))
+        db.email_ticket(firstname, lastname, email, path)
+    else:
+        path = 'B' + str(bookingid) + 'M' + str(movieid) + 'S' + str(screeningid) + '.pdf'
+        db.ticket_to_pdf(path, bookingid, "", "", movie, seatstostore, orderPart, screen, screeningid, total, qr, date, time)
+        db.add_ticket(bookingid, movieid, total, "", "", email, path, qr, orderPart.count('4'), orderPart.count('2'), orderPart.count('3'), orderPart.count('1'))    
+    
+    
 
     if should_send_ticket:
         return send_file('../'+path, 'application/pdf', as_attachment=True, attachment_filename=path)
@@ -257,13 +265,14 @@ def list_movies():
     db = Database('cinema.db')
     found_movies = []
     movies = serialize_all_movies(db.fetch()[0])
+    print(movies)
     for movie in movies:
         for word in movie_name.split('_'):
             if word in movies[movie]['original_title'].lower():
                 if not movies[movie]['original_title'] in added_movies:
                     found_movies.append(movies[movie])
                     added_movies.append(movies[movie]['original_title'])
-
+    print("the found movies are {}".format(found_movies))
     return {'movies': found_movies}
 
 
@@ -628,4 +637,4 @@ if __name__ == '__main__':
     thread = Thread(target=spinner, args=())
     thread.daemon = True
     thread.start()
-    app.run(debug=False, host='localhost', port='4000', threaded=True)
+    app.run(debug=False, host='localhost', port='5000', threaded=True)

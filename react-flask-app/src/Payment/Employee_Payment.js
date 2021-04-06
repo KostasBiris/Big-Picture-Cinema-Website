@@ -62,6 +62,7 @@ class Payment extends React.Component {
         this.reset = this.reset.bind(this);
         this.onClick = this.onClick.bind(this);
         this.paymentType = this.paymentType.bind(this);
+        this.getCashTicket = this.getCashTicket.bind(this);
     }   
 
     componentDidMount() {
@@ -221,6 +222,18 @@ class Payment extends React.Component {
         })
         return total;
     }
+
+    getCashTicket = () => {
+        var go = '/makebooking'
+        fetch(go, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ data: {state: this.state} })}
+        )
+        .then(response => response.blob()).then(data => window.open(URL.createObjectURL(data)))
+    }
     
     calculateReturn = () => {
         let total = this.calculateTotal();
@@ -240,6 +253,7 @@ class Payment extends React.Component {
 
         if(button === "Enter"){
             this.calculateReturn()
+            this.getCashTicket();
         }
 
         else if(button === "Delete"){
@@ -254,33 +268,33 @@ class Payment extends React.Component {
 
     payByCard = () => {
         console.log(this.props)
-        if (this.validate())
-        {
+        // if (this.validate())
+        // {
             return( <div classNameName="Payment">
                 <Elements stripe={promise}>
                 <CheckoutForm props={this.props} state={this.state}/>
                 </Elements>
                 </div>)
-        }
-        else
-        {
-            return(<></>)
-        }
+        // }
+        // else
+        // {
+        //     return(<></>)
+        // }
     }
 
     payByCash = () => {
-        if (this.validate()){
+        // if (this.validate()){
             return (
                 <React.Fragment>
                     <div className="result"><p>{this.state.result}</p></div>
                     <KeyPad onClick={this.onClick} />
                 </ React.Fragment>
             )
-        }
-        else
-        {
-            return(<></>)
-        }
+        // }
+        // else
+        // {
+        //     return(<></>)
+        // }
     }
 
     paymentType = (e) => {
@@ -376,38 +390,7 @@ class Payment extends React.Component {
                                     <br />
                                     <br />
                                     <form>
-                                        <div className="md-form mb-2">
-                                            <input onChange={this.handleFirstName} value={this.state.firstname} className="register_details form-control" type="text" name="first_name" id="first_name"
-                                                placeholder="First name" style={{ color: 'black' }} required />
-                                        </div>
-                                        <div className="md-form mb-2">
-                                            <input onChange={this.handleLastName} value={this.state.lastname} className="register_details form-control" type="text" name="last_name" id="last_name"
-                                                placeholder="Last name" style={{ color: 'black' }} required />
-                                        </div>
-                                        <div className="md-form mb-2">
-                                            <input onChange={this.handleEmail} value={this.state.email} className="register_details form-control" type="text" name="email" id="email"
-                                                placeholder="E-mail address" style={{ color: 'black' }} required />
-                                        </div>
-                                        <div className="md-form mb-2">
-                                            <input onChange={this.handleAddressOne} value={this.state.addressOne} className="register_details form-control" className="register_details form-control" type="text" name="address" id="address"
-                                                placeholder="Address Line 1" style={{ color: 'black' }} required />
-                                        </div>
-                                        <div className="md-form mb-2">
-                                            <input onChange={this.handleAddressTwo} value={this.state.addressTwo} className="register_details form-control" type="text" name="address" id="address-2"
-                                                placeholder="Address Line 2 (Optional)" style={{ color: 'black' }} />
-                                        </div>
-                                        <div className="row">
-                                            <div className="col-lg-4 col-md-12 mb-4">
-                                                <select className="register_details custom-select d-block w-100" id="country" required>
-                                                    <option value="">Country</option>
-                                                    <option>United Kingdom</option>
-                                                </select>
-                                                <div className="invalid-feedback">
-                                                    Please select a valid country.
-                                        </div>
-                                            </div>
-
-                                        </div>
+                                        
 
                                         <hr class="mb-4"/>
                                         <button onClick={this.paymentType} value="card" class="btn btn-primary btn-lg btn-block" type="submit">PAY BY CARD</button>

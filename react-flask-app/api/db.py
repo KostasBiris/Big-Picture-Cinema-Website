@@ -396,7 +396,7 @@ class Database:
         for screening in screenings:
             screeningdata.append(self.quick_get_screening(screening))
 
-        print(screeningdata)
+        # print(screeningdata)
         return moviedata, screeningdata
 
 
@@ -599,25 +599,40 @@ class Database:
         el = parts.count('3')
         ad = parts.count('1')
 
-
-
-        textLines = [
-        f'Booking ID: {booking_id}',
-        f'Movie Name: {movie}',
-        f'Screen No: {screen}',
-        f'Date & time: {date},{time}',
-        '',
-        f'Seats: {seats}',
-        f'Num VIP\'s: {vip}',
-        f'Num Children: {ch}',
-        f'Num Elders: {el}',
-        f'Num Adults: {ad}',
-        '',
-        f'Forename: {forename}',
-        f'Surname: {surname}',
-        '',
-        f'Price: £{total}',
-        ]
+        textLines = []
+        if forename == '' and surname == '':
+            textLines = [
+            f'Booking ID: {booking_id}',
+            f'Movie Name: {movie}',
+            f'Screen No: {screen}',
+            f'Date & time: {date},{time}',
+            '',
+            f'Seats: {seats}',
+            f'Num VIP\'s: {vip}',
+            f'Num Children: {ch}',
+            f'Num Elders: {el}',
+            f'Num Adults: {ad}',
+            '',
+            f'Price: £{total}',
+            ]
+        else:
+            textLines = [
+            f'Booking ID: {booking_id}',
+            f'Movie Name: {movie}',
+            f'Screen No: {screen}',
+            f'Date & time: {date},{time}',
+            '',
+            f'Seats: {seats}',
+            f'Num VIP\'s: {vip}',
+            f'Num Children: {ch}',
+            f'Num Elders: {el}',
+            f'Num Adults: {ad}',
+            '',
+            f'Forename: {forename}',
+            f'Surname: {surname}',
+            '',
+            f'Price: £{total}',
+            ]
 
         #image = 'QR_Code.png'
         #--------------------------------------------
@@ -1053,7 +1068,7 @@ seatmap = dat[0][5]
 #db.email_ticket('yourForename', 'yourSurname', 'yourEmail', 5)
 
 
-# Database('cinema.db').add_screen(50,10,5)
+Database('cinema.db').add_screen(35,8,6)
 # Database('cinema.db').add_screening('04-04-2021', '16:00', 1, 1)
 # Database('cinema.db').add_screening('04-04-2021', '18:00', 1, 1)
 # Database('cinema.db').add_screening('04-04-2021', '20:00', 1, 1)
@@ -1061,9 +1076,9 @@ seatmap = dat[0][5]
 # Database('cinema.db').add_screening('08-04-2021', '13:45', 1, 3)
 # Database('cinema.db').add_screening('09-04-2021', '13:45', 1, 3)
 # Database('cinema.db').add_screening('10-04-2021', '13:45', 1, 3)
-Database('cinema.db').add_screening('15-04-2021', '13:45', 1, 3)
-Database('cinema.db').add_screening('15-04-2021', '13:46', 1, 3)
-Database('cinema.db').add_screening('15-04-2021', '13:47', 1, 3)
+# Database('cinema.db').add_screening('15-04-2021', '13:45', 1, 3)
+# Database('cinema.db').add_screening('15-04-2021', '13:46', 1, 3)
+# Database('cinema.db').add_screening('15-04-2021', '13:47', 1, 3)
 
 
 #print(Database('cinema.db').get_upcoming())
