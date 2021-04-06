@@ -103,6 +103,8 @@ class CustomerAccountPage extends React.Component {
         })();
         await( async () => {
             this.assertAuth()
+        })();
+        await( async () => {
             this.getTickets()
         })();
         
@@ -154,7 +156,6 @@ class CustomerAccountPage extends React.Component {
          })
          .then(response => response.json()).then(data => { 
              this.setState({ tickets: Object.values(data.response)})})//accepts and stores the data
-        
         let pdfs = [];
         let tickets = [];
 
@@ -162,15 +163,18 @@ class CustomerAccountPage extends React.Component {
             tickets.push(entry);
         })
 
-        await tickets.forEach( function(entry) {
-            var go = '/getpdf/' + entry.id;
-            fetch(go, {method: 'POST'})
-            .then(response => response.blob())
-            .then(blob => {
-                pdfs.push({id : entry.id, pdf : URL.createObjectURL(blob)}); 
-            })
-        })
-        this.setState({pdfs: pdfs});
+        tickets.forEach(async function (entry, index) {
+             var go = '/getpdf/' + entry.id;
+             await fetch(go, { method: 'POST' })
+                 .then(response => response.blob())
+                 .then(blob => {
+                     this[index].pdfURL = URL.createObjectURL(blob);
+                 });
+         }, tickets);
+            this.setState({tickets: tickets})
+        
+        await new Promise(r => setTimeout(r, 20000));
+
     }
 
     getTicket = async (id) => {
@@ -178,7 +182,7 @@ class CustomerAccountPage extends React.Component {
         await fetch(go, {method: 'POST'})
         .then(response => response.blob())
         .then(blob => {
-            this.setState({currpdf: URL.createObjectURL(blob)})
+            this.setState({currpdf: URL.createObjectURL(blob).toString()})
             
         })
     }
@@ -195,38 +199,26 @@ class CustomerAccountPage extends React.Component {
     }
 
 
-    makeTicketList = () => {
-        //console.log(this.state);
+    makeTicketList =  () => {
         let tickets = [];
-        let pdfs = [];
         this.state.tickets.forEach(function(entry) { tickets.push(entry)});
-        this.state.pdfs.forEach(function(entry) { pdfs.push(entry)});
-        if (tickets.length !== pdfs.length) {
-            this.stepUp();
+        try {
+            console.log(tickets[0].pdfURL);
+
+        } catch (error) {
+            
         }
-
-        console.log(pdfs);
-        // console.log(tickets.length,  pdfs.length);
-        // console.log(this.state);
-        let pairs = [];
-
-        var i,j;
-        for (i = 0; i < this.state.tickets.length; i++) {
-            for (j = 0; j < this.state.pdfs.length; j++) {
-                if (tickets[i].bookingid === pdfs[j].id) {
-                    pairs.push({t: tickets[i], p: pdfs[j]});
-                }
-            }
-        }  
         return(
             <ul>
-            {pairs.map((P)=> {
+            {this.state.tickets.map((t) => {
+                console.log(JSON.stringify(t));
                 return (
-                    <a href={P.p.pdf}><li>{P.t.movieName}, {P.t.date}</li></a>
+                    <a href={t.pdfURL}><li>{t.movieName}, {t.date}</li></a>
                 )
             })}
             </ul>
         );
+    }
 
 
 
@@ -270,7 +262,7 @@ class CustomerAccountPage extends React.Component {
         //     </ul>
         //     </React.Fragment>
 
-    }
+    //}
 
     render() {
         //this.makeTicketList();
@@ -371,7 +363,7 @@ class CustomerAccountPage extends React.Component {
                                                 <h6 className="mb-0">Tickets</h6>
                                             </div>
                                             <div className="col-sm-9 text-secondary">
-                                                {this.makeTicketList()}                                                
+                                                {this.state.tickets.length > 0 ? this.makeTicketList() : <></>}                                                
                                             </div>
                                         </div>
                                     </div>
