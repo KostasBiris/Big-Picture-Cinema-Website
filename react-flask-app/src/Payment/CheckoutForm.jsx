@@ -88,7 +88,6 @@ export default function CheckoutForm (state, props)  {
         )
         .then(response => response.blob()).then(data => window.open(URL.createObjectURL(data)))
       
-      
       }
 
       //props.history.push('/');

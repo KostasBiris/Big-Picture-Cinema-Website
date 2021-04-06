@@ -100,7 +100,6 @@ class SearchResult extends React.Component{
 
     
     render () {
-        console.log("HERE IS THE PROP");
         console.log(this.prop);
         return (
 
@@ -120,7 +119,7 @@ class SearchResult extends React.Component{
                                     <p>{this.prop.overview}</p>
                                     {/* <p> Director: {this.prop.director}</p> */}
                                     {/* <button onClick={this.goToMovie} className="rounded-pill text buttons_background">ADD TO DATABASE</button> */}
-
+                                    <SearchIMDB onGetMovie={this.stepUp} movieID = {this.prop.id} />
                                     {this.state.forscreening ? <button onClick={this.addScreening}>ADD SCREENING</button> : 
                                     this.state.set ? <p>Already stored.</p> : <button onClick={this.addMovie}>ADD TO DATABASE</button>}
                                 

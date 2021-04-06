@@ -12,7 +12,7 @@ import AddScreening from '../Pages/AddScreening';
 import {createBrowserHistory} from 'history';
 
 
-class CustomerSite extends React.Component{
+class ManagerSite extends React.Component{
 
     constructor(props){
         super(props);        
@@ -23,10 +23,8 @@ render () {
     return(
     <React.Fragment>
 
-        
-        {/* <Route path ="/mlogin" component={ManagerLogin}/> */}
-
         <ManagerBanner history={history}/>
+        <Route path ="/mlogin" component={ManagerLogin}/>
         <Route path ="/addmovies/search/:query" component={SearchManager}/>
         <Route path="/overall_analytics" component={OverallAnalytics}/>
         <Route path="/addscreening" component={AddScreening} />
@@ -36,4 +34,4 @@ render () {
     );
 }
 }
-export default CustomerSite;
+export default ManagerSite;

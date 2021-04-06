@@ -97,65 +97,34 @@ def serialize_all_screenings(res):
     print(dic)
     return dic
 
-"""
-def serialize_daily_analytics(res):
 
-    return {
-        'id':res[0],
-        'movie_id':res[1],
-        'movie_name':res[2],
-        'date': res[3],
-        'income': res[4],
-        'num_tickets':res[5]
-    }
-
-def serialize_all_daily_analytics(res):
-    dic = {}
-
-    for i in range(len(res)):
-        dic[i] = serialize_daily_analytics(res[i])
-    return dic
-
-
-def serialize_overall_analytics(res):
-
-    return {
-        'id':res[0],
-        'movie_id':res[1],
-        'movie_name':res[2],
-        'income': res[3],
-        'num_tickets':res[4]
-    }
-
-def serialize_all_overall_analytics(res):
-    dic = {}
-
-    for i in range(len(res)):
-        dic[i] = serialize_overall_analytics(res[i])
-    return dic
-"""
 def serialize_ticket(res):
-    return {
-        'id' : res[0],
-        'bookingid' : res[1],
-        'movie_id' : res[2],
-        'customer_id' : res[3],
-        'price' : res[4],
-        'forename': res[5],
-        'surname': res[6],
-        'email':res[7],
-        'numVIP':res[9],
-        'numChild':res[10],
-        'numElder':res[11],
-        'numDefault':res[12],
-        'date' : res[13]
-    }
+    try:
+        return {
+            'id' : res[0],
+            'bookingid' : res[1],
+            'movie_id' : res[2],
+            'customer_id' : res[3],
+            'price' : res[4],
+            'forename': res[5],
+            'surname': res[6],
+            'email':res[7],
+            'numVIP':res[9],
+            'numChild':res[10],
+            'numElder':res[11],
+            'numDefault':res[12],
+            'date' : res[13],
+            'movieName' : Database('cinema.db').quick_get_movie(res[0])[1]
+        }
+    except TypeError:
+        return None
 
 def serialize_all_tickets(res):
     dic ={}
     for i in range(len(res)):
-        dic[i] = serialize_ticket(res[i])
-        print(dic[i])
+        if serialize_ticket(res[i]):
+            dic[i] = serialize_ticket(res[i])
+            print(dic[i])
     return dic
 
 
@@ -211,10 +180,18 @@ def makebooking():
     for part in orderPart:
         total+=prices[part]
     qr = db.qr_code_generator(bookingid, screeningid)
-    path = 'B' + str(bookingid) + 'M' + str(movieid) + 'S' + str(screeningid) + firstname[0] + lastname[0] + '.pdf'
-    db.add_ticket(bookingid, movieid, total, firstname, lastname, email, path, qr, orderPart.count('4'), orderPart.count('2'), orderPart.count('3'), orderPart.count('1'))
-    db.ticket_to_pdf(path, bookingid, firstname, lastname, movie, seatstostore, orderPart, screen, screeningid, total, qr, date, time)
-    db.email_ticket(firstname, lastname, email, path)
+    path = ""
+    if not should_send_ticket:
+        path = 'B' + str(bookingid) + 'M' + str(movieid) + 'S' + str(screeningid) + firstname[0] + lastname[0] + '.pdf'
+        db.ticket_to_pdf(path, bookingid, firstname, lastname, movie, seatstostore, orderPart, screen, screeningid, total, qr, date, time)
+        db.add_ticket(bookingid, movieid, total, firstname, lastname, email, path, qr, orderPart.count('4'), orderPart.count('2'), orderPart.count('3'), orderPart.count('1'))
+        db.email_ticket(firstname, lastname, email, path)
+    else:
+        path = 'B' + str(bookingid) + 'M' + str(movieid) + 'S' + str(screeningid) + '.pdf'
+        db.ticket_to_pdf(path, bookingid, "", "", movie, seatstostore, orderPart, screen, screeningid, total, qr, date, time)
+        db.add_ticket(bookingid, movieid, total, "", "", email, path, qr, orderPart.count('4'), orderPart.count('2'), orderPart.count('3'), orderPart.count('1'))    
+    
+    
 
     if should_send_ticket:
         return send_file('../'+path, 'application/pdf', as_attachment=True, attachment_filename=path)
@@ -228,6 +205,21 @@ def getmoviename(id):
     db = Database('cinema.db')
     result = db.quick_get_movie(int(id))
     return jsonify({'response' : result[1]})
+
+@app.route('/getticket/<email>', methods=['POST'])
+def getticket(email):
+    db = Database('cinema.db')
+    print(db.get_customer_tickets_by_email(email))
+    return jsonify({'response': serialize_all_tickets(db.get_customer_tickets_by_email(email))})
+
+@app.route('/getpdf/<id>', methods=['POST'])
+def getpdf(id):
+    db = Database('cinema.db')
+    ticket = db.quick_get_ticket(id)[0]
+    return send_file('../'+ticket,'application/pdf', as_attachment=True, attachment_filename=ticket)
+
+
+
 
 
 """
@@ -257,13 +249,14 @@ def list_movies():
     db = Database('cinema.db')
     found_movies = []
     movies = serialize_all_movies(db.fetch()[0])
+    print(movies)
     for movie in movies:
         for word in movie_name.split('_'):
             if word in movies[movie]['original_title'].lower():
                 if not movies[movie]['original_title'] in added_movies:
                     found_movies.append(movies[movie])
                     added_movies.append(movies[movie]['original_title'])
-
+    print("the found movies are {}".format(found_movies))
     return {'movies': found_movies}
 
 
@@ -331,75 +324,6 @@ def payment_info():
     return jsonify({'response':'OK'})
 
 
-#===============================================================================================================================
-@app.route('/analytics')
-def analytics():
-    return render_template('manager_analytics.html')
-
-
-
-cinemaLabels = [
-    'Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5',
-    'Week 6', 'Week 7', 'Week 8', 'Week 9', 'Week 10',
-    'Week 11', 'Week 12', 'Week 13', 'Week 14', 'Week 15',
-]
-
-cinemaValues = [
-    1967.67, 1290.89, 879.75, 1349.19,
-    2328.91, 2504.28, 2873.83, 4764.87,
-    4349.29, 1258.30, 707, 1800, 1500,
-    1577.5, 1247
-]
-
-
-# Adding the same values as overall movies for now to just have mock graphs for now. 
-@app.route('/weekly_movie_analytics')
-def weekly_movie_analytics():
-    bar_labels=labels
-    bar_values=values
-    return render_template('weekly_movie_analytics.html', title='Best Performing Movies this week', max=17000, labels=bar_labels, values=bar_values)
-
-@app.route('/weekly_cinema_analytics')
-def weekly_cinema_analytics():
-    bar_labels=cinemaLabels
-    bar_values=cinemaValues
-    return render_template('weekly_cinema_analytics.html', title='Weekly sales in the cinema', max=17000, labels=bar_labels, values=bar_values)
-
-
-
-#===============================================================================================================================
-
-
-labels = [
-    'Captain America', 'Spiderman', 'Thor', 'Black Widow',
-    'Iron Man', 'Hulk', 'Ant Man', 'Loki',
-    'Hawkeye', 'Falcon', 'Wasp', 'Winter Soldier'
-]
-
-values = [
-    967.67, 1190.89, 1079.75, 1349.19,
-    2328.91, 2504.28, 2873.83, 4764.87,
-    4349.29, 6458.30, 9907, 8000
-]
-
-colors = [
-    "#F7464A", "#46BFBD", "#FDB45C", "#FEDCBA",
-    "#ABCDEF", "#DDDDDD", "#ABCABC", "#4169E1",
-    "#C71585", "#FF4500", "#FEDCBA", "#46BFBD"]
-
-@app.route('/overall_analytics')
-def overall_analytics():
-    db = Database('cinema.db')
-    data = db.fetch()[8]
-    return {'overall_analytics': serialize_all_overall_analytics(data)}
-
-
-'''   
-@app.route('/overall_analytics')
-def overall_analytics():
-    return render_template('overall_analytics.html')
-'''
-#================================================================================================================================
 
 @app.route('/screens_description')
 def screens_description():
@@ -628,4 +552,4 @@ if __name__ == '__main__':
     thread = Thread(target=spinner, args=())
     thread.daemon = True
     thread.start()
-    app.run(debug=False, host='localhost', port='4000', threaded=True)
+    app.run(debug=False, host='localhost', port='5000', threaded=True)
