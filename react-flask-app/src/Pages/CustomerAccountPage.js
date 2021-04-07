@@ -3,87 +3,9 @@ import main from '../static/main.css';
 import Banner from '../components/Banner.js';
 import usericon from '../static/usericon.png';
 import { ThemeConsumer } from 'react-bootstrap/esm/ThemeProvider';
+import { Link } from "react-router-dom";
 
 var publicIP = require('public-ip')
-
-
-
-// const table = {
-//     borderCollapse: 'collapse',
-//     width: '50%',
-//     marginLeft: 'auto',
-//     marginRight: 'auto'
-// }
-
-
-// const td = {
-//     border: '1px solid #cccccc',
-//     padding: '8px'
-// }
-
-// const th = {
-//     fontWeight: 'bold',
-//     textTransform: 'uppercase'
-// }
-
-// const tr = {
-//     "&:nthChild(even)" : {
-//         backgroundColor: '#dddddd'
-//     },
-    
-//     "&:hover" : {
-//         backgroundColor: 'blue',
-//         color: 'white'
-//     },
-
-// }
-// let sortDirection = false;
-//   let ticketsData = [
-//     {date: new Date(Date.parse('14-05-2021')), movieName:'Thor', file: '.../react-flask-app/api/templates/algoII.pdf'},
-//     {date: new Date("29-03-2021"), movieName:'Spider Man', file: 'algoII.pdf'},
-//     {date: new Date("08-04-2021"), movieName:'Iron Man', file: 'algoII.pdf'},
-//     {date: new Date("02-05-2021"), movieName:'Hulk', file: 'algoII.pdf'},
-//     {date: new Date("16-07-2021"), movieName:'Black Widow', file: 'algoII.pdf'}
-//   ];
-
-//  /* window.onload = () => {
-//     loadTableData(ticketsData);
-//   };*/
-
-//   function loadTableData(ticketsData) {
-//     const tableBody = document.getElementById('tableData');
-//     let dataHtml = '';
-
-//     for(let ticket of ticketsData){
-//                   //-----------Date-----------|----------MovieName--------|--------------------Link to Ticket's PDF--------------------->
-//       dataHtml += `<tr><td>${ticket.date}</td><td>${ticket.movieName}</td><td><a href=${ticket.file}><div>click here</div></a></td></tr>` ;
-
-//     }
-//     console.log(dataHtml)
-
-//     tableBody.innerHTML = dataHtml;
-//   }
-
-//   function sortColumn(columnName){
-//     const dataType = typeof ticketsData[0][columnName];
-//     sortDirection = !sortDirection;
-
-//     switch(dataType){
-//       case 'number':
-//         sortNumberColumn(sortDirection, columnName)
-//         break;
-//     }
-
-//     loadTableData(ticketsData);
-//   }
-
-//   function sortNumberColumn(sort, columnName){
-//     ticketsData = ticketsData.sort((p1,p2) => {
-//       return sort ? p1[columnName] - p2[columnName] : p2[columnName] - p1[columnName]
-
-//     });
-//   }
-
 
 class CustomerAccountPage extends React.Component {
     constructor(props){
@@ -91,10 +13,7 @@ class CustomerAccountPage extends React.Component {
         this.state = {data: [], auth: false, tickets: [], pdfs : [], currpdf: null, html: ''}
         this.stepUp = this.stepUp.bind(this);
         this.getTickets = this.getTickets.bind(this);
-        this.getTicket = this.getTicket.bind(this);
         this.makeTicketList = this.makeTicketList.bind(this);
-        this.getTicketPDFs = this.getTicketPDFs.bind(this);
-        // this.loadTableData = this.loadTableData.bind(this);
     }
 
     stepUp = async () => {
@@ -104,23 +23,12 @@ class CustomerAccountPage extends React.Component {
         await( async () => {
             this.assertAuth()
         })();
-        await( async () => {
-            this.getTickets()
-        })();
-        
-        
-       // console.log(this.state);
-       // await this.getTicketPDFs();
+        this.getTickets();
     }
 
     componentDidMount = async() => {
-        //await (async ()=> {
-        // 
-        // window.addEventListener('load', this.loadTableData(ticketsData));
-        // this.loadTableData(ticketsData)})();
         window.addEventListener('load', this.stepUp);
         await this.stepUp();
-        //this.getTicketPDFs();
     }   
 
 
@@ -142,6 +50,7 @@ class CustomerAccountPage extends React.Component {
     };
 
      getTickets = async () =>{
+
         let email = this.state.data.email;
         if (email === undefined) {
             this.stepUp();
@@ -164,105 +73,34 @@ class CustomerAccountPage extends React.Component {
         })
 
         tickets.forEach(async function (entry, index) {
-             var go = '/getpdf/' + entry.id;
-             await fetch(go, { method: 'POST' })
+            go = '/getpdf/' + entry.id;
+            await fetch(go, { method: 'POST' })
                  .then(response => response.blob())
                  .then(blob => {
-                     this[index].pdfURL = URL.createObjectURL(blob);
+                    let u = URL.createObjectURL(blob);
+                    this[index].pdfURL = u;
                  });
          }, tickets);
-            this.setState({tickets: tickets})
-        
-        await new Promise(r => setTimeout(r, 20000));
+         this.setState({tickets: tickets});
 
     }
-
-    getTicket = async (id) => {
-        var go = '/getpdf/' + id;
-        await fetch(go, {method: 'POST'})
-        .then(response => response.blob())
-        .then(blob => {
-            this.setState({currpdf: URL.createObjectURL(blob).toString()})
-            
-        })
-    }
-
-    getTicketPDFs = async () => {
-        let new_ = [];
-        let tickets = this.state.tickets;
-        var i;
-        for (i=0; i <tickets.length; i++) {
-            await this.getTicket(tickets[i].id);
-            let pdf = this.state.currpdf;
-            this.setState({pdfs: [...this.state.pdfs, pdf]});
-        }
-    }
-
 
     makeTicketList =  () => {
         let tickets = [];
+        console.log()
         this.state.tickets.forEach(function(entry) { tickets.push(entry)});
-        try {
-            console.log(tickets[0].pdfURL);
-
-        } catch (error) {
-            
-        }
-        return(
-            <ul>
-            {this.state.tickets.map((t) => {
-                console.log(JSON.stringify(t));
-                return (
-                    <a href={t.pdfURL}><li>{t.movieName}, {t.date}</li></a>
-                )
-            })}
-            </ul>
+        return (
+                <ul>
+                {this.state.tickets.map((t) => {
+                        return (
+                            <React.Fragment>
+                                <Link style={{color:"orange"}}><li onClick={()=> {window.open(t.pdfURL)}}>{t.movieName}, {t.date}</li></Link>                            
+                            </React.Fragment>
+                    );
+                })}
+                </ul>
         );
     }
-
-
-
-//         let tickets = [];
-//         if (this.state.tickets === null) {
-//             //await this.getTickets();
-//             // return this.makeTicketList();
-// return        }
-//         this.state.tickets.forEach(function(entry) {
-//             tickets.push(entry);
-//         })
-//         let pdfs = this.state.pdfs;
-//         let html = '<ul>'
-//         for (var i = 0 ; i <= tickets.length; i++) {
-//             console.log(tickets[i]);
-//             if (tickets[i] === undefined) {break;}
-//             this.getTicket(tickets[i].id);
-//             html+= '<><a href=' + this.state.currpdf +'><li>'+i.toString()+': '+tickets[i].movieName+', ' + tickets[i].date+'</li></a></>'
-//         }
-//         html+='</ul>'
-//         console.log(html);
-//         this.setState({html : html});
-        // this.setState({html: 
-        //     <React.Fragment>
-        //     <ul>
-        //     {tickets.map( (t, index) => {
-        //         this.getTicket(t.id);
-        //         //let pdf = URL.createObjectURL(this.getTicket(t.id).value);
-        //         // for(;;) {
-        //         //     if (pdf.value !== undefined) {
-        //         //         break;
-        //         //     }
-        //         // }
-        //         //sconsole.log(pdf.value);
-        //         return (
-        //             <>
-        //             <a href={this.state.currpdf}><li>{index+1}: {t.movieName}, {t.date}</li></a>
-        //             </>
-        //         );
-        //     })}
-        //     </ul>
-        //     </React.Fragment>
-
-    //}
 
     render() {
         //this.makeTicketList();

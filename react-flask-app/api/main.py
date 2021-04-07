@@ -209,7 +209,7 @@ def getmoviename(id):
 @app.route('/getticket/<email>', methods=['POST'])
 def getticket(email):
     db = Database('cinema.db')
-    print(db.get_customer_tickets_by_email(email))
+    # print(db.get_customer_tickets_by_email(email))
     return jsonify({'response': serialize_all_tickets(db.get_customer_tickets_by_email(email))})
 
 @app.route('/getpdf/<id>', methods=['POST'])
@@ -249,7 +249,7 @@ def list_movies():
     db = Database('cinema.db')
     found_movies = []
     movies = serialize_all_movies(db.fetch()[0])
-    print(movies)
+    # print(movies)
     for movie in movies:
         for word in movie_name.split('_'):
             if word in movies[movie]['original_title'].lower():
@@ -337,15 +337,15 @@ def customer_register():
 def customer_login():
     return render_template('customer_login.html')
 
-@app.route('/', methods=['POST'])
-def _mainpage():
-    #For now, we just search the database based on the entry, and render html showing the results.
-    #We need to dynamic html generation.
-    db = Database('cinema.db')
-    query = request.form['query']
-    dat = str(db.search(query, 'movies'))
-    del db
-    return "<h1 style='color:blue'>" + dat + "</h1>"
+# @app.route('/', methods=['POST'])
+# def _mainpage():
+#     #For now, we just search the database based on the entry, and render html showing the results.
+#     #We need to dynamic html generation.
+#     db = Database('cinema.db')
+#     query = request.form['query']
+#     dat = str(db.search(query, 'movies'))
+#     del db
+#     return "<h1 style='color:blue'>" + dat + "</h1>"
 
 
 @app.route('/insession/<ip>', methods=['POST'])
@@ -520,7 +520,6 @@ def isupcoming(movieid):
     db = Database('cinema.db')
     movies = db.get_upcoming()[0]
     movie = db.quick_get_movie(movieid)
-    # print(movies, movie)
     return movie in movies
 
 
@@ -541,14 +540,9 @@ def get_tickets(customer_id):
 
 def spinner():
     db = Database('cinema.db')
-    print('hi!')
     while True:
         db.clear_sessions()
-        #pass
 if __name__ == '__main__':
-    #thread = Thread(target=spinner, args=())
-    #thread.daemon = True
-    #thread.start()
     thread = Thread(target=spinner, args=())
     thread.daemon = True
     thread.start()

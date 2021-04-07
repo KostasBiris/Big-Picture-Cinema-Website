@@ -25,6 +25,13 @@ let interval;
 class CustomerHomePage extends React.Component {
     constructor(props) {
         super(props);
+        if (this.props.location.state !== undefined) {
+            if (this.props.location.state.logout === true) {
+                
+            }
+        }
+
+
         //By default the state is a blank query.
         this.state = {query: '', IP: null, auth: false, response: undefined , movies: null, date:''};
         //Bind our methods.
