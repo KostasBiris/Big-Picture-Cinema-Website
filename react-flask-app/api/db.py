@@ -119,20 +119,7 @@ class Database:
                                                                customer_id INTEGER REFERENCES customers(id), \
                                                                employee_id INTEGER REFERENCES employees(id), \
                                                                manager_id INTEGER REFERENCES employees(id))")
-        """
-        self.cur.execute("CREATE TABLE IF NOT EXISTS daily_analytics (id INTEGER PRIMARY KEY, \
-                                                                      movie_id INTEGER REFERENCES movies(id) NOT NULL,\
-                                                                      movie_name TEXT REFERENCES movies(name) NOT NULL,\
-                                                                      date DATE REFERENCES screenings(date) NOT NULL, \
-                                                                      income FLOAT NOT NULL,\
-                                                                      num_tickets INTEGER NOT NULL)")
 
-        self.cur.execute("CREATE TABLE IF NOT EXISTS overall_analytics (id INTEGER PRIMARY KEY, \
-                                                                        movie_id INTEGER REFERENCES movies(id) NOT NULL,\
-                                                                        movie_name TEXT REFERENCES movies(name) NOT NULL,\
-                                                                        income FLOAT NOT NULL,\
-                                                                        num_tickets INTEGER NOT NULL)")
-        """
         self.cur.execute("CREATE TABLE IF NOT EXISTS payments (id INTEGER PRIMARY KEY, \
                                                                customer_id INTEGER REFERENCES customers(id),\
                                                                holder_name TEXT NOT NULL, \
@@ -191,16 +178,11 @@ class Database:
 
         self.cur.execute("SELECT * FROM sessions")
         sessions = self.cur.fetchall()
-        """
-        self.cur.execute("SELECT * FROM daily_analytics")
-        daily_analytics = self.cur.fetchall()
 
-        self.cur.execute("SELECT * FROM overall_analytics")
-        overall_analytics = self.cur.fetchall()
+        self.cur.execute("SELECT * FROM payments")
+        payments = self.cur.fetchall()
         
-        return movies, screens, screenings, customers, bookings, tickets, employees, sessions, daily_analytics, overall_analytics
-        """
-        return movies, screens, screenings, customers, bookings, tickets, employees, sessions
+        return movies, screens, screenings, customers, bookings, tickets, employees, sessions,payments
 
 #=-=-=-=-=-=-=-=-=-=-=-=MOVIES-=-=--=-=-=-=-=-=-=-=-=-=-=
     """
@@ -220,7 +202,7 @@ class Database:
 
 
     def update_movie(self, id, data):
-        self.cur.execute("UPDATE movies SET name=?, blurb=?, certificate=?, director=?, leadactors=?, release_date=?, omdbid=?, runtime=?, youtube_key=?, genres=?, WHERE id=?",(*data, id))
+        self.cur.execute("UPDATE movies SET name=?, blurb=?, certificate=?, director=?, writers=?, leadactors=?, release_date=?, omdbid=?, poster_path=?, runtime=?, youtube_key=?, genres=? WHERE id=?",(*data, id))
 
         self.conn.commit()
 
@@ -487,7 +469,7 @@ class Database:
         seats = self.cur.fetchone()[0]
         seatmap = self.update_seatmap(self.get_seatmap_from_blob(seatmap), seats.split(","), screening_id,'-')
         self.cur.execute("DELETE FROM bookings WHERE id=?",(id,))
-        remove_ticket(self, id)
+        self.remove_ticket(id)
 
         self.conn.commit()
 
@@ -503,7 +485,12 @@ class Database:
             self.update_seatmap(self.get_seatmap_from_blob(seatmap), seats.split(","), screening_id, '-')
             self.update_seatmap(self.get_seatmap_from_blob(seatmap), data[-1].split(","), screening_id, '+')
 
-        self.cur.execute("UPDATE bookings SET screening_id=?, customer_id=?, seats=? WHERE id=?",(*data, id))
+        if data[1] == 'NULL':
+            self.cur.execute("UPDATE bookings SET screening_id=?,  seats=?  WHERE id=?",(data[0],data[2], id))
+
+
+        else:
+            self.cur.execute("UPDATE bookings SET screening_id=?, customer_id=?, seats=?,  WHERE id=?",(*data, id))
 
         self.conn.commit()
 
@@ -910,116 +897,30 @@ class Database:
         #self.conn.commit()
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-"""
-#=-=-=-=-=-=-=-=-=-=ANALYTICS-=-=-=-=-=-=-=-=-=-=-=-=
-
-
-    def add_daily_analytics(self, movie_id, movie_name, date, income = 0.0, num_tickets = 0):
-        self.cur.execute("INSERT INTO daily_analytics VALUES (NULL, ?,?,?,?,?)",(movie_id, movie_name, date, income, num_tickets))
-        self.conn.commit()
-
-    def add_overall_analytics(self, movie_id, movie_name, income = 0.0, num_tickets = 0):
-        self.cur.execute("INSERT INTO overall_analytics VALUES (NULL, ?,?,?,?)",(movie_id, movie_name, income, num_tickets))
-        self.conn.commit()
-
-
-    def update_movie_daily_income(self, movie_name, date, price):
-        self.cur.execute("SELECT id FROM movies name=?",(movie_name,))
-        movie_id = self.cur.fetchone()
-
-        self.cur.execute("SELECT income FROM daily_analytics WHERE movie_name=? AND date=?",(movie_name,date,))
-        income = self.cur.fetchone()
-
-        income += price
-
-        self.cur.execute("UPDATE daily_analytics SET income=? WHERE movie_name=? AND date=?",(income, movie_name, date,))
-        
-        self.conn.commit()
-
-    def update_movie_overall_income(self, movie_name, price):
-        self.cur.execute("SELECT id FROM movies name=?",(movie_name,))
-        movie_id = self.cur.fetchone()
-
-        self.cur.execute("SELECT income FROM overall_analytics WHERE movie_name=?",(movie_name,))
-        income = self.cur.fetchone()
-
-        income += price
-
-        self.cur.execute("UPDATE daily_analytics SET income=? WHERE movie_name=? AND date=?",(income, movie_name, date,))
-        
-        self.conn.commit()
-
-    # def cinema_weekly_income(self, week_start, week_end):
-    #     #self.cur.execute("SELECT income FROM daily_analytics WHERE date >=? AND date <=?",(week_start,week_end,))
-    #     #rev_tuple = self.cur.fetchall()
-    #     rev_tuple = (10,20,50,20)
-    #     weekly_income = sum(list(rev_tuple))    
-
-    #     #print(weekly_income)
-    #     return weekly_income
-
-    # def cinema_overall_income(self):
-    #     #self.cur.execute("SELECT income FROM overall_analytics")
-    #     #rev_tuple = self.cur.fetchall()
-    #     rev_tuple = (10,20,50,20,60,10,20,10,50)
-    #     overall_income = sum(list(rev_tuple))
-
-    #     print(overall_income)
-    #     #return overall_income
-
-
-    # def movie_weekly_income(self, movie_id, week_start, week_end):
-    #     #self.cur.execute("SELECT income FROM daily_analytics WHERE movie_id=? AND date >=? AND date <=?",(movie_id,week_start,week_end,))
-    #     #rev_tuple = self.cur.fetchall()
-    #     rev_tuple = (10,20,50,20)
-    #     weekly_income = sum(list(rev_tuple))    
-
-    #     #print(weekly_income)
-    #     return weekly_income
-
-    # def movie_overall_income(self, movie_id):
-    #     self.cur.execute("SELECT date,income FROM overall_analytics WHERE movie_id=?",(movie_id,))
-    #     rev_tuple = self.cur.fetchone()
-    #     #rev_tuple = (10,20,50,20,60,10,20,10,50)
-    #     print(rev_tuple)
-    #     #overall_income = sum(list(rev_tuple))
-
-    #    # print(overall_income)
-    #     #return overall_income
-    
-    def quick_get_overall_incomes(self, id):
-        data = self.fetch()[9]
-        for d in data:
-            if d[0] == id:
-                return d
-
-#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=
-"""
-
 #=-=-=-=-=-=-=-=-=-=PAYMENTS-=-=-=-=-=-=-=-=-=-=
-    
-def add_payment(self, payment_date, customer_id, holder_name, postcode, card_number, expiration_date):
-    _card_number = generate_password_hash(card_number)
-    self.cur.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?)",
-                        (customer_id, holder_name, postcode, _card_number, expiration_date))
-    self.conn.commit()
 
-def remove_payment(self, payment_date, id=-1, customer_id=-1, holder_name="No name",):
+    def add_payment(self, customer_id, holder_name, postcode, card_number, expiration_date):
+        _card_number = generate_password_hash(card_number)
+        self.cur.execute("INSERT INTO payments VALUES (NULL, ?,?,?,?,?)",
+                            (customer_id, holder_name, postcode, _card_number, expiration_date))
+        self.conn.commit()
 
-    if(id == -1):
+    def remove_payment(self, id=-1, customer_id=-1, holder_name="No name",):
 
-        #Remove a specific using the customer's id and the payment date
-        if(customer_id != -1):
-            self.cur.execute("DELETE FROM payments WHERE customer_id=? AND payment_date=?", (customer_id, payment_date,))
+        if(id == -1):
 
-        #Remove a specific using the card holders name and the payment date
-        elif(customer_id == -1 and holder_name !="No name"):
-            self.cur.execute("DELETE FROM payments WHERE forename=? holder_name=? AND payment_date=?", (holder_name,payment_date,))
+            #Remove a specific using the customer's id and the payment date
+            if(customer_id != -1):
+                self.cur.execute("DELETE FROM payments WHERE customer_id=? AND payment_date=?", (customer_id, payment_date,))
 
-    else:
-        self.cur.execute("DELETE FROM payments WHERE id=?", (id,))
+            #Remove a specific using the card holders name and the payment date
+            elif(customer_id == -1 and holder_name !="No name"):
+                self.cur.execute("DELETE FROM payments WHERE forename=? holder_name=? AND payment_date=?", (holder_name,payment_date,))
 
-    self.conn.commit()
+        else:
+            self.cur.execute("DELETE FROM payments WHERE id=?", (id,))
+
+        self.conn.commit()
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 

@@ -1,5 +1,5 @@
 import unittest #testing framework
-from app.db import Database #our database class (MODULAR PROGRAMMING ;))
+from db import Database #our database class 
 import sqlite3
 import os #for path stuff
 import selenium
@@ -7,6 +7,8 @@ import urllib.request #for testing server
 from werkzeug.security import generate_password_hash, check_password_hash
 import numpy as np
 import pickle
+from datetime import datetime, timedelta
+
 
 def stepUp():
     return Database ('test.db'), sqlite3.connect('test.db')
@@ -15,6 +17,8 @@ def stepDown(db):
     del db
     _dir = os.path.abspath(os.path.join(__file__, os.pardir))
     _dir = os.path.abspath(os.path.join(_dir, os.pardir))
+    _dir = os.path.abspath(os.path.join(_dir, os.pardir))
+    # print(_dir + '/test.db')
     if os.path.isfile(_dir+'/test.db'):
         os.remove(_dir+'/test.db')
 
@@ -38,30 +42,40 @@ class TestDataBase(unittest.TestCase):
         #The assertions compare the expected fields against those received by the query executed.
 
         cursor = conn.execute('SELECT * FROM movies')
-        self.assertEqual(['id','name','blurb','certificate','director','leadactors'], [cursor.description[0][0], cursor.description[1][0],cursor.description[2][0],cursor.description[3][0]
-        ,cursor.description[4][0],cursor.description[5][0]])
+        self.assertEqual(['id','name','blurb','certificate','director','writers','leadactors','release_date', 'omdbid', 'poster_path', 'runtime', 'youtube_key', 'genres'], [cursor.description[0][0], cursor.description[1][0],cursor.description[2][0],cursor.description[3][0]
+        ,cursor.description[4][0],cursor.description[5][0], cursor.description[6][0], cursor.description[7][0], cursor.description[8][0], cursor.description[9][0],
+        cursor.description[10][0], cursor.description[11][0], cursor.description[12][0]])
 
         cursor = conn.execute('SELECT * FROM screens')
         self.assertEqual(['id','capacity','seatmap'],[cursor.description[0][0],cursor.description[1][0],cursor.description[2][0]])
         
         cursor = conn.execute('SELECT * FROM screenings')
-        self.assertEqual(['id','date','time','screenid','movieid','seatmap','supervisor','upper_section','middle_section', 'lower_section'], [cursor.description[0][0],cursor.description[1][0],cursor.description[2][0],cursor.description[3][0],cursor.description[4][0],
-        cursor.description[5][0],cursor.description[6][0],cursor.description[7][0],cursor.description[8][0], cursor.description[9][0] ])
-
+        self.assertEqual(['id','date','time','screen_id','movie_id','seatmap'], [cursor.description[0][0],cursor.description[1][0],cursor.description[2][0],cursor.description[3][0],cursor.description[4][0],
+        cursor.description[5][0]])
         cursor = conn.execute('SELECT * FROM customers')
         self.assertEqual(['id', 'forename', 'surname', 'email', 'phonenumber', 'hash', 'dob'], [cursor.description[0][0],cursor.description[1][0],cursor.description[2][0],cursor.description[3][0],cursor.description[4][0],
         cursor.description[5][0],cursor.description[6][0]])
 
         cursor = conn.execute("SELECT * FROM bookings")
-        self.assertEqual(['id','screeningid','customerid','seats'],[cursor.description[0][0],cursor.description[1][0],cursor.description[2][0],cursor.description[3][0]] )
+        self.assertEqual(['id','screening_id','customer_id','seats'],[cursor.description[0][0],cursor.description[1][0],cursor.description[2][0],cursor.description[3][0]] )
 
         cursor = conn.execute("SELECT * FROM employees")
         self.assertEqual(['id', 'forename', 'surname', 'email', 'phonenumber', 'hash', 'isManager'], [cursor.description[0][0],cursor.description[1][0],cursor.description[2][0],cursor.description[3][0],cursor.description[4][0],
         cursor.description[5][0],cursor.description[6][0]])
 
+        cursor = conn.execute("SELECT * FROM tickets")
+        self.assertEqual(['id', 'booking_id', 'movie_id', 'customer_id', 'price', 'forename', 'surname', 'email', 'qr', 'num_VIPs', 'num_children', 'num_elders', 'num_normal', 'date', 'path'],
+        [cursor.description[0][0], cursor.description[1][0],cursor.description[2][0],cursor.description[3][0]
+        ,cursor.description[4][0],cursor.description[5][0], cursor.description[6][0], cursor.description[7][0], cursor.description[8][0], cursor.description[9][0],
+        cursor.description[10][0], cursor.description[11][0], cursor.description[12][0], cursor.description[13][0], cursor.description[14][0]])
 
-        stepDown(db)
+        cursor = conn.execute("SELECT * FROM sessions")
+        self.assertEqual(['id','ip','time_connected','account_type','customer_id','employee_id','manager_id'],[cursor.description[0][0],cursor.description[1][0],cursor.description[2][0],cursor.description[3][0],cursor.description[4][0],
+        cursor.description[5][0],cursor.description[6][0]])
 
+        cursor = conn.execute("SELECT * FROM payments")
+        self.assertEqual(['id', 'customer_id','holder_name','postcode','card_number','expiration_date'], [cursor.description[0][0],cursor.description[1][0],cursor.description[2][0],cursor.description[3][0],cursor.description[4][0],
+        cursor.description[5][0]])
 
     #Test that the correct output is produced when 'fetching' an empty database.
     def testFetchEmpty(self):
@@ -73,7 +87,7 @@ class TestDataBase(unittest.TestCase):
         rows = testDataBase.fetch()
 
         #Asserts that the sum of the lengths of the rows fetched is 0 (False)
-        self.assertFalse(len(rows[0]) + len(rows[1]) + len(rows[2]) + len(rows[3]) + len(rows[4])+len(rows[5]))
+        self.assertFalse(len(rows[0]) + len(rows[1]) + len(rows[2]) + len(rows[3]) + len(rows[4])+len(rows[5])+len(rows[6]) + len(rows[7]) + len(rows[8]))
 
         stepDown(testDataBase)
 
@@ -82,14 +96,14 @@ class TestDataBase(unittest.TestCase):
         testDataBase,conn = stepUp()
 
         #Add an entry for testing.
-        testDataBase.add_movie('On the Waterfront', 'A movie about an ex-prizefighter, on the waterfront.', '16', 'Elia Kazan', 'Marlon Brando', '22-06-1954')
+        testDataBase.add_movie('On the Waterfront', 'A movie about an ex-prizefighter, on the waterfront.', '16', 'Elia Kazan', 'Tennessee Williams', 'Marlon Brando', '22-06-1954',1, 'path','136','key','drama')
 
         #Manually connect to the database.
        
         cursor = conn.execute('SELECT * FROM movies')
 
         #Asserts that the rows of the 'movies' table only contains our test entry, and that it does indeed contain this entry correctly.
-        self.assertEqual(cursor.fetchall(), [(1,'On the Waterfront', 'A movie about an ex-prizefighter, on the waterfront.', '16', 'Elia Kazan', 'Marlon Brando','22-06-1954')])
+        self.assertEqual(cursor.fetchall(), [(1,'On the Waterfront', 'A movie about an ex-prizefighter, on the waterfront.', '16', 'Elia Kazan', 'Tennessee Williams', 'Marlon Brando', '22-06-1954',1, 'path','136','key','drama')])
 
         stepDown(testDataBase)
 
@@ -98,19 +112,18 @@ class TestDataBase(unittest.TestCase):
     def testUpdateMovie(self):
         testDataBase,conn = stepUp()
 
-        conn.cursor().execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?)",('On the Waterfront', 'A movie about an ex-prizefighter, on the waterfront.',
-        '16', 'Elia Kazan', 'Marlon Brando', '22-06-1954'))
+        conn.cursor().execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?,?,?,?,?,?,?)",('On the Waterfront', 'A movie about an ex-prizefighter, on the waterfront.', '16', 'Elia Kazan', 'Tennessee Williams', 'Marlon Brando', '22-06-1954',1, 'path','136','key','drama'))
         conn.commit()
         conn.close()
         #Update our test movie.
-        testDataBase.update_movie(1, ('On the Waterfront', 'A movie about an ex-prizefighter.', '16', 'Elia Kazan', 'Marlon Brando, Vivien Leigh', '22-06-1954'))
+        testDataBase.update_movie(1, ('On the Waterfront', 'A movie about an ex-prizefighter.', '16', 'Elia Kazan','Tennessee Williams', 'Marlon Brando, Vivien Leigh', '22-06-1954',1, 'path','136','key','drama'))
         
         #Manually connect to the database.
         conn = sqlite3.connect('test.db')
         cursor = conn.execute('SELECT * FROM movies')
 
         #Asserts that the rows of the 'movies' table only contains our test entry, and that it has been correctly updated.
-        self.assertEqual(cursor.fetchall(), [(1,'On the Waterfront', 'A movie about an ex-prizefighter.', '16', 'Elia Kazan', 'Marlon Brando, Vivien Leigh', '22-06-1954')])
+        self.assertEqual(cursor.fetchall(), [(1,'On the Waterfront', 'A movie about an ex-prizefighter.', '16', 'Elia Kazan','Tennessee Williams', 'Marlon Brando, Vivien Leigh', '22-06-1954',1, 'path','136','key','drama')])
 
         stepDown(testDataBase)
 
@@ -172,7 +185,7 @@ class TestDataBase(unittest.TestCase):
     def testRemoveMovie(self):
         testDataBase,conn = stepUp()
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?)",("On the Waterfront", "A movie about an ex-prizefighter, on the waterfront.", "16", "Elia Kazan", "Marlon Brando", "22-06-1954"))
+        conn.cursor().execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?,?,?,?,?,?,?)",('On the Waterfront', 'A movie about an ex-prizefighter, on the waterfront.', '16', 'Elia Kazan', 'Tennessee Williams', 'Marlon Brando', '22-06-1954',1, 'path','136','key','drama'))
         conn.commit()
         #Store the previous number of rows in the 'movies' table.
         cursor.execute("SELECT * FROM movies")
@@ -188,7 +201,7 @@ class TestDataBase(unittest.TestCase):
         #Assert that the number of rows has decremented.
         self.assertEqual(prev_len-1, new_len)
         #Assert that our original entry is NOT in the 'movies' table.
-        self.assertTrue((1,'On the Waterfront', 'A movie about an ex-prizefighter, on the waterfront.', '16', 'Elia Kazan', 'Marlon Brando', '02-02-2002') not in conn.cursor().fetchall())
+        self.assertTrue((1,'On the Waterfront', 'A movie about an ex-prizefighter, on the waterfront.', '16', 'Elia Kazan', 'Tennessee Williams', 'Marlon Brando', '22-06-1954',1, 'path','136','key','drama') not in conn.cursor().fetchall())
 
         stepDown(testDataBase)
 
@@ -314,7 +327,7 @@ class TestDataBase(unittest.TestCase):
         cursor = conn.cursor()
 
         #Insert test screening
-        cursor.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?)",("On the Waterfront", "A movie about an ex-prizefighter, on the waterfront.", "16", "Elia Kazan", "Marlon Brando", "22-06-1954"))
+        cursor.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?,?,?,?,?,?,?)",('On the Waterfront', 'A movie about an ex-prizefighter, on the waterfront.', '16', 'Elia Kazan', 'Tennessee Williams', 'Marlon Brando', '22-06-1954',1, 'path','136','key','drama'))
         seatmapA = np.zeros((5,5), dtype=int)
         n = int(len(seatmapA)/2)
 
@@ -332,12 +345,12 @@ class TestDataBase(unittest.TestCase):
         cursor.execute("INSERT INTO employees VALUES (NULL, ?,?,?,?,?,?)", ("staff1_fn", "staff1_sn", "staff1@email.com", "07495508368", "staff1_password", True))
         conn.commit()
         conn.close()
-        testDataBase.add_screening('01-03-2020','18:00', 1, 1,1,1,1,1)
+        testDataBase.add_screening('01-03-2020','18:00',1 ,1)
         #Manually connect to the database.
         conn = sqlite3.connect('test.db')
         cursor = conn.execute('SELECT * FROM screenings')
         #Asserts that the rows of the 'screenings' table only contains our test entry, and that it does indeed contain this entry correctly.
-        self.assertEqual(cursor.fetchall(), [(1, '01-03-2020', '18:00', 1, 1, seatmapA.dumps(),1,1,1,1)])
+        self.assertEqual(cursor.fetchall(), [(1, '01-03-2020', '18:00', 1, 1, seatmapA.dumps())])
 
         stepDown(testDataBase)
 
@@ -349,7 +362,7 @@ class TestDataBase(unittest.TestCase):
         cursor = conn.cursor()
 
         #Insert test screening
-        cursor.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?)",("On the Waterfront", "A movie about an ex-prizefighter, on the waterfront.", "16", "Elia Kazan", "Marlon Brando", "22-06-1954"))
+        cursor.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?,?,?,?,?,?,?)",('On the Waterfront', 'A movie about an ex-prizefighter, on the waterfront.', '16', 'Elia Kazan', 'Tennessee Williams', 'Marlon Brando', '22-06-1954',1, 'path','136','key','drama'))
         seatmapA = np.zeros((5,5), dtype=int)
         n = int(len(seatmapA)/2)
 
@@ -365,15 +378,15 @@ class TestDataBase(unittest.TestCase):
         cursor = conn.cursor()
         cursor.execute("INSERT INTO screens VALUES (NULL, ?, ?)", (25, seatmapA.dumps()))
         cursor.execute("INSERT INTO employees VALUES (NULL, ?,?,?,?,?,?)", ("staff1_fn", "staff1_sn", "staff1@email.com", "07495508368", "staff1_password", True))
-        cursor.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?,?,?,?,?,?) ", ('01-03-2020','18:00', 1, 1, seatmapA.dumps(), 1,1,1,1))
+        cursor.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?,?) ", ('01-03-2020','18:00', 1, 1, seatmapA.dumps()))
         conn.commit()
         conn.close()
-        testDataBase.update_screening(1, ('02-03-2020', '19:00', 1, 1, seatmapA.dumps(),1,1,1,1))
+        testDataBase.update_screening(1, ('02-03-2020', '19:00', 1, 1, seatmapA.dumps()))
         conn = sqlite3.connect('test.db')
         cursor = conn.execute('SELECT * FROM screenings')
 
         #Asserts that the rows of the 'screenings' table only contains our test entry, and that it has been correctly updated.
-        self.assertEqual(cursor.fetchall(), [(1, '02-03-2020', '19:00', 1, 1, seatmapA.dumps(), 1,1,1,1)])
+        self.assertEqual(cursor.fetchall(), [(1, '02-03-2020', '19:00', 1, 1, seatmapA.dumps())])
 
     #Test that a screening is correctly removed.
     def testRemoveScreening(self):
@@ -382,7 +395,7 @@ class TestDataBase(unittest.TestCase):
         cursor = conn.cursor()
 
         #Insert test screening
-        cursor.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?)",("On the Waterfront", "A movie about an ex-prizefighter, on the waterfront.", "16", "Elia Kazan", "Marlon Brando", "22-06-1954"))
+        cursor.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?,?,?,?,?,?,?)",('On the Waterfront', 'A movie about an ex-prizefighter, on the waterfront.', '16', 'Elia Kazan', 'Tennessee Williams', 'Marlon Brando', '22-06-1954',1, 'path','136','key','drama'))
         seatmapA = np.zeros((5,5), dtype=int)
         n = int(len(seatmapA)/2)
 
@@ -398,7 +411,7 @@ class TestDataBase(unittest.TestCase):
         cursor = conn.cursor()
         cursor.execute("INSERT INTO screens VALUES (NULL, ?, ?)", (25, seatmapA.dumps()))
         cursor.execute("INSERT INTO employees VALUES (NULL, ?,?,?,?,?,?)", ("staff1_fn", "staff1_sn", "staff1@email.com", "07495508368", "staff1_password", True))
-        cursor.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?,?,?,?,?,?) ", ('01-03-2020','18:00', 1, 1, seatmapA.dumps(), 1,1,1,1))
+        cursor.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?,?) ", ('01-03-2020','18:00', 1, 1, seatmapA.dumps()))
         cursor.execute("SELECT * FROM screenings")
         prev_len = len(cursor.fetchall())
         conn.commit()
@@ -413,7 +426,7 @@ class TestDataBase(unittest.TestCase):
         self.assertEqual(prev_len-1,new_len)
 
         #Assert that our original entry is NOT in the 'screenings' table
-        self.assertTrue((1,'01-03-2020', '18:00', 1, 1, seatmapA.dumps(), 1, 1, 1, 1) not in cursor.fetchall())
+        self.assertTrue((1,'01-03-2020', '18:00', 1, 1, seatmapA.dumps()) not in cursor.fetchall())
 
 
         stepDown(testDataBase)
@@ -556,7 +569,7 @@ class TestDataBase(unittest.TestCase):
     def testInsertBooking(self):
         testDataBase, conn = stepUp()
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?)",("On the Waterfront", "A movie about an ex-prizefighter, on the waterfront.", "16", "Elia Kazan", "Marlon Brando", "22-06-1954"))
+        cursor.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?,?,?,?,?,?,?)",('On the Waterfront', 'A movie about an ex-prizefighter, on the waterfront.', '16', 'Elia Kazan', 'Tennessee Williams', 'Marlon Brando', '22-06-1954',1, 'path','136','key','drama'))
         seatmapA = np.zeros((5,5), dtype=int)
         n = int(len(seatmapA)/2)
 
@@ -571,21 +584,20 @@ class TestDataBase(unittest.TestCase):
                 seatmapA[n][i]=2
         cursor.execute("INSERT INTO screens VALUES (NULL, ?, ?)", (25, seatmapA.dumps()))
         cursor.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?)", ("customer1_fn", "customer1_sn", "customer1@email.com", "07495508368", generate_password_hash("pwd"), '13-07-2001'))
-        cursor.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?,?,?,?,?,?) ", ('01-03-2020','18:00', 1, 1, seatmapA.dumps(), 1,1,1,1))
+        cursor.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?,?) ", ('01-03-2020','18:00', 1, 1, seatmapA.dumps()))
         conn.commit()
         conn.close()        
         
         #Insert a test booking.
 
-        testDataBase.add_booking(1,1, 'A1,A2,A3')
+        testDataBase.add_booking(1,'NULL', 'A1,A2,A3')
         
         #Manually connect to the database.
         conn = sqlite3.connect('test.db')
         cursor = conn.cursor()
         cursor.execute('SELECT * FROM bookings')
-
         #Asserts that the rows of the 'bookings' table only contains our test entry, and that it does indeed contain this entry correctly.
-        self.assertEqual(cursor.fetchall(), [(1,1,1,'A1,A2,A3')])
+        self.assertEqual(cursor.fetchall(), [(1,1,None,'A1,A2,A3')])
 
         cursor.execute("SELECT seatmap FROM screenings WHERE id=?",(1,))
         seatmapB = cursor.fetchone()[0]
@@ -611,7 +623,7 @@ class TestDataBase(unittest.TestCase):
     def testUpdateBooking(self):
         testDataBase, conn = stepUp()
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?)",("On the Waterfront", "A movie about an ex-prizefighter, on the waterfront.", "16", "Elia Kazan", "Marlon Brando", "22-06-1954"))
+        cursor.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?,?,?,?,?,?,?)",('On the Waterfront', 'A movie about an ex-prizefighter, on the waterfront.', '16', 'Elia Kazan', 'Tennessee Williams', 'Marlon Brando', '22-06-1954',1, 'path','136','key','drama'))
         seatmapA = np.zeros((5,5), dtype=int)
         n = int(len(seatmapA)/2)
 
@@ -626,12 +638,12 @@ class TestDataBase(unittest.TestCase):
                 seatmapA[n][i]=2
         cursor.execute("INSERT INTO screens VALUES (NULL, ?, ?)", (25, seatmapA.dumps()))
         cursor.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?)", ("customer1_fn", "customer1_sn", "customer1@email.com", "07495508368", generate_password_hash("pwd"), '13-07-2001'))
-        cursor.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?,?,?,?,?,?) ", ('01-03-2020','18:00', 1, 1, seatmapA.dumps(), 1,1,1,1))
-        cursor.execute("INSERT INTO bookings VALUES (NULL,?,?,?)",(1,1, 'A1,A2,A3'))
+        cursor.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?,?) ", ('01-03-2020','18:00', 1, 1, seatmapA.dumps()))
+        cursor.execute("INSERT INTO bookings VALUES (NULL,?,?,?)",(1,'NULL', 'A1,A2,A3'))
         conn.commit()
         conn.close()
 
-        testDataBase.update_booking(1, (1,1,"B1,B2,B3"))
+        testDataBase.update_booking(1, (1,'NULL',"B1,B2,B3"))
 
         conn = sqlite3.connect('test.db')
         cursor = conn.cursor()
@@ -656,7 +668,7 @@ class TestDataBase(unittest.TestCase):
                 else :
                     self.assertTrue(seatmapB[i][j] in [0,-1, 2])
         
-        self.assertEqual(data, [(1,1,1, 'B1,B2,B3')])
+        self.assertEqual(data, [(1,1,'NULL', 'B1,B2,B3')])
 
         stepDown(testDataBase)
 
@@ -667,7 +679,7 @@ class TestDataBase(unittest.TestCase):
     def testRemoveBooking(self):
         testDataBase, conn = stepUp()
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?)",("On the Waterfront", "A movie about an ex-prizefighter, on the waterfront.", "16", "Elia Kazan", "Marlon Brando", "22-06-1954"))
+        cursor.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?,?,?,?,?,?,?)",('On the Waterfront', 'A movie about an ex-prizefighter, on the waterfront.', '16', 'Elia Kazan', 'Tennessee Williams', 'Marlon Brando', '22-06-1954',1, 'path','136','key','drama'))
         seatmapA = np.zeros((5,5), dtype=int)
         n = int(len(seatmapA)/2)
 
@@ -682,8 +694,8 @@ class TestDataBase(unittest.TestCase):
                 seatmapA[n][i]=2
         cursor.execute("INSERT INTO screens VALUES (NULL, ?, ?)", (25, seatmapA.dumps()))
         cursor.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?)", ("customer1_fn", "customer1_sn", "customer1@email.com", "07495508368", generate_password_hash("pwd"), '13-07-2001'))
-        cursor.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?,?,?,?,?,?) ", ('01-03-2020','18:00', 1, 1, seatmapA.dumps(), 1,1,1,1))
-        cursor.execute("INSERT INTO bookings VALUES (NULL,?,?,?)",(1,1, 'A1,A2,A3'))
+        cursor.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?,?) ", ('01-03-2020','18:00', 1, 1, seatmapA.dumps()))
+        cursor.execute("INSERT INTO bookings VALUES (NULL,?,?,?)",(1,'NULL', 'A1,A2,A3'))
         conn.commit()
         cursor.execute("SELECT * FROM bookings")
         prev_len = len(cursor.fetchall())
@@ -705,91 +717,111 @@ class TestDataBase(unittest.TestCase):
         for i in range(len(seatmapB)):
             for j in range(len(seatmapB[i])):
                 self.assertEqual(seatmapB[i][j], seatmapA[i][j])
-        self.assertTrue((1,1,1, 'A1,A2,A3') not in fetch)
+        self.assertTrue((1,'NULL',1, 'A1,A2,A3') not in fetch)
         self.assertEqual(prev_len-1, new_len)
         stepDown(testDataBase)
 
 
+    def testInsertTicket(self):
+        testDataBase, conn = stepUp()
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?,?,?,?,?,?,?)",('On the Waterfront', 'A movie about an ex-prizefighter, on the waterfront.', '16', 'Elia Kazan', 'Tennessee Williams', 'Marlon Brando', '22-06-1954',1, 'path','136','key','drama'))
+        seatmapA = np.zeros((5,5), dtype=int)
+        n = int(len(seatmapA)/2)
 
-class TestMainPage(unittest.TestCase):
+        for i in range(len(seatmapA[n])):
 
+            #Empty space
+            if(i==0 or i==1 or i==(len(seatmapA[n])-2) or i==(len(seatmapA[n])-1)):
+                seatmapA[n][i]=-1
+            
+            #VIP seats
+            else:
+                seatmapA[n][i]=2
+        cursor.execute("INSERT INTO screens VALUES (NULL, ?, ?)", (25, seatmapA.dumps()))
+        cursor.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?)", ("customer1_fn", "customer1_sn", "customer1@email.com", "07495508368", generate_password_hash("pwd"), '13-07-2001'))
+        cursor.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?,?) ", ('01-03-2020','18:00', 1, 1, seatmapA.dumps()))
+        cursor.execute("INSERT INTO bookings VALUES (NULL,?,?,?)",(1,'NULL', 'A1,A2,A3'))
+        conn.commit()
+        testDataBase.add_ticket(1, 1, '10.0','Jared','Swift','jaredswift@hotmail.co.uk', 'B1M1JS','qr')
+        cursor.execute("SELECT * FROM tickets")
+        data = cursor.fetchall()
+        self.assertEqual(data, [(1,1,1,-1, 10.0,'Jared','Swift','jaredswift@hotmail.co.uk' ,'qr', 0, 0, 0, 0,str(datetime.today().strftime("%d-%m-%Y")), 'B1M1JS')])
+        stepDown(testDataBase)
 
-    def testSearchQuery(self):
-        pass
+    def testRemoveTicket(self):
+        testDataBase, conn = stepUp()
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?,?,?,?,?,?,?)",('On the Waterfront', 'A movie about an ex-prizefighter, on the waterfront.', '16', 'Elia Kazan', 'Tennessee Williams', 'Marlon Brando', '22-06-1954',1, 'path','136','key','drama'))
+        seatmapA = np.zeros((5,5), dtype=int)
+        n = int(len(seatmapA)/2)
 
-    def testClickWhatsNew(self):
-        pass
+        for i in range(len(seatmapA[n])):
 
-    def testClickTickets(self):
-        pass
-
-    def testClickScreens(self):
-        pass
-
-    def testClickInfo(self):
-        pass
-
-    def testClickAccount(self):
-        pass
-
-    def testClickLogin(self):
-        pass
-
-    def testClickSignup(self):
-        pass
-
-
-class TestLoginPage(unittest.TestCase):
-    
-    def testCorrectLogin(self):
-        pass
-
-    def testIncorrectLogin(self):
-        pass
-
-    def testNonExistingUser(self):
-        pass
-
-    def testLockAccount(self):
-        pass
-
-    def testEmptyFields(self):
-        pass
-
-class TestRegisterPage(unittest.TestCase):
-
-    def testEmptyFields(self):
-        pass
-
-    def testAlphaFirstname(self):
-        pass
-
-    def testAlphaSurname(self):
-        pass
-
-    def testNumericPhone(self):
-        pass
-
-    def testPhoneLength(self):
-        pass
-
-    def testValidEmail(self):
-        pass
-
-    def testPasswordLength(self):
-        pass
-    def testValidDoB(self):
-        pass
-
-    def testRegisterValid(self):
-        pass
-
-    def testRegisterInvalid(self):
-        pass
+            #Empty space
+            if(i==0 or i==1 or i==(len(seatmapA[n])-2) or i==(len(seatmapA[n])-1)):
+                seatmapA[n][i]=-1
+            
+            #VIP seats
+            else:
+                seatmapA[n][i]=2
+        cursor.execute("INSERT INTO screens VALUES (NULL, ?, ?)", (25, seatmapA.dumps()))
+        cursor.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?)", ("customer1_fn", "customer1_sn", "customer1@email.com", "07495508368", generate_password_hash("pwd"), '13-07-2001'))
+        cursor.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?,?) ", ('01-03-2020','18:00', 1, 1, seatmapA.dumps()))
+        cursor.execute("INSERT INTO bookings VALUES (NULL,?,?,?)",(1,'NULL', 'A1,A2,A3'))
+        cursor.execute("INSERT INTO tickets VALUES (NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", (1,1,-1, 10.0,'Jared','Swift','jaredswift@hotmail.co.uk' ,'qr', 0, 0, 0, 0,str(datetime.today().strftime("%d-%m-%Y")), 'B1M1JS'))
+        conn.commit()
+        cursor.execute("SELECT * FROM tickets")
+        prev_len = len(cursor.fetchall())
+        data = cursor.fetchall()
+        conn.close()
+        testDataBase.remove_ticket(1)
+        conn = sqlite3.connect('test.db')
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM tickets")
+        fetch = cursor.fetchall()
+        new_len = len(fetch)
+        self.assertTrue((1,1,1,-1, 10.0,'Jared','Swift','jaredswift@hotmail.co.uk' ,'qr', 0, 0, 0, 0,str(datetime.today().strftime("%d-%m-%Y")), 'B1M1JS') not in fetch)
+        self.assertEqual(prev_len-1, new_len)
+        stepDown(testDataBase)
 
 
+    def testInsertPayment(self):
+        testDataBase, conn = stepUp()
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?)", ("customer1_fn", "customer1_sn", "customer1@email.com", "07495508368", generate_password_hash("pwd"), '13-07-2001'))
+        conn.commit()
+        testDataBase.add_payment(1, 'Jared Swift', 'LS61JY', '4242424242424242', '07/21')
+        conn = sqlite3.connect('test.db')
+        cursor = conn.execute('SELECT * FROM payments')    
+        fetch = cursor.fetchall()
+        hash = fetch[0][4]
+        fetch = [tuple(list(f)[:4] + list(f)[5:]) for f in fetch]
+        #Asserts that the rows of the 'customers' table only contains our test entry, and that it does indeed contain this entry correctly.
+        self.assertEqual(fetch, [(1,1, 'Jared Swift', 'LS61JY', '07/21')])
+        self.assertTrue(check_password_hash(hash, '4242424242424242'))
+        stepDown(testDataBase)
 
-
+    def testRemovePayment(self):
+        testDataBase, conn = stepUp()
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?)", ("customer1_fn", "customer1_sn", "customer1@email.com", "07495508368", generate_password_hash("pwd"), '13-07-2001'))
+        cursor.execute("INSERT INTO payments VALUES (NULL, ?, ?, ?, ?, ?)",(1, 'Jared Swift', 'LS61JY', generate_password_hash('4242424242424242'), '07/21'))
+        conn.commit()
+        cursor.execute("SELECT * FROM payments")
+        prev_len = len(cursor.fetchall())
+        
+        conn.close()
+        testDataBase.remove_payment(1)
+        conn = sqlite3.connect('test.db')
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM payments")
+        fetch = cursor.fetchall()
+        new_len = len(fetch)
+        fetch = [tuple(list(f)[:4] + list(f)[5:]) for f in fetch]
+        self.assertTrue((1, 'Jared Swift', 'LS61JY', '07/21') not in fetch)
+        self.assertEqual(prev_len-1, new_len)
+        stepDown(testDataBase)
 """
     A 'suite' is required to ensure that our unittests are NOT executed in alphabetical order (how they are by default),
     but instead, are executed according to an order that we specify.
@@ -822,45 +854,17 @@ def suite():
     suite.addTest(TestDataBase('testInsertBooking'))
     suite.addTest(TestDataBase('testUpdateBooking')) 
     suite.addTest(TestDataBase('testRemoveBooking'))
+    suite.addTest(TestDataBase('testInsertTicket'))
+    suite.addTest(TestDataBase('testRemoveTicket'))
+    suite.addTest(TestDataBase('testInsertPayment'))
+    suite.addTest(TestDataBase('testRemovePayment'))
 
-    suite.addTest(TestMainPage('testSearchQuery'))
-    suite.addTest(TestMainPage('testClickWhatsNew'))
-    suite.addTest(TestMainPage('testClickTickets'))    
-    suite.addTest(TestMainPage('testClickScreens'))    
-    suite.addTest(TestMainPage('testClickInfo'))    
-    suite.addTest(TestMainPage('testClickAccount'))    
-    suite.addTest(TestMainPage('testClickLogin'))    
-    suite.addTest(TestMainPage('testClickSignup'))
-
-    suite.addTest(TestLoginPage('testCorrectLogin'))    
-    suite.addTest(TestLoginPage('testIncorrectLogin'))  
-    suite.addTest(TestLoginPage('testNonExistingUser'))  
-    suite.addTest(TestLoginPage('testLockAccount'))  
-    suite.addTest(TestLoginPage('testEmptyFields'))  
-
-    suite.addTest(TestRegisterPage('testEmptyFields'))
-    suite.addTest(TestRegisterPage('testAlphaFirstname'))
-    suite.addTest(TestRegisterPage('testAlphaSurname'))
-    suite.addTest(TestRegisterPage('testNumericPhone'))
-    suite.addTest(TestRegisterPage('testPhoneLength'))
-    suite.addTest(TestRegisterPage('testValidEmail'))
-    suite.addTest(TestRegisterPage('testValidDoB'))
-    suite.addTest(TestRegisterPage('testRegisterValid'))
-    suite.addTest(TestRegisterPage('testRegisterInvalid'))
-
-    """
-
-
-
-    suite.addTest(TestDataBase('testFetchNonEmpty'))
-
-
-    """
     return suite
 
 if __name__ == '__main__':
     #Create a TextTestRunner 
     #failfast=False ensures that our testing suite does not terminate upon a singular test failing.    
+    stepDown(Database('test.db'))
     testRunner = unittest.TextTestRunner(failfast=True, verbosity=2)
     #Run our test suite!
     testRunner.run(suite())
