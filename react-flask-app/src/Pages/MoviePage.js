@@ -14,12 +14,14 @@ class MoviePage extends React.Component {
                       returnedData: [], 
                       movieURL: '',
                       fromMoviePage: true,
-                      isUpcoming: false
+                      isUpcoming: false,
+                      screenings: []
                     };
         //Bind our method.
         this.getMovieData = this.getMovieData.bind(this);
         this.getClientIP = this.getClientIP.bind(this);
         this.goBookTickets = this.goBookTickets.bind(this);
+        this.getScreenings = this.getScreenings.bind(this);
         //Call our method.
         this.getMovieData();
         this.getClientIP();
@@ -54,6 +56,7 @@ class MoviePage extends React.Component {
             .then(response => response.json()).then(data => {
 
                 this.setState({ returnedData: data });
+                this.setState({screenings: Object.values(data.screenings)})
                 console.log(this.state.returnedData);
                 
             });
@@ -73,8 +76,8 @@ class MoviePage extends React.Component {
         // })
 
     }
-        
 
+    
     goBookTickets = (e) => {
         if (this.props.isEmployee)
             this.props.history.push('/ebook', this.state);
@@ -83,6 +86,18 @@ class MoviePage extends React.Component {
         
     }
 
+    getScreenings = () => {
+        var screenings = this.state.screenings;
+        return (
+            <ul>
+                {screenings.map(s => {
+                    return (
+                        <li>{s.date}, {s.time}, {s.screenid}</li>
+                    );
+                })}
+            </ul>
+        );
+    }
 
     render() {
         console.log(this.state.isUpcoming);
@@ -126,7 +141,14 @@ class MoviePage extends React.Component {
                         <th>Rating: </th>
                         <td data-th="Certificate">{this.state.returnedData.certificate}</td>
                         </tr>
+                        <tr>
+                        <th>Screenings: </th>
+                        <td data-th="Screenings">{this.getScreenings()}</td>
+                        </tr>
                     </table>
+                    {/* Screenings:
+                    {this.getScreenings()} */}
+                    {/* {this.state.returnedData.screenings!==undefined ? this.getScreenings() : <></>} */}
                     <br /><br />
                     <div>
                         <br />
@@ -134,6 +156,15 @@ class MoviePage extends React.Component {
                             <iframe width="600px" height="335px" src = {"https://www.youtube.com/embed/" + this.state.returnedData.youtube_key + "/?controls=1"}>
                             </iframe>
                     </div>
+                    <br/>
+
+                    <br/>
+
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+
                     {
                         this.state.returnedData.isupcoming ?  <div class="text">
                         <button onClick={this.goBookTickets} className="tab_background" style={{position:'absolute',top:'80%',left:'1300px',width:'180px',height:'60px'}}>BOOK TICKETS</button>

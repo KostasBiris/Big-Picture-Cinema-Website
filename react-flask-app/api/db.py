@@ -324,6 +324,11 @@ class Database:
 
         self.conn.commit()
 
+    def get_movie_screenings(self, id):
+        self.cur.execute("SELECT * FROM screenings WHERE movie_id=?",(id, ))
+        return self.cur.fetchall()
+        
+
     def update_screening(self, id, data):
 
         self.cur.execute("UPDATE screenings SET date=?, time=?, screen_id=?, movie_id=?, seatmap=? WHERE id=?",(*data, id))

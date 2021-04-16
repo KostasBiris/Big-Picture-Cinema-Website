@@ -78,22 +78,31 @@ def serialize_all_movies(res):
         dic[i] =serialize_movie(res[i])
     return dic
 
-def serialize_screening(res):
+def serialize_screening(res, flag=0):
 
-    return {
-        'id':res[0],
-        'date':res[1],
-        'time':res[2],
-        'screenid': res[3],
-        'movieid': res[4],
-        'seatmap':res[5].tolist()
-    }
+    if not flag:
+        return {
+            'id':res[0],
+            'date':res[1],
+            'time':res[2],
+            'screenid': res[3],
+            'movieid': res[4],
+            'seatmap':res[5].tolist()
+        }
+    else :
+        return {
+            'id':res[0],
+            'date':res[1],
+            'time':res[2],
+            'screenid': res[3],
+            'movieid': res[4],
+        }
 
-def serialize_all_screenings(res):
+def serialize_all_screenings(res,flag=0):
     dic = {}
 
     for i in range(len(res)):
-        dic[i] = serialize_screening(res[i])
+        dic[i] = serialize_screening(res[i],flag=flag)
     print(dic)
     return dic
 
@@ -239,7 +248,11 @@ def _view_movie(name):
     db = Database('cinema.db')
     movie = db.find_movie(name)
     if not movie: pass
-    return serialize_movie(movie)
+    movs = serialize_movie(movie)
+    # print(serialize_all_screenings(db.get_movie_screenings(movs['internalid']),flag=1))
+    movs['screenings'] = serialize_all_screenings(db.get_movie_screenings(movs['internalid']),flag=1)
+    print(movs)
+    return movs
 
 @app.route('/movie/search/', methods = ['POST'])
 def list_movies():
