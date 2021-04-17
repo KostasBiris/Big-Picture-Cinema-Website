@@ -25,11 +25,11 @@ let interval;
 class CustomerHomePage extends React.Component {
     constructor(props) {
         super(props);
-        if (this.props.location.state !== undefined) {
-            if (this.props.location.state.logout === true) {
+        // if (this.props.location.state !== undefined) {
+        //     if (this.props.location.state.logout === true) {
                 
-            }
-        }
+        //     }
+        // }
 
 
         //By default the state is a blank query.
@@ -42,9 +42,9 @@ class CustomerHomePage extends React.Component {
         this.handleAccount = this.handleAccount.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
         this.getClientIP = this.getClientIP.bind(this);
-        this.assertAuth = this.assertAuth.bind(this);
-        this.stepUp = this.stepUp.bind(this);
-        this.getSomeMovies = this.getSomeMovies.bind(this);
+        // this.assertAuth = this.assertAuth.bind(this);
+        // this.stepUp = this.stepUp.bind(this);
+        // this.getSomeMovies = this.getSomeMovies.bind(this);
         this.getRandomPosters = this.getRandomPosters.bind(this);
         this.handleClick = this.handleClick.bind(this);
     }
@@ -63,38 +63,39 @@ class CustomerHomePage extends React.Component {
         })();
     }
 
-    stepUp = async (flag) => {
-        await (async () => {
-            this.setState({ IP: await publicIP.v4() })
-        })();
-        if (flag) {
-            this.assertAuth();
-        }
+    // stepUp = async (flag) => {
+    //     await (async () => {
+    //         this.setState({ IP: await publicIP.v4() })
+    //     })();
+    //     if (flag) {
+    //         this.assertAuth();
+    //     }
         
         
-    }
+    // }
 
-    isAuth = () => {
-        if (this.props.location !== undefined) {
-            if (this.props.location.state !== undefined) {
-                if (this.props.location.state.auth === true) {
-                    this.auth = true;
-                    this.props.location.state.auth = false;
-                    this.state.IP = this.props.location.state.IP;
-                    return true;
-                }
-            }
-        }
+    // isAuth = () => {
+    //     if(this.props.location)
+    //         if(this.props.location.state)
+    //             if (this.props.location.state.logged === true)
+    //                 return true;
+    //             else
+    //                 return false
+    //         else
+    //             return false;
+    //     else
+    //         return false;
+    // }
     
-        if (this.state.response === "error" || this.state.response === undefined || this.auth === false) {
+        // if (this.state.response === "error" || this.state.response === undefined || this.auth === false) {
             // console.log(this.state.response);
-            return false;
-        }
-        return true;
-    }
+            // return false;
+        // }
+        // return true;
+    // }
 
     async componentDidMount() {
-        window.addEventListener('load', this.stepUp);
+        // window.addEventListener('load', this.stepUp);
         
         const _jquery = document.createElement("script");
         _jquery.src = "https://code.jquery.com/jquery-3.2.1.slim.min.js";
@@ -122,33 +123,33 @@ class CustomerHomePage extends React.Component {
         // console.log(this.state);
 
 
-        interval = setInterval(() => {
-            if (this.IP !== null) {
-                this.assertAuth();
-            }
-        }, 5000)
+        // interval = setInterval(() => {
+        //     if (this.IP !== null) {
+        //         this.assertAuth();
+        //     }
+        // }, 5000)
 
     }
 
-    componentWillUnmount = () => {
-        window.removeEventListener('load', this.stepUp(true));
-        clearInterval(interval);
-    }
+    // componentWillUnmount = () => {
+    //     window.removeEventListener('load', this.stepUp(true));
+    //     clearInterval(interval);
+    // }
 
 
-    assertAuth = () => {
-        if (this.state.IP === null) {this.stepUp(false)}
-        var go = '/insession/' + this.state.IP;
-        fetch(go, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(response => response.json()).then(data => {
-                this.setState({ response: data.response })
-            })
-    };
+    // assertAuth = () => {
+    //     if (this.state.IP === null) {this.stepUp(false)}
+    //     var go = '/insession/' + this.state.IP;
+    //     fetch(go, {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         }
+    //     })
+    //         .then(response => response.json()).then(data => {
+    //             this.setState({ response: data.response })
+    //         })
+    // };
 
     //Method for handling a change in the search query field.
     handleSearchChange = (e) => {
@@ -255,6 +256,7 @@ class CustomerHomePage extends React.Component {
         
         let indexes = [];
         // console.log(this.state);
+        // console.log(this.props)
         function getRandomInt(max) {
             return Math.floor(Math.random() * Math.floor(max));
         }
@@ -294,8 +296,6 @@ class CustomerHomePage extends React.Component {
 
 
     render() {
-        // console.log(this.state);
-        if (this.isAuth()) {
             return (
                 <React.Fragment>
                     <head>
@@ -357,69 +357,6 @@ class CustomerHomePage extends React.Component {
                     </body>
                     </React.Fragment>
             );
-        } else {
-
-            return (
-                <React.Fragment>
-                    <head>
-                        <link rel="stylesheet" type="text/css" href={main} />
-                        <link rel="icon" href="data:;base64,iVBORw0KGgo" />
-                        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-                    </head>
-                    <body id = 'grad1'>
-
-                        <div id="carouselExampleIndicators" className="carousel slide" data-ride="carousel">
-                            <ol className="carousel-indicators">
-                                <li data-target="#carouselExampleIndicators" data-slide-to="0" className="active"></li>
-                                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-                            </ol>
-                            <div className="carousel-inner">
-                            <div className="carousel-item active">
-                                <img className="d-block w-100" src={aa1} alt="First slide"/>
-                            </div>
-                            <div className="carousel-item">
-                                <img className="d-block w-100" src={aa2} alt="Second slide"/>
-                            </div>
-                            <div className="carousel-item">
-                                <img className="d-block w-100" src={aa3} alt="Third slide"/>
-                            </div>    
-                        </div>
-                        <a className="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                            <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span className="sr-only">Previous</span>
-                        </a>
-                        <a className="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                            <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span className="sr-only">Next</span>
-                        </a>
-                    </div>
-                    <br/>
-                    <div class="header_text">
-                        <h1 style={{position:'absolute', left:'25px', color: '#4e5b60', fontWeight: 'bold'}}>PLAYING NOW</h1>
-                    </div>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    {/*this.getRandomPosters()*/}
-                    {this.state.movies !== null ? this.getRandomPosters() : <></>}
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <footer className="bg-light text-center">
-                        <div className="text-center p-3" style={{backgroundColor: 'rgba(0, 0, 0, 0.2)'}}>
-                            All rights reserved. © 2021 Copyright:
-                            <a className="text-dark" >The Big Picture</a>
-                        </div>
-                    </footer>
-                    </body>
-                </React.Fragment>
-            );
-        }
     }
 }
 

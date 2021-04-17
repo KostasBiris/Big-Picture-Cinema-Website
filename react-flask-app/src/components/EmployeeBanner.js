@@ -2,6 +2,7 @@ import main from '../static/main.css';
 import finlogo from '../static/finlogo.png';
 import usericon from '../static/usericon.png';
 import React from 'react';
+import { logout } from '../auth';
 
 class EmployeeBanner extends React.Component {
 
@@ -51,7 +52,7 @@ class EmployeeBanner extends React.Component {
 }
 
 handleLogout = (e) => {
-
+  logout();
   var go = '/logout/' + this.state.IP;
 
   fetch(go, {

@@ -6,4 +6,7 @@ Flask==1.1.2
 reportlab==3.4.0
 qrcode==6.1
 numpy==1.19.0
-
+flask-praetorian==1.1.0 
+Flask-SQLAlchemy==2.5.1
+SQLAlchemy==1.4.7
+Flask-Cors==3.0.10

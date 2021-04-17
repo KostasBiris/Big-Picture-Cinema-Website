@@ -28,9 +28,11 @@ import EmployeeBook from "./Pages/EmployeeBook";
 import CustomerSite from "./Sites/CustomerSite";
 import EmployeeSite from "./Sites/EmployeeSite";
 import ManagerSite from "./Sites/ManagerSite";
+import {useAuth} from "./auth"
 
 import {createBrowserHistory} from 'history';
 const history = createBrowserHistory();
+
 const customerRoutes = ['/', '/home', '/search/', '/book', '/payment', '/account', '/register', '/login']
 const employeeRoutes = ['/emain', '/ebook', '/eas', '/emain/search/', '/emain/view_movies', '/movie/:title', '/epayment', '/elogin']
 const managerRoutes = ['/addmovies/search/', '/overall_analytics', '/addscreening','/mlogin']
@@ -38,6 +40,9 @@ const managerRoutes = ['/addmovies/search/', '/overall_analytics', '/addscreenin
 
 function SiteType() {
   let location = history.location.pathname;
+
+  var logged = useAuth();
+  console.log(logged)
 
   // This if else statement block is only a quick fix for now
   if (location.includes("search"))
@@ -54,17 +59,17 @@ function SiteType() {
 
   if (customerRoutes.includes(location)){
     console.log("customer")
-    return < Route component={CustomerSite} />
+    return <Route render={(props) => <CustomerSite {...props} logged={logged}/> }/>
   }
   else if (employeeRoutes.includes(location))
   {
     console.log("employee")
-    return < Route component={EmployeeSite} />
+    return <Route render={(props) => <EmployeeSite {...props} logged={logged}/> }/>
   }
   else if (managerRoutes.includes(location))
   {
     console.log("manager")
-    return < Route component={ManagerSite} />
+    return <Route render={(props) => <ManagerSite {...props} logged={logged}/> }/>
   }
   else
     console.log("THROW ERROR!")
@@ -74,6 +79,7 @@ function SiteType() {
 const App = () => (
     // Set up routing for our web application.
     // Redirce '/' to '/home' by default.
+    
     
     
     <React.Fragment>

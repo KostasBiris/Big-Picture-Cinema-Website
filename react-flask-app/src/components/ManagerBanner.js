@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from '../static/finlogo.png';
-
+import { logout } from '../auth';
 
 
 class ManagerBanner extends React.Component {
@@ -67,7 +67,7 @@ class ManagerBanner extends React.Component {
     }
 
     handleLogout = (e) => {
-
+        logout()
         var go = '/logout/' + this.state.IP;
       
         fetch(go, {

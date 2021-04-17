@@ -9,10 +9,63 @@ import stripe
 from threading import Thread
 import datetime
 import base64
+import flask_praetorian
+import sqlalchemy
+from sqlalchemy import create_engine
+from db_sqlalchemy import User
+
+# from sqlalchemy import create_engine
+# import sqlalchemy as db
+# import flask_sqlalchemy as dba
+# from sqlalchemy.ext.declarative import declarative_base
+# from sqlalchemy.orm import scoped_session, sessionmaker, Query
+
+# create customer user table with sqlalchemy
+# engine = sqlalchemy.create_engine('sqlite:///cinema.db', echo=True)
+
+# connection = engine.connect()
+
+# metadata = sqlalchemy.MetaData()
+
+# customers = sqlalchemy.Table('customers', metadata, autoload=True, autoload_with=engine)
+
+
+# engine = create_engine('sqlite:///cinema.db', convert_unicode=True, echo=False)
+# db_session = scoped_session(sessionmaker(bind=engine))
+# Base = declarative_base()
+# Base.metadata.reflect(engine)
+# Base.query = db_session.query_property()
+
+# initialize flask app
 app = Flask(__name__)
+# db = SQLAlchemy(app)
+
+
+app.debug = True
+app.config['SECRET_KEY'] = 'top secret'
+app.config['JWT_ACCESS_LIFESPAN'] = {'hours': 24}
+app.config['JWT_REFRESH_LIFESPAN'] = {'days': 30}
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cinema.db'
+
 CORS(app)
 
+guard = flask_praetorian.Praetorian()
+# from db_sqlalchemy import User
+
+
+
+
+
+# Initialize the flask-praetorian instance for the app
+guard.init_app(app, User)
+
 stripe.api_key = "sk_test_51ISQ7OC2YcxFx25Ty8LGkfEVQczFPRVHPyDqa6WJRtwNXNUST7GJbzEpWdWFWBZftAMgeM1U8LVfDrwb8R768K0800R2icalhU"
+
+
+
+
+# db.init_app(app)
+
 
 @app.route('/')
 def mainpage():
@@ -346,9 +399,9 @@ def screens_description():
 def customer_register():
     return render_template('customer_register.html')
 
-@app.route('/login')
-def customer_login():
-    return render_template('customer_login.html')
+# @app.route('/login')
+# def customer_login():
+#     return render_template('customer_login.html')
 
 # @app.route('/', methods=['POST'])
 # def _mainpage():
@@ -361,18 +414,14 @@ def customer_login():
 #     return "<h1 style='color:blue'>" + dat + "</h1>"
 
 
-@app.route('/insession/<ip>', methods=['POST'])
-def insession(ip):
+@app.route('/api/insession')
+@flask_praetorian.auth_required
+def protected():
     db = Database('cinema.db')
-    rq = db.ip_in_session(ip)
-    #data = db.fetch_customer(rq[4])
-    if not rq:
-        del db
-        return jsonify({'response': 'error'})
+    email = flask_praetorian.current_user().email
+    
     try:
-
-        data = db.fetch_customer(rq[4])
-
+        data = db.fetch_customer(email)
         return jsonify({'response':serialize_user(data)})
 
     except TypeError:
@@ -389,11 +438,10 @@ def logout(ip):
 
 @app.route('/register', methods=['POST'])
 def _register():
-
     data = request.json['data']
     db = Database('cinema.db')
     db.add_customer(data['forename'], data['surname'], data['email'],
-    data['phonenumber'],  data['password'],
+    data['phonenumber'],  guard.hash_password(data['password']),
     data['dob'])
     del db
     return jsonify({'result': 'OK'})
@@ -404,6 +452,8 @@ def employeelogin():
     return render_template('employee_login.html')
 
 
+# from sqlalchemy.orm import scoped_session, sessionmaker, Query
+# engine = create_engine('sqlite:///cinema.db', convert_unicode=True, echo=False)
 @app.route('/login', methods = ['POST'])
 def _login():
     db = Database('cinema.db')
@@ -411,14 +461,54 @@ def _login():
     print(data)
     email = data['email']
     password = data['password']
-    ip = data['IP']
-    res, id_ = db.validate_customer(email, password)
-    if res:
-        db.add_session(ip, time.time(), 1, id_, 'NULL', 'NULL')
-       # del db
-        return jsonify({'response': 'OK'})
-    del db
+
+    # user = User.lookup(email)
+        
+    # print(user)
+    
+    user = guard.authenticate(email, password)
+    # print('this is the user')
+    # print(user.email)
+    # print(user.password)
+    ret = {'access_token': guard.encode_jwt_token(user)}
+    return ret, 200
+    # ip = data['IP']
+    # res, id_ = db.validate_customer(email, password)
+    # if res:
+    #     db.add_session(ip, time.time(), 1, id_, 'NULL', 'NULL')
+    #    # del db
+    #     return jsonify({'response': 'OK'})
+    # del db
     return jsonify({'response' : 'BAD'})
+
+@app.route('/api/refresh', methods=['POST'])
+def refresh():
+    """
+    Refreshes an existing JWT by creating a new one that is a copy of the old
+    except that it has a refrehsed access expiration.
+    .. example::
+       $ curl http://localhost:5000/api/refresh -X GET \
+         -H "Authorization: Bearer <your_token>"
+    """
+    print("refresh request")
+    old_token = request.get_data()
+    new_token = guard.refresh_jwt_token(old_token)
+    ret = {'access_token': new_token}
+    return ret, 200
+
+
+# @app.route('/api/protected')
+# @flask_praetorian.auth_required
+# def protected():
+#     """
+#     A protected endpoint. The auth_required decorator will require a header
+#     containing a valid JWT
+#     .. example::
+#        $ curl http://localhost:5000/api/protected -X GET \
+#          -H "Authorization: Bearer <your_token>"
+#     """
+#     return {'message': f'protected endpoint (allowed user {flask_praetorian.current_user().username})'}
+
     
 @app.route('/manager_login',methods=['POST'])
 def manager_login():

@@ -10,6 +10,7 @@ import Search from '../components/Search';
 import { BrowserRouter, Route, Link } from 'react-router-dom';
 import BookTickets from '../Pages/BookTicketsPage';
 import ReactDatePicker from 'react-datepicker';
+import {logout, authFetch} from "../auth";
 
 var publicIP = require('public-ip')
 
@@ -30,22 +31,22 @@ class Banner extends React.Component {
         this.handleRegister = this.handleRegister.bind(this);
         this.handleAccount = this.handleAccount.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
-        this.assertAuth = this.assertAuth.bind(this);
-        this.stepUp = this.stepUp.bind(this);
-        this.getClientIP = this.getClientIP.bind(this);
+        // this.assertAuth = this.assertAuth.bind(this);
+        // this.stepUp = this.stepUp.bind(this);
+        // this.getClientIP = this.getClientIP.bind(this);
 
     }
 
     async componentDidMount  ()  {
-        window.addEventListener('load', this.stepUp);
-        await this.stepUp();
-        this.assertAuth();
-        interval = setInterval(() => {
+        // window.addEventListener('load', this.stepUp);
+        // await this.stepUp();
+        // this.assertAuth();
+        // interval = setInterval(() => {
 
-            if (this.state.IP !== null) {
-                this.assertAuth();
-            }
-        }, 5000)
+        //     if (this.state.IP !== null) {
+        //         this.assertAuth();
+        //     }
+        // }, 5000)
 
         // const _jquery = document.createElement("script");
         // _jquery.src = "https://code.jquery.com/jquery-3.2.1.slim.min.js";
@@ -69,61 +70,58 @@ class Banner extends React.Component {
         // document.body.appendChild(_bootstrap);
     }
 
-    componentWillUnmount = () => {
-        window.removeEventListener('load', this.stepUp(true))
-        clearInterval(interval);
-    }
+    // componentWillUnmount = () => {
+    //     window.removeEventListener('load', this.stepUp(true))
+    //     clearInterval(interval);
+    // }
 
 
-    getClientIP = () => {
-        (async () => {
-            this.setState({ IP: await publicIP.v4() })
-        })();
-    }
+    // getClientIP = () => {
+    //     (async () => {
+    //         this.setState({ IP: await publicIP.v4() })
+    //     })();
+    // }
 
 
 
-    stepUp = async (flag) => {
-        await (async () => {
-            this.setState({ IP: await publicIP.v4() })
-        })();
-        if (flag)
-            this.assertAuth();
-    }
+    // stepUp = async (flag) => {
+    //     await (async () => {
+    //         this.setState({ IP: await publicIP.v4() })
+    //     })();
+    //     if (flag)
+    //         this.assertAuth();
+    // }
 
-    async assertAuth  ()  {
-        if (this.state.IP === null) {
-            return false;
-        }
-        var go = '/insession/' + this.state.IP;
-        fetch(go, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(response => response.json()).then(data => {
-                this.setState({ response: data.response })
-            })
-    };
+    // async assertAuth  ()  {
+    //     if (this.state.IP === null) {
+    //         return false;
+    //     }
+    //     var go = '/insession/' + this.state.IP;
+    //     fetch(go, {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         }
+    //     })
+    //         .then(response => response.json()).then(data => {
+    //             this.setState({ response: data.response })
+    //         })
+    // };
 
-    isAuth = () => {
-        if (this.props.location !== undefined) {
-            if (this.props.location.state !== undefined) {
-                if (this.props.location.state.auth === true) {
-                    this.auth = true;
-                    this.props.location.state.auth = false;
-                    this.state.IP = this.props.location.state.IP;
-                    return true;
-                }
-            }
-        }
-        if (this.state.response === "error" || this.state.response === undefined || this.auth === false) {
-            // console.log(this.state.response);
-            return false;
-        }
-        return true;
-    }
+    // isAuth = () => {
+    //     console.log("from is auth in BANNER home page")
+    //     console.log(this.props)
+    //     if(this.props.location)
+    //         if(this.props.location.state)
+    //             if (this.props.location.state.logged === true)
+    //                 return true;
+    //             else
+    //                 return false
+    //         else
+    //             return false;
+    //     else
+    //         return false;
+    // }
 
     //Method for handling a change in the search query field.
     handleSearchChange = (e) => {
@@ -167,11 +165,12 @@ class Banner extends React.Component {
     }
 
     handleAccount = (e) => {
-        this.props.history.push('/account');
+        this.props.history.push('/account', this.state);
     }
 
     handleLogout = (e) => {
-
+        logout() // deletes token from in session in flask_praetorian
+        this.props.history.push('/home') // go to home
         var go = '/logout/' + this.state.IP;
 
         fetch(go, {
@@ -216,7 +215,8 @@ class Banner extends React.Component {
 
 
     render() {
-        if (this.isAuth()) {
+        // console.log(this.props)
+        if (this.props.logged) {
             return (
                 <React.Fragment>
                     <head>

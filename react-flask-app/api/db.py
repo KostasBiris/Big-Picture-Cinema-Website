@@ -101,7 +101,7 @@ class Database:
                                                                surname TEXT NOT NULL, \
                                                                email TEXT NOT NULL, \
                                                                phonenumber TEXT NOT NULL, \
-                                                               hash TEXT NOT NULL, \
+                                                               password TEXT NOT NULL, \
                                                                dob DATE NOT NULL)")
 
         self.cur.execute("CREATE TABLE IF NOT EXISTS employees (id INTEGER PRIMARY KEY, \
@@ -718,8 +718,8 @@ class Database:
 #=-=-=-=-=-=-=-=-=-=CUSTOMERS-=-=-=-=-=-=-=-=-=-=
     
     def add_customer(self, forename, surname, email, phonenumber, password, dob):
-        _hash = generate_password_hash(password)
-        self.cur.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?)",(forename, surname, email, phonenumber, _hash, dob))
+        # _hash = generate_password_hash(password)
+        self.cur.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?)",(forename, surname, email, phonenumber, password, dob))
         self.conn.commit()
 
 
@@ -786,9 +786,9 @@ class Database:
         self.conn.commit()
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-    def fetch_customer(self, id):
+    def fetch_customer(self, email):
 
-        self.cur.execute("SELECT * from customers WHERE id =?", (id,))
+        self.cur.execute("SELECT * from customers WHERE email =?", (email,))
         return self.cur.fetchone()
 
     def validate_customer(self, email, password):

@@ -4,6 +4,9 @@ import Banner from '../components/Banner.js';
 import usericon from '../static/usericon.png';
 import { ThemeConsumer } from 'react-bootstrap/esm/ThemeProvider';
 import { Link } from "react-router-dom";
+import {authFetch} from "../auth";
+import {withHooksHOC} from "../auth/withHooksHOC";
+
 
 var publicIP = require('public-ip')
 
@@ -17,9 +20,9 @@ class CustomerAccountPage extends React.Component {
     }
 
     stepUp = async () => {
-        await (async () => {
-            this.setState({IP: await publicIP.v4()})
-        })();
+        // await (async () => {
+        //     this.setState({IP: await publicIP.v4()})
+        // })();
         await( async () => {
             this.assertAuth()
         })();
@@ -37,31 +40,24 @@ class CustomerAccountPage extends React.Component {
     }
 
     assertAuth = () => {
-        var go = '/insession/' + this.state.IP;//routes
-        fetch(go, {//sends the request
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ data: this.IP })//data sent from react to flask
-        })
-            .then(response => response.json()).then(data => {
-                this.setState({ auth: true , data: data.response})})//accepts and stores the data
+        authFetch("/api/insession").then(response => response.json()).then(data => {
+            this.setState({ auth: true , data: data.response})})//accepts and stores the data        
     };
 
      getTickets = async () =>{
 
         let email = this.state.data.email;
-        if (email === undefined) {
-            this.stepUp();
-        }
+        console.log(this.state)
+        // if (email === undefined) {
+        //     this.stepUp();
+        // }
         var go = '/getticket/' + email;//routes
         await fetch(go, {//sends the request
              method: 'POST',
              headers: {
                  'Content-Type': 'application/json'
              },
-             body: JSON.stringify({ data: this.IP })//data sent from react to flask
+            //  body: JSON.stringify({ data: this.IP })//data sent from react to flask
          })
          .then(response => response.json()).then(data => { 
              this.setState({ tickets: Object.values(data.response)})})//accepts and stores the data
@@ -87,7 +83,7 @@ class CustomerAccountPage extends React.Component {
 
     makeTicketList =  () => {
         let tickets = [];
-        console.log()
+        // console.log()
         this.state.tickets.forEach(function(entry) { tickets.push(entry)});
         return (
                 <ul>
@@ -104,7 +100,7 @@ class CustomerAccountPage extends React.Component {
 
     render() {
         //this.makeTicketList();
-        //console.log(this.state);
+        // console.log(this.props.auth[0]);
         return (
             <body>
                 
@@ -234,5 +230,5 @@ class CustomerAccountPage extends React.Component {
         );
     }
 }
-export default CustomerAccountPage;
+export default withHooksHOC(CustomerAccountPage);
 

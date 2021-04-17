@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Route, Switch } from "react-router";
+import { Redirect, Route, Switch } from "react-router";
 import { Link, BrowserRouter } from "react-router-dom";
 import ArbitraryScreen from "../Seatmap/ArbitraryScreen";
 import BookTickets from "../Pages/BookTicketsPage";
@@ -22,44 +22,46 @@ import {createBrowserHistory} from 'history';
 class CustomerSite extends React.Component{
 
     constructor(props){
-        super(props);        
+        super(props);
+        this.whatBanner = this.whatBanner.bind(this);        
     }
 
+
+    whatBanner = () => { 
+        // if (this.props.logged[0] == true)
+            return (<React.Fragment>
+                        <EmployeeBanner history={this.props.history} logged={this.props.logged[0]}/>
+                        <EMenu />
+                        <Route exact path ="/emain" component={EmployeeMain}/>
+                        <Route path="/ebook" render={(props) => <BookTickets {...props} isEmployee={true}/> } />
+                        <Route path="/eas" render={(props) => <ArbitraryScreen {...props} isEmployee={true}/> }/>
+                        <Route path="/emain/search/:query" component={SearchResults}/>
+                        <Route path="/emain/view_movies" component={ViewMovies}/>
+                        <Route path ="/emain/account" component={CustomerAccountPage}/>
+                        <Route path="/movie/:title" render={(props) => <MoviePage {...props} isEmployee={true}/> }/>
+                        <Route path="/epayment" component={EPayment}/>
+                    </React.Fragment>)
+        // else{
+        //     console.log("rendeing else")
+        //     return (
+        //         <React.Fragment>
+        //         <Route path ="/elogin" component={EmployeeLogin}/>
+        //         <Redirect to="/elogin" />
+        //         </React.Fragment>
+        //     )
+        // }
+    }
+
+
+
+
 render () {
-    const history = createBrowserHistory();
+    // const history = createBrowserHistory();
+    console.log(this.props.logged)
     return(
     <React.Fragment>
-
-        <EmployeeBanner history={history}/>
-
-        <EMenu />
+        {this.whatBanner()}
         
-        {/* <Link to={'/emain'} /> */}
-        {/* <Route exact path="/" render={() => (<Redirect to="/emain" />)} /> */}
-        <Route exact path ="/emain" component={EmployeeMain}/>
-        {/* <Link to={'/book'} /> */}
-        <Route path="/ebook" render={(props) => <BookTickets {...props} isEmployee={true}/> } />
-        {/* <Route path="/ebook" component={BookTickets}/> */}
-        {/* <Link to={'/as'} /> */}
-        {/* <Route path="/eas" render={(props) => <ArbitraryScreen {...props} isEmployee={true}/> } /> */}
-        <Route path="/eas" render={(props) => <ArbitraryScreen {...props} isEmployee={true}/> }/>
-        {/* <Link to={'/payment'} /> */}
-        {/* <Route path="/payment" component={Payment}/> */}
-        {/* <Link to={'emain/search/:query'} /> */}
-        <Route path="/emain/search/:query" component={SearchResults}/>
-
-        <Route path="/register" component={CustomerRegister}/>
-
-        <Route path="/emain/view_movies" component={ViewMovies}/>
-
-        <Route path ="/emain/account" component={CustomerAccountPage}/>
-
-        {/* <Route path ="/movie/:title" component={MoviePage}/> */}
-        <Route path="/movie/:title" render={(props) => <MoviePage {...props} isEmployee={true}/> }/>
-
-        <Route path ="/elogin" component={EmployeeLogin}/>
-
-        <Route path="/epayment" component={EPayment}/>
     </React.Fragment>
 
     );

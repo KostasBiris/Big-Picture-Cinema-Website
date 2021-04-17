@@ -2,6 +2,10 @@ import React from 'react';
 import main from '../static/main.css';
 import logo from '../static/finlogo.png';
 import cinema from '../static/cinema.jpg';
+import {login} from "../auth";
+import { Redirect } from "react-router";
+
+
 var publicIP = require('public-ip')
 /*body {
     background-image: url("../static/cinema.jpg");
@@ -17,46 +21,47 @@ class EmployeeLogin extends React.Component{
         this.handleLogin = this.handleLogin.bind(this);
         this.handleIDChange = this.handleIDChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
-        this.validate = this.validate.bind(this);
-        this.login = this.login.bind(this);
-        this.assertAuth = this.assertAuth.bind(this);
-        this.getClientIP = this.getClientIP.bind(this);
-        this.getClientIP();
+        this.Login = this.Login.bind(this);
+        // this.validate = this.validate.bind(this);
+        // this.assertAuth = this.assertAuth.bind(this);
+        // this.getClientIP = this.getClientIP.bind(this);
+        // this.getClientIP();
     }
     
-    getClientIP = () => {
-        (async () => {
-            this.setState({ IP: await publicIP.v4() })
-        })();
-    }
+    // getClientIP = () => {
+    //     (async () => {
+    //         this.setState({ IP: await publicIP.v4() })
+    //     })();
+    // }
 
-    validate = (password) => {
+    // validate = (password) => {
 
-        //Validate the password through length check.
-        function validate(password) {
-            if (password.length >= 8) {
-                return true;
-            }
-            return false;
-        }
+    //     //Validate the password through length check.
+    //     function validate(password) {
+    //         if (password.length >= 8) {
+    //             return true;
+    //         }
+    //         return false;
+    //     }
 
-        //Use && for returning True IFF both are true.
-        return validate(password);
-    }
+    //     //Use && for returning True IFF both are true.
+    //     return validate(password);
+    // }
 
 
     handleLogin = (e) => {
         e.preventDefault();
-        console.log(this.state);
-        if (!this.validate(this.state.password)) {
-            alert("Please enter a valid username and password and ID.");
-            console.log(this.state);
-            //We reset the state for security reasons.
-            //this.setState({ email: '', password: '' });
-        } else {
-            //If validation passes, attempt to login.
-            this.login();
-        }
+        this.Login();
+        // console.log(this.state);
+        // if (!this.validate(this.state.password)) {
+        //     alert("Please enter a valid username and password and ID.");
+        //     console.log(this.state);
+        //     //We reset the state for security reasons.
+        //     //this.setState({ email: '', password: '' });
+        // } else {
+        //     //If validation passes, attempt to login.
+        //     this.login();
+        // }
     }
 
 
@@ -68,7 +73,7 @@ class EmployeeLogin extends React.Component{
         this.setState({ password: e.target.value });
     }
 
-    login = () => {
+    Login = () => {
         fetch('/employee_login', {
             method: 'POST',
             headers: {
@@ -76,29 +81,37 @@ class EmployeeLogin extends React.Component{
             },
             body: JSON.stringify({ data: this.state })
         })
-            .then(response => response.json()).then(data => {
-                this.setState({ response: data.response })
-            }).then(() => console.log(this.state)).then(() => this.assertAuth());
+            .then(response => response.json()).then(token => {
+                if (token.access_token) {
+                    login(token) // store login key in local database 
+                    this.setState({logged: this.props.auth[0]});
+                    if(this.props.auth[0] == true)
+                        this.props.history.push('/emain', this.state)
+                    else
+                        return <Redirect to='/elogin' />
+                }
+                else
+                    console.log("Please type in correct username/password");
+            })
     };
 
-    assertAuth = () => {
-        console.log(this.state.response);
-        if (this.state.response === "OK") {
-            this.setState({ email: '', password: '' });
-            console.log('LOGIN: SUCCESS');
-            //this.props.history.push('/employee', { auth: true, IP: this.state.IP });
-        }
-        if (this.state.response === "BAD") {
-            alert('LOGIN: FAILED');
-            this.setState({ id: 0, password: '', response: '' });
-        }
-    }
+    // assertAuth = () => {
+    //     console.log(this.state.response);
+    //     if (this.state.response === "OK") {
+    //         this.setState({ email: '', password: '' });
+    //         console.log('LOGIN: SUCCESS');
+    //         //this.props.history.push('/employee', { auth: true, IP: this.state.IP });
+    //     }
+    //     if (this.state.response === "BAD") {
+    //         alert('LOGIN: FAILED');
+    //         this.setState({ id: 0, password: '', response: '' });
+    //     }
+    // }
 
 
 
 render(){
     return(
-       
         <body>
         <head>
         <link rel="stylesheet" type="text/css" href={main}/>
