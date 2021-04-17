@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import {authFetch} from "../auth";
 import {withHooksHOC} from "../auth/withHooksHOC";
 
-
+var checkedEmail = 0;
 var publicIP = require('public-ip')
 
 class CustomerAccountPage extends React.Component {
@@ -48,9 +48,10 @@ class CustomerAccountPage extends React.Component {
 
         let email = this.state.data.email;
         console.log(this.state)
-        // if (email === undefined) {
-        //     this.stepUp();
-        // }
+        if (email === undefined && checkedEmail<=3) {
+            checkedEmail++;
+            this.stepUp();
+        }
         var go = '/getticket/' + email;//routes
         await fetch(go, {//sends the request
              method: 'POST',
