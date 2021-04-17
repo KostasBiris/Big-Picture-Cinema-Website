@@ -88,7 +88,7 @@ class ManagerBanner extends React.Component {
             
                 <body id="grad1">
                     <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                    <a className="navbar-brand" href="#"><img src={logo} style={{top:'1px', width:'rem', height:'8rem'}}/></a>
+                    <input onClick={() => this.props.history.push('/overall_analytics', this.state)} type="image" style={{ top: '1px', width: 'rem', height: '8rem' }} src={logo}/>
                     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                     </button>

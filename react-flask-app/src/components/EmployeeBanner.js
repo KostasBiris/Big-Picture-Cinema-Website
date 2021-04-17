@@ -1,5 +1,5 @@
 import main from '../static/main.css';
-import finlogo from '../static/finlogo.png';
+import logo from '../static/finlogo.png';
 import usericon from '../static/usericon.png';
 import React from 'react';
 import { logout } from '../auth';
@@ -79,7 +79,7 @@ handleAccount = (e) => {
         </head>
             <body>
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <a className="navbar-brand" href="#"><img src={finlogo} style={{top:'1px',width:'rem',height:'8rem'}}/></a>
+        <input onClick={() => this.props.history.push('/emain', this.state)} type="image" style={{ top: '1px', width: 'rem', height: '8rem' }} src={logo}/>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
