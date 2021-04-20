@@ -98,7 +98,7 @@ class CustomerHomePage extends React.Component {
         // window.addEventListener('load', this.stepUp);
         
         const _jquery = document.createElement("script");
-        _jquery.src = "https://code.jquery.com/jquery-3.2.1.slim.min.js";
+        _jquery.src = "https://code.jquery.com/jquery-3.3.1.js";
         _jquery.async = true;
         _jquery.integrity = "sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN";
         _jquery.crossOrigin = "anonymous";
@@ -157,7 +157,6 @@ class CustomerHomePage extends React.Component {
         //Update the state to represent the changes to the field.
         this.setState({ query: e.target.value });
     }
-
     //Method for handling submitting a search query.
     //Called when the submit button is pressed.
     handleSubmit = (e) => {

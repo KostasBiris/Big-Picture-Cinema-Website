@@ -50,6 +50,7 @@ class ManagerBanner extends React.Component {
       }
 
     handleSubmit = (e) => {
+        e.preventDefault();
         var go = ''
         go = '/addmovies/search/' + this.state.query.split(' ').join('_');
     
@@ -115,9 +116,10 @@ class ManagerBanner extends React.Component {
                                     <button className="dropdown-item" style={{color:'#f9bc50'}}>OVERALL</button>
                                 </div>
                             </li>
+                            <button className="tab_background mr-5">LOG OUT</button>
+
                         </ul>
                         <form className="form-inline my-2 my-lg-0">
-                            <button className="tab_background mr-5">LOG OUT</button>
                             <input onChange={this.handleSearchChange} value={this.state.query} className="form-control mr-sm-2 search_bar" type="search" placeholder="Search here.." aria-label="Search"/>
                             <button onClick={this.handleSubmit} className="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>
                         </form>

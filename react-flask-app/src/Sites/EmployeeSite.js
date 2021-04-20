@@ -19,13 +19,12 @@ import EMenu from "../components/EmployeeMenu";
 import {createBrowserHistory} from 'history';
 
 
-class CustomerSite extends React.Component{
+class EmployeeSite extends React.Component{
 
     constructor(props){
         super(props);
         this.whatBanner = this.whatBanner.bind(this);        
     }
-
 
     whatBanner = () => { 
         // if (this.props.logged[0] == true)
@@ -67,4 +66,4 @@ render () {
     );
 }
 }
-export default CustomerSite;
+export default EmployeeSite;
