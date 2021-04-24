@@ -28,6 +28,7 @@ import EmployeeBook from "./Pages/EmployeeBook";
 import CustomerSite from "./Sites/CustomerSite";
 import EmployeeSite from "./Sites/EmployeeSite";
 import ManagerSite from "./Sites/ManagerSite";
+import NotFoundPage from './NotFound/NotFoundPage'
 import {useAuth} from "./auth"
 
 import {createBrowserHistory} from 'history';
@@ -72,7 +73,8 @@ function SiteType() {
     return <Route render={(props) => <ManagerSite {...props} logged={logged}/> }/>
   }
   else
-    console.log("THROW ERROR!")
+    return <Route component={NotFoundPage} />
+
 }
 
 
@@ -86,6 +88,7 @@ const App = () => (
     <BrowserRouter>
       <Switch>
         <SiteType />
+        
         
         
         
