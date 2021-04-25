@@ -107,13 +107,88 @@ class MoviePage extends React.Component {
                     <link rel="stylesheet" type="text/css" href={main} />
                 </head>
                 <div className="header_text"></div>
-                    <h1 style = {{position:'absolute', left:'5rem', color: '#4e5b60' }}>{this.state.returnedData.original_title}</h1>
-                    <br /><br /><br /><br /><br /><br /><br /><br />
+                    <h1 style = {{position:'absolute', left:'25px', color: '#4e5b60', fontWeight:'bold' }}>{this.state.returnedData.original_title}</h1>
+                    {/* <br /><br /><br /><br /><br /><br /><br /><br />
                     <h2 className="text" style={{position:'absolute', left:'35rem', color:'#4e5b60'}}>Movie Description</h2>
                     <br /><br />
                     <h2 className="text_description" style={{position:'absolute'}}> {this.state.returnedData.blurb} </h2>
-                    <img className="movie_page" src={'https://image.tmdb.org/t/p/w500/' + this.state.returnedData.poster_path} style={{left: '5rem'}}/>
-                    <div className="text"></div>
+                    */}<div className="column" style={{position:'relative', left:'25px'}}>
+                        <img className="poster poster_movies" src={'https://image.tmdb.org/t/p/w500/' + this.state.returnedData.poster_path} style={{left: '5rem', position: 'relative'}}/>
+
+                    </div> 
+                    <div className="container">
+                        <div className="row">
+                            <div className="border-dark card-sm-center position_table" style={{position:'absolute', left:'22rem', top:'15rem'}}>
+                                <div className="card-header">
+                                    Movie Description
+                                </div>
+                                <div className="card-body text-dark">
+                                    <p className="card-text">
+                                    {this.state.returnedData.blurb}
+                                    </p>
+                                    {
+                                        this.state.returnedData.isupcoming ?   
+                                            <button onClick={this.goBookTickets}  className="buttons_background rounded-pill">BOOK TICKETS</button> 
+                                        : 
+                                            <></>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br></br>
+                    <div className="row">
+                    <table className="table table-sm-center table-dark position_table" style={{position:'absolute', left:'22rem', top:'27rem'}}>
+                            <tr>
+                                <th scope="col">
+                                    Director(s):
+                                </th>
+                                <td data-th = "Director(s)">{this.state.returnedData.director}</td>
+
+                            </tr> 
+                            <tr>
+                                <th scope="col">
+                                        Writer(s):
+                                </th>
+                                <td data-th = "Writer(s)">{this.state.returnedData.writers}</td>
+                            </tr>  
+                            <tr>
+                                <th scope="col">
+                                    Actors:
+                                </th>
+
+                                    <td data-th = "Actors">{this.state.returnedData.leadactors}</td>
+                            </tr>
+                            <tr>
+                                <th scope="col">
+                                    Runtime:
+                                </th>
+                                <td data-th = "Runtime">{this.state.returnedData.runtime} mins</td>
+                            </tr>
+                            <tr>
+                                <th scope="col">
+                                    Release Date:
+                                </th>
+                                <td data-th = "ReleaseDate">{this.state.returnedData.release_date}</td>
+                            </tr>
+                            <tr>
+                                <th scope="col">
+                                    Genres:
+                                </th>
+                                <td data-th = "Genres">{this.state.returnedData.genres}</td>
+                            </tr>
+                            
+                    </table>
+
+                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <div className="embed-responsive embed-responsive-21by9">
+                        
+                    </div>
+                    {/* <div className="text"></div>
                     <table className="position_table">
                             <tr>
                             <th>Director/s: </th>
@@ -147,8 +222,8 @@ class MoviePage extends React.Component {
                         </tr>
                     </table>
                     {/* Screenings:
-                    {this.getScreenings()} */}
-                    {/* {this.state.returnedData.screenings!==undefined ? this.getScreenings() : <></>} */}
+                    {this.getScreenings()} 
+                     {this.state.returnedData.screenings!==undefined ? this.getScreenings() : <></>} 
                     <br /><br />
                     <div>
                         <br />
@@ -176,7 +251,7 @@ class MoviePage extends React.Component {
 
                     }
                    
-                </div>
+                </div> */}
             </React.Fragment>
         )
     }

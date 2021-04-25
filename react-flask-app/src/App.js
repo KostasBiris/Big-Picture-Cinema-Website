@@ -78,7 +78,7 @@ function SiteType() {
 }
 
 
-const App = () => (
+const App = (props) => (
     // Set up routing for our web application.
     // Redirce '/' to '/home' by default.
     
@@ -90,8 +90,8 @@ const App = () => (
         <SiteType />
         
         
-        
-        
+
+
         {/* <Route exact path="/home" component={CustomerHomePage} /> 
         <Route exact path="/login" component={LoginPage} />
         <Route exact path="/search/:query" component={SearchResults}/> 
@@ -117,6 +117,7 @@ const App = () => (
         <Route exact path="/ebook" component={EmployeeBook}/> */}
         <Route exact path="/ebook" component={EmployeeBook}/>
         <Route render={() => <Redirect to={{pathname: "/"}}/>}/>
+
       </Switch>
     </BrowserRouter>
 

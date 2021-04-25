@@ -53,7 +53,7 @@ class TestDataBase(unittest.TestCase):
         self.assertEqual(['id','date','time','screen_id','movie_id','seatmap'], [cursor.description[0][0],cursor.description[1][0],cursor.description[2][0],cursor.description[3][0],cursor.description[4][0],
         cursor.description[5][0]])
         cursor = conn.execute('SELECT * FROM customers')
-        self.assertEqual(['id', 'forename', 'surname', 'email', 'phonenumber', 'hash', 'dob'], [cursor.description[0][0],cursor.description[1][0],cursor.description[2][0],cursor.description[3][0],cursor.description[4][0],
+        self.assertEqual(['id', 'forename', 'surname', 'email', 'phonenumber', 'password', 'dob'], [cursor.description[0][0],cursor.description[1][0],cursor.description[2][0],cursor.description[3][0],cursor.description[4][0],
         cursor.description[5][0],cursor.description[6][0]])
 
         cursor = conn.execute("SELECT * FROM bookings")

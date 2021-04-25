@@ -127,7 +127,7 @@ class User(Base):
             # print(item)
         
         res = cls.query.filter_by(email=email).first()
-        print(res.password)
+        # print(res.password)
         return res
         # print(res.id)
         # print(cls)

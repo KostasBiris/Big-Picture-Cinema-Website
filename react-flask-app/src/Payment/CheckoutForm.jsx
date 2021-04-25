@@ -76,6 +76,9 @@ export default function CheckoutForm (state, props)  {
       setError(null);
       setProcessing(false);
       setSucceeded(true);
+      if (state.save === "on") {
+        console.log('save card details.');
+      }
      // console.log(_props);
       console.log(state);
         var go = '/makebooking'

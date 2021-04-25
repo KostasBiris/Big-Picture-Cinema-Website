@@ -33,8 +33,6 @@ class CustomerAccountPage extends React.Component {
         window.addEventListener('load', this.stepUp);
         await this.stepUp();
     }   
-
-
     componentWillUnmount() {
         window.removeEventListener('load', this.stepUp)
     }

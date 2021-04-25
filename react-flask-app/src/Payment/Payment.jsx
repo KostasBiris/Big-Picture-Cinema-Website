@@ -7,7 +7,9 @@ import "./Style/Payment.scss"
 import Banner from "../components/Banner";
 import Select from 'react-select'
 import { relativeTimeThreshold } from "moment";
-
+import ThemeProvider from "react-bootstrap/esm/ThemeProvider";
+import {authFetch} from "../auth";
+import {withHooksHOC} from "../auth/withHooksHOC";
 
 // Make sure to call loadStripe outside of a component’s render to avoid
 // recreating the Stripe object on every render.
@@ -36,7 +38,8 @@ class Payment extends React.Component {
             orderPart: [],
             valid: false,
             total: 0,
-            isEmployee: false
+            isEmployee: false,
+            save: false
         };
 
 
@@ -53,6 +56,8 @@ class Payment extends React.Component {
         this.handleChangeSelect= this.handleChangeSelect.bind(this);
         this.calculateTotal = this.calculateTotal.bind(this);
         this.validate = this.validate.bind(this);
+        this.assertAuth = this.assertAuth.bind(this);
+        this.handleSave = this.handleSave.bind(this);
                 //  this.renderSelector = this.renderSelector.bind(this);
     }
 
@@ -91,7 +96,16 @@ class Payment extends React.Component {
             }
         }
         this.setState({orderPart:k});
+
+        if (this.props.isAuthed) {
+            this.assertAuth();
+        }
+        console.log(this.state);
     }
+    assertAuth = async () => {
+        await authFetch("/api/insession").then(response => response.json()).then(data => {
+            this.setState({firstname : data.response.forename, lastname : data.response.surname, email: data.response.email})})//accepts and stores the data        
+    };
 
     handleFirstName = (e) => {
         this.setState({ firstname: e.target.value });
@@ -219,8 +233,9 @@ class Payment extends React.Component {
         return total;
     }   
 
-
-
+    handleSave = (e) => {
+        this.setState({save: e.target.value})
+    }
 
     orderSummary = () => {
         let map_ = this.props.location.state.seatmap_copy;
@@ -339,13 +354,15 @@ class Payment extends React.Component {
                                             </div>
 
                                         </div>
+                                        Save my details:       
+                                        <input type="checkbox" defaultChecked={this.state.save} onChange={this.handleSave} />
 
                                     </form>
                                     {this.validate() ?<div classNameName="Payment">
                                         <Elements stripe={promise}>
                                             <CheckoutForm props={this.props} state={this.state}/>
                                         </Elements>
-                                    </div> : <></>}
+                                    </div> : <></>}    
                                     
                                 </div>
                                 <div className="col-sm-6 col-xs-13">

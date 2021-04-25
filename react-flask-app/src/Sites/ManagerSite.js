@@ -19,6 +19,7 @@ class ManagerSite extends React.Component{
         this.whatBanner = this.whatBanner.bind(this);         
     }
 
+
     whatBanner = () => { 
         // if (this.props.logged[0] == true)
             return (

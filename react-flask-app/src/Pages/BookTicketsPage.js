@@ -13,6 +13,7 @@ class BookTickets extends React.Component {
     constructor(props) {
         console.log("inside book tickets.")
         super(props);
+        console.log(this.props);
         if (this.props.location) {
             console.log(this.props.location.state);
         }
