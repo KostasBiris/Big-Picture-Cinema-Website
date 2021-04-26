@@ -5,7 +5,7 @@ import ManagerBanner from '../components/ManagerBanner';
 import moment from 'moment';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 var publicIP = require('public-ip')
 //Generic component for individual Movie Pages.
 
@@ -279,13 +279,15 @@ class OverallAnalytics extends React.Component {
                 <br />
                 <span><p>This shows all income ever made from every movie ever screened.</p></span>
 
-                <BarChart width={500} height={300} data={this.state.data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                <BarChart width={500} height={300} data={this.state.data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }} layout="vertical">
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" stroke="#000000" />
-                    <YAxis stroke="#000000" />
+                    {/* <XAxis dataKey="name" stroke="#000000" /> */}
+                    {/* <YAxis stroke="#000000" /> */}
+                    <XAxis type="number"/>
+                    <YAxis type="category" dataKey="name"/>
                     <Tooltip />
                     <Legend />
-                    <Bar dataKey="revenue (£)" fill="#8884d8" />
+                    <Bar barSize={300/this.state.data.length} background label="name" dataKey="revenue (£)" fill="#8884d8" />
                 </BarChart>
                 <div className="header_text" >
                     <h2 style={{ position: 'absolute', left: '25px', color: '#4e5b60' }}>OVERALL INCOME: £{this.state.totalrev}</h2>
