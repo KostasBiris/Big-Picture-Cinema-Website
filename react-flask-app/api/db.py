@@ -370,6 +370,7 @@ class Database:
             date = row[1]
             a = datetime.strptime(date, "%d-%m-%Y")
             today = datetime.today()
+            today = today - timedelta(days=1) # include "today" in the set of days for which we have to show a movie
             inc = timedelta(days=14)
             twoweeks = today + inc
             if a >= today and a<=twoweeks:
