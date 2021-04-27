@@ -17,8 +17,9 @@ import poster8 from '../static/poster8.jpg';
 import poster9 from '../static/poster9.jpg';
 import moment from 'moment'
 import DatePicker from 'react-datepicker';
-
-var publicIP = require('public-ip')
+global.jQuery = require('jquery');
+require('bootstrap');
+var publicIP = require('public-ip');
 
 let interval;
 //Component for the main page of the customers.
@@ -97,26 +98,26 @@ class CustomerHomePage extends React.Component {
     async componentDidMount() {
         // window.addEventListener('load', this.stepUp);
         
-        const _jquery = document.createElement("script");
-        _jquery.src = "https://code.jquery.com/jquery-3.3.1.js";
-        _jquery.async = true;
-        _jquery.integrity = "sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN";
-        _jquery.crossOrigin = "anonymous";
-        await document.body.appendChild(_jquery);
+        // const _jquery = document.createElement("script");
+        // _jquery.src = "https://code.jquery.com/jquery-3.3.1.js";
+        // _jquery.async = true;
+        // _jquery.integrity = "sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN";
+        // _jquery.crossOrigin = "anonymous";
+        // await document.body.appendChild(_jquery);
 
-        const _popper = document.createElement("script");
-        _popper.src = "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js";
-        _popper.async = true;
-        _popper.integrity = "sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q";
-        _popper.crossOrigin = "anonymous";
-        await document.body.appendChild(_popper);
+        // const _popper = document.createElement("script");
+        // _popper.src = "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js";
+        // _popper.async = true;
+        // _popper.integrity = "sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q";
+        // _popper.crossOrigin = "anonymous";
+        // await document.body.appendChild(_popper);
 
-        const _bootstrap = document.createElement("script");
-        _bootstrap.src = "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js";
-        _bootstrap.async = true;
-        _bootstrap.integrity ="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl";
-        _bootstrap.crossOrigin ="anonymous";
-        await document.body.appendChild(_bootstrap);
+        // const _bootstrap = document.createElement("script");
+        // _bootstrap.src = "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js";
+        // _bootstrap.async = true;
+        // _bootstrap.integrity ="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl";
+        // _bootstrap.crossOrigin ="anonymous";
+        // await document.body.appendChild(_bootstrap);
 
         this.getSomeMovies();
 

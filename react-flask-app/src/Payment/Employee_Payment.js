@@ -9,6 +9,8 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+global.jQuery = require('jquery');
+require('bootstrap');
 
 // Make sure to call loadStripe outside of a component’s render to avoid
 // recreating the Stripe object on every render.
@@ -69,26 +71,26 @@ class Payment extends React.Component {
         window.addEventListener('load', this.stepUp);
         window.addEventListener('load', this.getMovieName(this.state.screening.movieid));
         this.getMovieName(this.state.screening.movieid);
-        const _jquery = document.createElement("script");
-        _jquery.src = "https://code.jquery.com/jquery-3.2.1.slim.min.js";
-        _jquery.async = true;
-        _jquery.integrity = "sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN";
-        _jquery.crossOrigin = "anonymous";
-        document.body.appendChild(_jquery);
+        // const _jquery = document.createElement("script");
+        // _jquery.src = "https://code.jquery.com/jquery-3.2.1.slim.min.js";
+        // _jquery.async = true;
+        // _jquery.integrity = "sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN";
+        // _jquery.crossOrigin = "anonymous";
+        // document.body.appendChild(_jquery);
 
-        const _popper = document.createElement("script");
-        _popper.src = "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js";
-        _popper.async = true;
-        _popper.integrity = "sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q";
-        _popper.crossOrigin = "anonymous";
-        document.body.appendChild(_popper);
+        // const _popper = document.createElement("script");
+        // _popper.src = "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js";
+        // _popper.async = true;
+        // _popper.integrity = "sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q";
+        // _popper.crossOrigin = "anonymous";
+        // document.body.appendChild(_popper);
 
-        const _bootstrap = document.createElement("script");
-        _bootstrap.src = "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js";
-        _bootstrap.async = true;
-        _bootstrap.integrity = "sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl";
-        _bootstrap.crossOrigin = "anonymous";
-        document.body.appendChild(_bootstrap);
+        // const _bootstrap = document.createElement("script");
+        // _bootstrap.src = "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js";
+        // _bootstrap.async = true;
+        // _bootstrap.integrity = "sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl";
+        // _bootstrap.crossOrigin = "anonymous";
+        // document.body.appendChild(_bootstrap);
 
         let k = [];
         for (var i = 0; i < this.props.location.state.selectedSeats.length; i++) {

@@ -665,7 +665,7 @@ class Database:
 
     def email_ticket(self, cust_forename, cust_surname, cust_email, path):
         cinema_email = 'theBigPictureCinema2021@gmail.com'
-        cinema_password = 'thebigpicture2021'
+        cinema_password = 'bigPicture2021'
 
         message = EmailMessage()
         message['from'] = cinema_email

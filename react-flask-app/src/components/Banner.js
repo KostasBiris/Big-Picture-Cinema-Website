@@ -11,8 +11,12 @@ import { BrowserRouter, Route, Link } from 'react-router-dom';
 import BookTickets from '../Pages/BookTicketsPage';
 import ReactDatePicker from 'react-datepicker';
 import {logout, authFetch} from "../auth";
-
+// import jquery from '../static/jquery-3.2.1.slim.min.js';
+// import popper from '../static/popper.min.js';
+// import bootstrap from '../static/bootstrap.min.js';
 var publicIP = require('public-ip')
+global.jQuery = require('jquery');
+require('bootstrap');
 
 let interval;
 
@@ -221,6 +225,9 @@ class Banner extends React.Component {
                 <React.Fragment>
                     <head>
                         <link rel="stylesheet" type="text/css" href={main} />
+                        {/* <script type="text/javascript" src='../static/jquery-3.2.1.slim.min.js'/>
+                        <script type="text/javascript" src= '../static/popper.min.js'/>
+                        <script type="text/javascript" src='../static/bootstrap.min.js'/> */}
                         <link rel="icon" href="data:;base64,iVBORw0KGgo" />
                         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
                     </head>
@@ -278,6 +285,9 @@ class Banner extends React.Component {
                 <React.Fragment>
                     <head>
                         <link rel="stylesheet" type="text/css" href={main} />
+                        {/* <script type="text/javascript" src='../static/jquery-3.2.1.slim.min.js'/>
+                        <script type="text/javascript" src='../static/popper.min.js'/>
+                        <script type="text/javascript" src='../static/bootstrap.min.js'/> */}
                         <link rel="icon" href="data:;base64,iVBORw0KGgo" />
                         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
                     </head>
