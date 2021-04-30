@@ -4,6 +4,8 @@ import '../static/main.css';
 
  
 //Component for displaying a search result.
+
+// const certificationDict = { 0 : '15', 1 : 'R18', 2 : 'U', 3 : 'PG', 4 : '12A', 5 : '12', 6 : '18'};
 class SearchResult extends React.Component{
     constructor(props) {
         super(props);
@@ -18,10 +20,13 @@ class SearchResult extends React.Component{
         this.date = this.prop.release_date;
         this.date = this.date.split("-")[0];
         this.state = {title: '', blurb: '', certificate:'', directors:[], writers:[], actors:[], release_date:'', omdbid: -1, set: false, forscreening:false , 
-        poster_path : this.prop.poster_path, runtime:'', genres: this.prop.genre_ids, youtube_key:''}
+        poster_path : this.prop.poster_path, runtime:'', genres: '', youtube_key:''}
         this.addMovie = this.addMovie.bind(this);
         this.stepUp = this.stepUp.bind(this);
         this.addScreening = this.addScreening.bind(this);
+
+        // we can get certifications from https://api.themoviedb.org/3/certification/movie/list?api_key=271393256b89c9461c48c1688804f774
+        // this can be pasted in browser to see output
     }
 
     componentDidMount =() => {
@@ -33,7 +38,7 @@ class SearchResult extends React.Component{
     }
 
     addMovie = () => {
-        // console.log(this.state);
+        console.log(this.state);
         fetch('/add', {
             method: 'POST',
             headers: {
@@ -75,10 +80,34 @@ class SearchResult extends React.Component{
             })
         }
 
-        this.setState({title: this.prop.original_title, blurb: this.prop.overview, certificate: '', 
+        let genres = [];
+        if (data.genres){{
+            data.genres.forEach(function(entry){
+                genres.push(entry.name);
+            })
+        }}
+
+        var certificate;
+        if (data.release_dates.results)
+        {
+            data.release_dates.results.forEach(function(entry)
+            {
+                if (entry.iso_3166_1 == "GB")
+                {
+                    // let index = entry.release_dates[0].type;
+                    // certificate = certificationDict.index;
+                    certificate = entry.release_dates[0].certification;
+                    console.log(data)
+                    console.log("The certificate " + certificate)
+                }
+            })
+        }       
+     
+
+        this.setState({title: this.prop.original_title, blurb: this.prop.overview, certificate: certificate, 
             release_date: this.prop.release_date, directors: _directors, actors: _actors, 
             writers:_writers, omdbid: data.id, 
-            runtime : data.runtime,
+            runtime : data.runtime, genres: genres,
             youtube_key: youtube_key});
 
         var go = '/omdb/' + this.state.omdbid;
@@ -100,7 +129,7 @@ class SearchResult extends React.Component{
 
     
     render () {
-        console.log(this.prop);
+        // console.log(this.state);
         return (
 
 
@@ -117,8 +146,6 @@ class SearchResult extends React.Component{
                                 <div className=".card-body">
                                     <h4 className=".card-title">{this.prop.original_title}</h4>
                                     <p>{this.prop.overview}</p>
-                                    {/* <p> Director: {this.prop.director}</p> */}
-                                    {/* <button onClick={this.goToMovie} className="rounded-pill text buttons_background">ADD TO DATABASE</button> */}
                                     <SearchIMDB onGetMovie={this.stepUp} movieID = {this.prop.id} />
                                     {this.state.forscreening ? <button onClick={this.addScreening}>ADD SCREENING</button> : 
                                     this.state.set ? <p>Already stored.</p> : <button onClick={this.addMovie}>ADD TO DATABASE</button>}
@@ -134,18 +161,7 @@ class SearchResult extends React.Component{
 
             </React.Fragment>
 
-            
-            // <div>
-            //     <a  href={this.href}>
-            //     <img src={this.image} alt={this.prop.original_title} width="200" height="200"></img><br />
-            //     <span >{this.prop.original_title}</span><br/>
-            //     <span >{this.date}</span>
-            //     </a>
-            //     <SearchIMDB onGetMovie={this.stepUp} movieID = {this.prop.id} />
-            //     {this.state.forscreening ? <button onClick={this.addScreening}>ADD SCREENING</button> : 
-            //     this.state.set ? <p>Already stored.</p> : <button onClick={this.addMovie}>ADD TO DATABASE</button>}
-            //     {}
-            // </div>
+        
         )
     }
 

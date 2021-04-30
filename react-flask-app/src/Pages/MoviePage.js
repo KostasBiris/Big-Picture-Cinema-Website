@@ -15,7 +15,7 @@ class MoviePage extends React.Component {
                       movieURL: '',
                       fromMoviePage: true,
                       isUpcoming: false,
-                      screenings: []
+                      screenings: [],
                     };
         //Bind our method.
         this.getMovieData = this.getMovieData.bind(this);
@@ -61,20 +61,6 @@ class MoviePage extends React.Component {
                 
             });
 
-
-
-        
-        // fetch('/isupcoming', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify({data: this.state.returnedData.internalid})
-        // })
-        // .then(response => response.json()).then(data =>{
-        //     this.setState({isUpcoming: data})
-        // })
-
     }
 
     
@@ -100,7 +86,7 @@ class MoviePage extends React.Component {
     }
 
     render() {
-        console.log(this.state.isUpcoming);
+        // console.log(this.state.isUpcoming);
         return (
             <React.Fragment>
                 <head>
@@ -177,7 +163,12 @@ class MoviePage extends React.Component {
                                 </th>
                                 <td data-th = "Genres">{this.state.returnedData.genres}</td>
                             </tr>
-                            
+                            <tr>
+                                <th scope="col">
+                                    Certificate:
+                                </th>
+                                <td data-th = "Certificate">{this.state.returnedData.certificate}</td>
+                            </tr>
                     </table>
 
                     </div>

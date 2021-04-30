@@ -9,7 +9,6 @@ class SearchIMDB extends React.Component {
     this.getMovieData = this.getMovieData.bind(this);
     this.getTrandingMoviesData = this.getTrandingMoviesData.bind(this);
 
-
   }
 
   componentDidMount = () => {
@@ -31,21 +30,24 @@ class SearchIMDB extends React.Component {
       method: 'GET',
     })
       .then(response => response.json()).then(data => {
-        console.log(data);
+        // console.log(data);
         this.props.onGetMovie(data.results);
 
       });
+    
+    fetch(`https://api.themoviedb.org/3/certification/movie/list?api_key=271393256b89c9461c48c1688804f774`)
   }
   // fetch that returns only the details for a specific movie
   getMovieData = (movieID) => {
     // fetch(`http://www.omdbapi.com/?i=${movieID}&apikey=21f186c3`, {
-    fetch(`https://api.themoviedb.org/3/movie/${movieID}?api_key=271393256b89c9461c48c1688804f774&language=en-US&append_to_response=credits,videos`, {
+    fetch(`https://api.themoviedb.org/3/movie/${movieID}?api_key=271393256b89c9461c48c1688804f774&language=en-US&append_to_response=credits,videos,release_dates`, {
       method: 'GET',
     })
       .then(response => response.json()).then(data => {
-       // console.log(data)
+      //  console.log(data)
         this.props.onGetMovie(data); // depends on the function that is passed as a prop
       });
+
   }
 
   getTrandingMoviesData = () => {
@@ -54,7 +56,7 @@ class SearchIMDB extends React.Component {
       method: 'GET',
     })
       .then(response => response.json()).then(data => {
-        console.log(data)
+        // console.log(data)
         this.props.onGetMovie(data); // depends on the function that is passed as a prop
       });
   }

@@ -20,30 +20,6 @@ class SearchManager extends React.Component{
   componentDidMount() {
 
     this.getClientIP();
-    // window.addEventListener('load', this.handleQuery);
-    // this.handleQuery();
-    
-    // const _jquery = document.createElement("script");
-    // _jquery.src = "https://code.jquery.com/jquery-3.2.1.slim.min.js";
-    // _jquery.async = true;
-    // _jquery.integrity = "sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN";
-    // _jquery.crossOrigin = "anonymous";
-    // document.body.appendChild(_jquery);
-
-    // const _popper = document.createElement("script");
-    // _popper.src = "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js";
-    // _popper.async = true;
-    // _popper.integrity = "sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q";
-    // _popper.crossOrigin = "anonymous";
-    // document.body.appendChild(_popper);
-
-    // const _bootstrap = document.createElement("script");
-    // _bootstrap.src = "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js";
-    // _bootstrap.async = true;
-    // _bootstrap.integrity ="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl";
-    // _bootstrap.crossOrigin ="anonymous";
-    // document.body.appendChild(_bootstrap);
-
 }
 
 
@@ -59,16 +35,6 @@ class SearchManager extends React.Component{
     this.setState({ returnedData : Object.values(data)})
   }
 
-  // handleQuery = () => {
-  //   if(this.props.match){
-  //       this.setState({query : this.props.match.params.query});
-  //   }
-
-  //   return(
-  //       <SearchIMDB onGetMovie={this.getMovies} movieName={this.state.query} getAllMovies={"True"} getTranding={"False"} />
-  //   );
-
-  // }
 
   render() {
     //Results found.

@@ -578,10 +578,10 @@ def add():
     runtime = data['runtime']
     youtube_key = data['youtube_key']
     genres = data['genres']
-    print(title, blurb, certificate, director, writers, leadactors, release, omdbid, poster_path, runtime, youtube_key, genres)
+    print(certificate, genres)
 
-    db.add_movie(title, blurb, certificate, ' '.join(director), ' '.join(writers), ' '.join(leadactors[:len(leadactors)//10]), release, omdbid, poster_path,
-    runtime, youtube_key, ' '.join(str(genres)))
+    db.add_movie(title, blurb, certificate, ' '.join(director), ' '.join(writers), ', '.join(leadactors[:len(leadactors)//10]), release, omdbid, poster_path,
+    runtime, youtube_key, ', '.join(genres))
     return jsonify({'response': 'OK'})
 
 
