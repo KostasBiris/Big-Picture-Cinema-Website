@@ -60,33 +60,13 @@ class Payment extends React.Component {
         this.validate = this.validate.bind(this);
         this.assertAuth = this.assertAuth.bind(this);
         this.handleSave = this.handleSave.bind(this);
-                //  this.renderSelector = this.renderSelector.bind(this);
+                
     }
 
     componentDidMount() {
         window.addEventListener('load', this.stepUp);
         window.addEventListener('load', this.getMovieName(this.state.screening.movieid));
         this.getMovieName(this.state.screening.movieid);
-        // const _jquery = document.createElement("script");
-        // _jquery.src = "https://code.jquery.com/jquery-3.2.1.slim.min.js";
-        // _jquery.async = true;
-        // _jquery.integrity = "sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN";
-        // _jquery.crossOrigin = "anonymous";
-        // document.body.appendChild(_jquery);
-
-        // const _popper = document.createElement("script");
-        // _popper.src = "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js";
-        // _popper.async = true;
-        // _popper.integrity = "sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q";
-        // _popper.crossOrigin = "anonymous";
-        // document.body.appendChild(_popper);
-
-        // const _bootstrap = document.createElement("script");
-        // _bootstrap.src = "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js";
-        // _bootstrap.async = true;
-        // _bootstrap.integrity = "sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl";
-        // _bootstrap.crossOrigin = "anonymous";
-        // document.body.appendChild(_bootstrap);
 
         let k = [];
         for (var i = 0; i < this.props.location.state.selectedSeats.length; i++) {
@@ -277,7 +257,8 @@ class Payment extends React.Component {
                                         <div className="col-lg-10 col-md-12 mb-4">
                                             <select value={this.state.orderPart[index]} onChange={(e) => this.handleChangeSelect(e, index)} className="register_details custom-select d-block w-100" id="ticket-type" placeholder="Ticket Type" required>     
                                                 <option value="1">Adult (£7.50)</option>
-                                                <option value="2">Kids (£5.50)</option>
+                                                { this.state.movie.certificate == "U" || this.state.movie.certificate == "PG" || this.state.movie.certificate == "12A" || this.state.movie.certificate == "12" ?
+                                                <option value="2">Kids (£5.50)</option> : <></>}
                                                 <option value="3">Senior (£6.50)</option>
                                             </select>
                                         </div>
@@ -301,7 +282,8 @@ class Payment extends React.Component {
 
 
     render() {
-       // console.log(this.state)
+    //    console.log(this.state)
+    //    console.log(this.props)
         return (
 
                 <body id="grad1">

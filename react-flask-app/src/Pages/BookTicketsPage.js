@@ -21,8 +21,6 @@ class BookTickets extends React.Component {
         }
         this.state = {
             dateChosen: '',
-            //   moviesPlaying: [], // stores array of movies currently playing
-            //   moviesPosters: [], // stores array of posters of movies currently playing
             movieChosen: [],   // stores the movie chosen by the user
             movieTimes: [],
             movieScreens: [],
@@ -36,7 +34,6 @@ class BookTickets extends React.Component {
         this.handleTime = this.handleTime.bind(this);
         this.handleMovie = this.handleMovie.bind(this);
         this.handleScreen = this.handleScreen.bind(this);
-        // this.displayMovies = this.displayMovies.bind(this);
         this.getMovieTimes = this.getMovieTimes.bind(this);
         this.getMovieScreens = this.getMovieScreens.bind(this);
         this.goToSeatMap = this.goToSeatMap.bind(this);
@@ -72,27 +69,6 @@ class BookTickets extends React.Component {
     componentDidMount = () =>{
         window.addEventListener('load', this.seekData);
         this.seekData();
-
-        // const _jquery = document.createElement("script");
-        // _jquery.src = "https://code.jquery.com/jquery-3.2.1.slim.min.js";
-        // _jquery.async = true;
-        // _jquery.integrity = "sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN";
-        // _jquery.crossOrigin = "anonymous";
-        // document.body.appendChild(_jquery);
-    
-        // const _popper = document.createElement("script");
-        // _popper.src = "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js";
-        // _popper.async = true;
-        // _popper.integrity = "sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q";
-        // _popper.crossOrigin = "anonymous";
-        // document.body.appendChild(_popper);
-    
-        // const _bootstrap = document.createElement("script");
-        // _bootstrap.src = "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js";
-        // _bootstrap.async = true;
-        // _bootstrap.integrity ="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl";
-        // _bootstrap.crossOrigin ="anonymous";
-        // document.body.appendChild(_bootstrap);
     }
     componentWillUnmount = () => {
         window.removeEventListener('load', this.seekData)
@@ -155,29 +131,6 @@ class BookTickets extends React.Component {
         this.setState({ screening: screening });
         // console.log(this.state.screening)
 
-
-
-
-        /* let screenid = parseInt(This.state.screenChosen);
-         let timechosen = this.state.timeChosen;
-         let date_chosen_day = this.state.dateChosen.split("-")[2]
-         let screeningid=[];
-         this.state.screenings.forEach(function(entry) {
-             let movie_date_day = entry.date.split("-")[0];
-             if (parseInt(movie_date_day) == parseInt(date_chosen_day)) {
-                 if (entry.id == m) {
-                     if (entry.screenid == screenid) {
-                         if (entry.time ===timechosen) {
-                             screeningid.push(entry.id);
-                         }
-                     }
- 
-                 }
-             }                         
- 
-         })
-         this.setState({screeningid : screeningid[0]});*/
-
     }
     handleMovie = (e) => {
         // e.preventDefault();
@@ -194,7 +147,7 @@ class BookTickets extends React.Component {
 
     // filters out the times of the movieChosen and these are used to be rendered.
     getMovieTimes = () => {
-        console.log(this.state)
+        // console.log(this.state)
         // getting the data before going into if statement or 'this' wont be recognised
         let movieChosen = parseInt(this.state.movieChosen)
         let date_chosen_day = this.state.dateChosen.split("-")[0]
@@ -228,17 +181,6 @@ class BookTickets extends React.Component {
                 <Select onChange={this.handleTime} value={this.state.timeChosen} options={options} placeholder="time" name="times" />
             </div>
         )
-
-        // render movie times
-        /*times.map( ( time, index ) => {
-            return (
-                // <Select value = {times}  onChange={this.handleTime} options={times}  placeholder="time" name="times" />
-                <div onClick={this.handleTime} className="col-md-2 col-4 my-1 px-2 time-input">
-                    <label for={index} value={time} > {time}AM/PM </label>
-                    <input type="radio" id ={index} className="cell py-1"></input>
-                </div>
-                );
-        })*/
 
     }
 
@@ -275,14 +217,6 @@ class BookTickets extends React.Component {
             this.props.history.push('/eas', this.state);
         else
             this.props.history.push('/as', this.state);
-        //let go = ''
-        //     if (this.state.screenChosen && this.state.dateChosen && this.state.movieChosen && this.state.timeChosen){   // quick validation before next page
-        //         go = this.props.history.location.pathname + this.screenChosen; // get the current url and add the next direction
-        //         console.log(go);
-        //         this.props.history.push(go, this.state);
-        //     }
-        //     else
-        //         alert('one of the fields in your booking is empty! Please fill every field to continue to the next page.')
     }
 
     movieOnScreen = (screenid) => {
@@ -318,7 +252,6 @@ class BookTickets extends React.Component {
 
                 </head>
                 <body id="grad1">
-                    {/* <Banner props={this.props} /> */}
                     <br />
 
                     <div className="header_text">
