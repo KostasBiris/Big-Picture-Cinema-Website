@@ -323,30 +323,30 @@ class Payment extends React.Component {
                                     <br />
                                     <br />
                                     <br />
-                                    <form>
+                                    <form className="">
                                         <div className="md-form mb-2">
-                                            <input onChange={this.handleFirstName} value={this.state.firstname} className="register_details form-control" type="text" name="first_name" id="first_name"
+                                            <input className="registerDetails formControl" onChange={this.handleFirstName} value={this.state.firstname} type="text" name="first_name" id="first_name"
                                                 placeholder="First name" style={{ color: 'black' }} required />
                                         </div>
                                         <div className="md-form mb-2">
-                                            <input onChange={this.handleLastName} value={this.state.lastname} className="register_details form-control" type="text" name="last_name" id="last_name"
+                                            <input className="registerDetails formControl"  onChange={this.handleLastName} value={this.state.lastname} type="text" name="last_name" id="last_name"
                                                 placeholder="Last name" style={{ color: 'black' }} required />
                                         </div>
                                         <div className="md-form mb-2">
-                                            <input onChange={this.handleEmail} value={this.state.email} className="register_details form-control" type="text" name="email" id="email"
+                                            <input className="registerDetails formControl"  onChange={this.handleEmail} value={this.state.email} type="text" name="email" id="email"
                                                 placeholder="E-mail address" style={{ color: 'black' }} required />
                                         </div>
                                         <div className="md-form mb-2">
-                                            <input onChange={this.handleAddressOne} value={this.state.addressOne} className="register_details form-control" className="register_details form-control" type="text" name="address" id="address"
+                                            <input className="registerDetails formControl"  onChange={this.handleAddressOne} value={this.state.addressOne} type="text" name="address" id="address"
                                                 placeholder="Address Line 1" style={{ color: 'black' }} required />
                                         </div>
                                         <div className="md-form mb-2">
-                                            <input onChange={this.handleAddressTwo} value={this.state.addressTwo} className="register_details form-control" type="text" name="address" id="address-2"
+                                            <input className="registerDetails formControl"  onChange={this.handleAddressTwo} value={this.state.addressTwo} type="text" name="address" id="address-2"
                                                 placeholder="Address Line 2 (Optional)" style={{ color: 'black' }} />
                                         </div>
                                         <div className="row">
                                             <div className="col-lg-4 col-md-12 mb-4">
-                                                <select className="register_details custom-select d-block w-100" id="country" required>
+                                                <select className=" customSelect d-block w-100" id="country" required>
                                                     <option value="">Country</option>
                                                     <option>United Kingdom</option>
                                                 </select>
@@ -362,7 +362,7 @@ class Payment extends React.Component {
                                     </form>
                                     {this.validate() ?<div classNameName="Payment">
                                         <Elements stripe={promise}>
-                                            <CheckoutForm props={this.props} state={this.state}/>
+                                            <CheckoutForm props={this.props} state={this.state} save ={this.state.save} auth = {this.state.isAuthed}/>
                                         </Elements>
                                     </div> : <></>}    
                                     

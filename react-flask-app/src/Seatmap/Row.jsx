@@ -35,7 +35,7 @@ export default class Row extends React.Component{
                 onMouseOut={this.handleMouseMove.bind(this, false)}
                 onMouseOver={this.handleMouseMove.bind(this, true)}
             >
-                <RowNumber rowNumber={rowNumber} bold={bold} />
+                <RowNumber rowNumber={String.fromCharCode(parseInt(rowNumber)+64)} bold={bold} />
                 {this.props.children}
             </div>
         );
