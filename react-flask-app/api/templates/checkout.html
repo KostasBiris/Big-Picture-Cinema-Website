@@ -61,17 +61,14 @@
                 <div class="col-sm-6 col-xs-12">
                     <br>
                     <div class="header_text">
-                        <h2 style="position:absolute; left:25px; color: #4e5b60; font-weight: bold;">CHECKOUT DETAILS
+                        <h2 style="position:relative; left:15px; color: #4e5b60; font-weight: bold; margin-bottom:auto; ">CHECKOUT DETAILS
                         </h2>
                     </div>
-                    <br>
-                    <br>
-                    <br>
                     <br>
                     <form>
                         <div class="md-form mb-2">
                             <input class="register_details form-control" type="text" name="first_name" id="first_name"
-                                placeholder="First name" style="color:black;" required />
+                                placeholder="First name" style="color:black; margin-top: auto;" required />
                         </div>
                         <div class="md-form mb-2">
                             <input class="register_details form-control" type="text" name="last_name" id="last_name"
@@ -107,17 +104,20 @@
                                 </div>
                             </div>
                         </div>
-                        <hr class="mb-4">
+                        <div class="container md-form mb-2">
+                            <hr class="mb-4">
+                            <img style= "height: 5rem; max-width: fit-content;" src="{{url_for('static',filename='poster3.jpg')}}">
+                            <br>
+                            <br>
                         <button class="btn btn-primary btn-lg btn-block" type="submit">PAY NOW</button>
+                        </div>
                     </form>
                 </div>
                 <div class="col-sm-6 col-xs-13">
                     <br>
                     <div class="header_text">
-                        <h3 style="position:absolute; left:25px; color: #4e5b60; font-weight: bold;">ORDER SUMMARY</h3>
+                        <h3 style="position:relative; left:15px; color: #4e5b60; font-weight: bold;  margin-bottom:auto;">ORDER SUMMARY</h3>
                     </div>
-                    <br>
-                    <br>
                     <br>
                     <h5 class="my-0" style="position:absolute; left:25px;">Select Ticket Type: </h5>
                     <br>
@@ -236,15 +236,12 @@
     <nav>
         <ul class="pagination justify-content-center ">
             <li class="page-item disabled">
-                <a class="buttons_prev mr-3" style="color: white;" tabindex="-1" aria-disabled="true">
-                    &nbsp;&nbsp;<&nbsp;&nbsp; </a>
+                <a class="buttons_prev" style="color: white;" tabindex="-1" aria-disabled="true">
+                    < </a>
             </li>
-            <li class="page-item"><a class="buttons_background mr-3" style="color: white;">MOVIE</a></li>
-            <li class="page-item"><a class="buttons_background mr-3" style="color: white;">SEATS</a></li>
-            <li class="page-item"><a class="buttons_background mr-3" style="color: white;">CHECKOUT</a></li>
-            <li class="page-item">
-                <a class="buttons_next mr-3" style="color: white;">&nbsp;&nbsp;>&nbsp;&nbsp;</a>
-            </li>
+            <li class="page-item"><a class="buttons_background" style="color: white;">MOVIE</a></li>
+            <li class="page-item"><a class="buttons_background" style="color: white;">SEATS</a></li>
+            <li class="page-item"><a class="buttons_background" style="color: white;">CHECKOUT</a></li>
         </ul>
     </nav>
     <br>

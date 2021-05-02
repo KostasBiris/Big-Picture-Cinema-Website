@@ -335,6 +335,11 @@ def moviepage():
 def managerlogin():
     return render_template('manager_login.html')
 
+@app.route('/analytics')
+def overallanalytics():
+    return render_template('overall_analytics.html')
+
+
 @app.route('/screen')
 def screen():
     return render_template('screen.html')
@@ -646,7 +651,7 @@ def spinner():
     while True:
         db.clear_sessions()
 if __name__ == '__main__':
-    thread = Thread(target=spinner, args=())
-    thread.daemon = True
-    thread.start()
+    #thread = Thread(target=spinner, args=())
+  #  thread.daemon = True
+    #thread.start()
     app.run(debug=False, host='localhost', port='5000', threaded=True)
