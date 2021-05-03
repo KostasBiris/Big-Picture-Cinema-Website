@@ -1,6 +1,8 @@
 
 import React from 'react';
 import './burger.css'
+import { Link } from 'react-router-dom';
+
 
 class NotFoundPage extends React.Component {
     
@@ -63,7 +65,7 @@ class NotFoundPage extends React.Component {
 </div>
 
 
-
+<Link to='/home' class="btn-go-home" target="_blank">GO BACK HOME</Link>
 
             </React.Fragment>
 
