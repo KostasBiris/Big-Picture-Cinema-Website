@@ -17,27 +17,22 @@ class SearchResults extends React.Component{
     super(props);
     //Bind our method.
     this.getMovies = this.getMovies.bind(this);
-    this.getClientIP = this.getClientIP.bind(this);
     //By default the state is an empty array.
     this.state ={ returnedData: [], IP: null, auth: false, manager: true};
   }
 
   componentDidMount() {
 
-    this.getClientIP();
     window.addEventListener('load', this.getMovies);
     this.getMovies();
-
+    if (this.state.returnedData.length === 0) {
+      this.props.history.push('/', this.state);
+    }
 
 }
 
 
-  getClientIP = () => {
-    (async () => {
-        this.setState({IP: await publicIP.v4()})
-    })();
 
-  }
   //Invoke a request to our rest API to search the database for movies matching our query.
   getMovies = async () => {
     let movie = ''
