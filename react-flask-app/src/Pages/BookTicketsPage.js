@@ -272,7 +272,7 @@ class BookTickets extends React.Component {
                                                     <input type="radio" name="gender" className="sr-only" id={index} checked = {parseInt(this.state.movieChosen) === parseInt(movie.internalid)} />
                                                     <label for={index}>
                                                         <figure><img id={movie.internalid} onClick={this.handleMovie} className="image_box"
-                                                            src={'https://image.tmdb.org/t/p/w500/' + movie.poster_path} className="new_movies"
+                                                            src={'https://image.tmdb.org/t/p/w500/' + movie.poster_path} 
                                                             style={{ position: 'relative' }} />
                                                         </figure>
                                                     </label>
@@ -296,10 +296,10 @@ class BookTickets extends React.Component {
                                                 <h1 className="header_text" style={{ color: "antiqueWhite" }}>CHOOSE DATE:</h1>
                                             </div>
                                         </div>
-                                        <div className="card-body p-3 p-sm-5">
-                                            <div className="row text-center mx-0">
+                                        <div className="justify-content-sm-center px-sm-4 card-body">
+                                            <div className="row text-center">
                                                 <div className="col-md-2 col-4 my-1 px-2">
-                                                    <div className="mx-0 mb-0 row justify-content-sm-center px-1 justify-content-start px-1">
+                                                    <div className="mx-0 mb-0 row justify-content-sm-center justify-content-center px-1">
                                                         <input type="date" onChange={this.handleDate} value={this.reformatd(this.state.dateChosen)} disabled={this.state.movieChosen.length === 0 ? "disabled" : ""} />
                                                         <span className="fa fa-calendar"></span>
                                                     </div>
@@ -329,7 +329,7 @@ class BookTickets extends React.Component {
                                                 <h1 className="header_text" style={{ color: "antiqueWhite" }}>CHOOSE SCREEN:</h1>
                                             </div>
                                         </div>
-                                        <div className="card-body p-3 p-sm-5">
+                                        <div className="card-body">
                                             <div className="row text-center mx-0">
                                                 {
                                                     this.state.movieScreens ? this.getMovieScreens(this.state.movieScreens) :
@@ -344,8 +344,8 @@ class BookTickets extends React.Component {
                                                                     //     <label for="1">SILVER SCREEN 1</label>
                                                                     //     <input type="radio" id="1" className="tab_background rounded-pill" name="screen" value="1" onClick={this.handleScreen}/>
                                                                     // </div>
-                                                                    <div className=".col-md-2 .col-4 .my-1 .px-2 tab_background rounded-pill" >
-                                                                    <input type="radio" id="1" className="tab_background rounded-pill" name="screen" value="1" onClick={this.handleScreen}/>
+                                                                    <div className=".col-md-2 .col-4 .my-1 .px-2 buttons_remove" >
+                                                                    <input type="radio" id="1" className="buttons_remove" name="screen" value="1" onClick={this.handleScreen}/>
                                                                     <label style={{padding:'5px'}} for="1">SILVER SCREEN 1</label>
                                                                     
                                                                     </div>
@@ -356,9 +356,9 @@ class BookTickets extends React.Component {
                                                             {
                                                                 this.movieOnScreen(2) ?
                                                                     
-                                                                    <div className=".col-md-2 .col-4 .my-1 .px-2 tab_background rounded-pill">
+                                                                    <div className=".col-md-2 .col-4 .my-1 .px-2 buttons_remove">
                                                                         
-                                                                        <input type="radio" id="2" className="tab_background rounded-pill" name="screen" value="2" onClick={this.handleScreen}></input>
+                                                                        <input type="radio" id="2" className="buttons_remove" name="screen" value="2" onClick={this.handleScreen}></input>
                                                                         <label style={{padding:'5px'}} for="2">SILVER SCREEN 2</label>
                                                                     </div> 
 
@@ -367,9 +367,9 @@ class BookTickets extends React.Component {
                                                             }
                                                             {
                                                                 this.movieOnScreen(3) ?
-                                                                    <div className=".col-md-2 .col-4 .my-1 .px-2 tab_background rounded-pill">
+                                                                    <div className=".col-md-2 .col-4 .my-1 .px-2 buttons_remove">
                                                                         
-                                                                        <input type="radio" id="3" className="tab_background rounded-pill" name="screen" value="3" onClick={this.handleScreen}></input>
+                                                                        <input type="radio" id="3" className="buttons_remove" name="screen" value="3" onClick={this.handleScreen}></input>
                                                                         <label style={{padding:'5px'}} for="3">SILVER SCREEN 3</label>
                                                                     </div>
                                                                     :
@@ -377,9 +377,9 @@ class BookTickets extends React.Component {
                                                             }
                                                             {
                                                                 this.movieOnScreen(4) ?
-                                                                    <div className=".col-md-2 .col-4 .my-1 .px-2 tab_background rounded-pill">
+                                                                    <div className=".col-md-2 .col-4 .my-1 .px-2 buttons_remove">
                                                                         
-                                                                        <input type="radio" id="4" className="tab_background rounded-pill" name="screen" value="4" onClick={this.handleScreen}></input>
+                                                                        <input type="radio" id="4" className="buttons_remove" name="screen" value="4" onClick={this.handleScreen}></input>
                                                                         <label style={{padding:'5px'}} for="4">VMAX SCREEN</label>
                                                                     </div>
 
@@ -389,9 +389,9 @@ class BookTickets extends React.Component {
                                                             {
                                                                 this.movieOnScreen(5) ?
 
-                                                                    <div className=".col-md-2 .col-4 .my-1 .px-2 tab_background rounded-pill">
+                                                                    <div className=".col-md-2 .col-4 .my-1 .px-2 buttons_remove">
                                                                         
-                                                                        <input type="radio" id="5" className="tab_background rounded-pill" name="screen" value="5" onClick={this.handleScreen}></input>
+                                                                        <input type="radio" id="5" className="buttons-remove" name="screen" value="5" onClick={this.handleScreen}></input>
                                                                         <label style={{padding:'5px'}} for="5">GOLDEN SCREEN</label>
                                                                     </div>
                                                                     :
@@ -418,10 +418,10 @@ class BookTickets extends React.Component {
                                                 <h1 className="header_text" style={{ color: "antiqueWhite" }}>CHOOSE A TIME: </h1>
                                             </div>
                                         </div>
-                                        <div className="card-body p-3 p-sm-5">
-                                            <div className="row text-center mx-0">
-                                                <div className="card-body p-3 p-sm-5">
-                                                    <div className="row text-center mx-0">
+                                        <div className="card-body">
+                                            <div className="row text-center">
+                                                <div className="card-body">
+                                                    <div className="row text-center">
                                                         {
                                                             this.state.screenChosen !== "" ? this.getMovieTimes() :
                                                                 <p> Choose a screen to see the screening times </p>
@@ -441,11 +441,11 @@ class BookTickets extends React.Component {
 
                     <nav>
                         <div className="container text-center">
-                            <button className="tab_background text mr-3 btn-lg">{'<'}</button>
+                            
                             <button className="tab_background text mr-3 btn-lg">MOVIE</button>
                             <button className="tab_background text mr-3 btn-lg" onClick={this.goToSeatMap}>SEATS</button>
                             <button className="tab_background text mr-9 btn-lg">CHECKOUT</button>
-                            <button className="tab_background text mr-3 btn-lg" style={{marginLeft:'12px'}}>{'>'}</button>
+                           
                         </div>
                     </nav>
                     <br />

@@ -153,21 +153,13 @@ class Banner extends React.Component {
                             </button>
                             <div className="collapse navbar-collapse" id="navbarSupportedContent">
                                 <ul className="navbar-nav mr-auto">
-                                    <li className="nav-item active">
+                                    <li className="nav-item">
                                         <button className="tab_background text mr-3">WHAT'S NEW</button>
                                     </li>
                                     <li className="nav-item">
                                         <Link to={'/book'}>
                                         <button className="tab_background text mr-3">TICKETS</button>
                                         </Link>
-                                    </li>
-                                    <li className="nav-item dropdown">
-                                    <button className="tab_background dropdown-toggle text mr-3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">SCREENS</button>
-                                        <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                            <button className="dropdown-item" style={{ color: '#f9bc50' }} >SILVER Screens</button>
-                                            <button className="dropdown-item" style={{ color: '#f9bc50' }}>VMAX Screens</button>
-                                            <button className="dropdown-item" style={{ color: '#f9bc50' }} >GOLDEN Screens</button>
-                                        </div>
                                     </li>
                                     <li className="nav-item">
                                         <button className="tab_background text mr-9">INFO</button>
@@ -177,11 +169,11 @@ class Banner extends React.Component {
                                     <button onClick={this.handleLogout} className="tab_background mr-3">LOG OUT</button>
                                     <input onClick={this.handleAccount} className="mr-3" type="image" style={{ width: '2rem', height: '2rem' }} src={usericon} />
                                 </form>
-                                <form className="form-inline my-2 my-lg-0">
+                                <form className="form-inline my-2 my-lg-0 mr-3">
                                     <input onChange={this.handleSearchChange} value={this.state.query} className="form-control mr-sm-2 search_bar" type="search" placeholder="Search here.." aria-label="Search" />
                                     <button onClick={this.handleSubmit} className="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>
                                 </form>
-                                <form className="form-inline my-2 my-lg-0">
+                                <form className="form-inline my-2 my-lg-0 mr-3">
                                 <input type="date" onChange={this.handleDate} value={this.reformatd(this.state.date)} />
                                 <button onClick={this.handleSubmitDate} className="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>
                                 </form>
@@ -217,17 +209,10 @@ class Banner extends React.Component {
                                     <li className="nav-item">
                                         
                                         <Link to={'/book'}>
-                                            <button className="tab_background text mr3">TICKETS</button>
+                                            <button className="tab_background text mr-3">TICKETS</button>
                                         </Link>
                                         {/* <Route path="/book" component={BookTickets}/> */}
                                     </li>
-                                    <li className="nav-item dropdown"></li>
-                                    <button className="tab_background dropdown-toggle text mr-3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">SCREENS</button>
-                                    <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <button className="dropdown-item" style={{ color: '#f9bc50' }} >SILVER Screens</button>
-                                        <button className="dropdown-item" style={{ color: '#f9bc50' }}>VMAX Screens</button>
-                                        <button className="dropdown-item" style={{ color: '#f9bc50' }} >GOLDEN Screens</button>
-                                    </div>
                                     <li className="nav-item">
                                         <button className="tab_background text mr-3" >EVENTS</button>
                                     </li>
@@ -239,11 +224,11 @@ class Banner extends React.Component {
                                     <button onClick={this.handleLogin} className="tab_background mr-3">LOG IN</button>
                                     <button onClick={this.handleRegister} className="tab_background mr-5">SIGN UP</button>
                                 </form>
-                                <form className="form-inline my-2 my-lg-0">
+                                <form className="form-inline my-2 my-lg-0 mr-3">
                                     <input onChange={this.handleSearchChange} value={this.state.query} className="form-control mr-sm-2 search_bar" type="search" placeholder="Search here.." aria-label="Search" />
                                     <button onClick={this.handleSubmit} className="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>
                                 </form>
-                                <form className="form-inline my-2 my-lg-0">
+                                <form className="form-inline my-2 my-lg-0 mr-3">
                                     <input type="date" onChange={this.handleDate} value={this.reformatd(this.state.date)} />
                                     <button onClick={this.handleSubmitDate} className="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>
                                 </form>

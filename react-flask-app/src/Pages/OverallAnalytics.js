@@ -140,7 +140,7 @@ class OverallAnalytics extends React.Component {
             value: v.original_title
         }));
         return (
-            <div>
+            <div className="instruct">
                 <Select onChange={this.handleMovieA} value={this.state.MovieA} options={options} placeholder="Movie" name="movieA" />
             </div>
         )
@@ -207,7 +207,7 @@ class OverallAnalytics extends React.Component {
         }));
         //console.log(options);
         return (
-            <div>
+            <div className="instruct">
                 <Select onChange={this.handleMovieB} value={this.state.MovieB} options={options} placeholder="Movie" name="movieB" />
             </div>
         )
@@ -266,19 +266,30 @@ class OverallAnalytics extends React.Component {
 
     render() {
         return (
-            <body>
+            <body id="grad1">
                 {/* <ManagerBanner /> */}
                 <br />
                 <br />
-                <div className="header_text" >
-                    <h1 style={{ position: 'absolute', left: '25px', color: '#4e5b60' }}>OVERALL ANALYTICS</h1>
-                </div>
-                <br />
-                <br />
-                <br />
-                <br />
-                <span><p>This shows all income ever made from every movie ever screened.</p></span>
-
+                <div className="container-fluid px-0 px-sm-4 mx-auto">
+                            <div className="row justify-content-center mx-0">
+                                <div className="col-lg-10">
+                                    <div className="card border-0">
+                                        <div className="card-header" style={{ backgroundColor: "#4e5b60" }}>
+                                            <div className="mx-0 mx-b row justify-content-sm-center justify-content-start px-1">
+                                                <h1 className="header_text" style={{ color: "antiqueWhite" }}>OVERALL ANALYTICS: </h1>
+                                            </div>
+                                        </div>
+                                        {
+                                            <div className="header_text " >
+                                                            <h2 style={{ position: 'absolute', left: '85px', color: '#4e5b60'}}>Overall Income: £{this.state.totalrev}</h2>
+                                                        </div>
+                                                        }
+                                        <div className="card-body">
+                                            <div className="row text-center">
+                                                <div className="card-body">
+                                                    <div className="row text-center">
+                                                       
+                                                    
                 <BarChart width={500} height={300} data={this.state.data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }} layout="vertical">
                     <CartesianGrid strokeDasharray="3 3" />
                     {/* <XAxis dataKey="name" stroke="#000000" /> */}
@@ -289,25 +300,39 @@ class OverallAnalytics extends React.Component {
                     <Legend />
                     <Bar barSize={300/this.state.data.length} background label="name" dataKey="revenue (£)" fill="#8884d8" />
                 </BarChart>
-                <div className="header_text" >
-                    <h2 style={{ position: 'absolute', left: '25px', color: '#4e5b60' }}>OVERALL INCOME: £{this.state.totalrev}</h2>
+                
+                
                 </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                <br />
+                <br />
+                <br />
+                <div className="container-fluid px-0 px-sm-4 mx-auto">
+                            <div className="row justify-content-center mx-0">
+                                <div className="col-lg-10">
+                                    <div className="card border-0">
+                                        <div className="card-header" style={{ backgroundColor: "#4e5b60" }}>
+                                            <div className="mx-0 mx-b row justify-content-sm-center justify-content-start px-1">
+                                                <h1 className="header_text" style={{ color: "antiqueWhite" }}>WEEKLY ANALYTICS: </h1>
+                                            </div>
+                                        </div>
+                                        {
+                                            <div className="header_text" >
+                                            <h2 style={{ position: 'absolute', left: '85px', color: '#4e5b60' }}>Weekly Income: £{this.state.weeklyrev}</h2>
+                                        </div>
+                                        }
+                                         <div className="card-body">
+                                            <div className="row text-center">
+                                                <div className="card-body">
+                                                    <div className="row text-center">
+                
 
-
-                <br />
-                <br />
-                <br />
-                <div className="header_text" >
-                    <h1 style={{ position: 'absolute', left: '25px', color: '#4e5b60' }}>WEEKLY ANALYTICS</h1>
-                </div>
-                <br />
-                <br />
-                <br />
-                <br />
-
-                <br />
-                <br />
-                <span><p>This shows all income from the past week.</p></span>
                 <BarChart width={500} height={300} data={this.state.dataPastWeek} marg={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="name" stroke="#000000" />
@@ -316,46 +341,59 @@ class OverallAnalytics extends React.Component {
                     <Legend />
                     <Bar dataKey="revenue (£)" fill="#8884d8" />
                 </BarChart>
-                <div className="header_text" >
-                    <h2 style={{ position: 'absolute', left: '25px', color: '#4e5b60' }}>WEEKLY INCOME: £{this.state.weeklyrev}</h2>
                 </div>
+                
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                
+                
                 <br />
                 <br />
                 <br />
-                <br />
-                <div className="header_text" >
-                    <h1 style={{ position: 'absolute', left: '25px', color: '#4e5b60' }}>COMPARE MOVIES IN RANGE</h1>
+                <div className="container-fluid px-0 px-sm-4 mx-auto">
+                            <div className="row justify-content-center mx-0">
+                                <div className="col-lg-10">
+                                    <div className="card border-0">
+                                        <div className="card-header" style={{ backgroundColor: "#4e5b60" }}>
+                                            <div className="mx-0 mx-b row justify-content-sm-center justify-content-start px-1">
+                                                <h1 className="header_text" style={{ color: "antiqueWhite" }}>COMPARE MOVIES IN RANGE:</h1>
+                                            </div>
+                                        </div>
+                                        <div className="card-body">
+                                            <div className="row text-center">
+                                                <div className="card-body">
+                                                    <div className="row text-center">
+                
+                <div className=".col-md-2 .col-4 .my-1 .px-2 analytics">
+                <label className="instruct" for="date" id="date">Choose a date:</label>
+                <input className="fa fa-calender" type = "date" name="date" onChange={this.handleDateChangeA} value={this.reformatd(this.state.DateA)}  dateFormat="dd/MM/yyyy" />
                 </div>
-                <br />
-                <br />
-                <br />
-
-
-                <label for="date" id="date">Choose a date:</label>
-                <input type = "date" name="date" onChange={this.handleDateChangeA} value={this.reformatd(this.state.DateA)}  dateFormat="dd/MM/yyyy" /><br></br>
-                <br />
-                <br />
-                <br />
-                <label for="date" id="date">Choose a date:</label>
-                <input type = "date" name="date" onChange={this.handleDateChangeB} value={this.reformatd(this.state.DateB)}  dateFormat="dd/MM/yyyy" /><br></br>
-                <br />
-                <br />
-                <br />
-                <div>
-                    <label for="movieA" id="movieA">Choose a movie:</label>
+                <div className=".col-md-2 .col-4 .my-1 .px-2 analytics">
+                <label className="instruct" for="date" id="date">Choose a date:</label>
+                <input  className="fa fa-calender" type = "date" name="date" onChange={this.handleDateChangeB} value={this.reformatd(this.state.DateB)}  dateFormat="dd/MM/yyyy" />
+                </div>
+                <div className=".col-md-2 .col-4 .my-1 .px-2">
+                    <label className="instruct" for="movieA" id="movieA">Choose a movie: </label>
                     {this.getMoviesA()}
                 </div>
                 <br />
                 <br />
                 <br />
-                <div>
-                    <label for="movieB" id="movieB">Choose a movie:</label>
+                <div className=".col-md-2 .col-4 .my-1 .px-2 analytics">
+                    <label className="instruct" for="movieB" id="movieB">Choose a movie: </label>
                     {this.getMoviesB()}
                 </div>
                 <br />
                 <br />
                 <br />
-                <button type="submit" onClick={this.handleCompare}>COMPARE MOVIES</button>
+                <div className=".col-md-2 .col-4 .my-1 .px-2">
+                <button className="buttons_remove" type="submit" onClick={this.handleCompare}>COMPARE MOVIES</button>
+                </div>
                 {this.state.comparisonDrawn === true?
                     <div>
                         <span><p>Comparison between {this.state.MovieA.value} and {this.state.MovieB.value} from {this.state.DateA} to {this.state.DateB}</p></span>
@@ -371,8 +409,30 @@ class OverallAnalytics extends React.Component {
                     </div>
                     :
                     <></>}
+                     </div>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+                    
+                    <br/>
+                    <br/>
+                    <br/>
+                    <footer className="bg-light text-center">
+                        <div className="text-center p-3" style={{backgroundColor: 'rgba(0, 0, 0, 0.2)'}}>
+                            All rights reserved. © 2021 Copyright:
+                            <a className="text-dark" >The Big Picture</a>
+                        </div>
+                    </footer>
             </body>
+            
+            
         )
+        
     }
 }
 

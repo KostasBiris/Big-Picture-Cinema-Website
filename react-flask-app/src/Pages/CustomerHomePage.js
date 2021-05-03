@@ -277,15 +277,15 @@ class CustomerHomePage extends React.Component {
             <div className="row">
                 {indexes.map(i => {
                     return (
-                    <div className="col-lg-3 col-md-4 hover01">
-                        <div className="col-md-2 col-md-offset-1">
+                        <div class="col-lg-3 col-md-4 hover01">
+                            <center>
+                    <div className=".col-sm-5 .col-md-6">
                             <figure><img onClick={(e) => {
                                 this.handleClick(e, movies[i])}
-                                } className="img-fluid new_movies" src={'https://image.tmdb.org/t/p/w500/' + movies[i].poster_path} alt=""/></figure>
+                                } className="img-fluid image_box" src={'https://image.tmdb.org/t/p/w500/' + movies[i].poster_path} alt=""/></figure>
                         </div>
-                        
-
-                    </div>
+                        </center>
+                        </div>
                     );
                 
             })}

@@ -92,6 +92,7 @@ class MoviePage extends React.Component {
                 <head>
                     <link rel="stylesheet" type="text/css" href={main} />
                 </head>
+                <body id = 'grad1'>
                 <div className="header_text"></div>
                     <h1 style = {{position:'absolute', left:'25px', color: '#4e5b60', fontWeight:'bold' }}>{this.state.returnedData.original_title}</h1>
                     {/* <br /><br /><br /><br /><br /><br /><br /><br />
@@ -179,6 +180,15 @@ class MoviePage extends React.Component {
                     <div className="embed-responsive embed-responsive-21by9">
                         
                     </div>
+                    <br/>
+                    <br/>
+                    <footer className="bg-light text-center">
+                        <div className="text-center p-3" style={{backgroundColor: 'rgba(0, 0, 0, 0.2)'}}>
+                            All rights reserved. © 2021 Copyright:
+                            <a className="text-dark" >The Big Picture</a>
+                        </div>
+                    </footer>
+                    </body>
                     {/* <div className="text"></div>
                     <table className="position_table">
                             <tr>
