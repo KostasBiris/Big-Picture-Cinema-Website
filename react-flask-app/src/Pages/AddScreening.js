@@ -15,10 +15,10 @@ class AddScreening extends React.Component {
 
     }
 
-    handleScreenChange = (screen) => {
-        //e.preventDefault();
-
-        this.setState({screen: screen});
+    handleScreenChange = (e) => {        
+        e.preventDefault();
+        console.log(e);
+        this.setState({screen: e.target.value});
     }
 
     handleMovieChange = (movie) => {
@@ -50,8 +50,8 @@ class AddScreening extends React.Component {
             let time = this.state.time;
             let date = moment(this.state.date).format('DD-MM-YYYY').toString();
             let obj = this.state.movies.find(r=> r.original_title === this.state.movie.label);
-
             let data = {movie_id: obj.internalid, screen: screen, time: time, date: date};
+            console.log(data);
             fetch('/addascreening', {
                 method: 'POST',
                 headers: {
@@ -60,6 +60,7 @@ class AddScreening extends React.Component {
                 body: JSON.stringify({ data: data })
             }).then(response => response.json()).then(data=> {
                 alert('RESULT: ' + data.response)
+                this.setState({date: moment(), time: ""})
             })
         } else{
             alert("Please fill in all details!")
@@ -100,7 +101,7 @@ class AddScreening extends React.Component {
                     <label for="movies" id="movies">Choose a movie:</label>
                     <Select value = {this.state.movie}  onChange={this.handleMovieChange} style={{width: this.state.movie === undefined ? '100px' : `${100 + this.state.movie.length*2}px` }} options={options}  placeholder="select movie" name="movies" id="movies"/>
                     <label for="screens" id="screens">Choose a screen:</label>
-                    <select onChange={this.handleScreenChange} value={this.state.screen}name="screens" id="screens">
+                    <select value={this.state.screen} onChange={this.handleScreenChange} name="screens" id="screens">
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
