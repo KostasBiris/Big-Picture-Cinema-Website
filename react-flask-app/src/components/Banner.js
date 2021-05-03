@@ -41,92 +41,6 @@ class Banner extends React.Component {
 
     }
 
-    async componentDidMount  ()  {
-        // window.addEventListener('load', this.stepUp);
-        // await this.stepUp();
-        // this.assertAuth();
-        // interval = setInterval(() => {
-
-        //     if (this.state.IP !== null) {
-        //         this.assertAuth();
-        //     }
-        // }, 5000)
-
-        // const _jquery = document.createElement("script");
-        // _jquery.src = "https://code.jquery.com/jquery-3.2.1.slim.min.js";
-        // _jquery.async = true;
-        // _jquery.integrity = "sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN";
-        // _jquery.crossOrigin = "anonymous";
-        // document.body.appendChild(_jquery);
-
-        // const _popper = document.createElement("script");
-        // _popper.src = "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js";
-        // _popper.async = true;
-        // _popper.integrity = "sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q";
-        // _popper.crossOrigin = "anonymous";
-        // document.body.appendChild(_popper);
-
-        // const _bootstrap = document.createElement("script");
-        // _bootstrap.src = "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js";
-        // _bootstrap.async = true;
-        // _bootstrap.integrity ="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl";
-        // _bootstrap.crossOrigin ="anonymous";
-        // document.body.appendChild(_bootstrap);
-    }
-
-    // componentWillUnmount = () => {
-    //     window.removeEventListener('load', this.stepUp(true))
-    //     clearInterval(interval);
-    // }
-
-
-    // getClientIP = () => {
-    //     (async () => {
-    //         this.setState({ IP: await publicIP.v4() })
-    //     })();
-    // }
-
-
-
-    // stepUp = async (flag) => {
-    //     await (async () => {
-    //         this.setState({ IP: await publicIP.v4() })
-    //     })();
-    //     if (flag)
-    //         this.assertAuth();
-    // }
-
-    // async assertAuth  ()  {
-    //     if (this.state.IP === null) {
-    //         return false;
-    //     }
-    //     var go = '/insession/' + this.state.IP;
-    //     fetch(go, {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         }
-    //     })
-    //         .then(response => response.json()).then(data => {
-    //             this.setState({ response: data.response })
-    //         })
-    // };
-
-    // isAuth = () => {
-    //     console.log("from is auth in BANNER home page")
-    //     console.log(this.props)
-    //     if(this.props.location)
-    //         if(this.props.location.state)
-    //             if (this.props.location.state.logged === true)
-    //                 return true;
-    //             else
-    //                 return false
-    //         else
-    //             return false;
-    //     else
-    //         return false;
-    // }
-
     //Method for handling a change in the search query field.
     handleSearchChange = (e) => {
         // e.preventDefault();
@@ -254,9 +168,6 @@ class Banner extends React.Component {
                                             <button className="dropdown-item" style={{ color: '#f9bc50' }}>VMAX Screens</button>
                                             <button className="dropdown-item" style={{ color: '#f9bc50' }} >GOLDEN Screens</button>
                                         </div>
-                                    </li>
-                                    <li className="nav-item">
-                                        <button className="tab_background text mr-3" >EVENTS</button>
                                     </li>
                                     <li className="nav-item">
                                         <button className="tab_background text mr-9">INFO</button>

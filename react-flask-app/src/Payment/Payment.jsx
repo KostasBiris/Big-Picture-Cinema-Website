@@ -1,7 +1,6 @@
 import React from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-import CheckoutFormNoAuth from "./CheckoutFormNoAuth";
 import CheckoutFormAuth from "./CheckoutFormAuth";
 import CheckoutFormAuthNoKey from "./CheckoutFormAuthNoKey";
 import CheckoutForm from './CheckoutForm';
