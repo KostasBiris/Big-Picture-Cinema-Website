@@ -111,15 +111,16 @@ def serialize_movie(res):
     }
 
 def serialize_user(res):
-
-
+    print(res)
     return {
-        'id': res[0],
-        'forename': res[1],
-        'surname': res[2],
-        'email': res[3],
-        'phone': res[4],
-        'dob' : res[6]
+            'id': res[0],
+            'forename': res[1],
+            'surname': res[2],
+            'email': res[3],
+            'phone': res[4],
+            'dob' : res[6],
+            'stripe' : res[7],
+            'pm' : res[8]
     }
 
 
@@ -215,9 +216,12 @@ def tk():
 @app.route('/makebooking', methods=['POST'])
 def makebooking():
     db = Database('cinema.db')
+    print(request.json)
+    # stripeKey = request.json['stripeKey']
     data = request.json['data']
     data = data['state']
-    print(data)
+    # stripe = data['stripeID']
+    # stripeKey = request.json['stripe']
     should_send_ticket = data['isEmployee']
     screening = data['screening']
     screeningid = screening['id']
@@ -226,7 +230,6 @@ def makebooking():
     screen = screening['screenid']
     date = screening['date']
     time = screening['time']
-
     seatstostore = ''
     for seat in seats:
         seatstostore += str(seat['row']) + str(seat['col']) + ','
@@ -253,7 +256,12 @@ def makebooking():
         db.ticket_to_pdf(path, bookingid, "", "", movie, seatstostore, orderPart, screen, screeningid, total, qr, date, time)
         db.add_ticket(bookingid, movieid, total, "", "", email, path, qr, orderPart.count('4'), orderPart.count('2'), orderPart.count('3'), orderPart.count('1'))    
     
-    
+    # if request.json['data']['props']['isAuthed']:
+    #     print('WAS AUTHED!  ')
+    #     print(request.json)
+    #     db.pairStripe(request.json['stripeID'], email)
+    # else:
+    #     print('was not authed!!!!')
 
     if should_send_ticket:
         return send_file('../'+path, 'application/pdf', as_attachment=True, attachment_filename=path)
@@ -334,11 +342,6 @@ def moviepage():
 @app.route('/primelogin')
 def managerlogin():
     return render_template('manager_login.html')
-
-@app.route('/analytics')
-def overallanalytics():
-    return render_template('overall_analytics.html')
-
 
 @app.route('/screen')
 def screen():
@@ -477,14 +480,6 @@ def _login():
     # print(user.password)
     ret = {'access_token': guard.encode_jwt_token(user)}
     return ret, 200
-    # ip = data['IP']
-    # res, id_ = db.validate_customer(email, password)
-    # if res:
-    #     db.add_session(ip, time.time(), 1, id_, 'NULL', 'NULL')
-    #    # del db
-    #     return jsonify({'response': 'OK'})
-    # del db
-    return jsonify({'response' : 'BAD'})
 
 @app.route('/api/refresh', methods=['POST'])
 def refresh():
@@ -553,8 +548,60 @@ def account():
 def calculate_order_amount(items):
     return 100
 
+
+@app.route('/setup-payment-intent', methods=['POST'])
+def setup_intent():
+    _stripe = stripe.SetupIntent.create(
+        payment_method_types=["card"],
+    )
+    return _stripe
+
+@app.route('/create_customer', methods=['POST'])
+def cc():
+    print(request.json)
+    pm = request.json.get('payment_method', None)
+    em = request.json.get('email', None)
+    if not pm:
+        return 'Payment method not supplied', 400
+    if not em:
+        return 'Email not supplied', 400
+    c = stripe.Customer.create(
+        payment_method = pm,
+        email = em
+    )
+    key = c['id']
+    db = Database('cinema.db')
+    db.pairStripe(em, key, pm)
+    return c
+
+
 @app.route('/create-payment-intent', methods=['POST'])
 def create_payment():
+                #     payment_method: paymentid,
+                # customer: customerid,
+                # total : state.total
+    payment_method = request.json.get('payment_method',None)
+    customer = request.json.get('customer', None)
+    total = request.json.get('total', None)
+
+    # if not payment_method : return jsonify(error='No payment method supplied'),400
+    # if not customer : return jsonify(error='No customer'), 400
+    if not total : total = 1000 
+    else : total*=100
+    intent = stripe.PaymentIntent.create(
+        amount = total,
+        currency = 'gbp',
+        payment_method_types = ['card'],
+        customer = customer,
+        payment_method = payment_method,
+        off_session = True,
+        confirm = True
+    )
+    return intent
+
+
+@app.route('/create-payment-intent2', methods=['POST'])
+def create_payment2():
     try:
         data = json.loads(request.data)
         intent = stripe.PaymentIntent.create(
@@ -651,7 +698,7 @@ def spinner():
     while True:
         db.clear_sessions()
 if __name__ == '__main__':
-    #thread = Thread(target=spinner, args=())
-  #  thread.daemon = True
-    #thread.start()
+    # thread = Thread(target=spinner, args=())
+    # thread.daemon = True
+    # thread.start()
     app.run(debug=False, host='localhost', port='5000', threaded=True)

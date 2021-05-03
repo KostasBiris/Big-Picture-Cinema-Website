@@ -14,19 +14,14 @@ class CustomerAccountPage extends React.Component {
     constructor(props){
         super(props);
         this.state = {data: [], auth: false, tickets: [], pdfs : [], currpdf: null, html: ''}
+        this.assertAuth = this.assertAuth.bind(this);
         this.stepUp = this.stepUp.bind(this);
         this.getTickets = this.getTickets.bind(this);
         this.makeTicketList = this.makeTicketList.bind(this);
     }
 
     stepUp = async () => {
-        // await (async () => {
-        //     this.setState({IP: await publicIP.v4()})
-        // })();
-        await( async () => {
-            this.assertAuth()
-        })();
-        this.getTickets();
+        this.assertAuth();
     }
 
     componentDidMount = async() => {
@@ -37,19 +32,27 @@ class CustomerAccountPage extends React.Component {
         window.removeEventListener('load', this.stepUp)
     }
 
-    assertAuth = () => {
-        authFetch("/api/insession").then(response => response.json()).then(data => {
-            this.setState({ auth: true , data: data.response})})//accepts and stores the data        
+    assertAuth = async() => {
+        await authFetch("/api/insession").then(response => response.json()).then(data => 
+            this.setState({auth: true, data: data.response}))
+        this.getTickets();
+            // {
+            // this.setState({ auth: true , data: data.response})} 
+            // )
+            // .then(this.getTickets())
+            
+            //accepts and stores the data     
+            // console.log(this.state);   
     };
 
      getTickets = async () =>{
-
+        // console.log(this.state);
         let email = this.state.data.email;
-        console.log(this.state)
-        if (email === undefined && checkedEmail<=3) {
-            checkedEmail++;
-            this.stepUp();
-        }
+        // console.log(this.state)
+        // if (email === undefined && checkedEmail<=10) {
+        //     checkedEmail++;
+        //     this.stepUp();
+        // }
         var go = '/getticket/' + email;//routes
         await fetch(go, {//sends the request
              method: 'POST',

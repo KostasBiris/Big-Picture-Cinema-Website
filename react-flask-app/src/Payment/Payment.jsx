@@ -1,7 +1,10 @@
 import React from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-import CheckoutForm from "./CheckoutForm";
+import CheckoutFormNoAuth from "./CheckoutFormNoAuth";
+import CheckoutFormAuth from "./CheckoutFormAuth";
+import CheckoutFormAuthNoKey from "./CheckoutFormAuthNoKey";
+import CheckoutForm from './CheckoutForm';
 import main from "../static/main.css"
 import "./Style/Payment.scss"
 import Banner from "../components/Banner";
@@ -10,7 +13,6 @@ import { relativeTimeThreshold } from "moment";
 import ThemeProvider from "react-bootstrap/esm/ThemeProvider";
 import {authFetch} from "../auth";
 import {withHooksHOC} from "../auth/withHooksHOC";
-
 // Make sure to call loadStripe outside of a component’s render to avoid
 // recreating the Stripe object on every render.
 // loadStripe is initialized with your real test publishable API key.
@@ -29,8 +31,6 @@ class Payment extends React.Component {
             firstname: '',
             lastname: '',
             email: '',
-            addressOne: '',
-            addressTwo: '',
             ticketTypes: [],
             SelectedQuantity: 0,
             numberSeats: this.props.location.state.selectedSeats.length,
@@ -50,8 +50,6 @@ class Payment extends React.Component {
         this.handleFirstName = this.handleFirstName.bind(this);
         this.handleLastName = this.handleLastName.bind(this);
         this.handleEmail = this.handleEmail.bind(this);
-        this.handleAddressOne = this.handleAddressOne.bind(this);
-        this.handleAddressTwo = this.handleAddressTwo.bind(this);
         this.handleTicketTypes = this.handleTicketTypes.bind(this);
         this.orderSummary = this.orderSummary.bind(this);
         this.getMovieName = this.getMovieName.bind(this);
@@ -60,6 +58,7 @@ class Payment extends React.Component {
         this.validate = this.validate.bind(this);
         this.assertAuth = this.assertAuth.bind(this);
         this.handleSave = this.handleSave.bind(this);
+        this.getPaymentWidget = this.getPaymentWidget.bind(this);
                 
     }
 
@@ -86,7 +85,7 @@ class Payment extends React.Component {
     }
     assertAuth = async () => {
         await authFetch("/api/insession").then(response => response.json()).then(data => {
-            this.setState({firstname : data.response.forename, lastname : data.response.surname, email: data.response.email})})//accepts and stores the data        
+            this.setState({firstname : data.response.forename, lastname : data.response.surname, email: data.response.email, stripeID : data.response.stripe, pm : data.response.pm})})//accepts and stores the data        
     };
 
     handleFirstName = (e) => {
@@ -104,16 +103,6 @@ class Payment extends React.Component {
         this.setState({ email: e.target.value });
         this.validate();
 
-    }
-
-    handleAddressOne = (e) => {
-        this.setState({ addressOne: e.target.value });
-        this.validate();
-
-    }
-
-    handleAddressTwo = (e) => {
-        this.setState({ addressTwo: e.target.value });
     }
 
     handleTicketTypes = (e) => {
@@ -139,9 +128,6 @@ class Payment extends React.Component {
             return regexp.test(surname);
         }
 
-        function validateAdd(add) {
-            return add.length >=3;
-        }
 
         function validateTickets(tickets) {
             let flag = true;
@@ -159,13 +145,8 @@ class Payment extends React.Component {
             }
         })
 
-
-
-
-
-
         return validateEmail(this.state.email) && validateFirstname(this.state.firstname) 
-        && validateSurname(this.state.lastname) && validateAdd(this.state.addressOne) && ok;
+        && validateSurname(this.state.lastname) && ok;
     }
 
 
@@ -279,6 +260,40 @@ class Payment extends React.Component {
         )
     }
 
+    getPaymentWidget = () => {
+        if (this.props.isAuthed && this.state.stripeID !== '') {
+            console.log('USING CHECKOUTFORMAUTH')
+            return (
+            <div classNameName="Payment">
+                <Elements stripe={promise}>
+                    <CheckoutFormAuth props={this.props} state={this.state}/>
+                </Elements>
+            </div>
+            );
+        }
+        else if (this.props.isAuthed && this.state.stripeID === '') {
+            console.log('USING CHECKOUT FORM AUTHNOKEY')
+            return (
+                <div className="Payment">
+                    <Elements stripe={promise}>
+                        <CheckoutFormAuthNoKey props={this.props} state={this.state}/>
+                    </Elements>
+                </div>
+            );
+        }
+        else if (!this.props.isAuthed) {
+            console.log('USING NOAUTH')
+            return (
+                <div className="Payment">
+                    <Elements stripe={promise}>
+                        <CheckoutForm props={this.props} state={this.state}/>
+                    </Elements>
+                </div>
+            );
+        }
+    }
+
+
 
 
     render() {
@@ -318,36 +333,11 @@ class Payment extends React.Component {
                                             <input className="registerDetails formControl"  onChange={this.handleEmail} value={this.state.email} type="text" name="email" id="email"
                                                 placeholder="E-mail address" style={{ color: 'black' }} required />
                                         </div>
-                                        <div className="md-form mb-2">
-                                            <input className="registerDetails formControl"  onChange={this.handleAddressOne} value={this.state.addressOne} type="text" name="address" id="address"
-                                                placeholder="Address Line 1" style={{ color: 'black' }} required />
-                                        </div>
-                                        <div className="md-form mb-2">
-                                            <input className="registerDetails formControl"  onChange={this.handleAddressTwo} value={this.state.addressTwo} type="text" name="address" id="address-2"
-                                                placeholder="Address Line 2 (Optional)" style={{ color: 'black' }} />
-                                        </div>
-                                        <div className="row">
-                                            <div className="col-lg-4 col-md-12 mb-4">
-                                                <select className=" customSelect d-block w-100" id="country" required>
-                                                    <option value="">Country</option>
-                                                    <option>United Kingdom</option>
-                                                </select>
-                                                <div className="invalid-feedback">
-                                                    Please select a valid country.
-                                        </div>
-                                            </div>
 
-                                        </div>
-                                        Save my details:       
-                                        <input type="checkbox" defaultChecked={this.state.save} onChange={this.handleSave} />
+                
 
                                     </form>
-                                    {this.validate() ?<div classNameName="Payment">
-                                        <Elements stripe={promise}>
-                                            <CheckoutForm props={this.props} state={this.state} save ={this.state.save} auth = {this.state.isAuthed}/>
-                                        </Elements>
-                                    </div> : <></>}    
-                                    
+                                    {this.validate() ? this.getPaymentWidget() : <></>}
                                 </div>
                                 <div className="col-sm-6 col-xs-13">
                                     <br />
