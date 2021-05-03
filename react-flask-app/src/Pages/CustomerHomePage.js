@@ -17,6 +17,7 @@ import poster8 from '../static/poster8.jpg';
 import poster9 from '../static/poster9.jpg';
 import moment from 'moment'
 import DatePicker from 'react-datepicker';
+import Footer from '../components/Footer';
 global.jQuery = require('jquery');
 require('bootstrap');
 var publicIP = require('public-ip');
@@ -348,12 +349,6 @@ class CustomerHomePage extends React.Component {
 
                     <br/>
                     <br/>
-                    <footer className="bg-light text-center">
-                        <div className="text-center p-3" style={{backgroundColor: 'rgba(0, 0, 0, 0.2)'}}>
-                            All rights reserved. © 2021 Copyright:
-                            <a className="text-dark" >The Big Picture</a>
-                        </div>
-                    </footer>
                     </body>
                     </React.Fragment>
             );

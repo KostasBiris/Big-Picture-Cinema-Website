@@ -7,7 +7,7 @@ import SearchManager from "../components/SearchManager";
 import ManagerBanner from "../components/ManagerBanner";
 import OverallAnalytics from "../Pages/OverallAnalytics";
 import AddScreening from '../Pages/AddScreening';
-
+import Footer from '../components/Footer';
 
 import {createBrowserHistory} from 'history';
 
@@ -28,6 +28,8 @@ class ManagerSite extends React.Component{
                     <Route path ="/addmovies/search/:query" component={SearchManager}/>
                     <Route path="/overall_analytics" component={OverallAnalytics}/>
                     <Route path="/addscreening" component={AddScreening} />
+                    <Footer/>
+
                 </React.Fragment>)
         // else
         // {

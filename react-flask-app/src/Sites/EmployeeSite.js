@@ -15,7 +15,7 @@ import MoviePage from "../Pages/MoviePage";
 import EmployeeLogin from "../Pages/EmployeeLogin";
 import EPayment from "../Payment/Employee_Payment";
 import EMenu from "../components/EmployeeMenu";
-
+import Footer from '../components/Footer';
 import {createBrowserHistory} from 'history';
 
 
@@ -39,6 +39,8 @@ class EmployeeSite extends React.Component{
                         <Route path ="/emain/account" component={CustomerAccountPage}/>
                         <Route path="/movie/:title" render={(props) => <MoviePage {...props} isEmployee={true}/> }/>
                         <Route path="/epayment" component={EPayment}/>
+                        <Footer/>
+
                     </React.Fragment>)
         // else{
         //     console.log("rendeing else")

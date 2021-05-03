@@ -11,7 +11,7 @@ import Payment from "../Payment/Payment";
 import CustomerAccountPage from "../Pages/CustomerAccountPage";
 import CustomerRegister from "../Pages/CustomerRegister";
 import {withHooksHOC} from "../auth/withHooksHOC";
-
+import Footer from '../components/Footer';
 import {createBrowserHistory} from 'history';
 
 class CustomerSite extends React.Component{
@@ -51,6 +51,8 @@ render () {
         <Route path ="/movie/:title" component={MoviePage}/>
         <Route path="/register" component={CustomerRegister}/>
         <Route path="/login" component={LoginPage}/>
+        <Footer/>
+
     </React.Fragment>
 
     );
