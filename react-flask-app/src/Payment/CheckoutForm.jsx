@@ -26,11 +26,11 @@ const button = {
   }
 }
 const form = {
-  width: '30vw',
+  width: '15vw',
   alignSelf:'center',
   boxShadow:'0px 0px 0px 0.5px rgba(50, 50, 93, 0.1), 0px 2px 5px 0px rgba(50, 50, 93, 0.1), 0px 1px 1.5px 0px rgba(0, 0, 0, 0.07)',
   borderRadius:'7px',
-  padding:'40px'
+  // padding:'4rem'
 }  
 
 const body = {
@@ -40,10 +40,9 @@ const body = {
   display: 'flex',
   justifyContent:'center',
   alignContent:'center',
-  height:'21.5vh',
-  width:'30vw',
-  marginLeft:'150px'
-
+  // height:'21.5vh',
+  width:'15vw',
+  // marginLeft:'150px'
 }
 const input ={
   borderRadius:'6px',
@@ -149,8 +148,8 @@ export default function CheckoutForm (state, props)  {
   };
 
   return (
-    <body style={body}>
-    <form id="payment-form" onSubmit={handleSubmit} style={form}>
+    <body style={body} style={{paddingLeft:'0.1rem',paddingRight:'0.1rem', marginBottom: '1rem'}} >
+    <form id="payment-form" onSubmit={handleSubmit} style={form} style={{padding: '0 0 0 0',minWidth: '250px'}}>
       <CardElement id="card-element" options={cardStyle} onChange={handleChange} />
       <button style={button}
         disabled={processing || disabled || succeeded}

@@ -155,7 +155,7 @@ export default function CheckoutFormAuth(state, props) {
 
 
     return (
-        <body style={body}  >
+        <body style={body} style={{ paddingLeft: '0.1rem', paddingRight: '0.1rem', marginBottom: '1rem' }}  >
             <button style={button}
                 disabled={processing || disabled || succeeded}
                 id="submit"

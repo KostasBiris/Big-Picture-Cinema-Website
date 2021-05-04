@@ -239,7 +239,7 @@ class Payment extends React.Component {
                             <li className="d-flex justify-content-center">
                             <div>
                                 <div className="row">
-                                    <div className="col-lg-10 col-md-12 mb-4">
+                                <div className="col-lg-10 col-md-12 mb-4" style={{minWidth:'120px',fontSize:'10px'}}>
                                         <select value={this.state.orderPart[index]} onChange={(e) => this.handleChangeSelect(e, index)} className="register_details custom-select d-block w-100" id="ticket-type" placeholder="Ticket Type" required>     
                                             <option value="4">VIP (£10.0)</option>
                                         </select>
@@ -259,13 +259,14 @@ class Payment extends React.Component {
                                 <li className="d-flex justify-content-center">
                                 <div>
                                     <div className="row">
-                                        <div className="col-lg-10 col-md-12 mb-4">
-                                            <select value={this.state.orderPart[index]} onChange={(e) => this.handleChangeSelect(e, index)} className="register_details custom-select d-block w-100" id="ticket-type" placeholder="Ticket Type" required>     
+                                        <div className="col-lg-10 col-md-12 mb-4" style={{minWidth:'120px', fontSize:'10px'}}>
+                                            <select value={this.state.orderPart[index]} onChange={(e) => this.handleChangeSelect(e, index)}className="register_details custom-select d-block w-100" id="ticket-type" placeholder="Ticket Type" required>     
                                                 <option value="1">Adult (£7.50)</option>
                                                 { this.state.movieObj.certificate == "U" || 
                                                 this.state.movieObj.certificate == "PG"     || 
                                                 this.state.movieObj.certificate == "12A"    || 
                                                 this.state.movieObj.certificate == "12"     || 
+                                                this.state.movieObj.certificate == "PG-12"  ||
                                                 this.state.movieObj.certificate == "15" ?
                                                 <option value="2">Kids (£5.50)</option> : <></>}
                                                 <option value="3">Senior (£6.50)</option>
@@ -327,11 +328,11 @@ class Payment extends React.Component {
     render() {
         return (
 
-                <body id="grad1">
+                <body id="grad1" style={{height:"100%", minHeight: "100vh"}}>
                     <head>
                         <link rel="stylesheet" type="text/css" href={main} />
                         <link rel="icon" href="data:;base64,iVBORw0KGgo" />
-                        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+                        <meta name="viewport" content=" height=device-height, width=device-width, initial-scale=1, shrink-to-fit=no" />
                     </head>
                         <fieldset style={{ paddingTop: '50px', paddingRight: '20px' }}>
                         <div className="container modalContentPayment" >
@@ -359,12 +360,17 @@ class Payment extends React.Component {
                                             <input className="registerDetails formControl"  onChange={this.handleEmail} value={this.state.email} type="text" name="email" id="email"
                                                 placeholder="E-mail address" style={{ color: 'black' }} required />
                                         </div>
+                                        <div className="container">
+                                        
+                                        </div>
                                     </form>
-                                    <div className="md-form mb-2">
+                                    {this.validate() ? this.getPaymentWidget() : <></>}
+                                    
+                                    {/* <div className="md-form mb-2">
                                     <div className="container justify-content-center" style={{padding:'3rem'}}>
                                     {this.validate() ? this.getPaymentWidget() : <></>}
                                     </div>
-                                    </div>
+                                    </div> */}
                                 </div>
                                 <div className="col-sm-6 col-xs-13">
                                     <br />
