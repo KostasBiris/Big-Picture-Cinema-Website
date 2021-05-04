@@ -5,14 +5,10 @@ import Moment from 'react-moment';
 import moment, { min } from 'moment';
 import vid from '../static/vid.mp4';
 
-
-var publicIP = require('public-ip')
-
 class CustomerRegister extends React.Component {
     constructor(props) {
         super(props);
         this.state = { forename: '', surname: '', email: '', phonenumber: '', password: '', dob: ''};
-        this.getClientIP = this.getClientIP.bind(this);
         this.handleFornameChange = this.handleFornameChange.bind(this);
         this.handleSurnameChange = this.handleSurnameChange.bind(this);
         this.handlePhoneNumberChange = this.handlePhoneNumberChange.bind(this);

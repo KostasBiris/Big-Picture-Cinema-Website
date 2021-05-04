@@ -50,9 +50,10 @@ render () {
         <Route path="/searchscreenings/:query" component={ScreeningResults}/>
         <Route path ="/account" component={CustomerAccountPage}/>
         <Route path ="/movie/:title" component={MoviePage}/>
+        <Footer/>
         <Route path="/register" component={CustomerRegister}/>
         <Route path="/login" component={LoginPage}/>
-        <Footer/>
+
 
     </React.Fragment>
 
