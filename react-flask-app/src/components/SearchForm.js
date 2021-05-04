@@ -1,5 +1,7 @@
 import { useState } from 'react' 
 
+
+//Functional component
 const SearchForm = ({onGetMovie}) => {
     const [movie, setMovie] = useState('');
 

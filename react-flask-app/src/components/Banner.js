@@ -11,14 +11,10 @@ import { BrowserRouter, Route, Link } from 'react-router-dom';
 import BookTickets from '../Pages/BookTicketsPage';
 import ReactDatePicker from 'react-datepicker';
 import {logout, authFetch} from "../auth";
-// import jquery from '../static/jquery-3.2.1.slim.min.js';
-// import popper from '../static/popper.min.js';
-// import bootstrap from '../static/bootstrap.min.js';
 var publicIP = require('public-ip')
 global.jQuery = require('jquery');
 require('bootstrap');
 
-let interval;
 
 class Banner extends React.Component {
     constructor(props) {
@@ -35,9 +31,6 @@ class Banner extends React.Component {
         this.handleRegister = this.handleRegister.bind(this);
         this.handleAccount = this.handleAccount.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
-        // this.assertAuth = this.assertAuth.bind(this);
-        // this.stepUp = this.stepUp.bind(this);
-        // this.getClientIP = this.getClientIP.bind(this);
 
     }
 
@@ -78,14 +71,17 @@ class Banner extends React.Component {
         this.props.history.push('/login');
     }
 
+    //Method for handling the register button.
     handleRegister = (e) => {
         this.props.history.push('/register');
     }
 
+    //Method for handling the account button.
     handleAccount = (e) => {
         this.props.history.push('/account', this.state);
     }
 
+    //Method for handling the logout button.
     handleLogout = (e) => {
         logout() // deletes token from in session in flask_praetorian
         this.props.history.push('/home') // go to home
@@ -101,7 +97,7 @@ class Banner extends React.Component {
     }
 
     
-
+    //Method for handling searching by date.
     handleSubmitDate = (e) => {
         e.preventDefault();
         if (this.state.date !== '') {
@@ -110,10 +106,9 @@ class Banner extends React.Component {
 
     }
 
-    
+    //Method for handling the date changing.
     handleDate = (e) => {
-        // e.preventDefault();
-        // console.log(e.target.value)
+        //Dirty trick to reformat the date how we want it.
         function formatd(inp) {
             let dArr = inp.split("-");  // ex input "2010-01-18"
             return dArr[2] + "-" + dArr[1] + "-" + dArr[0]; //ex out: "18/01/10"
@@ -123,6 +118,7 @@ class Banner extends React.Component {
             this.setState({ date: formatd(e.target.value) });   
     }
 
+    //Another dirty func for reformatting the date.
     reformatd = (inp) => {
         let dArr = inp.split("-");
         return dArr[2] + "-" + dArr[1] + "-" + dArr[0];
@@ -133,15 +129,12 @@ class Banner extends React.Component {
 
 
     render() {
-        // console.log(this.props)
+        //Is the client logged in?
         if (this.props.logged) {
             return (
                 <React.Fragment>
                     <head>
                         <link rel="stylesheet" type="text/css" href={main} />
-                        {/* <script type="text/javascript" src='../static/jquery-3.2.1.slim.min.js'/>
-                        <script type="text/javascript" src= '../static/popper.min.js'/>
-                        <script type="text/javascript" src='../static/bootstrap.min.js'/> */}
                         <link rel="icon" href="data:;base64,iVBORw0KGgo" />
                         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
                     </head>
@@ -188,9 +181,6 @@ class Banner extends React.Component {
                 <React.Fragment>
                     <head>
                         <link rel="stylesheet" type="text/css" href={main} />
-                        {/* <script type="text/javascript" src='../static/jquery-3.2.1.slim.min.js'/>
-                        <script type="text/javascript" src='../static/popper.min.js'/>
-                        <script type="text/javascript" src='../static/bootstrap.min.js'/> */}
                         <link rel="icon" href="data:;base64,iVBORw0KGgo" />
                         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
                     </head>
@@ -246,6 +236,4 @@ class Banner extends React.Component {
 
 
 }
-
-
 export default Banner;

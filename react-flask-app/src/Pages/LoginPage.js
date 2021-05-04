@@ -20,11 +20,9 @@ class LoginPage extends React.Component {
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.Login = this.Login.bind(this);
+        
         this.setState({logged: this.props.auth[0]}); // is the user logged?
     }
-
-
-
     //Method for handling login atttempt.
     //Called when the login button is pressed.
     handleLogin = (e) => {
@@ -53,8 +51,6 @@ class LoginPage extends React.Component {
                     console.log("Please type in correct username/password");
             })
     }
-
-
     //Method for handling a change in the email field.
     handleEmailChange = (e) => {
         //Update the state to match the value of the field.
@@ -98,6 +94,7 @@ class LoginPage extends React.Component {
                 </form>: 
                 <></>
                 
+                }
             </div>
         </body>
         );

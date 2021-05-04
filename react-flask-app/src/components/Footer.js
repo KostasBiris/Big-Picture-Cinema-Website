@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 
+
+
+//Modular footer component
 class Footer extends Component {
     render() {
         return (

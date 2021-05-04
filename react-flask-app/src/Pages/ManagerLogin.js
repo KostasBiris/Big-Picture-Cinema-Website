@@ -20,12 +20,13 @@ class ManagerLogin extends React.Component {
         this.Login = this.Login.bind(this);
     }
 
-
+    //Method for handling login attempt.
     handleLogin = (e) => {
         e.preventDefault();
         this.Login();
     }
 
+    //Methods for handling changes in the forms.
     handleEmailChange = (e) => {
         this.setState({ email: e.target.value });
     }
@@ -37,7 +38,7 @@ class ManagerLogin extends React.Component {
     handlePasswordChange = (e) => {
         this.setState({ password: e.target.value });
     }
-
+    //Method for making the fetch call to the flask server in order to authenticate.
     Login = () => {
         fetch('/manager_login', {
             method: 'POST',

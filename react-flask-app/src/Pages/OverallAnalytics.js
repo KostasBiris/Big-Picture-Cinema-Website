@@ -51,6 +51,7 @@ class OverallAnalytics extends React.Component {
 
     }
 
+    //Method for collecting data and formatting it into a state for input into charts.
     buildChartData = () => {
         var i;
         var j;
@@ -122,6 +123,7 @@ class OverallAnalytics extends React.Component {
         this.buildChartData();
     }
 
+    //Generate list of movies
     getMoviesA = () => {
         const options = this.state.movies.map(v => ({
             label: v.original_title,
@@ -134,7 +136,7 @@ class OverallAnalytics extends React.Component {
         )
     }
 
-
+    //Handler for the first date picker.
     handleDateChangeA = (e) => {
         // e.preventDefault();
         // console.log(e.target.value)
@@ -151,6 +153,7 @@ class OverallAnalytics extends React.Component {
         if (e.target.value)
             this.setState({ DateA: formatd(e.target.value) });
     }
+    //Handler for the second date picker.
     handleDateChangeB = (e) => {
         // e.preventDefault();
         // console.log(e.target.value)
@@ -168,11 +171,13 @@ class OverallAnalytics extends React.Component {
             this.setState({ DateB: formatd(e.target.value) });
     }
 
+    //dirty func for reformatting dates.
     reformatd = (inp) => {
         let dArr = inp.split("-");
         return dArr[2] + "-" + dArr[1] + "-" + dArr[0];
 
     }
+    //Handlers
     handleMovieA = (data) => {
         console.log(data);
         this.setState({ MovieA: data });
@@ -188,6 +193,7 @@ class OverallAnalytics extends React.Component {
         this.makeComparison();
     }
 
+    //Generate list of movies
     getMoviesB = () => {
         const options = this.state.movies.map(v => ({
             label: v.original_title,
@@ -200,7 +206,7 @@ class OverallAnalytics extends React.Component {
             </div>
         )
     }
-
+    //Get the internal ID from the movie name.
     getid = (mov) => {
         let movid;
         this.state.movies.forEach(function (entry) {
@@ -212,7 +218,7 @@ class OverallAnalytics extends React.Component {
         return movid;
     }
 
-
+    //Compare two movies between date ranges.
     makeComparison = () => {
         let ticks = []
         this.state.tickets.forEach(function (entry) {

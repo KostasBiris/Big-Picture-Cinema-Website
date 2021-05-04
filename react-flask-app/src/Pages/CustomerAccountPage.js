@@ -20,6 +20,7 @@ class CustomerAccountPage extends React.Component {
         this.makeTicketList = this.makeTicketList.bind(this);
     }
 
+    //assert authentication
     stepUp = async () => {
         this.assertAuth();
     }
@@ -32,34 +33,24 @@ class CustomerAccountPage extends React.Component {
         window.removeEventListener('load', this.stepUp)
     }
 
+    //Find out if the user is authenticated, and get their details as well as booked tickets.
     assertAuth = async() => {
         await authFetch("/api/insession").then(response => response.json()).then(data => 
             this.setState({auth: true, data: data.response}))
-        this.getTickets();
-            // {
-            // this.setState({ auth: true , data: data.response})} 
-            // )
-            // .then(this.getTickets())
-            
-            //accepts and stores the data     
-            // console.log(this.state);   
+        this.getTickets();  
     };
 
+    //Get the pdfs of all tickets belonging to the customer
      getTickets = async () =>{
         // console.log(this.state);
         let email = this.state.data.email;
-        // console.log(this.state)
-        // if (email === undefined && checkedEmail<=10) {
-        //     checkedEmail++;
-        //     this.stepUp();
-        // }
         var go = '/getticket/' + email;//routes
+        //get the tickets
         await fetch(go, {//sends the request
              method: 'POST',
              headers: {
                  'Content-Type': 'application/json'
              },
-            //  body: JSON.stringify({ data: this.IP })//data sent from react to flask
          })
          .then(response => response.json()).then(data => { 
              this.setState({ tickets: Object.values(data.response)})})//accepts and stores the data
@@ -70,6 +61,7 @@ class CustomerAccountPage extends React.Component {
             tickets.push(entry);
         })
 
+        //get the pdf's
         tickets.forEach(async function (entry, index) {
             go = '/getpdf/' + entry.id;
             await fetch(go, { method: 'POST' })
@@ -82,7 +74,7 @@ class CustomerAccountPage extends React.Component {
          this.setState({tickets: tickets});
 
     }
-
+    //Make a list of hyperlinks for tickets to be rendered.
     makeTicketList =  () => {
         let tickets = [];
         // console.log()

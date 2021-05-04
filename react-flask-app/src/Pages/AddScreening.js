@@ -15,23 +15,27 @@ class AddScreening extends React.Component {
 
     }
 
+    //Method for handling the screen changing.
     handleScreenChange = (e) => {        
         e.preventDefault();
         console.log(e);
         this.setState({screen: e.target.value});
     }
 
+    //Method for handling the movie changing.
     handleMovieChange = (movie) => {
         //e.preventDefault();
         this.setState({movie: movie});
 
     }
-
+    //Method for handling the time changing.
     handleTimeChange = (time) => {
         this.setState({time: time});
     }
 
+    //Method for handling the date changing.
     handleDateChange = (date) => {
+        //Make sure that the date is AFTER or equal to today.
         if (moment(date).isBefore()) {
             this.setState({date:moment()});
         }
@@ -42,8 +46,6 @@ class AddScreening extends React.Component {
     
     handleSubmit = (e) => {
         e.preventDefault();
-        //console.log(this.state.movies);
-        //console.log(this.state.movie);
         if (this.state.screen!=0 && this.movie!="" && this.time!="") {
             let movie = this.state.movie.value;
             let screen = this.state.screen;
@@ -77,6 +79,7 @@ class AddScreening extends React.Component {
         }).then(response => response.json()).then(data => this.setState({ movies: Object.values(data.response) }))
     }
 
+    //Func for helping with options.
     MakeData = (data) => {
         return <option value={data}>{data}</option>
     }

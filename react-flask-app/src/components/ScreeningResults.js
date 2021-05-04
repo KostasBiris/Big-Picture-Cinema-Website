@@ -19,7 +19,7 @@ class ScreeningResults extends React.Component {
         this.fetchMovies();
     }
 
-
+    //Method that fetches movies on the specified date.
     async fetchMovies() {
         await fetch('/searchdates', {
             method: 'POST',
@@ -33,7 +33,7 @@ class ScreeningResults extends React.Component {
         })
     }
 
-
+    //Method for returning search results as cards.
     moviesToCards = () => {
         return (
             <div>

@@ -21,19 +21,15 @@ class EmployeeBanner extends React.Component {
 
   }
 
-
+  //Method for handling the search query changing.
   handleSearchChange = (e) => {
-    // e.preventDefault();
     //Update the state to represent the changes to the field.
     this.setState({ query: e.target.value });
   }
 
-
+  //Method for handling the search query being submitted.
   handleSubmit = (e) => {
-    // e.preventDefault();
-    //Redirect the route to execute the search query.
-    // e.preventDefault();
-    // console.log(this.props.history)
+
     var go = ''
     go = '/emain/search/' + this.state.query.split(' ').join('_');
 
@@ -51,6 +47,7 @@ class EmployeeBanner extends React.Component {
 
 }
 
+//Method for handling logging out.
 handleLogout = (e) => {
   logout();
   var go = '/logout/' + this.state.IP;
@@ -64,6 +61,8 @@ handleLogout = (e) => {
 
 }
 
+
+//Method for handling clicking the account button.
 handleAccount = (e) => {
   this.props.history.push('/emain/account');
 }
@@ -87,9 +86,7 @@ handleAccount = (e) => {
           <form className="form-inline my-2 my-lg-0">
             <button onClick={this.handleLogout} className="tab_background mr-3">LOG OUT</button>
             <input onClick={this.handleAccount} className="mr-3" type="image" style={{width:"2rem",height:"2rem"}} src={usericon}/>
-            {/* <input onChange={this.handleSearchChange} className="form-control mr-sm-2 search_bar" type="search" placeholder="Search here.." aria-label="Search"/> */}
             <input onChange={this.handleSearchChange} value={this.state.query} className="form-control mr-sm-2 search_bar" type="search" placeholder="Search here.." aria-label="Search" />
-            {/* <button onClick={this.handleSubmit} className="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>           */}
             <button onClick={this.handleSubmit} className="btn btn-outline-success my-2 my-sm-0 text_button" type="submit">Search</button>
           </form>
         </div>

@@ -10,10 +10,9 @@ class SearchManager extends React.Component{
     super(props);
     //Bind our method.
     this.getMovies = this.getMovies.bind(this);
-    this.getClientIP = this.getClientIP.bind(this);
     // this.handleQuery = this.handleQuery.bind(this);
     //By default the state is an empty array.
-    this.state ={ returnedData: [], IP: null, auth: false, manager: true, query: ''};
+    this.state ={ returnedData: [], auth: false, manager: true, query: ''};
     
   }
 
@@ -22,13 +21,6 @@ class SearchManager extends React.Component{
     this.getClientIP();
 }
 
-
-  getClientIP = () => {
-    (async () => {
-        this.setState({IP: await publicIP.v4()})
-    })();
-
-  }
   //Invoke a request to our rest API to search the database for movies matching our query.
   getMovies = (data) => {
     // MANAGER ADD MOVIES FUNCTIONALITY 

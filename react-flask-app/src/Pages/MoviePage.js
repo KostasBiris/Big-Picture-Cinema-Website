@@ -24,13 +24,6 @@ class MoviePage extends React.Component {
         this.getScreenings = this.getScreenings.bind(this);
         //Call our method.
         this.getMovieData();
-        this.getClientIP();
-    }
-    getClientIP = () => {
-        (async () => {
-            this.setState({IP: await publicIP.v4()})
-        })();
-
     }
     
     componentDidMount = () => {
@@ -63,7 +56,7 @@ class MoviePage extends React.Component {
 
     }
 
-    
+    //Function for redirecting to the book tickets page.
     goBookTickets = (e) => {
         if (this.props.isEmployee)
             this.props.history.push('/ebook', this.state);
@@ -72,6 +65,7 @@ class MoviePage extends React.Component {
         
     }
 
+    //Get screenings corresponding to the movie.
     getScreenings = () => {
         var screenings = this.state.screenings;
         return (

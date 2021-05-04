@@ -147,6 +147,8 @@ class CustomerHomePage extends React.Component {
         this.props.history.push(go, this.state);
     } 
 
+
+    //Get some random movie posters (from the upcoming movies!)
     getRandomPosters = () => {
         
         let indexes = [];

@@ -22,21 +22,16 @@ class ManagerBanner extends React.Component {
         window.addEventListener('load', this.stepUp);
     
     }
-
+    //Method for handling the search query changing.
     handleSearchChange = (e) => {
-        // e.preventDefault();
         //Update the state to represent the changes to the field.
         this.setState({ query: e.target.value });
       }
-
+    //Method for handling the submission of the query.
     handleSubmit = (e) => {
         e.preventDefault();
         var go = ''
         go = '/addmovies/search/' + this.state.query.split(' ').join('_');
-    
-        console.log(go)
-        console.log("hellooooooo")
-        
     
         if (this.props.history){
             this.props.history.push(go, this.state);
@@ -46,7 +41,7 @@ class ManagerBanner extends React.Component {
             this.props.props.history.push(go, this.state);
         }
     }
-
+    //Method for handling logging out.
     handleLogout = (e) => {
         logout()
         var go = '/logout/' + this.state.IP;

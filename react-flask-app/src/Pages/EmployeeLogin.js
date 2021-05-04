@@ -21,22 +21,24 @@ class EmployeeLogin extends React.Component{
     }
     
 
-
+    //Method for handling login.
     handleLogin = (e) => {
         e.preventDefault();
         this.Login();
 
     }
 
-
+    //Method for handling the ID changing.
     handleIDChange = (e) => {
         this.setState({ id: e.target.value });
     }
-
+    //Method for handling the password changing.
     handlePasswordChange = (e) => {
         this.setState({ password: e.target.value });
     }
 
+
+    //Call the fetch to the api in order to authenticate and login.
     Login = () => {
         fetch('/employee_login', {
             method: 'POST',

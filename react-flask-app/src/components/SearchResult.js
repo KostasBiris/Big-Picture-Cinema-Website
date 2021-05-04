@@ -36,6 +36,7 @@ class SearchResult extends React.Component{
         }
     }
 
+    //Method for pushing a movie page to the history stack.
     goToMovie = () => {
         let go = '/movie/' + this.name + '/' + this.id;
         this.props.history.push(go, this.state);

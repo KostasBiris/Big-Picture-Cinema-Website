@@ -36,7 +36,7 @@ class SearchResult extends React.Component{
             }
         }
     }
-
+    //Method for adding a corresponding movie to the database.
     addMovie = () => {
         console.log(this.state);
         fetch('/add', {
@@ -51,10 +51,12 @@ class SearchResult extends React.Component{
             )
     };
 
+    //Method for setting up the state.
     stepUp = (data) => {
         let _directors = [];
         let _actors = [];
         let _writers = [];
+        //Getting the directors, actors and writers
         if(data.credits){
             data.credits.crew.forEach(function(entry){
                     if (entry.job === "Director") {
@@ -70,7 +72,7 @@ class SearchResult extends React.Component{
                 }
             })
         }
-
+        //Getting the trailer
         let youtube_key;
         if (data.videos){
             data.videos.results.forEach(function(entry){
@@ -79,14 +81,14 @@ class SearchResult extends React.Component{
                 }
             })
         }
-
+        //Getting genres
         let genres = [];
         if (data.genres){{
             data.genres.forEach(function(entry){
                 genres.push(entry.name);
             })
         }}
-
+        //Certification stuff
         var certificate;
         if (data.release_dates.results)
         {
@@ -103,13 +105,13 @@ class SearchResult extends React.Component{
             })
         }       
      
-
+        //Update the state
         this.setState({title: this.prop.original_title, blurb: this.prop.overview, certificate: certificate, 
             release_date: this.prop.release_date, directors: _directors, actors: _actors, 
             writers:_writers, omdbid: data.id, 
             runtime : data.runtime, genres: genres,
             youtube_key: youtube_key});
-
+        //Fetch from omdb
         var go = '/omdb/' + this.state.omdbid;
         var result;
         fetch (go, {
@@ -122,6 +124,8 @@ class SearchResult extends React.Component{
          
     }
 
+
+    //Pushes the add screening page to the navigation stack.
     addScreening = () => {
         // console.log(this.props);
         this.props.history_.push('/addscreening', {state: this.state})

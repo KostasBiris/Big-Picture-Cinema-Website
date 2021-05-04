@@ -11,7 +11,7 @@ var publicIP = require('public-ip')
 class CustomerRegister extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { forename: '', surname: '', email: '', phonenumber: '', password: '', dob: '', IP: null};
+        this.state = { forename: '', surname: '', email: '', phonenumber: '', password: '', dob: ''};
         this.getClientIP = this.getClientIP.bind(this);
         this.handleFornameChange = this.handleFornameChange.bind(this);
         this.handleSurnameChange = this.handleSurnameChange.bind(this);
@@ -21,17 +21,9 @@ class CustomerRegister extends React.Component {
         this.handleDOBChange = this.handleDOBChange.bind(this);
         this.validate = this.validate.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.getClientIP();
     }
 
-
-    getClientIP = () => {
-        (async () => {
-            this.setState({ IP: await publicIP.v4() })
-        })();
-
-    }
-
+    //Methods for handling changes in the form.
     handleFornameChange = (e) => {
         this.setState({ forename: e.target.value });
 
@@ -41,7 +33,6 @@ class CustomerRegister extends React.Component {
         this.setState({ surname: e.target.value });
 
     }
-
     handlePhoneNumberChange = (e) => {
         this.setState({ phonenumber: e.target.value });
     }
@@ -59,6 +50,7 @@ class CustomerRegister extends React.Component {
         this.setState({ dob: e.target.value });
     }
 
+    //Method for performing validation techniques, using regex mostly.
     validate = () => {
         function validateEmail(email) {
             //https://stackoverflow.com/questions/52188192/what-is-the-simplest-and-shortest-way-for-validating-an-email-in-react
@@ -108,6 +100,7 @@ class CustomerRegister extends React.Component {
         && validateSurname(this.state.surname) && validatePhone(this.state.phonenumber) && validateDOB(this.state.dob);
     }
 
+    //Method for handling submission.
     handleSubmit = (e) => {
         
         e.preventDefault();
@@ -121,6 +114,7 @@ class CustomerRegister extends React.Component {
         }
     }
 
+    //Make the fetch call to flask to register.
     registerUser = () => {
         fetch ('/register', {
             method: 'POST' ,

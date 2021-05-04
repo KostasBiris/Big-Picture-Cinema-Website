@@ -44,6 +44,8 @@ class BookTickets extends React.Component {
 
     componentDidCatch(TypeError){}
 
+
+    //Method that fetches the upcoming screenings and their movies.
     seekData = async () => {
         await fetch('/upcoming', {
             method: 'POST',
@@ -79,7 +81,7 @@ class BookTickets extends React.Component {
 
 
 
-
+    //Dirty function for date reformatting.
     reformatd = (inp) => {
         let dArr = inp.split("-");
         return dArr[2] + "-" + dArr[1] + "-" + dArr[0];
@@ -88,9 +90,7 @@ class BookTickets extends React.Component {
 
 
     handleDate = (e) => {
-        // e.preventDefault();
-        // console.log(e.target.value)
-
+        //Again, func for date reformatting.
         function formatd(inp) {
 
 
@@ -104,6 +104,7 @@ class BookTickets extends React.Component {
             this.setState({ dateChosen: formatd(e.target.value) });
     }
 
+    //Method for handling change in the time.
     handleTime = (data) => {
         // e.preventDefault();
         this.setState({ timeChosen: data });
@@ -112,6 +113,7 @@ class BookTickets extends React.Component {
         let screenid = parseInt(this.state.screenChosen);
         let time = data;
         let screening;
+        //Find the associated screening.
         if (this.state.screenings.length > 0) {
             this.state.screenings.forEach(function (entry) {
                 if (entry.date === date) {
@@ -129,15 +131,17 @@ class BookTickets extends React.Component {
             })
         }
         this.setState({ screening: screening });
-        // console.log(this.state.screening)
 
     }
+    
+    //Method for handling the movie changing.
     handleMovie = (e) => {
         // e.preventDefault();
         if (e.target.id)
             this.setState({ movieChosen: e.target.id });
     }
 
+    //Method for handling the screen changing.
     handleScreen = (e) => {
         //e.preventDefault();
         this.setState({ screenChosen: e.target.value, timeChosen: '' });
@@ -147,12 +151,12 @@ class BookTickets extends React.Component {
 
     // filters out the times of the movieChosen and these are used to be rendered.
     getMovieTimes = () => {
-        // console.log(this.state)
         // getting the data before going into if statement or 'this' wont be recognised
         let movieChosen = parseInt(this.state.movieChosen)
         let date_chosen_day = this.state.dateChosen.split("-")[0]
         let times = [];
         let screenid = parseInt(this.state.screenChosen);
+        //Find the correct times
         if (this.state.screenings.length > 0) {
             this.state.screenings.forEach(function (entry) {
                 // get the day for each of the entries
@@ -211,6 +215,7 @@ class BookTickets extends React.Component {
         }
     }
 
+    //Method for pushing to the history stack the corresponding employee/customer seatmap
     goToSeatMap = () => {
         console.log(this.props)
         if (this.props.isEmployee)
@@ -219,6 +224,8 @@ class BookTickets extends React.Component {
             this.props.history.push('/as', this.state);
     }
 
+
+    //Checks if a movie is screening on a specific screen
     movieOnScreen = (screenid) => {
         let movieid = parseInt(this.state.movieChosen);
         let ok = false;
