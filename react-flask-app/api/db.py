@@ -237,11 +237,11 @@ class Database:
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 #=-=-=-=-=-=-=-=-=SCREENS-=-=-=-=-=-=-=-=-=-=
-    def add_screen(self,capacity, n,m):
+    def add_screen(self,capacity, n,m, vip_only=False):
 
         #Executre an SQL query to insert a new record into the movies database.
         #WE use '?' to prevent against SQL injection attacks.
-        self.cur.execute("INSERT INTO screens VALUES (NULL, ?,?)", (capacity,self.init_seatmap(n,m).dumps()))
+        self.cur.execute("INSERT INTO screens VALUES (NULL, ?,?)", (capacity,self.init_seatmap(n,m,vip_only).dumps()))
         #Commit the changes to the database.
         self.conn.commit()
 
@@ -807,17 +807,20 @@ class Database:
         dictionary = {'movies':0,'screens':1, 'screenings': 2,  'customers': 3, 'bookings': 4, 'employees': 5}
         return [row for row in self.fetch()[dictionary[table.lower()]] if query.lower() in str(row).lower()]
 
-    def init_seatmap(self,n, m):
+    def init_seatmap(self,n, m, vip_only):
         #Initialise a matrix full of 0s
         new_seatmap = np.zeros((n,m), dtype=int)
-
+        if vip_only:
+            for i in range(n):
+                for j in range(m):
+                    new_seatmap[i][j] = 2
+            return new_seatmap
         #Go to the middle row of the matrix, where the VIP seats are
         n = int(len(new_seatmap)/2)
         
         #Identify VIP seats and empty space(indexes not representing any seats)
         for i in range(len(new_seatmap[n])):
-
-            #Empty space
+                #Empty space
             if(i==0 or i==1 or i==(len(new_seatmap[n])-2) or i==(len(new_seatmap[n])-1)):
                 new_seatmap[n][i]=-1
             
@@ -830,6 +833,13 @@ class Database:
     def get_seatmap_from_blob(self, seatmap):
         return pickle.loads(seatmap)
 
+    def setupForCommercialUse(self):
+        db = Database('cinema.db')
+        db.add_screen(50,10,5)
+        db.add_screen(50,10,5)
+        db.add_screen(50,10,5)
+        db.add_screen(25,5,5,vip_only=True)
+        db.add_screen(100,10,10)
 
     def __del__(self):
         self.conn.close()
@@ -884,7 +894,7 @@ seatmap = dat[0][5]
 #db.email_ticket('yourForename', 'yourSurname', 'yourEmail', 5)
 
 
-Database('cinema.db').add_screen(35,8,6)
+Database('cinema.db').setupForCommercialUse()
 # Database('cinema.db').add_screening('04-04-2021', '16:00', 1, 1)
 # Database('cinema.db').add_screening('04-04-2021', '18:00', 1, 1)
 # Database('cinema.db').add_screening('04-04-2021', '20:00', 1, 1)
