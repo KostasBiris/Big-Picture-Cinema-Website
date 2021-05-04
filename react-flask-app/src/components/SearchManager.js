@@ -46,7 +46,7 @@ class SearchManager extends React.Component{
         {/* <head>
           <link rel="stylesheet" type="text/css" href={main}/>
         </head> */}
-          <body>
+          <body id="grad1">
             <SearchIMDB onGetMovie={this.getMovies} movieName={this.props.match.params.query} getAllMovies={"True"} getTranding={"False"} />
 
             <br />

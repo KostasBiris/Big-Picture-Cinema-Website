@@ -295,7 +295,7 @@ class OverallAnalytics extends React.Component {
                     {/* <XAxis dataKey="name" stroke="#000000" /> */}
                     {/* <YAxis stroke="#000000" /> */}
                     <XAxis type="number"/>
-                    <YAxis type="category" dataKey="name"/>
+                    <YAxis type="category" dataKey="name" fontSize={this.state.data.length === 1 ? 15 : 40/this.state.data.length + 'px'}/>
                     <Tooltip />
                     <Legend />
                     <Bar barSize={300/this.state.data.length} background label="name" dataKey="revenue (£)" fill="#8884d8" />
@@ -335,7 +335,7 @@ class OverallAnalytics extends React.Component {
 
                 <BarChart width={500} height={300} data={this.state.dataPastWeek} marg={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" stroke="#000000" />
+                    <XAxis dataKey="name" stroke="#000000" fontSize={ this.state.dataPastWeek.length === 1? 20 : 40/this.state.dataPastWeek.length + 'px'} />
                     <YAxis stroke="#000000" />
                     <Tooltip />
                     <Legend />

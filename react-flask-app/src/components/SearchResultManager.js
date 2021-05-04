@@ -134,7 +134,7 @@ class SearchResult extends React.Component{
 
 
             <React.Fragment>
-                <body>
+                <body id="grad1">
                 <div className="container"  style={{textAlign:"center"}}>
                     <div className=".card mb-3" style={{maxWidth: "60rem", maxHeight:"15rem", backgroundColor:"#ece9e388"}}>
                         <div className="row .no-gutters">
