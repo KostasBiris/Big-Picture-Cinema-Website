@@ -88,13 +88,11 @@ const App = (props) => (
     
     
     <React.Fragment>
-    <BrowserRouter>
+    <BrowserRouter history = {createBrowserHistory()} forceRefresh={true}>
       <Switch>
         <SiteType />
         
-        
-
-
+      
         {/* <Route exact path="/home" component={CustomerHomePage} /> 
         <Route exact path="/login" component={LoginPage} />
         <Route exact path="/search/:query" component={SearchResults}/> 
