@@ -88,13 +88,14 @@ class MoviePage extends React.Component {
                         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
                     </head>
                     <body id = 'grad1'>
-                <div className="header_text"></div>
-                    <h1 style = {{position:'absolute', left:'25px', color: '#4e5b60', fontWeight:'bold' }}>{this.state.returnedData.original_title}</h1>
-                    <div className="column" style={{position:'relative', left:'25px'}}>
-                        <img className="poster poster_movies" src={'https://image.tmdb.org/t/p/w500/' + this.state.returnedData.poster_path} style={{left: '5rem', position: 'relative'}}/>
+                <div className="header_text row justify-content-center">
+                    <h1 style = {{color: '#4e5b60', fontWeight:'bold', margin:'0.5rem'}}>{this.state.returnedData.original_title}</h1>
+                   </div>
+                    <div className="row justify-content-center">
+                        <img className="poster_template" src={'https://image.tmdb.org/t/p/w500/' + this.state.returnedData.poster_path}/>
 
                     </div> 
-                    <div className="container-fluid px-0 px-sm-4 mx-auto" style={{position:'relative', left:'12rem', top:'14rem', maxWidth:'15rem'}}>
+                    <div className="container-fluid px-0 px-sm-4 mx-auto">
                             <div className="row justify-content-center ">
                                 <div className="col-lg-10">
                                     <div className="card ">
@@ -108,10 +109,11 @@ class MoviePage extends React.Component {
                                                 <div className="card-body">
                                                     
                                     {this.state.returnedData.blurb}
+                                    <br></br>
                                     
                                     {
                                         this.state.returnedData.isupcoming ?   
-                                            <button onClick={this.goBookTickets}  className="buttons_background rounded-pill">BOOK TICKETS</button> 
+                                            <button onClick={this.goBookTickets}  className="buttons_background">BOOK TICKETS</button> 
                                         : 
                                             <></>
                                     }
@@ -125,8 +127,8 @@ class MoviePage extends React.Component {
                             </div>
                         
                     <br></br>/*
-                    <div className="row">
-                    <table className="table table-sm-center table-dark" style={{position:'relative', left:'21rem', top:'30rem', maxWidth:'fit-content'}}>
+                    <div className="row justify-content-center">
+                    <table className="table table-sm-center table-dark" style={{maxWidth:'fit-content'}} >
                             <tr>
                                 <th scope="col">
                                     Director(s):
@@ -135,38 +137,38 @@ class MoviePage extends React.Component {
 
                             </tr> 
                             <tr>
-                                <th scope="col">
+                                <th scope="row">
                                         Writer(s):
                                 </th>
                                 <td data-th = "Writer(s)">{this.state.returnedData.writers}</td>
                             </tr>  
                             <tr>
-                                <th scope="col">
+                                <th scope="row">
                                     Actors:
                                 </th>
 
                                     <td data-th = "Actors">{this.state.returnedData.leadactors}</td>
                             </tr>
                             <tr>
-                                <th scope="col">
+                                <th scope="row">
                                     Runtime:
                                 </th>
                                 <td data-th = "Runtime">{this.state.returnedData.runtime} mins</td>
                             </tr>
                             <tr>
-                                <th scope="col">
+                                <th scope="row">
                                     Release Date:
                                 </th>
                                 <td data-th = "ReleaseDate">{this.state.returnedData.release_date}</td>
                             </tr>
                             <tr>
-                                <th scope="col">
+                                <th scope="row">
                                     Genres:
                                 </th>
                                 <td data-th = "Genres">{this.state.returnedData.genres}</td>
                             </tr>
                             <tr>
-                                <th scope="col">
+                                <th scope="row">
                                     Certificate:
                                 </th>
                                 <td data-th = "Certificate">{this.state.returnedData.certificate}</td>
@@ -174,13 +176,6 @@ class MoviePage extends React.Component {
                     </table>
 
                     </div>
-                
-                    <br/>
-                    <div className="embed-responsive embed-responsive-21by9">
-                        
-                    </div>
-                    <br/>
-                    <br/>
                     </body>
             </React.Fragment>
         )
