@@ -29,7 +29,7 @@ class ManagerBanner extends React.Component {
       }
     //Method for handling the submission of the query.
     handleSubmit = (e) => {
-        e.preventDefault();
+        // e.preventDefault();
         var go = ''
         go = '/addmovies/search/' + this.state.query.split(' ').join('_');
     
@@ -44,7 +44,6 @@ class ManagerBanner extends React.Component {
     //Method for handling logging out.
     handleLogout = (e) => {
         logout()
-        var go = '/logout/' + this.state.IP;
       
         // fetch(go, {
         //     method: 'POST',

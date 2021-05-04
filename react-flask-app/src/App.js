@@ -88,7 +88,7 @@ const App = (props) => (
     
     
     <React.Fragment>
-    <BrowserRouter history = {createBrowserHistory()} forceRefresh={true}>
+    <BrowserRouter history={createBrowserHistory()}>
       <Switch>
         <SiteType />
         
