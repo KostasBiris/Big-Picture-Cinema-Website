@@ -115,20 +115,6 @@ class Database:
                                                                hash TEXT NOT NULL, \
                                                                isManager BIT NOT NULL)")
           
-        self.cur.execute("CREATE TABLE IF NOT EXISTS sessions  (id INTEGER PRIMARY KEY, \
-                                                               ip TEXT NOT NULL, \
-                                                               time_connected INTEGER NOT NULL, \
-                                                               account_type INTEGER NOT NULL, \
-                                                               customer_id INTEGER REFERENCES customers(id), \
-                                                               employee_id INTEGER REFERENCES employees(id), \
-                                                               manager_id INTEGER REFERENCES employees(id))")
-
-        self.cur.execute("CREATE TABLE IF NOT EXISTS payments (id INTEGER PRIMARY KEY, \
-                                                               customer_id INTEGER REFERENCES customers(id),\
-                                                               holder_name TEXT NOT NULL, \
-                                                               postcode TEXT NOT NULL,\
-                                                               card_number INT NOT NULL, \
-                                                               expiration_date DATE NOT NULL)")
 
         #commit the changes we have made to the database
         self.conn.commit()
@@ -171,21 +157,10 @@ class Database:
 
         self.cur.execute("SELECT * FROM tickets")
         tickets = self.cur.fetchall()
-        # for i in range(len(tickets)):
-        #     tickets[i] = list(tickets[i])
-        #     tickets[i][7] = self.im_from_bytes((tickets[i][7])
-        #     tickets[i] = tuple(tickets[i])
 
         self.cur.execute("SELECT * FROM employees")
         employees = self.cur.fetchall()
-
-        self.cur.execute("SELECT * FROM sessions")
-        sessions = self.cur.fetchall()
-
-        self.cur.execute("SELECT * FROM payments")
-        payments = self.cur.fetchall()
-        
-        return movies, screens, screenings, customers, bookings, tickets, employees, sessions,payments
+        return movies, screens, screenings, customers, bookings, tickets, employees
 
 #=-=-=-=-=-=-=-=-=-=-=-=MOVIES-=-=--=-=-=-=-=-=-=-=-=-=-=
     """
@@ -753,7 +728,7 @@ class Database:
         data = list(data)
         data[4] = generate_password_hash(data[4])
         data = tuple(data)
-        self.cur.execute("UPDATE customers SET forename=?, surname=?, email=?, phonenumber=?, hash=?, dob=? WHERE id=?",(*data, id))
+        self.cur.execute("UPDATE customers SET forename=?, surname=?, email=?, phonenumber=?, password=?, dob=?,stripe=?,pm=? WHERE id=?",(*data, id))
         self.conn.commit()
 
     def pairStripe(self, email, stripe, pm):
@@ -859,86 +834,6 @@ class Database:
     def __del__(self):
         self.conn.close()
 
-#=-=-=-=-=-=-=-=-=-=SESSIONS-=-=-=-=-=-=-=-=-=-=-=-=
-    def add_session(self, ip, time_connected, account_type, customer_id, employee_id, manager_id):
-        #_hash = generate_password_hash(password)
-        print('add session, ',ip)
-        if customer_id!='NULL':
-            self.cur.execute("INSERT INTO sessions VALUES (NULL, ?,?,?,?,NULL,NULL)",(ip, time_connected,  account_type, customer_id))
-            self.conn.commit()
-        elif employee_id!='NULL':
-            self.cur.execute("INSERT INTO sessions VALUES (NULL, ?,?,?,NULL,?,NULL)",(ip, time_connected, account_type, employee_id))
-            self.conn.commit()
-        elif manager_id!='NULL':
-            self.cur.execute("INSERT INTO sessions VALUES (NULL, ?,?,?,NULL,NULL,?)",(ip, time_connected,  account_type, manager_id))
-            self.conn.commit()
-        
-
-
-    def ip_in_session(self, ip):
-
-        self.cur.execute("SELECT * FROM sessions WHERE ip=?",(ip,))
-        return self.cur.fetchone()
-
-
-    def logout(self, ip):
-        self.cur.execute("SELECT * FROM sessions WHERE ip=?",(ip,))
-        data = self.cur.fetchone()
-        if not data: return False
-        id_ = data[0]
-        self.cur.execute("DELETE FROM sessions WHERE id=?",(id_,))
-        self.conn.commit()
-        return True
-
-    def clear_sessions(self):
-        self.cur.execute("SELECT * FROM sessions")
-        data = self.cur.fetchall()
-
-        for d in data:
-            if (time.time()-float(d[2])) > 1800:
-                self.cur.execute("SELECT * FROM sessions WHERE id=?",(d[0],))
-                self.remove_session(d[0])
-                self.conn.commit()
-        
-    def remove_session(self,id):
-        self.cur.execute("DELETE FROM sessions WHERE id=?",(id,))
-        self.conn.commit()
-
-    
-        #self.cur.execute("INSERT INTO sessions VALUES (NULL, ?,?,?,?,?,?,?)",(ip, time_connected, time_disconnected, account_type, customer_id, employee_id, manager_id))
-        #self.conn.commit()
-#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-#=-=-=-=-=-=-=-=-=-=PAYMENTS-=-=-=-=-=-=-=-=-=-=
-
-    def add_payment(self, customer_id, holder_name, postcode, card_number, expiration_date):
-        _card_number = generate_password_hash(card_number)
-        self.cur.execute("INSERT INTO payments VALUES (NULL, ?,?,?,?,?)",
-                            (customer_id, holder_name, postcode, _card_number, expiration_date))
-        self.conn.commit()
-
-    def remove_payment(self, id=-1, customer_id=-1, holder_name="No name",):
-
-        if(id == -1):
-
-            #Remove a specific using the customer's id and the payment date
-            if(customer_id != -1):
-                self.cur.execute("DELETE FROM payments WHERE customer_id=? AND payment_date=?", (customer_id, payment_date,))
-
-            #Remove a specific using the card holders name and the payment date
-            elif(customer_id == -1 and holder_name !="No name"):
-                self.cur.execute("DELETE FROM payments WHERE forename=? holder_name=? AND payment_date=?", (holder_name,payment_date,))
-
-        else:
-            self.cur.execute("DELETE FROM payments WHERE id=?", (id,))
-
-        self.conn.commit()
-#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-
-
-
-#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 """
 db = Database('cinema.db')

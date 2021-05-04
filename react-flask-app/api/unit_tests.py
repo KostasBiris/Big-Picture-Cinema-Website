@@ -51,8 +51,8 @@ class TestDataBase(unittest.TestCase):
         self.assertEqual(['id','date','time','screen_id','movie_id','seatmap'], [cursor.description[0][0],cursor.description[1][0],cursor.description[2][0],cursor.description[3][0],cursor.description[4][0],
         cursor.description[5][0]])
         cursor = conn.execute('SELECT * FROM customers')
-        self.assertEqual(['id', 'forename', 'surname', 'email', 'phonenumber', 'password', 'dob'], [cursor.description[0][0],cursor.description[1][0],cursor.description[2][0],cursor.description[3][0],cursor.description[4][0],
-        cursor.description[5][0],cursor.description[6][0]])
+        self.assertEqual(['id', 'forename', 'surname', 'email', 'phonenumber', 'password', 'dob', 'stripe', 'pm'], [cursor.description[0][0],cursor.description[1][0],cursor.description[2][0],cursor.description[3][0],cursor.description[4][0],
+        cursor.description[5][0],cursor.description[6][0],cursor.description[7][0],cursor.description[8][0]])
 
         cursor = conn.execute("SELECT * FROM bookings")
         self.assertEqual(['id','screening_id','customer_id','seats'],[cursor.description[0][0],cursor.description[1][0],cursor.description[2][0],cursor.description[3][0]] )
@@ -67,13 +67,6 @@ class TestDataBase(unittest.TestCase):
         ,cursor.description[4][0],cursor.description[5][0], cursor.description[6][0], cursor.description[7][0], cursor.description[8][0], cursor.description[9][0],
         cursor.description[10][0], cursor.description[11][0], cursor.description[12][0], cursor.description[13][0], cursor.description[14][0]])
 
-        cursor = conn.execute("SELECT * FROM sessions")
-        self.assertEqual(['id','ip','time_connected','account_type','customer_id','employee_id','manager_id'],[cursor.description[0][0],cursor.description[1][0],cursor.description[2][0],cursor.description[3][0],cursor.description[4][0],
-        cursor.description[5][0],cursor.description[6][0]])
-
-        cursor = conn.execute("SELECT * FROM payments")
-        self.assertEqual(['id', 'customer_id','holder_name','postcode','card_number','expiration_date'], [cursor.description[0][0],cursor.description[1][0],cursor.description[2][0],cursor.description[3][0],cursor.description[4][0],
-        cursor.description[5][0]])
 
         stepDown(db)
 
@@ -87,7 +80,7 @@ class TestDataBase(unittest.TestCase):
         rows = testDataBase.fetch()
 
         #Asserts that the sum of the lengths of the rows fetched is 0 (False)
-        self.assertFalse(len(rows[0]) + len(rows[1]) + len(rows[2]) + len(rows[3]) + len(rows[4])+len(rows[5])+len(rows[6]) + len(rows[7]) + len(rows[8]))
+        self.assertFalse(len(rows[0]) + len(rows[1]) + len(rows[2]) + len(rows[3]) + len(rows[4])+len(rows[5])+len(rows[6]))
 
         stepDown(testDataBase)
 
@@ -446,7 +439,7 @@ class TestDataBase(unittest.TestCase):
         print(fetch)
         fetch = [tuple(list(f)[:5] + list(f)[6:]) for f in fetch]
         #Asserts that the rows of the 'customers' table only contains our test entry, and that it does indeed contain this entry correctly.
-        self.assertEqual(fetch, [(1, 'Jared', 'Swift', 'ed18jws@leeds.ac.uk', '07495508368', '13-07-2001')])
+        self.assertEqual(fetch, [(1, 'Jared', 'Swift', 'ed18jws@leeds.ac.uk', '07495508368', '13-07-2001','','')])
         # self.assertTrue(check_password_hash(hash, 'o kostas einai andras'))
 
         stepDown(testDataBase)
@@ -455,11 +448,11 @@ class TestDataBase(unittest.TestCase):
     def testUpdateCustomer(self):
         testDataBase, conn = stepUp()
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?)", ('Kostas', 'Biris', 'sc19kb@leeds.ac.uk', '07495508228', generate_password_hash('i kostas einai yuneika'), '13-07-1900'))
+        cursor.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?,?,?)", ('Kostas', 'Biris', 'sc19kb@leeds.ac.uk', '07495508228', generate_password_hash('i kostas einai yuneika'), '13-07-1900','',''))
         conn.commit()
         conn.close()
         #Update test customer
-        testDataBase.update_customer(1, ('Kostas', 'Biris', 'sc19kb@leeds.ac.uk', '07495508228', 'i kostas einai yuneika', '13-07-1900'))
+        testDataBase.update_customer(1, ('Kostas', 'Biris', 'sc19kb@leeds.ac.uk', '07495508228', 'i kostas einai yuneika', '13-07-1900','',''))
         conn = sqlite3.connect('test.db')
         cursor = conn.execute('SELECT * FROM customers')
         fetch = cursor.fetchall()
@@ -469,7 +462,7 @@ class TestDataBase(unittest.TestCase):
         
         fetch = [tuple(list(f)[:5] + list(f)[6:]) for f in fetch]
         #Asserts that the rows of the 'customers' table only contains our test entry, and that it has been correctly updated.
-        self.assertEqual(fetch, [(1,'Kostas', 'Biris', 'sc19kb@leeds.ac.uk', '07495508228', '13-07-1900')])
+        self.assertEqual(fetch, [(1,'Kostas', 'Biris', 'sc19kb@leeds.ac.uk', '07495508228', '13-07-1900','','')])
         fetch = cursor.fetchall()
         # self.assertTrue(check_password_hash(hash, 'i kostas einai yuneika'))
 
@@ -480,7 +473,7 @@ class TestDataBase(unittest.TestCase):
 
         #Store the previous number of rows in the 'customers' table.
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?)", ('Kostas', 'Biris', 'sc19kb@leeds.ac.uk', '07495508228', generate_password_hash('i kostas einai yuneika'), '13-07-1900'))
+        cursor.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?,?,?)", ('Kostas', 'Biris', 'sc19kb@leeds.ac.uk', '07495508228', generate_password_hash('i kostas einai yuneika'), '13-07-1900','',''))
         conn.commit()
         cursor.execute("SELECT * FROM customers")
         prev_len = len(cursor.fetchall())
@@ -584,7 +577,7 @@ class TestDataBase(unittest.TestCase):
             else:
                 seatmapA[n][i]=2
         cursor.execute("INSERT INTO screens VALUES (NULL, ?, ?)", (25, seatmapA.dumps()))
-        cursor.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?)", ("customer1_fn", "customer1_sn", "customer1@email.com", "07495508368", generate_password_hash("pwd"), '13-07-2001'))
+        cursor.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?,?,?)", ("customer1_fn", "customer1_sn", "customer1@email.com", "07495508368", generate_password_hash("pwd"), '13-07-2001','',''))
         cursor.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?,?) ", ('01-03-2020','18:00', 1, 1, seatmapA.dumps()))
         conn.commit()
         conn.close()        
@@ -638,7 +631,7 @@ class TestDataBase(unittest.TestCase):
             else:
                 seatmapA[n][i]=2
         cursor.execute("INSERT INTO screens VALUES (NULL, ?, ?)", (25, seatmapA.dumps()))
-        cursor.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?)", ("customer1_fn", "customer1_sn", "customer1@email.com", "07495508368", generate_password_hash("pwd"), '13-07-2001'))
+        cursor.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?,?,?)", ("customer1_fn", "customer1_sn", "customer1@email.com", "07495508368", generate_password_hash("pwd"), '13-07-2001','',''))
         cursor.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?,?) ", ('01-03-2020','18:00', 1, 1, seatmapA.dumps()))
         cursor.execute("INSERT INTO bookings VALUES (NULL,?,?,?)",(1,'NULL', 'A1,A2,A3'))
         conn.commit()
@@ -694,7 +687,7 @@ class TestDataBase(unittest.TestCase):
             else:
                 seatmapA[n][i]=2
         cursor.execute("INSERT INTO screens VALUES (NULL, ?, ?)", (25, seatmapA.dumps()))
-        cursor.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?)", ("customer1_fn", "customer1_sn", "customer1@email.com", "07495508368", generate_password_hash("pwd"), '13-07-2001'))
+        cursor.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?,?,?)", ("customer1_fn", "customer1_sn", "customer1@email.com", "07495508368", generate_password_hash("pwd"), '13-07-2001','',''))
         cursor.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?,?) ", ('01-03-2020','18:00', 1, 1, seatmapA.dumps()))
         cursor.execute("INSERT INTO bookings VALUES (NULL,?,?,?)",(1,'NULL', 'A1,A2,A3'))
         conn.commit()
@@ -740,7 +733,7 @@ class TestDataBase(unittest.TestCase):
             else:
                 seatmapA[n][i]=2
         cursor.execute("INSERT INTO screens VALUES (NULL, ?, ?)", (25, seatmapA.dumps()))
-        cursor.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?)", ("customer1_fn", "customer1_sn", "customer1@email.com", "07495508368", generate_password_hash("pwd"), '13-07-2001'))
+        cursor.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?,?,?)", ("customer1_fn", "customer1_sn", "customer1@email.com", "07495508368", generate_password_hash("pwd"), '13-07-2001','',''))
         cursor.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?,?) ", ('01-03-2020','18:00', 1, 1, seatmapA.dumps()))
         cursor.execute("INSERT INTO bookings VALUES (NULL,?,?,?)",(1,'NULL', 'A1,A2,A3'))
         conn.commit()
@@ -767,7 +760,7 @@ class TestDataBase(unittest.TestCase):
             else:
                 seatmapA[n][i]=2
         cursor.execute("INSERT INTO screens VALUES (NULL, ?, ?)", (25, seatmapA.dumps()))
-        cursor.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?)", ("customer1_fn", "customer1_sn", "customer1@email.com", "07495508368", generate_password_hash("pwd"), '13-07-2001'))
+        cursor.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?,?,?)", ("customer1_fn", "customer1_sn", "customer1@email.com", "07495508368", generate_password_hash("pwd"), '13-07-2001','',''))
         cursor.execute("INSERT INTO screenings VALUES (NULL, ?,?,?,?,?) ", ('01-03-2020','18:00', 1, 1, seatmapA.dumps()))
         cursor.execute("INSERT INTO bookings VALUES (NULL,?,?,?)",(1,'NULL', 'A1,A2,A3'))
         cursor.execute("INSERT INTO tickets VALUES (NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", (1,1,-1, 10.0,'Jared','Swift','jaredswift@hotmail.co.uk' ,'qr', 0, 0, 0, 0,str(datetime.today().strftime("%d-%m-%Y")), 'B1M1JS'))
@@ -783,44 +776,6 @@ class TestDataBase(unittest.TestCase):
         fetch = cursor.fetchall()
         new_len = len(fetch)
         self.assertTrue((1,1,1,-1, 10.0,'Jared','Swift','jaredswift@hotmail.co.uk' ,'qr', 0, 0, 0, 0,str(datetime.today().strftime("%d-%m-%Y")), 'B1M1JS') not in fetch)
-        self.assertEqual(prev_len-1, new_len)
-        stepDown(testDataBase)
-
-
-    def testInsertPayment(self):
-        testDataBase, conn = stepUp()
-        cursor = conn.cursor()
-        cursor.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?)", ("customer1_fn", "customer1_sn", "customer1@email.com", "07495508368", generate_password_hash("pwd"), '13-07-2001'))
-        conn.commit()
-        testDataBase.add_payment(1, 'Jared Swift', 'LS61JY', '4242424242424242', '07/21')
-        conn = sqlite3.connect('test.db')
-        cursor = conn.execute('SELECT * FROM payments')    
-        fetch = cursor.fetchall()
-        hash = fetch[0][4]
-        fetch = [tuple(list(f)[:4] + list(f)[5:]) for f in fetch]
-        #Asserts that the rows of the 'customers' table only contains our test entry, and that it does indeed contain this entry correctly.
-        self.assertEqual(fetch, [(1,1, 'Jared Swift', 'LS61JY', '07/21')])
-        self.assertTrue(check_password_hash(hash, '4242424242424242'))
-        stepDown(testDataBase)
-
-    def testRemovePayment(self):
-        testDataBase, conn = stepUp()
-        cursor = conn.cursor()
-        cursor.execute("INSERT INTO customers VALUES (NULL, ?,?,?,?,?,?)", ("customer1_fn", "customer1_sn", "customer1@email.com", "07495508368", generate_password_hash("pwd"), '13-07-2001'))
-        cursor.execute("INSERT INTO payments VALUES (NULL, ?, ?, ?, ?, ?)",(1, 'Jared Swift', 'LS61JY', generate_password_hash('4242424242424242'), '07/21'))
-        conn.commit()
-        cursor.execute("SELECT * FROM payments")
-        prev_len = len(cursor.fetchall())
-        
-        conn.close()
-        testDataBase.remove_payment(1)
-        conn = sqlite3.connect('test.db')
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM payments")
-        fetch = cursor.fetchall()
-        new_len = len(fetch)
-        fetch = [tuple(list(f)[:4] + list(f)[5:]) for f in fetch]
-        self.assertTrue((1, 'Jared Swift', 'LS61JY', '07/21') not in fetch)
         self.assertEqual(prev_len-1, new_len)
         stepDown(testDataBase)
 """
@@ -857,8 +812,6 @@ def suite():
     suite.addTest(TestDataBase('testRemoveBooking'))
     suite.addTest(TestDataBase('testInsertTicket'))
     suite.addTest(TestDataBase('testRemoveTicket'))
-    suite.addTest(TestDataBase('testInsertPayment'))
-    suite.addTest(TestDataBase('testRemovePayment'))
 
     return suite
 
