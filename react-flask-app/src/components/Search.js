@@ -26,6 +26,7 @@ class SearchResults extends React.Component{
     window.addEventListener('load', this.getMovies);
     await this.getMovies();
     if (this.state.returnedData.length === 0) {
+      await alert("No movies found");
       this.props.history.push('/', this.state);
     }
 }
