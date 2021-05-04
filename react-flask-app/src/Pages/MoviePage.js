@@ -95,6 +95,10 @@ class MoviePage extends React.Component {
                         <img className="poster_template" src={'https://image.tmdb.org/t/p/w500/' + this.state.returnedData.poster_path}/>
 
                     </div> 
+                    <div className="video_frame header_text row justify-content-center">
+                            <iframe width="600px" height="335px" src = {"https://www.youtube.com/embed/" + this.state.returnedData.youtube_key + "/?controls=1"}>
+                            </iframe>
+                    </div>
                     <div className="container-fluid px-0 px-sm-4 mx-auto">
                             <div className="row justify-content-center ">
                                 <div className="col-lg-10">
@@ -126,7 +130,7 @@ class MoviePage extends React.Component {
                                 </div>
                             </div>
                         
-                    <br></br>/*
+                    <br></br>
                     <div className="row justify-content-center">
                     <table className="table table-sm-center table-dark" style={{maxWidth:'fit-content'}} >
                             <tr>
@@ -173,8 +177,13 @@ class MoviePage extends React.Component {
                                 </th>
                                 <td data-th = "Certificate">{this.state.returnedData.certificate}</td>
                             </tr>
+                            <tr>
+                                <th scope="row">
+                                    Screenings:
+                                </th>
+                                <td data-th = "Screenings">{this.getScreenings()}</td>
+                            </tr>
                     </table>
-
                     </div>
                     </body>
             </React.Fragment>

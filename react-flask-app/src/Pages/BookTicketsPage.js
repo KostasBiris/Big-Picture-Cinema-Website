@@ -205,7 +205,7 @@ class BookTickets extends React.Component {
                 return (
                     <div onClick={this.handleScreen} screenValue={screen} className="col-md-2 col-4 my-1 px-2 time-input">
                         {screen == 4 ? <label for={index}> VMAX SCREEN</label> :
-                            screen == 5 ? <label for={index}> GOLDEN SCREEN </label> :
+                            screen == 5 ? <label for={index}> IMAX </label> :
                                 <label for={index}> SILVER SCREEN {screen}</label>
                         }
                         <input type="radio" id={index} className="cell py-1"></input>
