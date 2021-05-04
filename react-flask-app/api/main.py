@@ -13,6 +13,7 @@ import flask_praetorian
 import sqlalchemy
 from sqlalchemy import create_engine
 from db_sqlalchemy import User
+from employeeModel import Employee
 
 # initialize flask app
 app = Flask(__name__)
@@ -27,15 +28,21 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cinema.db'
 CORS(app)
 
 guard = flask_praetorian.Praetorian()
-# from db_sqlalchemy import User
-
-
-
+employee_guard = flask_praetorian.Praetorian() 
 
 
 # Initialize the flask-praetorian instance for the app
 guard.init_app(app, User)
+employee_guard.init_app(app, Employee)
 
+# register employees
+db = Database('cinema.db')
+db.add_employee('Neymar', 'Santos', 'neymar@gmail.com', '6126216216', employee_guard.hash_password('neymar2021'), False)
+db.add_employee('Lionel', 'Messi', 'messi@gmail.com', '6236236236', employee_guard.hash_password('messi2021'), True)
+del db
+
+
+# stripe key for the payment authentication
 stripe.api_key = "sk_test_51ISQ7OC2YcxFx25Ty8LGkfEVQczFPRVHPyDqa6WJRtwNXNUST7GJbzEpWdWFWBZftAMgeM1U8LVfDrwb8R768K0800R2icalhU"
 
 
@@ -266,19 +273,6 @@ def getpdf(id):
     return send_file('../'+ticket,'application/pdf', as_attachment=True, attachment_filename=ticket)
 
 
-
-
-
-"""
-@app.route('/movie/<name>', methods = ['POST'])
-def view_movie(name):
-    name = name.replace("_", " ")
-    db = Database('cinema.db')
-    movie = db.search_movies(name)
-    if not movie: pass
-    return serialize_all_movies(movie)
-"""
-
 @app.route('/movie/<name>/page', methods= ['POST'])
 def _view_movie(name):
     name = name.replace("_", " ")
@@ -311,40 +305,6 @@ def list_movies():
     return {'movies': found_movies}
 
 
-@app.route('/caws')
-def moviepage():
-    return render_template('movie_template.html')
-
-
-@app.route('/primelogin')
-def managerlogin():
-    return render_template('manager_login.html')
-
-@app.route('/analytics')
-def overallanalytics():
- return render_template('overall_analytics.html')
-
-@app.route('/screen')
-def screen():
-    return render_template('screen.html')
-
-@app.route('/adminbooking')
-def booking():
-    return render_template('employee_main_interface.html')
-
-@app.route('/employee_checkout')
-def employee_checkout():
-    return render_template('employee_checkout.html')
-
-@app.route('/employee_book_tickets')
-def employee_book_tickets():
-    return render_template('employee_book_tickets.html')
-
-@app.route('/book-tickets')
-def booktickets():
-    return render_template('book_tickets.html')
-
-
 @app.route('/primelogin', methods =['POST'])
 def _managerlogin():
     db = Database('cinema.db')
@@ -354,14 +314,6 @@ def _managerlogin():
     print(email, pwd, _id)
     del db
     return render_template('business_main_interface.html')
-
-@app.route('/checkout')
-def checkout():
-    return render_template('checkout.html')
-
-@app.route('/search')
-def search():
-    return render_template('search.html')
 
 
 @app.route('/payment_info')
@@ -377,30 +329,6 @@ def payment_info():
     db = Database('cinema.db')
     db.add_payment(str(datetime.today().strftime("%d-%m-%Y")), customerid, holder_name, postcode, card_number, expiration_date)
     return jsonify({'response':'OK'})
-
-
-
-@app.route('/screens_description')
-def screens_description():
-    return render_template('screens_description.html')
-
-@app.route('/register')
-def customer_register():
-    return render_template('customer_register.html')
-
-# @app.route('/login')
-# def customer_login():
-#     return render_template('customer_login.html')
-
-# @app.route('/', methods=['POST'])
-# def _mainpage():
-#     #For now, we just search the database based on the entry, and render html showing the results.
-#     #We need to dynamic html generation.
-#     db = Database('cinema.db')
-#     query = request.form['query']
-#     dat = str(db.search(query, 'movies'))
-#     del db
-#     return "<h1 style='color:blue'>" + dat + "</h1>"
 
 
 @app.route('/api/insession')
@@ -441,8 +369,7 @@ def employeelogin():
     return render_template('employee_login.html')
 
 
-# from sqlalchemy.orm import scoped_session, sessionmaker, Query
-# engine = create_engine('sqlite:///cinema.db', convert_unicode=True, echo=False)
+
 @app.route('/login', methods = ['POST'])
 def _login():
     db = Database('cinema.db')
@@ -450,15 +377,7 @@ def _login():
     print(data)
     email = data['email']
     password = data['password']
-
-    # user = User.lookup(email)
-        
-    # print(user)
-    
     user = guard.authenticate(email, password)
-    # print('this is the user')
-    # print(user.email)
-    # print(user.password)
     ret = {'access_token': guard.encode_jwt_token(user)}
     return ret, 200
 
@@ -495,34 +414,33 @@ def refresh():
 def manager_login():
     db = Database('cinema.db')
     data = request.json['data']
-    email = data['email']
+    print(data)
+    _id = int(data['id'])
+    print (_id)
     password = data['password']
-    ip = data['IP']
-    id = data['id']
-    res, id_ = db.validate_manager(email, password,id)
-    if res:
-        db.add_session(ip, time.time(), 3, 'NULL', 'NULL', id_)
-       # del db
-        return jsonify({'response': 'OK'})
-    del db
-    return jsonify({'response' : 'BAD'})
+
+    employee = employee_guard.authenticate(_id, password)
+    print(employee)
+    ret = {'access_token': employee_guard.encode_jwt_token(employee)}
+    return ret, 200
+
 
 @app.route('/employee_login',methods=['POST'])
 def employee_login():
     db = Database('cinema.db')
     data = request.json['data']
-    id = data['id']
+    print(data)
+    _id = int(data['id'])
+    print (_id)
     password = data['password']
-    ip = data['IP']
-    res, id_ = db.validate_employee(password,id)
-    if res:
-        db.add_session(ip, time.time(), 2, 'NULL', id_, 'NULL')
-        return jsonify({'response': 'OK'})
-    del db
-    return jsonify({'response' : 'BAD'})
+
+    employee = employee_guard.authenticate(_id, password)
+    print(employee)
+    ret = {'access_token': employee_guard.encode_jwt_token(employee)}
+    return ret, 200
+
 
 @app.route('/account')
-
 def account():
     return render_template('account.html')
 
