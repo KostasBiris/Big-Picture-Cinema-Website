@@ -20,12 +20,11 @@ class CustomerSite extends React.Component{
 
     constructor(props){
         super(props);     
-        this.whatBanner = this.whatBanner.bind(this);        
+        this.whatBanner = this.whatBanner.bind(this);
     }
 
     
     whatBanner = (hist) => { 
-        // console.log(this.props.logged[0])
         if (this.props.logged[0])
             return <Banner history={this.props.history} logged={this.props.logged[0]}/>
         else
@@ -42,9 +41,7 @@ render () {
         <Route exact path="/" render={() => (<Redirect to="/home" />)} />
         <Route exact path ="/home" component={CustomerHomePage}/>
         <Route path="/book" component={BookTickets}/>
-        {/* <Route path="/book" render = {(props) => <BookTickets {...props} isAuthed={this.props.logged[0]}/>}/> */}
         <Route path="/as" component={ArbitraryScreen}/>
-        {/* <Route path="/payment" component={Payment}/> */}
         <Route path="/payment" render = {(props) => <Payment {...props} isAuthed={this.props.logged[0]}/>}/>
         <Route path="/search/:query" component={SearchResults}/>
         <Route path="/searchscreenings/:query" component={ScreeningResults}/>

@@ -56,15 +56,20 @@ class SearchResult extends React.Component{
         let _directors = [];
         let _actors = [];
         let _writers = [];
+        console.log(data)
         //Getting the directors, actors and writers
         if(data.credits){
             data.credits.crew.forEach(function(entry){
                     if (entry.job === "Director") {
                         _directors.push(entry.name);
                     }
-                    else if (entry.job === "Writer") {
-                        _writers.push(entry.name);
-                    }
+                    else if (entry.known_for_department === "Writing")
+                    {
+                        
+                        if (entry.job === "Writer" || entry.job === "Screenplay") {
+                            _writers.push(entry.name);
+                        }
+                    } 
                 })
                 data.credits.cast.forEach(function(entry){
                 if (entry.known_for_department === 'Acting'){
@@ -88,6 +93,7 @@ class SearchResult extends React.Component{
                 genres.push(entry.name);
             })
         }}
+
         //Certification stuff
         var certificate;
         if (data.release_dates.results)
@@ -96,13 +102,19 @@ class SearchResult extends React.Component{
             {
                 if (entry.iso_3166_1 == "GB")
                 {
-                    // let index = entry.release_dates[0].type;
-                    // certificate = certificationDict.index;
                     certificate = entry.release_dates[0].certification;
-                    console.log(data)
-                    console.log("The certificate " + certificate)
+                    // console.log(data)
+                    // console.log("The certificate " + certificate)
                 }
             })
+            // if the certificate is empty after checking
+            if (!certificate)
+            {
+                if (data.adult === true)
+                    certificate = '18' // only adults admitted
+                else
+                    certificate = 'PG' // all ages admitted
+            }
         }       
      
         //Update the state

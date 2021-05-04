@@ -27,7 +27,7 @@ class EmployeeSite extends React.Component{
     }
 
     whatBanner = () => { 
-        // if (this.props.logged[0] == true)
+        if (this.props.logged[0] == true){
             return (<React.Fragment>
                         <EmployeeBanner history={this.props.history} logged={this.props.logged[0]}/>
                         <EMenu />
@@ -40,8 +40,16 @@ class EmployeeSite extends React.Component{
                         <Route path="/movie/:title" render={(props) => <MoviePage {...props} isEmployee={true}/> }/>
                         <Route path="/epayment" component={EPayment}/>
                         <Footer/>
-
                     </React.Fragment>)
+        }
+        else{
+            return (
+                <React.Fragment>
+                <Route path ="/elogin" component={EmployeeLogin}/>
+                <Redirect to="/elogin" />
+                </React.Fragment>
+            )
+        }
     }
 
 

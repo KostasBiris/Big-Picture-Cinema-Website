@@ -88,13 +88,13 @@
     position: relative;
     z-index: 200;
     margin: 15px auto;
-    width: 100px;
+    width: 200px;
     padding: 10px 15px;
     border: 1px solid #FFCB39;
     border-radius: 100px;
-    font-weight: 400;
+    font-weight: 500;
     display: block;
-    color: white;
+    color: black;
     text-align: center;
     text-decoration: none;
     letter-spacing : 2px;

@@ -16,12 +16,12 @@ class ManagerSite extends React.Component{
 
     constructor(props){
         super(props);
-        this.whatBanner = this.whatBanner.bind(this);         
+        this.whatBanner = this.whatBanner.bind(this);
     }
 
 
     whatBanner = () => { 
-        // if (this.props.logged[0] == true)
+        if (this.props.logged[0] == true){
             return (
                 <React.Fragment>
                     <ManagerBanner history={this.props.history} logged={this.props.logged[0]}/>
@@ -29,8 +29,18 @@ class ManagerSite extends React.Component{
                     <Route path="/overall_analytics" component={OverallAnalytics}/>
                     <Route path="/addscreening" component={AddScreening} />
                     <Footer/>
-
                 </React.Fragment>)
+        }
+        else
+        {
+            return(
+                <React.Fragment>
+                    <Route path ="/mlogin" component={ManagerLogin}/>
+                    <Redirect to="/mlogin" />
+                </React.Fragment>
+            )
+        }
+
     }
 
 render () {
