@@ -4,6 +4,7 @@ import {
     useStripe,
     useElements
 } from "@stripe/react-stripe-js";
+import {useHistory} from "react-router-dom";
 
 const cardStyle = {
     style: {
@@ -92,6 +93,7 @@ export default function CheckoutFormAuthNoKey(state, props) {
     const [customerid, setCustomerid] = useState('');
     const [paymentid, setPaymentid] = useState('')
     const [data, setData] = useState(state);
+    let history = useHistory();
     // console.log(props);
     console.log(state);
     useEffect(() => {
@@ -185,6 +187,8 @@ export default function CheckoutFormAuthNoKey(state, props) {
                 }
                 )
                     .then(response => response.blob()).then(data => state.isEmployee ? window.open(URL.createObjectURL(data)) : 1);
+                    alert("payment succeeded");
+                    history.push("/");
             }
         })
     }

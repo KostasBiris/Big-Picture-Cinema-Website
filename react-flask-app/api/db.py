@@ -112,7 +112,7 @@ class Database:
                                                                surname TEXT NOT NULL, \
                                                                email TEXT NOT NULL, \
                                                                phonenumber TEXT NOT NULL, \
-                                                               hash TEXT NOT NULL, \
+                                                               password TEXT NOT NULL, \
                                                                isManager BIT NOT NULL)")
           
 
@@ -738,8 +738,8 @@ class Database:
 
 #=-=-=-=-=-=-=-=-=-=EMPLOYEES-=-=-=-=-=-=-=-=-=-=-=-=
     def add_employee(self, forename, surname, email, phonenumber, password, isManager):
-        _hash = generate_password_hash(password)
-        self.cur.execute("INSERT INTO employees VALUES (NULL, ?,?,?,?,?,?)",(forename, surname, email, phonenumber, _hash, isManager))
+        # _hash = generate_password_hash(password)
+        self.cur.execute("INSERT INTO employees VALUES (NULL, ?,?,?,?,?,?)",(forename, surname, email, phonenumber, password, isManager))
 
         self.conn.commit()
 
@@ -840,6 +840,8 @@ class Database:
         db.add_screen(50,5,10)
         db.add_screen(25,5,5,vip_only=True)
         db.add_screen(100,10,10)
+        
+        
 
     def __del__(self):
         self.conn.close()

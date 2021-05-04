@@ -9,20 +9,16 @@ Base = declarative_base()
 Base.metadata.reflect(engine)
 Base.query = db_session.query_property()
 
-# connection = engine.connect()
-# metadata = db.MetaData()
-class User(Base):
-    # customers = db.Table('customers', metadata, autoload=True, autoload_with=engine)
-    __table__ = Base.metadata.tables['customers']
+
+class Employee(Base):
+    __table__ = Base.metadata.tables['employees']
+    # print(__table__.columns)
     
     @classmethod
-    def lookup(cls, email):
-        res = cls.query.filter_by(email=email).first()
+    def lookup(cls, id):
+        res = cls.query.filter_by(id=id).first()
+        print(res)
         return res
-        # print(res.id)
-        # print(cls)
-        # db_session = scoped_session(sessionmaker(bind=engine))
-        # print (db_session.query(email=email).one_or_none())
 
     @classmethod
     def identify(cls, id):
@@ -39,4 +35,3 @@ class User(Base):
         except Exception:
             return []
 
-    

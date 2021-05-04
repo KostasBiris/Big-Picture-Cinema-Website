@@ -4,8 +4,9 @@ import logo from '../static/finlogo.png';
 import vid from '../static/vid.mp4';
 import cinema from '../static/cinema.jpg';
 import ManagerBanner from '../components/ManagerBanner';
-import {login} from "../auth";
+import {loginE} from "../test";
 import { Redirect } from "react-router";
+import { withHooksHOC } from "../test/withHooksHOC";
 
 var publicIP = require('public-ip')
 
@@ -49,8 +50,8 @@ class ManagerLogin extends React.Component {
         })
             .then(response => response.json()).then(token => {
                 if (token.access_token) {
-                    login(token) // store login key in local database 
-                    this.setState({logged: this.props.auth[0]});
+                    loginE(token) // store login key in local database 
+                    // this.setState({logged: this.props.auth[0]});
                     if(this.props.auth[0] == true)
                         this.props.history.push('/overall_analytics', this.state)
                     else
@@ -101,4 +102,4 @@ class ManagerLogin extends React.Component {
 
 
 }
-export default ManagerLogin;
+export default withHooksHOC(ManagerLogin);

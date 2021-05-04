@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from '../static/finlogo.png';
-import { logout } from '../auth';
+import { logout } from '../test';
 global.jQuery = require('jquery');
 require('bootstrap');
 
@@ -46,12 +46,12 @@ class ManagerBanner extends React.Component {
         logout()
         var go = '/logout/' + this.state.IP;
       
-        fetch(go, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(response => response.json()).then(() => this.setState({ response: undefined }))
+        // fetch(go, {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     }
+        // }).then(response => response.json()).then(() => this.setState({ response: undefined }))
       
       }
       

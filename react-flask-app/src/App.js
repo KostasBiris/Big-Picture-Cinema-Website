@@ -30,6 +30,7 @@ import EmployeeSite from "./Sites/EmployeeSite";
 import ManagerSite from "./Sites/ManagerSite";
 import NotFoundPage from './NotFound/NotFoundPage'
 import {useAuth} from "./auth"
+import {useAuthE} from "./test"
 
 import {createBrowserHistory} from 'history';
 const history = createBrowserHistory();
@@ -43,7 +44,10 @@ function SiteType() {
   let location = history.location.pathname;
 
   var logged = useAuth();
-  console.log(logged)
+  var employee_logged = useAuthE();
+
+  console.log('employee logged:' + employee_logged)
+  console.log('user logged:' + logged)
 
   // This if else statement block is only a quick fix for now
   if (location.includes("search"))
@@ -57,7 +61,6 @@ function SiteType() {
     console.log(location)
   }
 
-
   if (customerRoutes.includes(location)){
     console.log("customer")
     return <Route render={(props) => <CustomerSite {...props} logged={logged}/> }/>
@@ -65,12 +68,12 @@ function SiteType() {
   else if (employeeRoutes.includes(location))
   {
     console.log("employee")
-    return <Route render={(props) => <EmployeeSite {...props} logged={logged}/> }/>
+    return <Route render={(props) => <EmployeeSite {...props} logged={employee_logged}/> }/>
   }
   else if (managerRoutes.includes(location))
   {
     console.log("manager")
-    return <Route render={(props) => <ManagerSite {...props} logged={logged}/> }/>
+    return <Route render={(props) => <ManagerSite {...props} logged={employee_logged}/> }/>
   }
   else
     return <Route component={NotFoundPage} />

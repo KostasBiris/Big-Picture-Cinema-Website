@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+
+
 import {
   CardElement,
   useStripe,
@@ -65,6 +68,8 @@ export default function CheckoutForm (state, props)  {
   const [clientSecret, setClientSecret] = useState('');
   const stripe = useStripe();
   const elements = useElements();
+  let history = useHistory();
+
  // const _props = props;
   //console.log(props);
   useEffect(() => {
@@ -139,10 +144,11 @@ export default function CheckoutForm (state, props)  {
           body: JSON.stringify({ data: state })}
         )
         .then(response => response.blob()).then(data => state.state.isEmployee ?  window.open(URL.createObjectURL(data)): 1)
-      
+         alert("payment succeeded");
+         history.push("/");
       }
-
-      //props.history.push('/');
+      
+      
     //  _props.history.push('/');
     
   };

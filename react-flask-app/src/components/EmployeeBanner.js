@@ -2,7 +2,7 @@ import main from '../static/main.css';
 import logo from '../static/finlogo.png';
 import usericon from '../static/usericon.png';
 import React from 'react';
-import { logout } from '../auth';
+import { logout } from '../test';
 
 class EmployeeBanner extends React.Component {
 
@@ -50,14 +50,14 @@ class EmployeeBanner extends React.Component {
 //Method for handling logging out.
 handleLogout = (e) => {
   logout();
-  var go = '/logout/' + this.state.IP;
+  this.props.history.push('/elogin') // go to home
 
-  fetch(go, {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json'
-      }
-  }).then(response => response.json()).then(() => this.setState({ response: undefined }))
+  // fetch(go, {
+  //     method: 'POST',
+  //     headers: {
+  //         'Content-Type': 'application/json'
+  //     }
+  // }).then(response => response.json()).then(() => this.setState({ response: undefined }))
 
 }
 

@@ -1,9 +1,9 @@
 import React from "react";
-import {useAuth} from "./index";
+import {useAuthE} from "./index";
 
 export const withHooksHOC = (Component) => {
   return (props) => {
-    const useA = useAuth();
+    const useA = useAuthE();
 
     return <Component auth={useA} {...props} />;
   };

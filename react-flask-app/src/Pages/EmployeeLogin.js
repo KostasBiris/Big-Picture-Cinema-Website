@@ -2,8 +2,9 @@ import React from 'react';
 import main from '../static/main.css';
 import logo from '../static/finlogo.png';
 import cinema from '../static/cinema.jpg';
-import {login} from "../auth";
+import {loginE} from "../test";
 import { Redirect } from "react-router";
+import {withHooksHOC} from "../test/withHooksHOC";
 
 
 var publicIP = require('public-ip')
@@ -49,8 +50,8 @@ class EmployeeLogin extends React.Component{
         })
             .then(response => response.json()).then(token => {
                 if (token.access_token) {
-                    login(token) // store login key in local database 
-                    this.setState({logged: this.props.auth[0]});
+                    loginE(token) // store login key in local database 
+                    // this.setState({logged: this.props.auth[0]});
                     if(this.props.auth[0] == true)
                         this.props.history.push('/emain', this.state)
                     else
@@ -85,11 +86,7 @@ render(){
         </body>
     );
 }
-   
-
-
-
-
 
 }
-export default EmployeeLogin;
+
+export default withHooksHOC(EmployeeLogin);
