@@ -21,6 +21,14 @@ class ManagerLogin extends React.Component {
         this.Login = this.Login.bind(this);
     }
 
+
+    componentDidMount = () => {
+        if (this.props.auth[0] === true) {
+            this.props.history.push('/overall_analytics',this.state);
+        }
+    }
+
+
     //Method for handling login attempt.
     handleLogin = (e) => {
         e.preventDefault();

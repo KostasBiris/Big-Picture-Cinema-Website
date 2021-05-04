@@ -91,8 +91,10 @@ class MoviePage extends React.Component {
                 <div className="header_text row justify-content-center">
                     <h1 style = {{color: '#4e5b60', fontWeight:'bold', marginBottom:'0.5rem', marginTop:'1rem'}}>{this.state.returnedData.original_title}</h1>
                    </div>
+                   {window.innerWidth > 600 ? 
                    <div className="d-flex justify-content-center">
                     
+                       
                         <img className="poster_template" src={'https://image.tmdb.org/t/p/w500/' + this.state.returnedData.poster_path}/>
 
                             <div className="d-flex align-items-center">
@@ -100,6 +102,18 @@ class MoviePage extends React.Component {
                             </iframe>
                             </div>
                     </div>
+                    : 
+                    <div>
+
+                        <div className="d-flex justify-content-center">
+                            <img className="poster_template" src={'https://image.tmdb.org/t/p/w500/' + this.state.returnedData.poster_path}/>
+                        </div>
+                        <div className="d-flex justify-content-center">
+                            <iframe style={{height:'20rem', width:'50rem', margin:'1rem', maxWidth:'500px'}} src = {"https://www.youtube.com/embed/" + this.state.returnedData.youtube_key + "/?controls=1"}/>
+                        </div>
+                    </div>
+
+                    }
                     <div className="container-fluid px-0 px-sm-4 mx-auto">
                             <div className="row justify-content-center ">
                                 <div className="col-lg-10">
