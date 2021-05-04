@@ -95,11 +95,7 @@ class MoviePage extends React.Component {
                 <body id = 'grad1'>
                 <div className="header_text"></div>
                     <h1 style = {{position:'absolute', left:'25px', color: '#4e5b60', fontWeight:'bold' }}>{this.state.returnedData.original_title}</h1>
-                    {/* <br /><br /><br /><br /><br /><br /><br /><br />
-                    <h2 className="text" style={{position:'absolute', left:'35rem', color:'#4e5b60'}}>Movie Description</h2>
-                    <br /><br />
-                    <h2 className="text_description" style={{position:'absolute'}}> {this.state.returnedData.blurb} </h2>
-                    */}<div className="column" style={{position:'relative', left:'25px'}}>
+                    <div className="column" style={{position:'relative', left:'25px'}}>
                         <img className="poster poster_movies" src={'https://image.tmdb.org/t/p/w500/' + this.state.returnedData.poster_path} style={{left: '5rem', position: 'relative'}}/>
 
                     </div> 
@@ -189,70 +185,6 @@ class MoviePage extends React.Component {
                         </div>
                     </footer>
                     </body>
-                    {/* <div className="text"></div>
-                    <table className="position_table">
-                            <tr>
-                            <th>Director/s: </th>
-                            <td data-th="Director/s">{this.state.returnedData.director}</td>
-                            </tr>
-                         <tr>
-                         <th>Writer/s: </th>
-                        <td data-th="Writer/s">{this.state.returnedData.writers}</td>
-                        </tr>
-                        <tr>
-                        <th>Actors: </th>
-                        <td data-th="Actors">{this.state.returnedData.leadactors}</td>
-                        </tr>
-                        <tr>
-                        <th>Runtime: </th>
-                        <td data-th="Runtime">{this.state.returnedData.runtime} mins</td>
-                        </tr>
-                        <tr>
-                            <th>Release date: </th>
-                            <td data-th="Release date">{this.state.returnedData.release_date}</td>
-                        </tr>
-                        <th>Genre: </th>
-                        <td data-th="Genre">{this.state.returnedData.genres}</td>
-                        <tr>
-                        <th>Rating: </th>
-                        <td data-th="Certificate">{this.state.returnedData.certificate}</td>
-                        </tr>
-                        <tr>
-                        <th>Screenings: </th>
-                        <td data-th="Screenings">{this.getScreenings()}</td>
-                        </tr>
-                    </table>
-                    {/* Screenings:
-                    {this.getScreenings()} 
-                     {this.state.returnedData.screenings!==undefined ? this.getScreenings() : <></>} 
-                    <br /><br />
-                    <div>
-                        <br />
-                    <div className="video_frame">
-                            <iframe width="600px" height="335px" src = {"https://www.youtube.com/embed/" + this.state.returnedData.youtube_key + "/?controls=1"}>
-                            </iframe>
-                    </div>
-                    <br/>
-
-                    <br/>
-
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-
-                    {
-                        this.state.returnedData.isupcoming ?  <div class="text">
-                        <button onClick={this.goBookTickets} className="tab_background" style={{position:'absolute',top:'80%',left:'1300px',width:'180px',height:'60px'}}>BOOK TICKETS</button>
-                    </div>
-                    :
-                    <></>
-
-
-
-                    }
-                   
-                </div> */}
             </React.Fragment>
         )
     }

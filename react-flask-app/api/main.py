@@ -14,31 +14,8 @@ import sqlalchemy
 from sqlalchemy import create_engine
 from db_sqlalchemy import User
 
-# from sqlalchemy import create_engine
-# import sqlalchemy as db
-# import flask_sqlalchemy as dba
-# from sqlalchemy.ext.declarative import declarative_base
-# from sqlalchemy.orm import scoped_session, sessionmaker, Query
-
-# create customer user table with sqlalchemy
-# engine = sqlalchemy.create_engine('sqlite:///cinema.db', echo=True)
-
-# connection = engine.connect()
-
-# metadata = sqlalchemy.MetaData()
-
-# customers = sqlalchemy.Table('customers', metadata, autoload=True, autoload_with=engine)
-
-
-# engine = create_engine('sqlite:///cinema.db', convert_unicode=True, echo=False)
-# db_session = scoped_session(sessionmaker(bind=engine))
-# Base = declarative_base()
-# Base.metadata.reflect(engine)
-# Base.query = db_session.query_property()
-
 # initialize flask app
 app = Flask(__name__)
-# db = SQLAlchemy(app)
 
 
 app.debug = True
@@ -697,13 +674,5 @@ def get_tickets(customer_id):
     tickets = db.get_customer_tickets(customer_id)
     return jsonify({'response': serialize_all_tickets(tickets)})
 
-
-def spinner():
-    db = Database('cinema.db')
-    while True:
-        db.clear_sessions()
 if __name__ == '__main__':
-    # thread = Thread(target=spinner, args=())
-    # thread.daemon = True
-    # thread.start()
     app.run(debug=False, host='localhost', port='5000', threaded=True)

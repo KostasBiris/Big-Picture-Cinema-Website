@@ -31,15 +31,6 @@ class ManagerSite extends React.Component{
                     <Footer/>
 
                 </React.Fragment>)
-        // else
-        // {
-        //     return(
-        //         <React.Fragment>
-        //             <Route path ="/mlogin" component={ManagerLogin}/>
-        //             <Redirect to="/mlogin" />
-        //         </React.Fragment>
-        //     )
-        // }
     }
 
 render () {

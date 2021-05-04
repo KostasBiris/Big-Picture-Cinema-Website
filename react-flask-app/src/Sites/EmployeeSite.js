@@ -42,15 +42,6 @@ class EmployeeSite extends React.Component{
                         <Footer/>
 
                     </React.Fragment>)
-        // else{
-        //     console.log("rendeing else")
-        //     return (
-        //         <React.Fragment>
-        //         <Route path ="/elogin" component={EmployeeLogin}/>
-        //         <Redirect to="/elogin" />
-        //         </React.Fragment>
-        //     )
-        // }
     }
 
 

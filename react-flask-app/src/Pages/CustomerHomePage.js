@@ -27,12 +27,6 @@ let interval;
 class CustomerHomePage extends React.Component {
     constructor(props) {
         super(props);
-        // if (this.props.location.state !== undefined) {
-        //     if (this.props.location.state.logout === true) {
-                
-        //     }
-        // }
-
 
         //By default the state is a blank query.
         this.state = {query: '', IP: null, auth: false, response: undefined , movies: null, date:''};
@@ -43,10 +37,6 @@ class CustomerHomePage extends React.Component {
         this.handleRegister = this.handleRegister.bind(this);
         this.handleAccount = this.handleAccount.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
-        this.getClientIP = this.getClientIP.bind(this);
-        // this.assertAuth = this.assertAuth.bind(this);
-        // this.stepUp = this.stepUp.bind(this);
-        // this.getSomeMovies = this.getSomeMovies.bind(this);
         this.getRandomPosters = this.getRandomPosters.bind(this);
         this.handleClick = this.handleClick.bind(this);
     }
@@ -57,101 +47,9 @@ class CustomerHomePage extends React.Component {
 
     }
 
-
-
-    getClientIP = () => {
-        (async () => {
-            this.setState({ IP: await publicIP.v4() })
-        })();
-    }
-
-    // stepUp = async (flag) => {
-    //     await (async () => {
-    //         this.setState({ IP: await publicIP.v4() })
-    //     })();
-    //     if (flag) {
-    //         this.assertAuth();
-    //     }
-        
-        
-    // }
-
-    // isAuth = () => {
-    //     if(this.props.location)
-    //         if(this.props.location.state)
-    //             if (this.props.location.state.logged === true)
-    //                 return true;
-    //             else
-    //                 return false
-    //         else
-    //             return false;
-    //     else
-    //         return false;
-    // }
-    
-        // if (this.state.response === "error" || this.state.response === undefined || this.auth === false) {
-            // console.log(this.state.response);
-            // return false;
-        // }
-        // return true;
-    // }
-
     async componentDidMount() {
-        // window.addEventListener('load', this.stepUp);
-        
-        // const _jquery = document.createElement("script");
-        // _jquery.src = "https://code.jquery.com/jquery-3.3.1.js";
-        // _jquery.async = true;
-        // _jquery.integrity = "sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN";
-        // _jquery.crossOrigin = "anonymous";
-        // await document.body.appendChild(_jquery);
-
-        // const _popper = document.createElement("script");
-        // _popper.src = "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js";
-        // _popper.async = true;
-        // _popper.integrity = "sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q";
-        // _popper.crossOrigin = "anonymous";
-        // await document.body.appendChild(_popper);
-
-        // const _bootstrap = document.createElement("script");
-        // _bootstrap.src = "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js";
-        // _bootstrap.async = true;
-        // _bootstrap.integrity ="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl";
-        // _bootstrap.crossOrigin ="anonymous";
-        // await document.body.appendChild(_bootstrap);
-
         this.getSomeMovies();
-
-        // console.log(this.state);
-
-
-        // interval = setInterval(() => {
-        //     if (this.IP !== null) {
-        //         this.assertAuth();
-        //     }
-        // }, 5000)
-
     }
-
-    // componentWillUnmount = () => {
-    //     window.removeEventListener('load', this.stepUp(true));
-    //     clearInterval(interval);
-    // }
-
-
-    // assertAuth = () => {
-    //     if (this.state.IP === null) {this.stepUp(false)}
-    //     var go = '/insession/' + this.state.IP;
-    //     fetch(go, {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         }
-    //     })
-    //         .then(response => response.json()).then(data => {
-    //             this.setState({ response: data.response })
-    //         })
-    // };
 
     //Method for handling a change in the search query field.
     handleSearchChange = (e) => {
@@ -173,10 +71,6 @@ class CustomerHomePage extends React.Component {
         catch (error) // TypeError is catched story is undefined == Very likely that it is a redirection attempt
         {
             console.log('catched the error!')
-            // console.log(this.props.props)
-            // this.props.props.history.go(2);     // Moves the pointer in the history stack by n entries
-            // go = '/search/' + this.state.query.split(' ').join('_');
-            // this.props.props.history.push(go);
         }
 
     }
@@ -256,8 +150,6 @@ class CustomerHomePage extends React.Component {
     getRandomPosters = () => {
         
         let indexes = [];
-        // console.log(this.state);
-        // console.log(this.props)
         function getRandomInt(max) {
             return Math.floor(Math.random() * Math.floor(max));
         }

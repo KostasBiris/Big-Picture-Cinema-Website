@@ -166,36 +166,6 @@ export default function CheckoutFormAuth(state, props) {
                 </span>
             </button>
         </body>
-
-
-
-        // <body style={body}>
-        //     <form id="payment-form" onSubmit={handleSubmit} style={form}>
-        //         <CardElement id="card-element" options={cardStyle} onChange={handleChange} />
-        //         <button style={button}
-        //             disabled={processing || disabled || succeeded}
-        //             id="submit"
-        //         >
-        //             <span id="button-text">
-        //                 {processing ? (
-        //                     <div className="spinner" id="spinner"></div>
-        //                 ) : (
-        //                     "Pay now"
-        //                 )}
-        //             </span>
-        //         </button>
-        //         {/* Show any error that happens when processing the payment */}
-        //         {error && (
-        //             <div className="card-error" role="alert">
-        //                 {error}
-        //             </div>
-        //         )}
-        //         {/* Show a success message upon completion */}
-        //         <p className={succeeded ? "result-message" : "result-message hidden"}>
-        //             <center>Payment succeeded</center>
-        //         </p>
-        //     </form>
-        // </body>
     );
 
 

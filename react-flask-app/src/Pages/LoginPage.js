@@ -20,40 +20,10 @@ class LoginPage extends React.Component {
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.Login = this.Login.bind(this);
-        // this.validate = this.validate.bind(this);
-        // this.assertAuth = this.assertAuth.bind(this);
-        // this.getClientIP = this.getClientIP.bind(this);
-        // this.getClientIP();
-        
         this.setState({logged: this.props.auth[0]}); // is the user logged?
     }
 
-    // getClientIP = () => {
-    //     (async () => {
-    //         this.setState({ IP: await publicIP.v4() })
-    //     })();
-    // }
 
-    // //Method for validating the email and password.
-    // validate = (email, password) => {
-
-    //     //Validate the email through regex.
-    //     function validateEmail(email) {
-    //         //https://stackoverflow.com/questions/52188192/what-is-the-simplest-and-shortest-way-for-validating-an-email-in-react
-    //         const regexp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    //         return regexp.test(email);
-    //     }
-    //     //Validate the password through length check.
-    //     function validate(password) {
-    //         if (password.length >= 8) {
-    //             return true;
-    //         }
-    //         return false;
-
-    //     }
-    //     //Use && for returning True IFF both are true.
-    //     return validateEmail(email) && validate(password);
-    // }
 
     //Method for handling login atttempt.
     //Called when the login button is pressed.
@@ -83,32 +53,6 @@ class LoginPage extends React.Component {
                     console.log("Please type in correct username/password");
             })
     }
-
-    
-   
-    // login = () => {
-    //     fetch('/login', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify({ data: this.state })})
-    //         .then(response => response.json()).then(data => {
-    //             this.setState({ response : data.response})
-    //            }).then(() => console.log(this.state)).then(() => this.assertAuth());
-    // };
-
-    // assertAuth = (token) => {
-    //     // console.log(token)
-    //     login(token);
-    //     // a(token);
-    //     // return <LoginComponent  />
-    //     console.log("This works mate")
-    //     // this.setState({logged : data.access_token})
-    // }
-
-
-
 
 
     //Method for handling a change in the email field.
@@ -154,7 +98,6 @@ class LoginPage extends React.Component {
                 </form>: 
                 <></>
                 
-                /*<button onClick={() => this.handleLogout()}>Logout</button>*/}
             </div>
         </body>
         );

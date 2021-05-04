@@ -7,12 +7,7 @@ import { Redirect } from "react-router";
 
 
 var publicIP = require('public-ip')
-/*body {
-    background-image: url("../static/cinema.jpg");
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
-  }*/
+
 
 class EmployeeLogin extends React.Component{
     constructor(props) {
@@ -22,46 +17,15 @@ class EmployeeLogin extends React.Component{
         this.handleIDChange = this.handleIDChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.Login = this.Login.bind(this);
-        // this.validate = this.validate.bind(this);
-        // this.assertAuth = this.assertAuth.bind(this);
-        // this.getClientIP = this.getClientIP.bind(this);
-        // this.getClientIP();
+
     }
     
-    // getClientIP = () => {
-    //     (async () => {
-    //         this.setState({ IP: await publicIP.v4() })
-    //     })();
-    // }
-
-    // validate = (password) => {
-
-    //     //Validate the password through length check.
-    //     function validate(password) {
-    //         if (password.length >= 8) {
-    //             return true;
-    //         }
-    //         return false;
-    //     }
-
-    //     //Use && for returning True IFF both are true.
-    //     return validate(password);
-    // }
 
 
     handleLogin = (e) => {
         e.preventDefault();
         this.Login();
-        // console.log(this.state);
-        // if (!this.validate(this.state.password)) {
-        //     alert("Please enter a valid username and password and ID.");
-        //     console.log(this.state);
-        //     //We reset the state for security reasons.
-        //     //this.setState({ email: '', password: '' });
-        // } else {
-        //     //If validation passes, attempt to login.
-        //     this.login();
-        // }
+
     }
 
 
@@ -94,21 +58,6 @@ class EmployeeLogin extends React.Component{
                     console.log("Please type in correct username/password");
             })
     };
-
-    // assertAuth = () => {
-    //     console.log(this.state.response);
-    //     if (this.state.response === "OK") {
-    //         this.setState({ email: '', password: '' });
-    //         console.log('LOGIN: SUCCESS');
-    //         //this.props.history.push('/employee', { auth: true, IP: this.state.IP });
-    //     }
-    //     if (this.state.response === "BAD") {
-    //         alert('LOGIN: FAILED');
-    //         this.setState({ id: 0, password: '', response: '' });
-    //     }
-    // }
-
-
 
 render(){
     return(

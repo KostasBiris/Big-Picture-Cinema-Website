@@ -14,18 +14,6 @@ var publicIP = require('public-ip')
 class OverallAnalytics extends React.Component {
     constructor(props) {
         super(props);
-
-        // if (this.props.location.state === undefined) {
-        //     this.props.history.push('/mlogin');
-        // }
-        // else {
-        //     if (this.props.location.state.auth === undefined) {
-        //         this.props.history.push('/mlogin');
-        //     }
-        //     if (this.props.location.state.auth === false) {
-        //         this.props.history.push('/mlogin');
-        //     }
-        // }
         this.state = { comparisonData: [], tickets: [], screenings: [], movies: [], totalrev: 0, data: [], dataPastWeek: [], weeklyrev: 0, MovieA: '', MovieB: '', DateA:'', DateB: '', comparisonDrawn: false };
         this.fetchChartData = this.fetchChartData.bind(this);
         this.buildChartData = this.buildChartData.bind(this);

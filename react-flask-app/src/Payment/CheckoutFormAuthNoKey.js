@@ -225,30 +225,6 @@ export default function CheckoutFormAuthNoKey(state, props) {
             )
 
         }
-        // const payload = await stripe.confirmCardPayment(clientSecret, {
-        //     payment_method: {
-        //         card: elements.getElement(CardElement)
-        //     }
-        // });
-
-        // if (payload.error) {
-        //     setError(`Payment failed ${payload.error.message}`);
-        //     setProcessing(false);
-        // } else {
-        //     setError(null);
-        //     setProcessing(false);
-        //     setSucceeded(true);
-        //     var go = '/makebooking'
-        //     fetch(go, {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify({ data: state })
-        //     }
-        //     )
-        //         .then(response => response.blob()).then(data => state.isEmployee ? window.open(URL.createObjectURL(data)) : 1)
-        // }
 
 
     return (
