@@ -34,7 +34,7 @@ import {useAuth} from "./auth"
 import {createBrowserHistory} from 'history';
 const history = createBrowserHistory();
 
-const customerRoutes = ['/', '/home', '/search/', '/book', '/payment', '/account', '/register', '/login']
+const customerRoutes = ['/', '/home', '/search/', '/book', '/payment', '/account', '/register', '/login', '/searchscreenings/']
 const employeeRoutes = ['/emain', '/ebook', '/eas', '/emain/search/', '/emain/view_movies', '/movie/:title', '/epayment', '/elogin']
 const managerRoutes = ['/addmovies/search/', '/overall_analytics', '/addscreening','/mlogin']
 

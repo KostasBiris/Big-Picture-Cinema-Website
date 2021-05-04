@@ -12,6 +12,7 @@ import CustomerAccountPage from "../Pages/CustomerAccountPage";
 import CustomerRegister from "../Pages/CustomerRegister";
 import {withHooksHOC} from "../auth/withHooksHOC";
 import Footer from '../components/Footer';
+import ScreeningResults from '../components/ScreeningResults'
 import {createBrowserHistory} from 'history';
 
 class CustomerSite extends React.Component{
@@ -36,7 +37,6 @@ render () {
 
     return(
 
-
     <React.Fragment>
         {this.whatBanner(history)}
         <Route exact path="/" render={() => (<Redirect to="/home" />)} />
@@ -47,6 +47,7 @@ render () {
         {/* <Route path="/payment" component={Payment}/> */}
         <Route path="/payment" render = {(props) => <Payment {...props} isAuthed={this.props.logged[0]}/>}/>
         <Route path="/search/:query" component={SearchResults}/>
+        <Route path="/searchscreenings/:query" component={ScreeningResults}/>
         <Route path ="/account" component={CustomerAccountPage}/>
         <Route path ="/movie/:title" component={MoviePage}/>
         <Route path="/register" component={CustomerRegister}/>

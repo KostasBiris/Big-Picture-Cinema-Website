@@ -19,7 +19,6 @@ class MoviePage extends React.Component {
                     };
         //Bind our method.
         this.getMovieData = this.getMovieData.bind(this);
-        this.getClientIP = this.getClientIP.bind(this);
         this.goBookTickets = this.goBookTickets.bind(this);
         this.getScreenings = this.getScreenings.bind(this);
         //Call our method.

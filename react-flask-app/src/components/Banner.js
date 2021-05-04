@@ -99,11 +99,17 @@ class Banner extends React.Component {
     
     //Method for handling searching by date.
     handleSubmitDate = (e) => {
-        e.preventDefault();
-        if (this.state.date !== '') {
-            this.props.history.push('/searchscreenings/' + this.state.date);
-        }
-
+        //e.preventDefault();
+        if (this.state.date !=='') {
+            const go = '/searchscreenings/' + this.state.date;
+            if (this.props.history){
+                console.log("going")
+                this.props.history.push(go, this.state);
+            }
+            else{
+                this.props.props.history.push(go);
+            }
+        }   
     }
 
     //Method for handling the date changing.
