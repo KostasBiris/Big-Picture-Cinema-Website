@@ -40,7 +40,8 @@ class Payment extends React.Component {
             valid: false,
             total: 0,
             isEmployee: false,
-            save: false
+            save: false,
+            movieObj : []
         };
 
 
@@ -58,7 +59,7 @@ class Payment extends React.Component {
         this.assertAuth = this.assertAuth.bind(this);
         this.handleSave = this.handleSave.bind(this);
         this.getPaymentWidget = this.getPaymentWidget.bind(this);
-                
+        this.getMovieObj = this.getMovieObj.bind(this);
     }
 
     componentDidMount() {
@@ -109,6 +110,7 @@ class Payment extends React.Component {
         // this.setState({ticketTypes: parseInt(e.target.value)})
     }
 
+    // returns true if the input is constructed like this: username@domain.com
     validate = () => {
         function validateEmail(email) {
             //https://stackoverflow.com/questions/52188192/what-is-the-simplest-and-shortest-way-for-validating-an-email-in-react
@@ -148,7 +150,25 @@ class Payment extends React.Component {
         && validateSurname(this.state.lastname) && ok;
     }
 
+    // get the movie object with the name returned from getMovieName
+    getMovieObj () {
+        var route = '/movie/' + this.state.movie + '/page';
+        console.log(route)
+        fetch(route, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ movie: this.state.movie })
+        })
+            .then(response => response.json()).then(data => {
+                this.setState({movieObj : data})
+                console.log(data)
+                
+            });
+    }
 
+    // get movie using ID fetching
     async getMovieName (id)  {
         var go = '/getmoviename/' + id;
 
@@ -159,9 +179,14 @@ class Payment extends React.Component {
             }
         }).then(response => response.json()).then(data => {
             this.setState({movie: data.response})
+
+            // get movie object after we get the name so that we have access to the certificate
+            this.getMovieObj();
         })
 
     }
+
+    
 
     handleChangeSelect = (e, index) => {
         let arr = [...this.state.orderPart];
@@ -171,6 +196,7 @@ class Payment extends React.Component {
         this.setState({orderPart : arr})
     }
 
+    // calculate final price
     calculateTotal = () => {
         let total = 0;
         let orderParts = [];
@@ -201,7 +227,6 @@ class Payment extends React.Component {
 
     orderSummary = () => {
         let map_ = this.props.location.state.seatmap_copy;
-        console.log(map_);
         return (
             <ul className="list-group mb-3 z-depth-1">
                     {this.state.seatsSelected.map((entry,index)=> {
@@ -237,7 +262,11 @@ class Payment extends React.Component {
                                         <div className="col-lg-10 col-md-12 mb-4">
                                             <select value={this.state.orderPart[index]} onChange={(e) => this.handleChangeSelect(e, index)} className="register_details custom-select d-block w-100" id="ticket-type" placeholder="Ticket Type" required>     
                                                 <option value="1">Adult (£7.50)</option>
-                                                { this.state.movie.certificate == "U" || this.state.movie.certificate == "PG" || this.state.movie.certificate == "12A" || this.state.movie.certificate == "12" ?
+                                                { this.state.movieObj.certificate == "U" || 
+                                                this.state.movieObj.certificate == "PG"     || 
+                                                this.state.movieObj.certificate == "12A"    || 
+                                                this.state.movieObj.certificate == "12"     || 
+                                                this.state.movieObj.certificate == "15" ?
                                                 <option value="2">Kids (£5.50)</option> : <></>}
                                                 <option value="3">Senior (£6.50)</option>
                                             </select>
@@ -296,8 +325,6 @@ class Payment extends React.Component {
 
 
     render() {
-    //    console.log(this.state)
-    //    console.log(this.props)
         return (
 
                 <body id="grad1">
@@ -380,13 +407,6 @@ class Payment extends React.Component {
                     </nav>
                     <br>
                     </br>
-
-                    {/* <footer className="bg-light text-center">
-                    <div class="text-center p-3" style={{ backgroundcolor: 'rgba(0, 0, 0, 0.2)' }}>
-                        All rights reserved. © 2021 Copyright:
-                    <a className="text-dark" >The Big Picture</a>
-                    </div>
-                    </footer> */}
 
                 </body>
 

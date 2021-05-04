@@ -12,7 +12,7 @@ var publicIP = require('public-ip')
 class EmployeeLogin extends React.Component{
     constructor(props) {
         super(props);
-        this.state = { id: 0, password: '', IP: null };
+        this.state = { id: '', password: '', IP: null };
         this.handleLogin = this.handleLogin.bind(this);
         this.handleIDChange = this.handleIDChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
@@ -78,7 +78,7 @@ render(){
     			<br/>
     			<input value={this.state.password} onChange={this.handlePasswordChange} className="registerDetails" type="password" name="password" id="password" placeholder="Password" style={{color:'black'}} required/>
     			<br/>
-    			<input  onClick={this.handleLogin}className="loginButton" type="submit" value="LOG IN" style={{color:'black', position:'relative'}} />
+    			<input  onClick={this.handleLogin} className="loginButton" type="submit" value="LOG IN" style={{color:'black', position:'relative'}} />
             </div>
   			</form>
     </div>

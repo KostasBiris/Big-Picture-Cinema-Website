@@ -611,9 +611,18 @@ def add():
     runtime = data['runtime']
     youtube_key = data['youtube_key']
     genres = data['genres']
-    print(certificate, genres)
+    
+    w = []
+    if len(writers) > 0:
+        w = ' '.join(writers)
+    elif len(writers) == 1:
+        w = writers[0]
+    else:
+        w = 'Sorry but we do not know an writer for this movie.'
+    
+    print(data)
 
-    db.add_movie(title, blurb, certificate, ' '.join(director), ' '.join(writers), ', '.join(leadactors[:len(leadactors)//10]), release, omdbid, poster_path,
+    db.add_movie(title, blurb, certificate, ' '.join(director), w, ', '.join(leadactors[:len(leadactors)//10]), release, omdbid, poster_path,
     runtime, youtube_key, ', '.join(genres))
     return jsonify({'response': 'OK'})
 

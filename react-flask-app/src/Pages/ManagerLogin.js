@@ -12,7 +12,7 @@ var publicIP = require('public-ip')
 class ManagerLogin extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { id: 0, password: '', email: '', IP: null };
+        this.state = { id: '', password: '', email: '', IP: null };
         this.handleLogin = this.handleLogin.bind(this);
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handleIDChange = this.handleIDChange.bind(this);
