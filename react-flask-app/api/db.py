@@ -763,7 +763,7 @@ class Database:
         data = list(data)
         data[4] = generate_password_hash(data[4])
         data = tuple(data)
-        self.cur.execute("UPDATE employees SET forename=?, surname=?, email=?, phonenumber=?, hash=?, isManager=? WHERE id=?",(*data, id))
+        self.cur.execute("UPDATE employees SET forename=?, surname=?, email=?, phonenumber=?, password=?, isManager=? WHERE id=?",(*data, id))
 
         self.conn.commit()
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -807,7 +807,7 @@ class Database:
         dictionary = {'movies':0,'screens':1, 'screenings': 2,  'customers': 3, 'bookings': 4, 'employees': 5}
         return [row for row in self.fetch()[dictionary[table.lower()]] if query.lower() in str(row).lower()]
 
-    def init_seatmap(self,n, m, vip_only):
+    def init_seatmap(self,n, m, vip_only=False):
         #Initialise a matrix full of 0s
         new_seatmap = np.zeros((n,m), dtype=int)
         if vip_only:
