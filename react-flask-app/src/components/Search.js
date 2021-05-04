@@ -21,17 +21,14 @@ class SearchResults extends React.Component{
     this.state ={ returnedData: [], IP: null, auth: false, manager: true};
   }
 
-  componentDidMount() {
+  componentDidMount = async ()  => {
 
     window.addEventListener('load', this.getMovies);
-    this.getMovies();
+    await this.getMovies();
     if (this.state.returnedData.length === 0) {
       this.props.history.push('/', this.state);
     }
-
 }
-
-
 
   //Invoke a request to our rest API to search the database for movies matching our query.
   getMovies = async () => {
@@ -48,7 +45,6 @@ class SearchResults extends React.Component{
       .then(response => response.json()).then(data => {
         console.log(data)
         this.setState({ returnedData : data.movies})
-
 
       });
 
