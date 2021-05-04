@@ -89,15 +89,16 @@ class MoviePage extends React.Component {
                     </head>
                     <body id = 'grad1'>
                 <div className="header_text row justify-content-center">
-                    <h1 style = {{color: '#4e5b60', fontWeight:'bold', margin:'0.5rem'}}>{this.state.returnedData.original_title}</h1>
+                    <h1 style = {{color: '#4e5b60', fontWeight:'bold', marginBottom:'0.5rem', marginTop:'1rem'}}>{this.state.returnedData.original_title}</h1>
                    </div>
-                    <div className="row justify-content-center">
+                   <div className="d-flex justify-content-center">
+                    
                         <img className="poster_template" src={'https://image.tmdb.org/t/p/w500/' + this.state.returnedData.poster_path}/>
 
-                    </div> 
-                    <div className="video_frame header_text row justify-content-center">
-                            <iframe width="600px" height="335px" src = {"https://www.youtube.com/embed/" + this.state.returnedData.youtube_key + "/?controls=1"}>
+                            <div className="d-flex align-items-center">
+                            <iframe style={{height:'20rem', width:'50rem', margin:'1rem'}} src = {"https://www.youtube.com/embed/" + this.state.returnedData.youtube_key + "/?controls=1"}>
                             </iframe>
+                            </div>
                     </div>
                     <div className="container-fluid px-0 px-sm-4 mx-auto">
                             <div className="row justify-content-center ">
