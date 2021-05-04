@@ -54,25 +54,40 @@ class SearchResult extends React.Component{
             <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
             
             <body id="grad1">
-                <div className="container"  style={{textAlign:"center"}}>
-                    <div className=".card mb-3" style={{maxWidth: "60rem", maxHeight:"15rem", backgroundColor:"#ece9e388"}}>
-                        <div className="row .no-gutters">
-                            <div className="col-md-4">
-                                <img className=".img-responsive .img-rounded" src={this.image} alt={this.prop.original_title}
-                                style={{maxHeight: "13rem", maxWidth: "10rem"}} ></img>
-                            </div>
-                            <div className="col-md-8">
-                                <div className=".card-body">
-                                    <h4 className=".card-title">{this.prop.original_title}</h4>
-                                    <p>{this.prop.blurb}</p>
-                                    <p> Director: {this.prop.director}</p>
-                                    <button onClick={this.goToMovie} className="rounded-pill text buttons_background">GET ALL TIMES & TICKETS</button>
+            <div className="container-fluid px-0 px-sm-4 mx-auto" >
+                            <div className="row justify-content-center mx-0" style={{ backgrouncolor: "antiqueWhite", padding:'1rem' }}>
+                                <div className="col-lg-10">
+                                    <div className="card border-0">
+                                    <div className="card-header" style={{ backgroundColor: "#4e5b60" }}>
+                                            <div className="mx-0 mb-0 row justify-content-sm-center justify-content-start px-1">
+                                            <h4 className=".card-title" style={{ color: "antiqueWhite" }}>{this.prop.original_title}</h4>
+                                            </div>
+                                        </div>
+                                    <div className="justify-content-sm-center px-sm-4 card-body">
+                                            <div className="row text-center">
+                                                <div className="col-md-2 col-4 my-1 px-2">
+                                                    <div className="mx-0 mb-0 row justify-content-start px-1">
+                                <img className="img-fluid" src={this.image} alt={this.prop.original_title}></img>
                                 </div>
-                            </div>
+                                </div>
+                                <div className="col my-1 px-2">
+                                   <div className="mx-0 mb-0 row justify-content-end px-1">
+                                    <p>{this.prop.blurb}</p>
+                                </div>
+                                    <div class="mb-auto p-2">
+                                    <button onClick={this.goToMovie} className="text buttons_background" >GET ALL TIMES & TICKETS</button>
+                                    </div>
+                                    </div>
+                                    
                         </div>
                     </div>
+                    </div>
+                    </div>
+                    </div>
+                    </div>
+                   
                 <br />
-                </div>
+                
                 
             </body>
             </React.Fragment>
