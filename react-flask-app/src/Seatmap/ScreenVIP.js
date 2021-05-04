@@ -30,7 +30,7 @@ export default function ScreenVIP() {
       <Seatmap rows={rows} maxReservableSeats={10} alpha />   
       </div>
       <div class="header_text">
-        <h1 style={{marginLeft:'620px', left:'3rem', color: '#4e5b60'}}>SCREEN</h1>
+        <h1 style={{marginLeft:'620px', left:'3rem', color: '#4e5b60'}}>SCREEN VIP</h1>
     </div>   
       </body>
     </React.Fragment>

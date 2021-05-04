@@ -263,7 +263,7 @@ class Payment extends React.Component {
         if (this.props.isAuthed && this.state.stripeID !== '') {
             console.log('USING CHECKOUTFORMAUTH')
             return (
-            <div classNameName="Payment">
+            <div className="Payment">
                 <Elements stripe={promise}>
                     <CheckoutFormAuth props={this.props} state={this.state}/>
                 </Elements>
@@ -311,8 +311,8 @@ class Payment extends React.Component {
                             <div className="row" >
                                 <div className="col-sm-6 col-xs-12 ">
                                     <br />
-                                    <div className="headerText">
-                                        <h2 style={{ position: 'absolute', left: '25px', color: '#4e5b60', fontWeight: 'bold' }}>CHECKOUT DETAILS
+                                    <div className="header_text">
+                                        <h2 style={{ position: 'absolute', left: '15px', color: '#4e5b60', fontWeight: 'bold',  marginBottom:'auto'}}>CHECKOUT DETAILS
                                 </h2>
                                     </div>
                                     <br />
@@ -322,7 +322,7 @@ class Payment extends React.Component {
                                     <form className="">
                                         <div className="md-form mb-2">
                                             <input className="registerDetails formControl" onChange={this.handleFirstName} value={this.state.firstname} type="text" name="first_name" id="first_name"
-                                                placeholder="First name" style={{ color: 'black' }} required />
+                                                placeholder="First name" style={{ color: 'black',  marginTop: 'auto' }} required />
                                         </div>
                                         <div className="md-form mb-2">
                                             <input className="registerDetails formControl"  onChange={this.handleLastName} value={this.state.lastname} type="text" name="last_name" id="last_name"
@@ -332,16 +332,17 @@ class Payment extends React.Component {
                                             <input className="registerDetails formControl"  onChange={this.handleEmail} value={this.state.email} type="text" name="email" id="email"
                                                 placeholder="E-mail address" style={{ color: 'black' }} required />
                                         </div>
-
-                
-
                                     </form>
+                                    <div className="md-form mb-2">
+                                    <div className="container justify-content-center" style={{padding:'3rem'}}>
                                     {this.validate() ? this.getPaymentWidget() : <></>}
+                                    </div>
+                                    </div>
                                 </div>
                                 <div className="col-sm-6 col-xs-13">
                                     <br />
-                                    <div className="headerText">
-                                        <h3 style={{ position: 'absolute', left: '25px', color: '#4e5b60', fontWeight: 'bold' }}>ORDER SUMMARY</h3>
+                                    <div className="header_text">
+                                        <h3 style={{ position: 'absolute', left: '15px', color: '#4e5b60', fontWeight: 'bold', marginBottom:'auto' }}>ORDER SUMMARY</h3>
                                     </div>
                                     <br/>
                                     <br/>
@@ -349,6 +350,7 @@ class Payment extends React.Component {
 
                                     {this.orderSummary()}
                                     <div>
+                                        <ul className='list-unstyled'>
                                         <li>
                                             <hr className="mb-4"></hr>
                                         </li>
@@ -356,6 +358,7 @@ class Payment extends React.Component {
                                             <h4>Total (£)</h4>
                                             <h4>{this.calculateTotal()}</h4>
                                         </li>
+                                        </ul>
                                     
                                 </div>
                                 </div>
@@ -368,14 +371,15 @@ class Payment extends React.Component {
                     <br />
 
                     <nav>
-                        <div className="container text-center">
-                            <button className="tab_background text mr-3 btn-lg">{'<'}</button>
-                            <button className="tab_background text mr-3 btn-lg">MOVIE</button>
-                            <button className="tab_background text mr-3 btn-lg" onClick={this.goToSeatMap}>SEATS</button>
-                            <button className="tab_background text mr-9 btn-lg">CHECKOUT</button>
-                            <button className="tab_background text mr-3 btn-lg" style={{marginLeft:'12px'}}>{'>'}</button>
+                        <div className="container justify-content-center text-center">
+                            <button className="page-item buttons_background mr-3">MOVIE</button>
+                            <button className="page-item buttons_background mr-3" onClick={this.goToSeatMap}>SEATS</button>
+                            <button className="page-item buttons_background mr-3">CHECKOUT</button>
+                            
                         </div>
                     </nav>
+                    <br>
+                    </br>
 
                     {/* <footer className="bg-light text-center">
                     <div class="text-center p-3" style={{ backgroundcolor: 'rgba(0, 0, 0, 0.2)' }}>

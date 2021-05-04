@@ -83,39 +83,51 @@ class MoviePage extends React.Component {
         // console.log(this.state.isUpcoming);
         return (
             <React.Fragment>
-                <head>
-                    <link rel="stylesheet" type="text/css" href={main} />
-                </head>
-                <body id = 'grad1'>
+                 <head>
+                        <link rel="stylesheet" type="text/css" href={main} />
+                        <link rel="icon" href="data:;base64,iVBORw0KGgo" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+                    </head>
+                    <body id = 'grad1'>
                 <div className="header_text"></div>
                     <h1 style = {{position:'absolute', left:'25px', color: '#4e5b60', fontWeight:'bold' }}>{this.state.returnedData.original_title}</h1>
                     <div className="column" style={{position:'relative', left:'25px'}}>
                         <img className="poster poster_movies" src={'https://image.tmdb.org/t/p/w500/' + this.state.returnedData.poster_path} style={{left: '5rem', position: 'relative'}}/>
 
                     </div> 
-                    <div className="container">
-                        <div className="row">
-                            <div className="border-dark card-sm-center position_table" style={{position:'absolute', left:'22rem', top:'15rem'}}>
-                                <div className="card-header">
-                                    Movie Description
-                                </div>
-                                <div className="card-body text-dark">
-                                    <p className="card-text">
+                    <div className="container-fluid px-0 px-sm-4 mx-auto" style={{position:'relative', left:'12rem', top:'14rem', maxWidth:'15rem'}}>
+                            <div className="row justify-content-center ">
+                                <div className="col-lg-10">
+                                    <div className="card ">
+                                        <div className="card-header" style={{ backgroundColor: "#4e5b60" }}>
+                                            <div className="row justify-content-sm-center justify-content-start" >
+                                                <h1 className="header_text" style={{ color: "antiqueWhite" }}>Movie Discription: </h1>
+                                            </div>
+                                        </div>
+                                        <div className="card-body">
+                                            <div className="row text-center">
+                                                <div className="card-body">
+                                                    
                                     {this.state.returnedData.blurb}
-                                    </p>
+                                    
                                     {
                                         this.state.returnedData.isupcoming ?   
                                             <button onClick={this.goBookTickets}  className="buttons_background rounded-pill">BOOK TICKETS</button> 
                                         : 
                                             <></>
                                     }
+                             </div>
+                             </div>
+                                                </div>
+                                            
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <br></br>
+                        
+                    <br></br>/*
                     <div className="row">
-                    <table className="table table-sm-center table-dark position_table" style={{position:'absolute', left:'22rem', top:'27rem'}}>
+                    <table className="table table-sm-center table-dark" style={{position:'relative', left:'21rem', top:'30rem', maxWidth:'fit-content'}}>
                             <tr>
                                 <th scope="col">
                                     Director(s):
@@ -163,21 +175,13 @@ class MoviePage extends React.Component {
                     </table>
 
                     </div>
-                    <br/>
-                    <br/>
-                    <br/>
+                
                     <br/>
                     <div className="embed-responsive embed-responsive-21by9">
                         
                     </div>
                     <br/>
                     <br/>
-                    <footer className="bg-light text-center">
-                        <div className="text-center p-3" style={{backgroundColor: 'rgba(0, 0, 0, 0.2)'}}>
-                            All rights reserved. © 2021 Copyright:
-                            <a className="text-dark" >The Big Picture</a>
-                        </div>
-                    </footer>
                     </body>
             </React.Fragment>
         )

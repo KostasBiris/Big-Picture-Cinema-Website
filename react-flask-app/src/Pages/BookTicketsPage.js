@@ -447,11 +447,11 @@ class BookTickets extends React.Component {
                     <br />
 
                     <nav>
-                        <div className="container text-center">
+                        <div className="container justify-content-center text-center">
                             
-                            <button className="tab_background text mr-3 btn-lg">MOVIE</button>
-                            <button className="tab_background text mr-3 btn-lg" onClick={this.goToSeatMap}>SEATS</button>
-                            <button className="tab_background text mr-9 btn-lg">CHECKOUT</button>
+                        <button className="page-item buttons_background mr-3">MOVIE</button>
+                            <button className="page-item buttons_background mr-3" onClick={this.goToSeatMap}>SEATS</button>
+                            <button className="page-item buttons_background mr-3">CHECKOUT</button>
                            
                         </div>
                     </nav>

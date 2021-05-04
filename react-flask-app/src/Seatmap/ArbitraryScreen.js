@@ -130,44 +130,36 @@ class ArbitraryScreen extends React.Component {
         console.log(this.props)
         return (
             <React.Fragment>
-                <body id="grad1">
-
-                    <head>
+                 <head>
                         <link rel="stylesheet" type="text/css" href={main} />
+                        <link rel="icon" href="data:;base64,iVBORw0KGgo" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
                     </head>
+                    <body id = 'grad1'>
                    
                     
-                    <div class="header_text">
-                        <h1 className="container text-center" style={{ color: '#4e5b60' }}>SCREEN</h1>
+                    <div className="header_text">
+                        <h1 className="container text-center" style={{ color: '#4e5b60', padding:'3rem' }}>SCREEN</h1>
                     </div>
-                    <div className="Seatmap" style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '50vh'}}>
+                    <div className="container-fluid seatmap">
+                    <div className="Seatmap" style={{padding:'2rem'}}>
                         <Seatmap rows={this.state.seatmap} maxReservableSeats={10} onChange={this.updateSeatmap} alpha />
                         {/* <Seatmap rows={this.state.seatmap} maxReservableSeats={10} onChange={this.updateSeatmap} alpha /> */}
                     </div>
+                    </div>
 
-
-                    
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
                     <br />
                     <br />
                     
                     <nav>
-                        <div className="container text-center">
-                            <button className="tab_background text mr-3 btn-lg">{'<'}</button>
-                            <button className="tab_background text mr-3 btn-lg">MOVIE</button>
-                            <button className="tab_background text mr-3 btn-lg" >SEATS</button>
-                            <button className="tab_background text mr-9 btn-lg" onClick={this.goToCheckOut}>CHECKOUT</button>
-                            <button className="tab_background text mr-3 btn-lg" style={{marginLeft:'12px'}}>{'>'}</button>
+                        <div className="container justify-content-center text-center">
+                            
+                            <button className="page-item buttons_background mr-3">MOVIE</button>
+                            <button className="page-item buttons_background mr-3" >SEATS</button>
+                            <button className="page-item buttons_background mr-3" onClick={this.goToCheckOut}>CHECKOUT</button>
+                            
                         </div>
                     </nav>
-                    <br />
-                    <br />
                     <br />
                     <br />
                     {/* <footer className="bg-light text-center">

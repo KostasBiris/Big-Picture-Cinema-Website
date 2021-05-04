@@ -320,11 +320,19 @@ def moviepage():
 def managerlogin():
     return render_template('manager_login.html')
 
+<<<<<<< Updated upstream
+=======
+
+
+>>>>>>> Stashed changes
 @app.route('/analytics')
 def overallanalytics():
  return render_template('overall_analytics.html')
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 @app.route('/screen')
 def screen():
     return render_template('screen.html')
