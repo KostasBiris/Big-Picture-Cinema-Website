@@ -1,23 +1,8 @@
 import React from 'react';
-import search from '../static/search.png';
-import logo from '../static/finlogo.png';
-import headerbanner from '../static/headerbanner.png';
-import follow from '../static/follow.png';
-import usericon from '../static/usericon.png';
 import main from '../static/main.css';
-import { shiftLeft, shiftRight } from './scripts/scripts'
-import Search from '../components/Search';
-import { BrowserRouter, Route } from 'react-router-dom';
 import aa1 from '../static/aa1.png';
 import aa2 from '../static/aa2.png';
 import aa3 from '../static/aa3.png';
-import poster13 from '../static/poster13.png';
-import poster14 from '../static/poster14.jpg';
-import poster8 from '../static/poster8.jpg';
-import poster9 from '../static/poster9.jpg';
-import moment from 'moment'
-import DatePicker from 'react-datepicker';
-import Footer from '../components/Footer';
 global.jQuery = require('jquery');
 require('bootstrap');
 var publicIP = require('public-ip');
@@ -27,16 +12,9 @@ let interval;
 class CustomerHomePage extends React.Component {
     constructor(props) {
         super(props);
-
         //By default the state is a blank query.
         this.state = {query: '', IP: null, auth: false, response: undefined , movies: null, date:''};
         //Bind our methods.
-        this.handleSearchChange = this.handleSearchChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleLogin = this.handleLogin.bind(this);
-        this.handleRegister = this.handleRegister.bind(this);
-        this.handleAccount = this.handleAccount.bind(this);
-        this.handleLogout = this.handleLogout.bind(this);
         this.getRandomPosters = this.getRandomPosters.bind(this);
         this.handleClick = this.handleClick.bind(this);
     }
@@ -51,82 +29,7 @@ class CustomerHomePage extends React.Component {
         this.getSomeMovies();
     }
 
-    //Method for handling a change in the search query field.
-    handleSearchChange = (e) => {
-       // e.preventDefault();
-        //Update the state to represent the changes to the field.
-        this.setState({ query: e.target.value });
-    }
-    //Method for handling submitting a search query.
-    //Called when the submit button is pressed.
-    handleSubmit = (e) => {
-        //e.preventDefault();
-        //Redirect the route to execute the search query.
-        var go = ''
-
-        try {
-            go = '/search/' + this.state.query.split(' ').join('_');
-            this.props.history.push(go, this.state);
-        }
-        catch (error) // TypeError is catched story is undefined == Very likely that it is a redirection attempt
-        {
-            console.log('catched the error!')
-        }
-
-    }
-
-    handleSubmitDate = (e) => {
-        e.preventDefault();
-        if (this.state.date!== '') {
-            this.props.history.push('/searchscreenings/' + this.state.date);
-        }
-
-    }
-
-
-    handleDate = (e) => {
-        // e.preventDefault();
-        // console.log(e.target.value)
-
-        function formatd(inp) {
-            let dArr = inp.split("-");  // ex input "2010-01-18"
-            return dArr[2] + "-" + dArr[1] + "-" + dArr[0]; //ex out: "18/01/10"
-
-        }
-        if (e.target.value)
-            this.setState({ date: formatd(e.target.value) });
-    }
-
-    //Method for handling the login button.
-    //Called when it is pressed.
-    handleLogin = (e) => {
-        // e.preventDefault();
-        //Redirect the route to the login page/
-        this.props.history.push('/login');
-    }
-
-    handleRegister = (e) => {
-        this.props.history.push('/register');
-    }
-
-    handleAccount = (e) => {
-        this.props.history.push('/account');
-    }
-
-    handleLogout = (e) => {
-
-        var go = '/logout/' + this.state.IP;
-
-        fetch(go, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(response => response.json()).then(() => this.setState({ response: undefined }))
-
-    }
-
-
+    // get movies to be displayed in home screen
     async getSomeMovies () { 
         await fetch('/upcoming', {
             method: 'POST',
@@ -140,7 +43,7 @@ class CustomerHomePage extends React.Component {
         // console.log(this.state.movies);
     }
 
-
+    // handle click to movie page
     handleClick = (e, movie) => {
         e.preventDefault();
         var go = '/movie/' + movie.original_title.split(' ').join('_') + '/' + movie.id;
