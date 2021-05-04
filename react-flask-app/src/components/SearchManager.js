@@ -10,16 +10,10 @@ class SearchManager extends React.Component{
     super(props);
     //Bind our method.
     this.getMovies = this.getMovies.bind(this);
-    // this.handleQuery = this.handleQuery.bind(this);
     //By default the state is an empty array.
     this.state ={ returnedData: [], auth: false, manager: true, query: ''};
     
   }
-
-  componentDidMount() {
-
-    this.getClientIP();
-}
 
   //Invoke a request to our rest API to search the database for movies matching our query.
   getMovies = (data) => {
@@ -34,10 +28,7 @@ class SearchManager extends React.Component{
     console.log("Testing the manager...")
 
       return (
-        <>
-        {/* <head>
-          <link rel="stylesheet" type="text/css" href={main}/>
-        </head> */}
+        <React.Fragment>
           <body id="grad1">
             <SearchIMDB onGetMovie={this.getMovies} movieName={this.props.match.params.query} getAllMovies={"True"} getTranding={"False"} />
 
@@ -57,9 +48,8 @@ class SearchManager extends React.Component{
             })
             : <p>No results found</p> }
 
-          {/* </div> */}
           </body>
-        </>
+        </React.Fragment>
       )
   
 
