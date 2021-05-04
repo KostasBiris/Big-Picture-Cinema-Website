@@ -132,8 +132,9 @@ class MoviePage extends React.Component {
                             </div>
                         
                     <br></br>
+                    
                     <div className="row justify-content-center">
-                    <table className="table table-sm-center table-dark" style={{maxWidth:'fit-content'}} >
+                    <table className="table table-sm-center table-dark" style={{maxWidth:'50%'}} >
                             <tr>
                                 <th scope="col">
                                     Director(s):
