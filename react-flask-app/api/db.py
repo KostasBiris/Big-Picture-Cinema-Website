@@ -835,9 +835,9 @@ class Database:
 
     def setupForCommercialUse(self):
         db = Database('cinema.db')
-        db.add_screen(50,10,5)
-        db.add_screen(50,10,5)
-        db.add_screen(50,10,5)
+        db.add_screen(50,5,10)
+        db.add_screen(50,5,10)
+        db.add_screen(50,5,10)
         db.add_screen(25,5,5,vip_only=True)
         db.add_screen(100,10,10)
 
