@@ -17,8 +17,6 @@ from employeeModel import Employee
 
 # initialize flask app
 app = Flask(__name__)
-
-
 app.debug = True
 app.config['SECRET_KEY'] = 'top secret'
 app.config['JWT_ACCESS_LIFESPAN'] = {'hours': 24}
@@ -32,12 +30,6 @@ employee_guard.init_app(app, Employee)
 guard = flask_praetorian.Praetorian()
 # Initialize the flask-praetorian instance for the app
 guard.init_app(app, User)
-
-# register employees
-db = Database('cinema.db')
-db.add_employee('Neymar', 'Santos', 'neymar@gmail.com', '6126216216', employee_guard.hash_password('neymar2021'), False)
-db.add_employee('Lionel', 'Messi', 'messi@gmail.com', '6236236236', employee_guard.hash_password('messi2021'), True)
-del db
 
 
 # stripe key for the payment authentication
