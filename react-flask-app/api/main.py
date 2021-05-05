@@ -27,13 +27,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cinema.db'
 
 CORS(app)
 
-guard = flask_praetorian.Praetorian()
 employee_guard = flask_praetorian.Praetorian() 
-
-
+employee_guard.init_app(app, Employee)
+guard = flask_praetorian.Praetorian()
 # Initialize the flask-praetorian instance for the app
 guard.init_app(app, User)
-employee_guard.init_app(app, Employee)
 
 # register employees
 db = Database('cinema.db')

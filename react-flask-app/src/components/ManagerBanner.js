@@ -43,15 +43,8 @@ class ManagerBanner extends React.Component {
     }
     //Method for handling logging out.
     handleLogout = (e) => {
-        logout()
-      
-        // fetch(go, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     }
-        // }).then(response => response.json()).then(() => this.setState({ response: undefined }))
-      
+        logout() 
+        this.props.history.push('/mlogin')
       }
       
       handleAccount = (e) => {
@@ -90,7 +83,7 @@ class ManagerBanner extends React.Component {
                                     <button className="dropdown-item" style={{color:'#f9bc50'}}>OVERALL</button>
                                 </div>
                             </li>
-                            <button className="tab_background mr-5">LOG OUT</button>
+                            <button onClick={this.handleLogout} className="tab_background mr-5">LOG OUT</button>
 
                         </ul>
                         <form className="form-inline my-2 my-lg-0">

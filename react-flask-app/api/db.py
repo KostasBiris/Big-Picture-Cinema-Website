@@ -169,6 +169,8 @@ class Database:
     def add_movie(self, name,blurb,certificate,director, writers,leadactors, release_date, omdbid, poster_path, runtime, youtube_key, genres):
         #Execute an SQL query to insert a new record into the movies database.
         #We use '?' to prevent against SQL injection attacks.
+        print(name,blurb,certificate,director, writers,leadactors, release_date, omdbid, poster_path, runtime, youtube_key, genres)
+
         self.cur.execute("INSERT INTO movies VALUES (NULL, ?,?,?,?,?,?,?,?,?,?,?,?)", (name, blurb, certificate, director, writers, leadactors, release_date, omdbid, poster_path, runtime, youtube_key, genres))
 
         #Commit the changes we have made to the database.
@@ -689,7 +691,7 @@ class Database:
         return self.cur.fetchall()
 
     def quick_get_ticket(self, id):
-        self.cur.execute("SELECT path FROM tickets WHERE id=?", (id))
+        self.cur.execute("SELECT path FROM tickets WHERE id=?", (id,))
         return self.cur.fetchone()
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=
@@ -704,7 +706,6 @@ class Database:
     def remove_customer(self, id=-1, forename="No forename", surname="No surname", email="No email", phonenumber=-1,dob=-1):
 
         if(id==-1):
-
             #Remove a specific customer using their Full Name and either their email or phone number
             if(forename!="No forename" and surname!="No surname" and (email!="No email" or phonenumber!=-1)):
                 
@@ -723,7 +724,7 @@ class Database:
             self.cur.execute("DELETE FROM customers WHERE id=?",(id,))
 
         self.conn.commit()
-
+    
     def update_customer(self, id, data):
         data = list(data)
         data[4] = generate_password_hash(data[4])
@@ -840,8 +841,93 @@ class Database:
         db.add_screen(50,5,10)
         db.add_screen(25,5,5,vip_only=True)
         db.add_screen(100,10,10)
+
+        print("adding movies...")
+        movie1 = {'title': 'Iron Man 3', 'blurb': "When Tony Stark's world is torn apart by a formidable terrorist called the Mandarin, he starts an odyssey of rebuilding and retribution.", 'certificate': '12A', 'directors': ['Shane Black'], 'writers': ['Shane Black', 'Drew Pearce'], 'actors': ['Robert Downey Jr.', 'Gwyneth Paltrow', 'Don Cheadle', 'Guy Pearce', 'Rebecca Hall', 'Jon Favreau', 'Ben Kingsley', 'Stephanie Szostak', 'James Badge Dale', 'William Sadler', 'Miguel Ferrer', 'Dale Dickey', 'Ty Simpkins', 'Paul Bettany', 'Wang Xueqi', 'Shaun Toub', 'Matthew Sterling Nye', 'Pat Kiernan', 'Josh Elliott', 'Megan Henderson', 'Thomas Roberts', 'Bill Maher', 'Joan Rivers', 'George Kotsiopoulos', "Bronte D'Esposito", 'Noah Visconti', 'Ashley Hamilton', 'Brooke Jayne Taylor', 'Kim Dean', 'Anthony Reynolds', 'Kendrick Cross', 'Tom Clark', 'Brian Schaeffer', 'John Eddins', 'Spencer Garrett', 'Drew Michael Hershner', 'Sarah Burkhardt', 'Jan Broberg', 'Andrew Lauer', 'Nate Bynum', 'Andrew Lander', 'Tom Virtue', 'Roy McCrerey', 'Serdar Kalsin', 'Demetrois Hodges', 'Bobby Tisdale', 'Yvonne Zima', 'Adam Pally', 'James Rackley', 'Cullen Moss', 'Jake Dewitt', 'Rebecca Mader', 'Kevin Arnold', 'David Buglione', 'Adam Lytle', "Paul Andrew O'Connor", 'Phil Ortiz', 'Gwendalyn Barker', 'Steve Wilder', 'Luciana Faulhaber', 'Kary Musa', 'Si-Fu Eric Oram', 'Naomi Parshin', 'Aurelia Riley', 'Johanna Yunda', 'Wesley Thompson', 'Jenna Ortega', 'T. C. Anyachonkeya', 'Chad Kurtz', 'Corey Hawkins', 'Linden Ashby', 'Sarah Farooqui', 'Sala Baker', 'Kial Butler', 'Nick Brandon', 'Fernando Chien', 'Ilram Choi', 'Kiante Elam', 'Colin Follenweider', 'Mark Ginther', 'Adrian Gonzalez', 'Dennis Keiffer', 'Samuel Le', 'Tara Macken', 'William Morts', 'J. C. Robaina', 'Philip J Silvera', 'Brian Simpson', 'Chris Gethard', 'Nick W. Nicholson', 'Bridger Zadina', 'Mark Ruffalo'], 'release_date': '2013-04-18', 'omdbid': 68721, 'set': False, 'forscreening': False, 'poster_path': '/qhPtAc1TKbMPqNvcdXSOn9Bn7hZ.jpg', 'runtime': 130, 'genres': ['Action', 'Adventure', 'Science Fiction'], 'youtube_key': 'f_h95mEd4TI'}
+        movie2 = {'title': 'Spider-Man: Homecoming', 'blurb': 'Following the events of Captain America: Civil War, Peter Parker, with the help of his mentor Tony Stark, tries to balance his life as an ordinary high school student in Queens, New York City, with fighting crime as his superhero alter ego Spider-Man as a new threat, the Vulture, emerges.', 'certificate': '12A', 'directors': ['Jon Watts'], 'writers': ['Christopher D. Ford', 'Jonathan M. Goldstein', 'Chris McKenna', 'Erik Sommers'], 'actors': ['Tom Holland', 'Michael Keaton', 'Robert Downey Jr.', 'Marisa Tomei', 'Jon Favreau', 'Gwyneth Paltrow', 'Zendaya', 'Donald Glover', 'Jacob Batalon', 'Laura Harrier', 'Tony Revolori', 'Bokeem Woodbine', 'Tyne Daly', 'Abraham Attah', 'Hannibal Buress', 'Kenneth Choi', 'Selenis Leyva', 'Angourie Rice', 'Martin Starr', 'Garcelle Beauvais', 'Michael Chernus', 'Michael Mando', 'Logan Marshall-Green', 'Jennifer Connelly', 'Gary Weeks', 'Christopher Berry', 'Jorge Lendeborg Jr.', 'Tunde Adebimpe', 'Tiffany Espensen', 'Isabella Amara', 'Michael Barbieri', 'Josie Totah', 'Hemky Madera', 'Zach Cherry', 'Yu Lew', 'Sondra James', 'Bob Adrian', 'Gary Richardson', 'Joe Hang', 'Wayne Pére', 'Chris Evans', 'Alexa Laraki', 'Liza Fagin', 'Kerry Condon', 'John Penick', 'Ethan Dizon', 'Amy Hill', 'Miles Mussenden', 'Martha Kelly', 'Kevin LaRosa Jr.', 'Ren Colley', 'Jennifer Kim', 'Ari Groover', 'Louis Gonzalez', 'Stewart Steinberg', 'Andy Powers', 'Omar Capra', 'Nitin Nohria', 'Vince Foster', 'Brian Schaeffer', 'Chris Adams', 'Maiya Boyd', 'Rebeca Donovan', 'Elli', 'Nickolas Wolf', 'Jaine Ye', 'Gina Cordan', 'Friday Chamberlain', 'Dante Brattelli', 'Donald K. Overstreet', 'Hallie Ricardo', 'Marmee Regine Cosico', 'Harrison Osterfield', 'Nicholas Azarian'], 'release_date': '2017-07-05', 'omdbid': 315635, 'set': False, 'forscreening': False, 'poster_path': '/c24sv2weTHPsmDa7jEMN0m2P3RT.jpg', 'runtime': 133, 'genres': ['Action', 'Adventure', 'Science Fiction', 'Drama'], 'youtube_key': 'xbQdPBiF3Co'}
+        movie3 = {'title': 'I Care a Lot', 'blurb': 'A court-appointed legal guardian defrauds her older clients and traps them under her care. But her latest mark comes with some unexpected baggage.', 'certificate': '15', 'directors': ['J Blakeson'], 'writers': [], 'actors': ['Rosamund Pike', 'Peter Dinklage', 'Eiza González', 'Dianne Wiest', 'Chris Messina', 'Isiah Whitlock Jr.', 'Macon Blair', 'Alicia Witt', 'Damian Young', 'Nicholas Logan', 'Liz Eng', 'Georgia Lyman', 'Moira Driscoll', 'Gary Tanguay', 'Lizzie Short', 'Kevin McCormick', 'Michael Malvesti', 'Ava Gaudet', 'Celeste Oliva'], 'release_date': '2021-02-19', 'omdbid': 601666, 'set': False, 'forscreening': False, 'poster_path': '/gKnhEsjNefpKnUdAkn7INzIFLSu.jpg', 'runtime': 119, 'genres': ['Comedy', 'Crime', 'Thriller'], 'youtube_key': '4lkCCo63nhM'}
+        movie4 = {'title': 'Bad Boys for Life', 'blurb': 'Marcus and Mike are forced to confront new threats, career changes, and midlife crises as they join the newly created elite team AMMO of the Miami police department to take down the ruthless Armando Armas, the vicious leader of a Miami drug cartel.', 'certificate': '15', 'directors': ['Adil El Arbi', 'Bilall Fallah'], 'writers': ['Joe Carnahan', 'Peter Craig', 'Chris Bremner'], 'actors': ['Will Smith', 'Martin Lawrence', 'Paola Nuñez', 'Vanessa Hudgens', 'Alexander Ludwig', 'Charles Melton', 'Kate del Castillo', 'Nicky Jam', 'Joe Pantoliano', 'Theresa Randle', 'Jacob Scipio', 'DJ Khaled', 'Jay Dubb', 'Happy Anderson', 'Bianca Bethune', 'Dennis Greene', 'Lisa Ann Hadley', 'Gissette E. Valentin', 'Rose Bianco', 'Edelia Merida', 'Jasmin Lawrence', "Shacai O'Neal", 'Carlos Guerrero', 'Massi Furlan', 'Keith Wheeler', 'Brandi Cohen', 'Jay Amor', 'Yessenia Hernandez', 'Anthony Molinari', 'Ivo Nandi', 'David Shae', 'Eduardo Rosario', 'Rory Markham', 'Brad Sanders', 'Damien Butler', 'Norma Alvarez', 'Christina Christensen', 'Nahima Bicelis', 'Erroll Castrillo', 'Kial Butler', 'Sharon Pfeiffer', 'Porshia C. Joseph', 'Ellison Kendrick', 'Davis Aguila', 'Adrian De Armas', 'Laura Ault', 'Misty Autery', 'James William Ballard', 'Austin Bollinger', "Mario 'Vocol' Booker", 'Thomas Brag', 'Troy Brenna', 'Sergio Briones', 'Landon Brooks', 'Ruben E.A. Brown', 'Lauren Buglioli', 'Ricardo Burgos', 'Matthew Byrge', 'Santos Caraballo', 'Matthew Carter', 'Joe Crosson', 'Ellen Marguerite Cullivan', 'LeBron Daniel', 'José Alfredo Fernandez', 'Darin Ferraro', 'Fred Galle', 'John Gettier', 'Joseph Giambrone', 'Derrick Gilbert', 'Jenin Gonzalez', 'Steve Heinz', 'Elvia Hill', 'Julia Kay', 'Melissa Kennemore', 'Tony Kim', 'D.L. Lewis', 'Josue Louis-Charles', 'Hans Marrero', 'Ryan L. Price', 'Diezel Ramos', 'Scott Rapp', 'Ashae Reagan', 'Felicia M. Reyes', 'Manuel Rivera', 'Luis Saldias', 'London Seabreeze', 'Pedro Tavarez Jr.', 'Robert Tinsley', 'Emily Towles', 'Joseph Velez', 'Maria Z. Wilson', 'Jamil C. Winston', 'John West Jr.'], 'release_date': '2020-01-15', 'omdbid': 38700, 'set': False, 'forscreening': False, 'poster_path': '/y95lQLnuNKdPAzw9F9Ab8kJ80c3.jpg', 'runtime': 124, 'genres': ['Thriller', 'Action', 'Crime'], 'youtube_key': 'jKCj3XuPG8M'}
+        movie5 = {'title': 'The Lodge', 'blurb': "When a father is forced to abruptly depart for work, he leaves his children, Aidan and Mia, at their holiday home in the care of his new girlfriend, Grace. Isolated and alone, a blizzard traps them inside the lodge as terrifying events summon specters from Grace's dark past.", 'certificate': 'PG', 'directors': ['Veronika Franz', 'Severin Fiala'], 'writers': ['Veronika Franz', 'Sergio Casci'], 'actors': ['Riley Keough', 'Jaeden Martell', 'Lia McHugh', 'Richard Armitage', 'Alicia Silverstone', 'Katelyn Wells', 'Rebecca Faulkenberry', 'Danny Keough', 'Lola Reid'], 'release_date': '2020-01-16', 'omdbid': 474764, 'set': False, 'forscreening': False, 'poster_path': '/yake2myhbW7c6dKbmwYDy1i40bm.jpg', 'runtime': 108, 'genres': ['Drama', 'Horror', 'Thriller'], 'youtube_key': 'ohLHereEOM8'}
+        movie6 = {'title': 'The Other Lamb', 'blurb': 'For her entire life, the cult she was born into has been all that teenage Selah has known. Along with a band of similarly cloistered young women she lives seemingly unstuck in time, cut off from modern society in a remote forest commune presided over by a man called Shepherd, a controlling, messiah-like figure with a frightening dark side. But when her insular world is rocked by a series of nightmarish visions and disturbing revelations, Selah begins to question everything about her existence—including her allegiance to the increasingly dangerous Shepherd.', 'certificate': '18', 'directors': ['Małgorzata Szumowska'], 'writers': ['Catherine S. McMullen'], 'actors': ['Michiel Huisman', 'Raffey Cassidy', 'Denise Gough', 'Eve Connolly', 'Kelly Campbell', 'Isabelle Connolly', 'Charlotte Moore', 'Zara Devlin', 'Ailbhe Cowley', 'Irene Kelleher', 'Jane Herbert', 'Mallory Adams', 'Juliette Crosbie', 'David Fawaz'], 'release_date': '2020-04-03', 'omdbid': 617786, 'set': False, 'forscreening': False, 'poster_path': '/ognWoVeoB6IhrPAFxTe7PUifYXU.jpg', 'runtime': 97, 'genres': ['Horror', 'Drama', 'Thriller'], 'youtube_key': 's3JygA8PXEg'}
+        movie7 = {'title': 'Soul', 'blurb': 'Joe Gardner is a middle school teacher with a love for jazz music. After a successful gig at the Half Note Club, he suddenly gets into an accident that separates his soul from his body and is transported to the You Seminar, a center in which souls develop and gain passions before being transported to a newborn child. Joe must enlist help from the other souls-in-training, like 22, a soul who has spent eons in the You Seminar, in order to get back to Earth.', 'certificate': 'PG', 'directors': ['Pete Docter', 'Kemp Powers'], 'writers': ['Pete Docter', 'Mike Jones'], 'actors': ['Jamie Foxx', 'Tina Fey', 'Ahmir-Khalib Thompson', 'Phylicia Rashād', 'Daveed Diggs', 'Richard Ayoade', 'Graham Norton', 'Rachel House', 'Alice Braga', 'Angela Bassett', 'Fortune Feimster', 'Donnell Rawlings', 'Margo Hall', 'Wes Studi', 'Sakina Jaffrey', 'Calum Grant', 'Laura Mooney', 'Zenobia Shroff', 'June Squibb', 'Jeannie Tirado', 'Cathy Cavadini', 'Dorian Lockett', 'Cora Champommier', 'Rhodessa Jones', 'Peggy Flood', 'Ochuwa Oghie', 'Doris Burke', 'Esther K. Chae', 'Élisapie', 'Marcus Shelby'], 'release_date': '2020-12-25', 'omdbid': 508442, 'set': False, 'forscreening': False, 'poster_path': '/hm58Jw4Lw8OIeECIq5qyPYhAeRJ.jpg', 'runtime': 101, 'genres': ['Family', 'Animation', 'Comedy', 'Drama', 'Music', 'Fantasy'], 'youtube_key': 'Gs--6c7Hn_A'}
+
+        movies = [movie1, movie2, movie3, movie4, movie5, movie6, movie7]
+        for movie in movies:
+            title = movie['title']
+            blurb = movie['blurb']
+            certificate = movie['certificate']
+            director = movie['directors']
+            writers = movie['writers']
+            leadactors = movie['actors']
+            release = movie['release_date']
+            omdbid = movie['omdbid']
+            poster_path = movie['poster_path']
+            runtime = movie['runtime']
+            youtube_key = movie['youtube_key']
+            genres = movie['genres']
+            
+            w = []
+            if len(writers) > 0:
+                w = ' '.join(writers)
+            elif len(writers) == 1:
+                w = writers[0]
+            else:
+                w = 'Sorry but we do not know an writer for this movie.'
+            
+
+            db.add_movie(title, blurb, certificate, ' '.join(director), w, ', '.join(leadactors[:len(leadactors)//10]), release, omdbid, poster_path,
+            runtime, youtube_key, ', '.join(genres))
+
+            # db.add_movie(movie['title'], movie['blurb'], movie['certificate'], movie['directors'], movie['writers'], movie['actors'], movie['release_date'], movie['omdbid'], movie['poster_path'], movie['runtime'], movie['youtube_key'], movie['genres'])
         
+        print("movies added.")
+
+        # add_screening(self, date, time, screen_id, movie_id):
+        print("adding screenings...")
+        # k = 0
+        for i in range(5, 8):
+            print(i)
+            if i == 10:
+                date = "10-05-2021"
+            else:
+                date = "0{}-05-2021".format(i)
+            
+            # time = "{}:00".format(16+k)
+            # db.add_screening(date,"14:00",1, 6)
+            # db.add_screening(date,"14:00",2, 7)
+            # db.add_screening(date,"14:00",3, 1)
+            # db.add_screening(date,"14:00",4, 2)
+            # db.add_screening(date,"14:00",5, 3)
+            db.add_screening(date,"16:00",1, 1)
+            db.add_screening(date,"16:00",2, 2)
+            db.add_screening(date,"16:00",3, 3)
+            db.add_screening(date,"16:00",4, 4)
+            db.add_screening(date,"16:00",5, 5)
+            db.add_screening(date,"18:00",1, 6)
+            db.add_screening(date,"18:00",2, 7)
+            db.add_screening(date,"18:00",3, 1)
+            db.add_screening(date,"18:00",4, 2)
+            db.add_screening(date,"18:00",5, 3)
+            db.add_screening(date,"20:00",1, 1)
+            db.add_screening(date,"20:00",2, 2)
+            db.add_screening(date,"20:00",3, 3)
+            db.add_screening(date,"20:00",4, 4)
+            db.add_screening(date,"20:00",5, 5)
+            db.add_screening(date,"22:00",1, 6)
+            db.add_screening(date,"22:00",2, 7)
+            db.add_screening(date,"22:00",3, 1)
+            db.add_screening(date,"22:00",4, 2)
+            db.add_screening(date,"22:00",5, 3)
+            # db.add_screening(date,"01:00",1, 1)
+            # db.add_screening(date,"01:00",2, 2)
+            # db.add_screening(date,"01:00",3, 3)
+            # db.add_screening(date,"01:00",4, 4)
+            # db.add_screening(date,"01:00",5, 5)
+            # k = k + 1
+
+        print('added screenings')
         
+    
 
     def __del__(self):
         self.conn.close()
@@ -896,7 +982,8 @@ seatmap = dat[0][5]
 #db.email_ticket('yourForename', 'yourSurname', 'yourEmail', 5)
 
 
-Database('cinema.db').setupForCommercialUse()
+# Database('cinema.db').setupForCommercialUse()
+
 # Database('cinema.db').add_screening('04-04-2021', '16:00', 1, 1)
 # Database('cinema.db').add_screening('04-04-2021', '18:00', 1, 1)
 # Database('cinema.db').add_screening('04-04-2021', '20:00', 1, 1)
@@ -919,3 +1006,9 @@ Database('cinema.db').setupForCommercialUse()
 # db.add_customer('seatmapCustomerFName','seatmapCustomerSName', 'seatmapCustomerEmail', 'seatmapCustomerPhone','seatmapCustomerPassword','01-01-01')
 # db.add_booking(1, 1, 'A1,A2,A3')
 #db.add_overall_analytics(1, 'spider-man', 10, 1)
+
+# db = Database('cinema')
+# db.remove_customer(email='sc19jcm@leeds.ac.uk')
+# db.remove_customer(email='sc19jcm@leeds.ac.uk')
+# db.remove_customer(email='sc19jcm@leeds.ac.uk')
+# db.remove_customer(email='sc19jcm@leeds.ac.uk')

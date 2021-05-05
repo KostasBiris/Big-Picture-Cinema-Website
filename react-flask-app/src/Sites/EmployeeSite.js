@@ -27,11 +27,20 @@ class EmployeeSite extends React.Component{
     }
 
     whatBanner = () => { 
+        console.log(this.props)
         if (this.props.logged[0] == true){
+            if (this.props.history.location.pathname == '/emain')
+                {
+                    return (<React.Fragment>
+                        <EmployeeBanner history={this.props.history} logged={this.props.logged[0]}/>
+                        <Route exact path ="/emain" component={EmployeeMain}/>
+                        <Footer/>
+                        </React.Fragment>
+                    )
+                }
             return (<React.Fragment>
                         <EmployeeBanner history={this.props.history} logged={this.props.logged[0]}/>
                         <EMenu />
-                        <Route exact path ="/emain" component={EmployeeMain}/>
                         <Route path="/ebook" render={(props) => <BookTickets {...props} isEmployee={true}/> } />
                         <Route path="/eas" render={(props) => <ArbitraryScreen {...props} isEmployee={true}/> }/>
                         <Route path="/emain/search/:query" component={SearchResults}/>
