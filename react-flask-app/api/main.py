@@ -146,6 +146,7 @@ def serialize_all_screenings(res,flag=0):
 
 
 def serialize_ticket(res):
+    # print('serializing' + str(res))
     try:
         return {
             'id' : res[0],
@@ -161,9 +162,10 @@ def serialize_ticket(res):
             'numElder':res[11],
             'numDefault':res[12],
             'date' : res[13],
-            'movieName' : Database('cinema.db').quick_get_movie(res[0])[1]
+            'movieName' : Database('cinema.db').quick_get_movie(res[2])[1]
         }
-    except TypeError:
+    except TypeError as e:
+        print(e)
         return None
 
 def serialize_all_tickets(res):
@@ -171,7 +173,7 @@ def serialize_all_tickets(res):
     for i in range(len(res)):
         if serialize_ticket(res[i]):
             dic[i] = serialize_ticket(res[i])
-            print(dic[i])
+            print('serialized: ' + str(dic[i]))# print(dic[i])
     return dic
 
 
@@ -194,6 +196,11 @@ def allmovies():
 def tk():
     db = Database('cinema.db')
     data = db.fetch()[5]
+    # print('tickets ---------------------------------------------------')
+    # print(serialize_all_tickets(data))
+    # print('0------------------------------')
+    for dat in data:
+        print(dat[0:7],dat[9:])
     return {'response': serialize_all_tickets(data)}
 
 
